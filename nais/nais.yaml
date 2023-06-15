@@ -1,0 +1,32 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: navno-search-api
+  namespace: personbruker
+  labels:
+    team: personbruker
+spec:
+  image: {{image}}
+  port: 8080
+  liveness:
+    path: /navno-search-api/internal/isAlive
+    initialDelay: 10
+  readiness:
+    path: /navno-search-api/internal/isAlive
+    initialDelay: 10
+  replicas:
+    min: {{ min-replicas }}
+    max: {{ max-replicas }}
+  ingresses:
+  {{#each ingresses}}
+     - "{{this}}"
+         {{/each}}
+  secureLogs:
+    enabled: true
+  resources:
+    limits:
+      cpu: 300m
+      memory: 768Mi
+    requests:
+      cpu: 100m
+      memory: 384Mi

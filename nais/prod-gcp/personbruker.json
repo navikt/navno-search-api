@@ -1,0 +1,7 @@
+{
+  "ingresses": [
+    "https://www.nav.no/navno-search-api"
+  ],
+  "min-replicas": 2,
+  "max-replicas": 4
+}
