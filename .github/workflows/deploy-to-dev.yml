@@ -41,3 +41,4 @@ jobs:
           RESOURCE: ./nais/nais.yaml
           VAR: image=${{steps.docker-build-push.outputs.image}}
           VARS: ./nais/dev-gcp/personbruker.json
+
