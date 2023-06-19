@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 class HealthController {
     @GetMapping("/isAlive")
     fun isAlive(): String {
-        return "Hello world"
+        return "ALIVE"
     }
 
     @GetMapping("/isReady")
     fun isReady(): String {
-        return "Hello world"
+        return "READY"
     }
 }

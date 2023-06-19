@@ -9,11 +9,15 @@ spec:
   image: {{image}}
   port: 8080
   liveness:
-    path: /navno-search-api/internal/isAlive
-    initialDelay: 10
+    path: /internal/isAlive
+    initialDelay: 60
+    timeout: 1
+    periodSeconds: 10
+    failureThreshold: 3
   readiness:
-    path: /navno-search-api/internal/isAlive
-    initialDelay: 10
+    path: /internal/isReady
+    initialDelay: 60
+    timeout: 1
   replicas:
     min: {{ min-replicas }}
     max: {{ max-replicas }}
