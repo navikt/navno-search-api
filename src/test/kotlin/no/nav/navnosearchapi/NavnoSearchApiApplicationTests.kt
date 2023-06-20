@@ -1,13 +1,13 @@
 package no.nav.navnosearchapi
 
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+import org.opensearch.spring.boot.autoconfigure.test.DataOpenSearchTest
 
-@SpringBootTest
+@DataOpenSearchTest
 class NavnoSearchApiApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+    @Test
+    fun contextLoads() {
+    }
 
 }
