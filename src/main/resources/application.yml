@@ -1,0 +1,9 @@
+opensearch:
+  uris: ${OPENSEARCH_URI}
+  username: ${OPENSEARCH_USERNAME}
+  password: ${OPENSEARCH_PASSWORD}
+
+spring:
+  jackson:
+    serialization:
+      indent-output: true
