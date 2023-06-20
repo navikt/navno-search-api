@@ -19,15 +19,15 @@ spec:
     initialDelay: 60
     timeout: 1
   replicas:
-    min: { { min-replicas } }
-    max: { { max-replicas } }
+    min: {{ min-replicas }}
+    max: {{ max-replicas }}
   openSearch:
     access: readwrite
     instance: navno-search
   ingresses:
-  { { #each ingresses}}
-      - "{{this}}"
-          {{/each } }
+  {{#each ingresses}}
+     - "{{this}}"
+         {{/each}}
   envFrom:
     - secret: navno-search-api-secret
   secureLogs:
