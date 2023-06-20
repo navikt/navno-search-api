@@ -1,7 +1,7 @@
 opensearch:
-  uris: ${OPENSEARCH_URI}
-  username: ${OPENSEARCH_USERNAME}
-  password: ${OPENSEARCH_PASSWORD}
+  uris: ${OPEN_SEARCH_URI}
+  username: ${OPEN_SEARCH_USERNAME}
+  password: ${OPEN_SEARCH_PASSWORD}
 
 spring:
   jackson:
