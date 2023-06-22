@@ -1,9 +1,12 @@
 package no.nav.navnosearchapi.respository
 
 import no.nav.navnosearchapi.model.Content
-import org.springframework.data.repository.CrudRepository
+import no.nav.navnosearchapi.respository.utils.searchAllTextQuery
+import org.springframework.data.elasticsearch.annotations.Query
+import org.springframework.data.elasticsearch.core.SearchHits
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
-interface ContentRepository : CrudRepository<Content, Long> {
-    fun findByIngressLike(word: String): List<Content>
+interface ContentRepository : ElasticsearchRepository<Content, Long> {
+    @Query(searchAllTextQuery)
+    fun searchAllText(term: String): SearchHits<Content>
 }
-
