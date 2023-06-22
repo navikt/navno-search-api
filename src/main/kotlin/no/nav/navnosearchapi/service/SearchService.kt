@@ -7,5 +7,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class SearchService(val repository: ContentRepository) {
-    fun searchAllText(term: String): SearchHits<Content> = repository.searchAllText(term)
+    fun searchAllText(term: String): SearchHits<Content> {
+
+        if (term.startsWith('"') && term.endsWith('"')) {
+            return repository.searchAllTextForPhrase(term)
+        }
+
+        return repository.searchAllText(term)
+    }
 }

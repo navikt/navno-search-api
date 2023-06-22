@@ -8,3 +8,13 @@ const val searchAllTextQuery = """
       }
     }
     """
+
+const val searchAllTextForPhraseQuery = """
+    {
+      "multi_match": {
+        "query": "?0",
+        "type": "phrase",
+        "fields": ["name^3", "ingress^2", "text"]
+      }
+    }
+    """
