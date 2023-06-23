@@ -12,10 +12,14 @@ class SearchService(val repository: ContentRepository, @Value("\${opensearch.pag
     fun searchAllText(term: String, page: Int): Page<Content> {
         val pageRequest = PageRequest.of(page, pageSize)
 
-        if (term.startsWith('"') && term.endsWith('"')) {
+        if (isInQuotes(term)) {
             return repository.searchAllTextForPhrase(term, pageRequest)
         }
 
         return repository.searchAllText(term, pageRequest)
+    }
+
+    private fun isInQuotes(term: String): Boolean {
+        return term.startsWith('"') && term.endsWith('"')
     }
 }
