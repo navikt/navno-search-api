@@ -7,8 +7,8 @@ import org.springframework.data.elasticsearch.annotations.Field
 @Document(indexName = "content")
 data class Content(
     @Id val id: String,
-    @Field val href: String,
-    @Field val name: String,
-    @Field val ingress: String,
-    @Field val text: String,
+    @Field val href: String? = null,
+    @Field val name: String? = null,
+    @Field val ingress: String? = null,
+    @Field val text: String? = null,
 )
