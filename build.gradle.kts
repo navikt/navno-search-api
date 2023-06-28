@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-	implementation("org.opensearch.client:spring-data-opensearch-starter:1.1.0")
-	implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:1.1.0")
+	implementation("org.opensearch.client:spring-data-opensearch-starter:1.2.0")
+	implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:1.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
