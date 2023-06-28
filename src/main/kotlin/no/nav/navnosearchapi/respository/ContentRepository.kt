@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.elasticsearch.annotations.Query
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
-interface ContentRepository : ElasticsearchRepository<Content, Long> {
+interface ContentRepository : ElasticsearchRepository<Content, String> {
     @Query(searchAllTextQuery)
     fun searchAllText(term: String, pageable: Pageable? = null): Page<Content>
 
