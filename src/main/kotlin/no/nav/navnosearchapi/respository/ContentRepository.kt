@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.respository
 
 import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.respository.utils.findAllByIndexQuery
 import no.nav.navnosearchapi.respository.utils.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.respository.utils.searchAllTextQuery
 import org.springframework.data.domain.Page
@@ -14,4 +15,7 @@ interface ContentRepository : ElasticsearchRepository<Content, String> {
 
     @Query(searchAllTextForPhraseQuery)
     fun searchAllTextForPhrase(term: String, pageable: Pageable? = null): Page<Content>
+
+    @Query(findAllByIndexQuery)
+    fun findAllByIndex(appName: String, pageable: Pageable? = null): Page<Content>
 }
