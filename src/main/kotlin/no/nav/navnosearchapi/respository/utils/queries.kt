@@ -32,3 +32,15 @@ const val findAllByIndexQuery = """
       }
     }
     """
+
+const val deleteByAppNameAndId = """
+    {
+      "bool": {
+        "filter": {
+          "terms": {
+            "_index": ["?0"]
+          }
+        }
+      }
+    }
+    """

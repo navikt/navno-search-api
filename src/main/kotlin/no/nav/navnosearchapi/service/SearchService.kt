@@ -2,7 +2,6 @@ package no.nav.navnosearchapi.service
 
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.respository.ContentRepository
-import no.nav.navnosearchapi.utils.indexName
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -18,12 +17,6 @@ class SearchService(val repository: ContentRepository, @Value("\${opensearch.pag
         }
 
         return repository.searchAllText(term, pageRequest)
-    }
-
-    fun getContentForApp(appName: String, page: Int): Page<Content> {
-        val pageRequest = PageRequest.of(page, pageSize)
-
-        return repository.findAllByIndex(indexName(appName), pageRequest)
     }
 
     private fun isInQuotes(term: String): Boolean {
