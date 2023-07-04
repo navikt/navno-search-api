@@ -12,4 +12,5 @@ data class Content(
     @Field(type = FieldType.Text) val name: String? = null,
     @Field(type = FieldType.Text) val ingress: String? = null,
     @Field(type = FieldType.Text) val text: String? = null,
+    @Field(type = FieldType.Keyword) val maalgruppe: String? = null,
 )

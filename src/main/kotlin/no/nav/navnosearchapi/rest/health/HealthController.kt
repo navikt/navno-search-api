@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.health
+package no.nav.navnosearchapi.rest.health
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
