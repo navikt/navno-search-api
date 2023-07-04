@@ -11,3 +11,7 @@ fun indexName(appName: String): String {
 fun indexCoordinates(appName: String): IndexCoordinates {
     return IndexCoordinates.of(indexName(appName))
 }
+
+fun defaultIndexCoordinates(): IndexCoordinates {
+    return IndexCoordinates.of("search_content")
+}

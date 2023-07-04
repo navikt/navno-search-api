@@ -1,8 +1,8 @@
-package no.nav.navnosearchapi.controller
+package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.service.AdminService
-import org.springframework.data.domain.Page
+import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,7 +20,7 @@ class AdminController(val service: AdminService) {
     }
 
     @GetMapping("/content/{appName}")
-    fun getContentForAppName(@PathVariable appName: String, @RequestParam page: Int): Page<Content> {
+    fun getContentForAppName(@PathVariable appName: String, @RequestParam page: Int): SearchPage<Content> {
         return service.getContentForAppName(appName, page)
     }
 
