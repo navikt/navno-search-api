@@ -41,7 +41,7 @@ class ContentRepositoryIntegrationTests(
         runBlocking {
             operations.indexOps(indexCoordinates).create()
             operations.save(content, indexCoordinates)
-            delay(100)
+            delay(1000)
         }
 
         val result: ResponseEntity<SearchHitsImpl<Content>> =
