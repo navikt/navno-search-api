@@ -2,11 +2,9 @@ package no.nav.navnosearchapi.service
 
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.service.search.SearchHelper
-import no.nav.navnosearchapi.service.search.findAllByIndexQuery
 import no.nav.navnosearchapi.utils.indexCoordinates
-import no.nav.navnosearchapi.utils.indexName
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
-import org.springframework.data.elasticsearch.core.SearchPage
+import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,8 +20,7 @@ class AdminService(
         return operations.delete(id, indexCoordinates(appName))
     }
 
-    fun getContentForAppName(appName: String, page: Int): SearchPage<Content> {
-        val query = findAllByIndexQuery(indexName(appName))
-        return searchHelper.search(query, page)
+    fun getContentForAppName(appName: String): SearchHits<Content> {
+        return operations.search(operations.matchAllQuery(), Content::class.java, indexCoordinates(appName))
     }
 }
