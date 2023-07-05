@@ -1,8 +1,6 @@
 package no.nav.navnosearchapi
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.utils.indexCoordinates
 import org.assertj.core.api.Assertions.assertThat
@@ -25,7 +23,6 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Testcontainers(disabledWithoutDocker = true)
 @ContextConfiguration(initializers = [ContentRepositoryIntegrationTests.Initializer::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,7 +32,7 @@ class ContentRepositoryIntegrationTests(
     @LocalServerPort val serverPort: Int,
 ) {
     @Test
-    fun testContent() = runTest {
+    fun testContent() {
         val content = Content("id", "https://href.com", "name", "ingress", "text", "Privatperson")
 
         val indexCoordinates = indexCoordinates("testapp")

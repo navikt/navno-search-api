@@ -24,7 +24,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter:1.18.3")
     testImplementation("org.opensearch:opensearch-testcontainers:2.0.0")
