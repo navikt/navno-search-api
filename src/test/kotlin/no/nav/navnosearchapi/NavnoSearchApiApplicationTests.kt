@@ -1,5 +1,7 @@
 package no.nav.navnosearchapi
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.utils.indexCoordinates
 import org.assertj.core.api.Assertions.assertThat
@@ -37,7 +39,10 @@ class ContentRepositoryIntegrationTests(
         val indexCoordinates = indexCoordinates("testapp")
 
         operations.indexOps(indexCoordinates).create()
-        operations.save(content, indexCoordinates)
+
+        runBlocking {
+            async { operations.save(content, indexCoordinates) }.await()
+        }
 
         val result: ResponseEntity<SearchHitsImpl<Content>> =
             restTemplate.getForEntity("http://localhost:$serverPort/content/testapp")
