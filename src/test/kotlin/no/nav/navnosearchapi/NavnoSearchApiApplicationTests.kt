@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.utils.indexCoordinates
@@ -40,6 +41,7 @@ class ContentRepositoryIntegrationTests(
         runBlocking {
             operations.indexOps(indexCoordinates).create()
             operations.save(content, indexCoordinates)
+            delay(1000L)
         }
 
         val result: ResponseEntity<SearchHitsImpl<Content>> = runBlocking {
