@@ -1,17 +1,14 @@
 package no.nav.navnosearchapi.service
 
 import no.nav.navnosearchapi.model.Content
-import no.nav.navnosearchapi.service.search.SearchHelper
 import no.nav.navnosearchapi.utils.indexCoordinates
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.stereotype.Service
 
 @Service
-class AdminService(
-    val searchHelper: SearchHelper,
-    val operations: ElasticsearchOperations,
-) {
+class AdminService(val operations: ElasticsearchOperations) {
+
     fun saveAllContent(content: List<Content>, appName: String): List<Content> {
         return operations.save(content, indexCoordinates(appName)).toList()
     }
