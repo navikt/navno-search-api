@@ -1,30 +1,26 @@
 package no.nav.navnosearchapi
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import no.nav.navnosearchapi.model.Content
-import no.nav.navnosearchapi.utils.initialTestData
+import no.nav.navnosearchapi.utils.additionalTestData
 import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.Awaitility.await
+import org.awaitility.kotlin.matches
+import org.awaitility.kotlin.untilCallTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.boot.test.web.client.exchange
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.data.elasticsearch.core.SearchHitsImpl
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 
-class ContentRepositoryIntegrationTests : IntegrationTest() {
+class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @BeforeEach
     fun setup() {
-        val initialContent = initialTestData()
-
-        runBlocking {
-            operations.indexOps(indexCoordinates).delete()
-            operations.indexOps(indexCoordinates).create()
-            operations.save(initialContent, indexCoordinates)
-            delay(1000)
-        }
+        setupIndex()
     }
-
 
     @Test
     fun testFetchingContent() {
@@ -35,31 +31,28 @@ class ContentRepositoryIntegrationTests : IntegrationTest() {
 
     @Test
     fun testSavingContent() {
-        runBlocking {
-            restTemplate.postForLocation(
-                "${host()}/content/testapp",
-                listOf(Content(
-                    "11",
-                    "https://eleventh.com",
-                    "Eleventh name",
-                    "Eleventh ingress",
-                    "Eleventh text",
-                    "Samarbeidspartner"
-                ))
-            )
-            delay(1000)
-        }
+        val content: ResponseEntity<List<Content>> = restTemplate.exchange(
+            "${host()}/content/testapp",
+            HttpMethod.POST,
+            HttpEntity(additionalTestData),
+        )
+
+        await().untilCallTo { indexCount() } matches { count -> count == 11L }
+
+        val savedContent: Content = content.body?.first()!!
 
         assertThat(indexCount()).isEqualTo(11L)
+        assertThat(operations.exists(savedContent.id, indexCoordinates))
     }
 
     @Test
     fun testDeletingContent() {
-        runBlocking {
-            restTemplate.delete("${host()}/content/testapp/1")
-            delay(1000)
-        }
+        val deletedId = "1"
+        restTemplate.delete("${host()}/content/testapp/$deletedId")
+
+        await().untilCallTo { indexCount() } matches { count -> count == 9L }
 
         assertThat(indexCount()).isEqualTo(9L)
+        assertThat(!operations.exists(deletedId, indexCoordinates))
     }
 }

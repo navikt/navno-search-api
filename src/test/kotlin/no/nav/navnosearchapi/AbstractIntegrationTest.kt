@@ -1,6 +1,10 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.utils.indexCoordinates
+import no.nav.navnosearchapi.utils.initialTestData
+import org.awaitility.Awaitility
+import org.awaitility.kotlin.matches
+import org.awaitility.kotlin.untilCallTo
 import org.opensearch.testcontainers.OpensearchContainer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,9 +21,9 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 
 @Testcontainers(disabledWithoutDocker = true)
-@ContextConfiguration(initializers = [IntegrationTest.Initializer::class])
+@ContextConfiguration(initializers = [AbstractIntegrationTest.Initializer::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-abstract class IntegrationTest {
+abstract class AbstractIntegrationTest {
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
@@ -35,6 +39,14 @@ abstract class IntegrationTest {
     fun host() = "http://localhost:$serverPort"
 
     fun indexCount() = operations.count(operations.matchAllQuery(), indexCoordinates)
+
+    fun setupIndex() {
+        operations.indexOps(indexCoordinates).delete()
+        operations.indexOps(indexCoordinates).create()
+        operations.save(initialTestData, indexCoordinates)
+
+        Awaitility.await().untilCallTo { indexCount() } matches { count -> count == 10L }
+    }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
