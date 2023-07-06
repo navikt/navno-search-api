@@ -2,9 +2,6 @@ package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.utils.indexCoordinates
 import no.nav.navnosearchapi.utils.initialTestData
-import org.awaitility.Awaitility
-import org.awaitility.kotlin.matches
-import org.awaitility.kotlin.untilCallTo
 import org.opensearch.testcontainers.OpensearchContainer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -45,7 +42,7 @@ abstract class AbstractIntegrationTest {
         operations.indexOps(indexCoordinates).create()
         operations.save(initialTestData, indexCoordinates)
 
-        Awaitility.await().untilCallTo { indexCount() } matches { count -> count == 10L }
+        operations.indexOps(indexCoordinates).refresh()
     }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
