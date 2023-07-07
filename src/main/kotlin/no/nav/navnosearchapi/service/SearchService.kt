@@ -1,21 +1,20 @@
 package no.nav.navnosearchapi.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.SearchHelper
 import no.nav.navnosearchapi.service.search.filteredQuery
 import no.nav.navnosearchapi.service.search.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.searchAllTextQuery
-import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Service
 
 
 @Service
 class SearchService(
     val searchHelper: SearchHelper,
-    val objectMapper: ObjectMapper
+    val objectMapper: ObjectMapper,
 ) {
-    fun searchAllText(term: String, maalgruppe: List<String>?, page: Int): SearchPage<Content> {
+    fun searchAllText(term: String, maalgruppe: List<String>?, page: Int): ContentSearchPage {
         val query = if (isInQuotes(term)) {
             searchAllTextForPhraseQuery(term)
         } else {
