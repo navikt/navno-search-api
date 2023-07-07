@@ -9,7 +9,10 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHitSupport
 import org.springframework.data.elasticsearch.core.SearchPage
+import org.springframework.data.elasticsearch.core.query.HighlightQuery
 import org.springframework.data.elasticsearch.core.query.StringQuery
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,9 +21,20 @@ class SearchHelper(
     val operations: ElasticsearchOperations,
     val mapper: ContentSearchPageMapper
 ) {
-    fun search(query: String, page: Int): ContentSearchPage {
+    val highlightFields = listOf("name", "ingress", "text").map { HighlightField(it) }
+
+    fun search(query: String, page: Int, highlighting: Boolean = true): ContentSearchPage {
         val pageRequest = PageRequest.of(page, pageSize)
         val searchQuery = StringQuery(query, pageRequest)
+
+        if (highlighting) {
+            searchQuery.setHighlightQuery(
+                HighlightQuery(
+                    Highlight(highlightFields),
+                    Content::class.java
+                )
+            )
+        }
 
         val searchHits = operations.search(searchQuery, Content::class.java, defaultIndexCoordinates())
         val searchPage: SearchPage<Content> = SearchHitSupport.searchPageFor(searchHits, pageRequest)
