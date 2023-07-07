@@ -13,8 +13,8 @@ class ContentSearchPageMapper {
             hits = searchPage.searchHits.searchHits.map { hit -> ContentSearchHit(hit.content) },
             totalPages = searchPage.totalPages,
             totalElements = searchPage.totalElements,
-            size = searchPage.size,
-            number = searchPage.number
+            pageSize = searchPage.size,
+            pageNumber = searchPage.number
         )
     }
 }

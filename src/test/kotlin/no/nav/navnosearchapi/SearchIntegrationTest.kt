@@ -17,18 +17,28 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     fun testSearchForText() {
         val term = "First text"
 
-        val result = restTemplate.getForEntity<ContentSearchPage>("${host()}/content/search?page=0&term=$term").body!!
+        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term)).body!!
 
         assertThat(result.totalElements).isEqualTo(10L)
         assertThat(result.totalPages).isEqualTo(1L)
     }
 
     @Test
-    fun testSearchForPhrase() {
+    fun testSearchForTextWithMaalgruppeFilter() {
         val term = "First text"
+        val maalgruppe = "Privatperson"
 
-        val result =
-            restTemplate.getForEntity<ContentSearchPage>("${host()}/content/search?page=0&term=\"$term\"").body!!
+        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term, maalgruppe = maalgruppe)).body!!
+
+        assertThat(result.totalElements).isEqualTo(4L)
+        assertThat(result.totalPages).isEqualTo(1L)
+    }
+
+    @Test
+    fun testSearchForPhrase() {
+        val term = "\"First text\""
+
+        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term)).body!!
 
         assertThat(result.totalElements).isEqualTo(1L)
         assertThat(result.totalPages).isEqualTo(1L)

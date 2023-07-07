@@ -43,6 +43,11 @@ abstract class AbstractIntegrationTest {
 
     fun indexCount() = operations.count(operations.matchAllQuery(), indexCoordinates)
 
+    fun searchUrl(term: String, page: Int = 0, maalgruppe: String? = null): String {
+        val maalgruppeParam = maalgruppe?.let { "&maalgruppe=$it" } ?: ""
+        return "${host()}/content/search?page=$page&term=$term$maalgruppeParam"
+    }
+
     fun setupIndex() {
         operations.indexOps(indexCoordinates).delete()
         operations.indexOps(indexCoordinates).create()
