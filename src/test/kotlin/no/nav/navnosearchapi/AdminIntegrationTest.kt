@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi
 
+import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.Content
 import no.nav.navnosearchapi.utils.additionalTestData
 import org.assertj.core.api.Assertions.assertThat
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.boot.test.web.client.getForEntity
-import org.springframework.data.elasticsearch.core.SearchHitsImpl
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
@@ -21,9 +21,9 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testFetchingContent() {
-        val result: ResponseEntity<SearchHitsImpl<Content>> = restTemplate.getForEntity("${host()}/content/testapp")
+        val result = restTemplate.getForEntity<ContentSearchPage>("${host()}/content/testapp?page=0")
 
-        assertThat(result.body?.totalHits).isEqualTo(10L)
+        assertThat(result.body?.totalElements).isEqualTo(10L)
     }
 
     @Test

@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.utils.indexCoordinates
+import no.nav.navnosearchapi.utils.indexName
 import no.nav.navnosearchapi.utils.initialTestData
 import org.opensearch.testcontainers.OpensearchContainer
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,13 +12,15 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
+import org.springframework.data.elasticsearch.core.index.AliasAction
+import org.springframework.data.elasticsearch.core.index.AliasActionParameters
+import org.springframework.data.elasticsearch.core.index.AliasActions
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 
-@Testcontainers(disabledWithoutDocker = true)
+@Testcontainers(disabledWithoutDocker = true, parallel = true)
 @ContextConfiguration(initializers = [AbstractIntegrationTest.Initializer::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class AbstractIntegrationTest {
@@ -31,7 +34,10 @@ abstract class AbstractIntegrationTest {
     @LocalServerPort
     var serverPort: Int? = null
 
-    val indexCoordinates: IndexCoordinates = indexCoordinates("testapp")
+    final val appName = "testapp"
+    final val aliasName = "search_content"
+    final val indexName = indexName(appName)
+    final val indexCoordinates = indexCoordinates(appName)
 
     fun host() = "http://localhost:$serverPort"
 
@@ -40,10 +46,19 @@ abstract class AbstractIntegrationTest {
     fun setupIndex() {
         operations.indexOps(indexCoordinates).delete()
         operations.indexOps(indexCoordinates).create()
+        operations.indexOps(indexCoordinates).alias(aliasActions())
         operations.save(initialTestData, indexCoordinates)
-
         operations.indexOps(indexCoordinates).refresh()
     }
+
+    private fun aliasActions() = AliasActions(
+        AliasAction.Add(
+            AliasActionParameters.builder()
+                .withIndices(indexName)
+                .withAliases(aliasName)
+                .build()
+        )
+    )
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
