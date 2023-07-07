@@ -24,6 +24,6 @@ class AdminService(
     }
 
     fun getContentForAppName(appName: String, page: Int): ContentSearchPage {
-        return searchHelper.search(findAllByIndexQuery(indexName(appName)), page)
+        return searchHelper.search(findAllByIndexQuery(indexName(appName)), page, false)
     }
 }
