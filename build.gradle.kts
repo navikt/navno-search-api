@@ -2,10 +2,19 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.0"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.spring") version "1.8.21"
+    val versions = object {
+        val kotlin = "1.9.0"
+        val springBoot = "3.1.2"
+        val springDepMgmt = "1.1.2"
+        val versions = "0.47.0"
+    }
+
+    kotlin("jvm") version(versions.kotlin)
+    kotlin("plugin.spring") version(versions.kotlin)
+
+    id("org.springframework.boot") version(versions.springBoot)
+    id("io.spring.dependency-management") version(versions.springDepMgmt)
+    id("com.github.ben-manes.versions") version(versions.versions) // ./gradlew dependencyUpdates to check for new versions
 }
 
 java {
@@ -17,16 +26,23 @@ repositories {
 }
 
 dependencies {
-    implementation("org.opensearch.client:spring-data-opensearch-starter:1.2.0")
-    implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:1.2.0")
+    val versions = object {
+        val coroutines = "1.7.3"
+        val opensearch = "1.2.0"
+        val opensearchTestcontainers = "2.0.0"
+        val testcontainers = "1.18.3"
+    }
+
+    implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}")
+    implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.testcontainers:junit-jupiter:1.18.3")
-    testImplementation("org.opensearch:opensearch-testcontainers:2.0.0")
+    testImplementation("org.testcontainers:junit-jupiter:${versions.testcontainers}")
+    testImplementation("org.opensearch:opensearch-testcontainers:${versions.opensearchTestcontainers}")
 }
 
 tasks.withType<KotlinCompile> {
