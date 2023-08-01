@@ -1,0 +1,48 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: navno-search-api-alert
+  namespace: personbruker
+  labels:
+    team: personbruker
+spec:
+  groups:
+    - name: navno-search-api-alert
+      rules:
+        - alert: applikasjon nede
+          expr: kube_deployment_status_replicas_available{deployment="navno-search-api-alert"} == 0
+          for: 2m
+          annotations:
+            summary: "App {{ $labels.app }} er nede i namespace {{ $labels.kubernetes_namespace }}"
+            action: "`kubectl describe pod -l app={{ $labels.app }} -n {{ $labels.namespace }}` for events, og `kubectl logs -l app={{ $labels.app }} -n {{ $labels.namespace }}` for logger"
+          labels:
+            severity: danger
+            receiver_reference: team-navno-backend-alerts
+            alert_type: custom
+        - alert: høy feilrate i logger
+          expr: (100 * sum by (log_app, log_namespace) (rate(logd_messages_total{log_app="navno-search-api-alert",log_level=~"Warning|Error"}[3m])) / sum by (log_app, log_namespace) (rate(logd_messages_total{log_app="navno-search-api-alert"}[3m]))) > 10
+          for: 3m
+          annotations:
+            action: "Sjekk loggene til app {{ $labels.log_app }} i namespace {{ $labels.log_namespace }}, for å se hvorfor det er så mye feil"
+          labels:
+            severity: warning
+            receiver_reference: team-navno-backend-alerts
+            alert_type: custom
+        - alert: Høy andel HTTP serverfeil (5xx responser)
+          expr: (100 * (sum by (backend) (rate(response_total{status_code=~"^5\\d\\d", namespace="personbruker", app="navno-search-api-alert"}[3m])) / sum by (backend) (rate(response_total{namespace="personbruker", app="navno-search-api-alert"}[3m])))) > 1
+          for: 3m
+          annotations:
+            action: "Sjekk loggene for å se hvorfor navno-search-api-alert returnerer HTTP feilresponser"
+          labels:
+            severity: danger
+            receiver_reference: team-navno-backend-alerts
+            alert_type: custom
+        - alert: Høy andel HTTP klientfeil (4xx responser)
+          expr: (100 * (sum by (backend) (rate(response_total{status_code=~"^4\\d\\d", namespace="personbruker", app="navno-search-api-alert"}[3m])) / sum by (backend) (rate(response_total{namespace="personbruker", app="navno-search-api-alert"}[3m])))) > 10
+          for: 3m
+          annotations:
+            action: "Sjekk loggene for å se hvorfor navno-search-api-alert returnerer HTTP feilresponser"
+          labels:
+            severity: warning
+            receiver_reference: team-navno-backend-alerts
+            alert_type: custom
