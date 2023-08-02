@@ -28,6 +28,7 @@ repositories {
 dependencies {
     val versions = object {
         val coroutines = "1.7.3"
+        val logstash = "7.4"
         val opensearch = "1.2.0"
         val opensearchTestcontainers = "2.0.0"
         val testcontainers = "1.18.3"
@@ -37,6 +38,7 @@ dependencies {
     implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("net.logstash.logback:logstash-logback-encoder:${versions.logstash}")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
