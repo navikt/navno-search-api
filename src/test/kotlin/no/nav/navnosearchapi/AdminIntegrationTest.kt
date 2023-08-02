@@ -10,6 +10,7 @@ import org.springframework.boot.test.web.client.exchange
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 class AdminIntegrationTest : AbstractIntegrationTest() {
@@ -51,5 +52,16 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(indexCount()).isEqualTo(9L)
         assertThat(!operations.exists(deletedId, indexCoordinates))
+    }
+
+    @Test
+    fun testDeletingContentForMissingApp() {
+        val deletedId = "1"
+        val appName = "missing-app"
+        val response: ResponseEntity<String> =
+            restTemplate.exchange("${host()}/content/$appName/$deletedId", HttpMethod.DELETE)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(response.body).isEqualTo("Fant ingen index for app: $appName")
     }
 }
