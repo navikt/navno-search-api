@@ -35,7 +35,6 @@ dependencies {
     }
 
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}")
-    implementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("net.logstash.logback:logstash-logback-encoder:${versions.logstash}")
@@ -44,6 +43,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter:${versions.testcontainers}")
     testImplementation("org.opensearch:opensearch-testcontainers:${versions.opensearchTestcontainers}")
