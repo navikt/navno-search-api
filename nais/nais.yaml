@@ -9,18 +9,18 @@ spec:
   image: {{image}}
   port: 8080
   liveness:
-    path: /actuator/health
+    path: /internal/health
     initialDelay: 60
     timeout: 1
     periodSeconds: 10
     failureThreshold: 3
   readiness:
-    path: /actuator/health
+    path: /internal/health
     initialDelay: 60
     timeout: 1
   prometheus:
     enabled: true
-    path: /actuator/prometheus
+    path: /internal/prometheus
   replicas:
     min: {{ min-replicas }}
     max: {{ max-replicas }}
