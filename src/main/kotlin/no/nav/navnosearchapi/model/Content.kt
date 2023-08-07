@@ -13,5 +13,5 @@ data class Content(
     @Field(type = FieldType.Text) val ingress: MultiLangField? = null,
     @Field(type = FieldType.Text) val text: MultiLangField? = null,
     @Field(type = FieldType.Keyword) val maalgruppe: String? = null,
-    @Field(type = FieldType.Keyword) val language: String? = null,
+    @Field(type = FieldType.Keyword) val language: String,
 )

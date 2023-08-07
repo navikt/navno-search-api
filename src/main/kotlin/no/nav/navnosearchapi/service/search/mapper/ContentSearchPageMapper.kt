@@ -21,15 +21,18 @@ class ContentSearchPageMapper {
     }
 
     private fun toContentSearchHit(searchHit: SearchHit<Content>): ContentSearchHit {
+        val language = searchHit.content.language
         return ContentSearchHit(
             content = searchHit.content,
             highlight = ContentHighlight(
-                name = searchHit.getHighlightField(NAME),
-                ingress = searchHit.getHighlightField(INGRESS),
-                text = searchHit.getHighlightField(TEXT),
+                name = searchHit.getHighlightField(languageSubfield(NAME, language)),
+                ingress = searchHit.getHighlightField(languageSubfield(INGRESS, language)),
+                text = searchHit.getHighlightField(languageSubfield(TEXT, language)),
             ),
         )
     }
+
+    private fun languageSubfield(field: String, language: String) = "$field.$language"
 
     companion object {
         private const val NAME = "name"
