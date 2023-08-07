@@ -35,7 +35,7 @@ abstract class AbstractIntegrationTest {
     var serverPort: Int? = null
 
     final val appName = "testapp"
-    final val aliasName = "search_content"
+    final val aliasName = "search-content"
     final val indexName = indexName(appName)
     final val indexCoordinates = indexCoordinates(appName)
 

@@ -21,7 +21,7 @@ class SearchHelper(
     val operations: ElasticsearchOperations,
     val mapper: ContentSearchPageMapper
 ) {
-    val highlightFields = listOf("name", "ingress", "text").map { HighlightField(it) }
+    val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }
 
     fun search(query: String, page: Int, highlighting: Boolean = true): ContentSearchPage {
         val pageRequest = PageRequest.of(page, pageSize)

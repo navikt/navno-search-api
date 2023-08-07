@@ -38,6 +38,6 @@ class SearchService(
     }
 
     companion object {
-        private const val MAALGRUPPE_KEYWORD = "maalgruppe.keyword"
+        private const val MAALGRUPPE_KEYWORD = "maalgruppe"
     }
 }
