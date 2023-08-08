@@ -1,8 +1,8 @@
 package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
+import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
 import no.nav.navnosearchapi.model.Content
-import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.utils.defaultIndexCoordinates
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest

@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import no.nav.navnosearchapi.dto.Content as ContentDto
 
 @RestController
 class AdminController(val service: AdminService) {
 
     @PostMapping("/content/{appName}")
-    fun saveContent(@RequestBody content: List<Content>, @PathVariable("appName") appName: String): List<Content> {
+    fun saveContent(@RequestBody content: List<ContentDto>, @PathVariable("appName") appName: String): List<Content> {
         return service.saveAllContent(content, appName)
     }
 
