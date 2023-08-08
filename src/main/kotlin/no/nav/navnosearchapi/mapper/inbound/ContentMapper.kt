@@ -1,16 +1,16 @@
 package no.nav.navnosearchapi.mapper.inbound
 
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.dto.ContentDto
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.NORWEGIAN
 import org.springframework.stereotype.Component
-import no.nav.navnosearchapi.dto.Content as ContentDto
 
 @Component
 class ContentMapper {
-    fun toContentDao(content: ContentDto): Content {
-        return Content(
+    fun toContentDao(content: ContentDto): ContentDao {
+        return ContentDao(
             id = content.id,
             href = content.href,
             name = toMultiLangField(content.name, content.language),

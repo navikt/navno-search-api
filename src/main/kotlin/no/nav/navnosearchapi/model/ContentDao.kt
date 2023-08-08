@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType
 import org.springframework.data.elasticsearch.annotations.WriteTypeHint
 
 @Document(indexName = "search-content", createIndex = false, writeTypeHint = WriteTypeHint.FALSE)
-data class Content(
+data class ContentDao(
     @Id val id: String,
     @Field(type = FieldType.Text) val href: String,
     @Field(type = FieldType.Text) val name: MultiLangField,

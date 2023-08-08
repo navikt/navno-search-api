@@ -1,11 +1,11 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 
 
 val initialTestData = listOf(
-    Content(
+    ContentDao(
         "1",
         "https://first.com",
         MultiLangField(en = "First name"),
@@ -14,7 +14,7 @@ val initialTestData = listOf(
         "Privatperson",
         "en"
     ),
-    Content(
+    ContentDao(
         "2",
         "https://second.com",
         MultiLangField(en = "Second name"),
@@ -23,7 +23,7 @@ val initialTestData = listOf(
         "Privatperson",
         "en"
     ),
-    Content(
+    ContentDao(
         "3",
         "https://third.com",
         MultiLangField(en = "Third name"),
@@ -32,7 +32,7 @@ val initialTestData = listOf(
         "Privatperson",
         "en"
     ),
-    Content(
+    ContentDao(
         "4",
         "https://fourth.com",
         MultiLangField(en = "Fourth name"),
@@ -41,7 +41,7 @@ val initialTestData = listOf(
         "Privatperson",
         "en"
     ),
-    Content(
+    ContentDao(
         "5",
         "https://fifth.com",
         MultiLangField(en = "Fifth name"),
@@ -50,7 +50,7 @@ val initialTestData = listOf(
         "Arbeidsgiver",
         "en"
     ),
-    Content(
+    ContentDao(
         "6",
         "https://sixth.com",
         MultiLangField(en = "Sixth name"),
@@ -59,7 +59,7 @@ val initialTestData = listOf(
         "Arbeidsgiver",
         "en"
     ),
-    Content(
+    ContentDao(
         "7",
         "https://seventh.com",
         MultiLangField(en = "Seventh name"),
@@ -68,7 +68,7 @@ val initialTestData = listOf(
         "Arbeidsgiver",
         "en"
     ),
-    Content(
+    ContentDao(
         "8",
         "https://eighth.com",
         MultiLangField(en = "Eighth name"),
@@ -77,7 +77,7 @@ val initialTestData = listOf(
         "Samarbeidspartner",
         "en"
     ),
-    Content(
+    ContentDao(
         "9",
         "https://ninth.com",
         MultiLangField(en = "Ninth name"),
@@ -86,7 +86,7 @@ val initialTestData = listOf(
         "Samarbeidspartner",
         "en"
     ),
-    Content(
+    ContentDao(
         "10",
         "https://tenth.com",
         MultiLangField(en = "Tenth name"),
@@ -98,7 +98,7 @@ val initialTestData = listOf(
 )
 
 val additionalTestData = listOf(
-    Content(
+    ContentDao(
         "11",
         "https://eleventh.com",
         MultiLangField(en = "Eleventh name"),

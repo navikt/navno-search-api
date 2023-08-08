@@ -1,19 +1,19 @@
 package no.nav.navnosearchapi.mapper.outbound
 
+import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentHighlight
 import no.nav.navnosearchapi.dto.ContentSearchHit
 import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.NORWEGIAN
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
-import no.nav.navnosearchapi.dto.Content as ContentDto
 
 @Component
 class ContentSearchPageMapper {
-    fun toContentSearchPage(searchPage: SearchPage<Content>): ContentSearchPage {
+    fun toContentSearchPage(searchPage: SearchPage<ContentDao>): ContentSearchPage {
         return ContentSearchPage(
             hits = searchPage.searchHits.searchHits.map { toContentSearchHit(it) },
             totalPages = searchPage.totalPages,
@@ -23,7 +23,7 @@ class ContentSearchPageMapper {
         )
     }
 
-    private fun toContentSearchHit(searchHit: SearchHit<Content>): ContentSearchHit {
+    private fun toContentSearchHit(searchHit: SearchHit<ContentDao>): ContentSearchHit {
         val language = searchHit.content.language
         return ContentSearchHit(
             content = toContentDto(searchHit.content),
@@ -35,7 +35,7 @@ class ContentSearchPageMapper {
         )
     }
 
-    private fun toContentDto(content: Content): ContentDto {
+    private fun toContentDto(content: ContentDao): ContentDto {
         return ContentDto(
             id = content.id,
             href = content.href,
