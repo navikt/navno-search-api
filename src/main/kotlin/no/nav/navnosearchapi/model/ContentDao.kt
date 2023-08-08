@@ -10,9 +10,9 @@ import org.springframework.data.elasticsearch.annotations.WriteTypeHint
 data class ContentDao(
     @Id val id: String,
     @Field(type = FieldType.Text) val href: String,
-    @Field(type = FieldType.Text) val name: MultiLangField,
-    @Field(type = FieldType.Text) val ingress: MultiLangField,
-    @Field(type = FieldType.Text) val text: MultiLangField,
+    @Field(type = FieldType.Object) val name: MultiLangField,
+    @Field(type = FieldType.Object) val ingress: MultiLangField,
+    @Field(type = FieldType.Object) val text: MultiLangField,
     @Field(type = FieldType.Keyword) val maalgruppe: String,
     @Field(type = FieldType.Keyword) val language: String,
 )

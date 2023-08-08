@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.utils
 
+import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 
@@ -98,12 +99,12 @@ val initialTestData = listOf(
 )
 
 val additionalTestData = listOf(
-    ContentDao(
+    ContentDto(
         "11",
         "https://eleventh.com",
-        MultiLangField(en = "Eleventh name"),
-        MultiLangField(en = "Eleventh ingress"),
-        MultiLangField(en = "Eleventh text"),
+        "Eleventh name",
+        "Eleventh ingress",
+        "Eleventh text",
         "Samarbeidspartner",
         "en"
     )
