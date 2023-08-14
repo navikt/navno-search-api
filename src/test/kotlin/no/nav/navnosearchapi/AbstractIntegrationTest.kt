@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi
 
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.utils.indexCoordinates
 import no.nav.navnosearchapi.utils.indexName
 import no.nav.navnosearchapi.utils.initialTestData
@@ -35,7 +36,7 @@ abstract class AbstractIntegrationTest {
     var serverPort: Int? = null
 
     final val appName = "testapp"
-    final val aliasName = "search_content"
+    final val aliasName = "search-content"
     final val indexName = indexName(appName)
     final val indexCoordinates = indexCoordinates(appName)
 
@@ -51,6 +52,7 @@ abstract class AbstractIntegrationTest {
     fun setupIndex() {
         operations.indexOps(indexCoordinates).delete()
         operations.indexOps(indexCoordinates).create()
+        operations.indexOps(indexCoordinates).putMapping(ContentDao::class.java)
         operations.indexOps(indexCoordinates).alias(aliasActions())
         operations.save(initialTestData, indexCoordinates)
         operations.indexOps(indexCoordinates).refresh()

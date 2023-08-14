@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.utils.additionalTestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -29,13 +29,13 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContent() {
-        val content: ResponseEntity<List<Content>> = restTemplate.exchange(
+        val content: ResponseEntity<List<ContentDao>> = restTemplate.exchange(
             "${host()}/content/testapp",
             HttpMethod.POST,
             HttpEntity(additionalTestData),
         )
 
-        val savedContent: Content = content.body?.first()!!
+        val savedContent: ContentDao = content.body?.first()!!
 
         operations.indexOps(indexCoordinates).refresh()
 

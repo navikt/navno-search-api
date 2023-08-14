@@ -1,7 +1,8 @@
 package no.nav.navnosearchapi.rest
 
+import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.service.AdminService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 class AdminController(val service: AdminService) {
 
     @PostMapping("/content/{appName}")
-    fun saveContent(@RequestBody content: List<Content>, @PathVariable("appName") appName: String): List<Content> {
+    fun saveContent(
+        @RequestBody content: List<ContentDto>,
+        @PathVariable("appName") appName: String
+    ): List<ContentDao> {
         return service.saveAllContent(content, appName)
     }
 

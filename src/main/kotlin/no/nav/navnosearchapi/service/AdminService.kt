@@ -1,8 +1,10 @@
 package no.nav.navnosearchapi.service
 
+import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.exception.NoIndexForAppException
-import no.nav.navnosearchapi.model.Content
+import no.nav.navnosearchapi.mapper.inbound.ContentMapper
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.service.search.SearchHelper
 import no.nav.navnosearchapi.service.search.findAllByIndexQuery
 import no.nav.navnosearchapi.utils.indexCoordinates
@@ -15,10 +17,12 @@ import org.springframework.stereotype.Service
 class AdminService(
     val operations: ElasticsearchOperations,
     val searchHelper: SearchHelper,
+    val mapper: ContentMapper,
 ) {
 
-    fun saveAllContent(content: List<Content>, appName: String): List<Content> {
-        return operations.save(content, indexCoordinates(appName)).toList()
+    fun saveAllContent(content: List<ContentDto>, appName: String): List<ContentDao> {
+        val mappedContent = content.map { mapper.toContentDao(it) }
+        return operations.save(mappedContent, indexCoordinates(appName)).toList()
     }
 
     fun deleteContentByAppNameAndId(appName: String, id: String): String {

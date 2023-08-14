@@ -1,8 +1,8 @@
 package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.model.Content
-import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
+import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
+import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.utils.defaultIndexCoordinates
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
@@ -21,7 +21,7 @@ class SearchHelper(
     val operations: ElasticsearchOperations,
     val mapper: ContentSearchPageMapper
 ) {
-    val highlightFields = listOf("name", "ingress", "text").map { HighlightField(it) }
+    val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }
 
     fun search(query: String, page: Int, highlighting: Boolean = true): ContentSearchPage {
         val pageRequest = PageRequest.of(page, pageSize)
@@ -31,13 +31,13 @@ class SearchHelper(
             searchQuery.setHighlightQuery(
                 HighlightQuery(
                     Highlight(highlightFields),
-                    Content::class.java
+                    ContentDao::class.java
                 )
             )
         }
 
-        val searchHits = operations.search(searchQuery, Content::class.java, defaultIndexCoordinates())
-        val searchPage: SearchPage<Content> = SearchHitSupport.searchPageFor(searchHits, pageRequest)
+        val searchHits = operations.search(searchQuery, ContentDao::class.java, defaultIndexCoordinates())
+        val searchPage: SearchPage<ContentDao> = SearchHitSupport.searchPageFor(searchHits, pageRequest)
 
         return mapper.toContentSearchPage(searchPage)
     }
