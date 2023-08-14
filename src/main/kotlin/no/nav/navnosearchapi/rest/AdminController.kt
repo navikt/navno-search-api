@@ -4,6 +4,7 @@ import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.service.AdminService
+import no.nav.navnosearchapi.validation.ContentDtoValidator
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class AdminController(val service: AdminService) {
+class AdminController(val service: AdminService, val validator: ContentDtoValidator) {
 
     @PostMapping("/content/{appName}")
     fun saveContent(
         @RequestBody content: List<ContentDto>,
         @PathVariable("appName") appName: String
     ): List<ContentDao> {
+        validator.validate(content)
         return service.saveAllContent(content, appName)
     }
 
