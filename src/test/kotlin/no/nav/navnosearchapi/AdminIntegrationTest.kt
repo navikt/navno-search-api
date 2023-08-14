@@ -3,6 +3,7 @@ package no.nav.navnosearchapi
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.utils.additionalTestData
+import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,6 +42,30 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(indexCount()).isEqualTo(11L)
         assertThat(operations.exists(savedContent.id, indexCoordinates))
+    }
+
+    @Test
+    fun testSavingContentWithMissingRequiredField() {
+        val response: ResponseEntity<String> = restTemplate.exchange(
+            "${host()}/content/testapp",
+            HttpMethod.POST,
+            HttpEntity(additionalTestDataAsMapWithMissingIngress),
+        )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(response.body).isEqualTo("Påkrevd felt mangler: ingress")
+    }
+
+    @Test
+    fun testSavingContentWithNonSupportedLanguage() {
+        val response: ResponseEntity<String> = restTemplate.exchange(
+            "${host()}/content/testapp",
+            HttpMethod.POST,
+            HttpEntity(listOf(additionalTestData[0].copy(language = "unsupported"))),
+        )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(response.body).isEqualTo("Validering feilet: language må være en av følgende gyldige verdier: [en, no]")
     }
 
     @Test
