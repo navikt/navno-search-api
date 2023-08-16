@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Setting
 import org.springframework.data.elasticsearch.annotations.WriteTypeHint
 
 @Document(
-    indexName = "search-content",
+    indexName = "search-content-v1",
     dynamic = Dynamic.STRICT,
     /* Disabler type hints da det lager et _class-felt i mappingen som gir problemer for wildcard-søk.
        Bør skrives om dersom vi trenger polymorfisk data. */
