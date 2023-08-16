@@ -1,10 +1,9 @@
 package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchapi.dto.ContentDto
-import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.service.AdminService
 import no.nav.navnosearchapi.validation.ContentDtoValidator
+import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,25 +15,27 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class AdminController(val service: AdminService, val validator: ContentDtoValidator) {
 
-    @PostMapping("/content/{appName}")
+    @PostMapping("/content/{teamName}")
     fun saveContent(
         @RequestBody content: List<ContentDto>,
-        @PathVariable("appName") appName: String
-    ): List<ContentDao> {
+        @PathVariable teamName: String
+    ): List<ContentDto> {
         validator.validate(content)
-        return service.saveAllContent(content, appName)
+        service.saveAllContent(content, teamName)
+        return content
     }
 
-    @GetMapping("/content/{appName}")
-    fun getContentForAppName(
-        @PathVariable appName: String,
+    @GetMapping("/content/{teamName}")
+    fun getContentForTeamName(
+        @PathVariable teamName: String,
         @RequestParam page: Int
-    ): ContentSearchPage {
-        return service.getContentForAppName(appName, page)
+    ): Page<ContentDto> {
+        return service.getContentForTeamName(teamName, page)
     }
 
-    @DeleteMapping("/content/{appName}/{id}")
-    fun deleteContentByAppNameAndId(@PathVariable appName: String, @PathVariable id: String): String {
-        return service.deleteContentByAppNameAndId(appName, id)
+    @DeleteMapping("/content/{teamName}/{id}")
+    fun deleteContentByTeamNameAndId(@PathVariable teamName: String, @PathVariable id: String): String {
+        service.deleteContentByTeamNameAndId(teamName, id)
+        return id
     }
 }

@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi
 
-import no.nav.navnosearchapi.utils.indexCoordinates
+import no.nav.navnosearchapi.repository.ContentRepository
 import no.nav.navnosearchapi.utils.initialTestData
 import org.opensearch.testcontainers.OpensearchContainer
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +10,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -25,17 +24,14 @@ abstract class AbstractIntegrationTest {
     lateinit var restTemplate: TestRestTemplate
 
     @Autowired
-    lateinit var operations: ElasticsearchOperations
+    lateinit var repository: ContentRepository
 
     @LocalServerPort
     var serverPort: Int? = null
 
-    final val appName = "testapp"
-    final val indexCoordinates = indexCoordinates(appName)
-
     fun host() = "http://localhost:$serverPort"
 
-    fun indexCount() = operations.count(operations.matchAllQuery(), indexCoordinates)
+    fun indexCount() = repository.count()
 
     fun searchUrl(term: String, page: Int = 0, maalgruppe: String? = null): String {
         val maalgruppeParam = maalgruppe?.let { "&maalgruppe=$it" } ?: ""
@@ -43,10 +39,8 @@ abstract class AbstractIntegrationTest {
     }
 
     fun setupIndex() {
-        operations.indexOps(indexCoordinates).delete()
-        operations.indexOps(indexCoordinates).create()
-        operations.save(initialTestData, indexCoordinates)
-        operations.indexOps(indexCoordinates).refresh()
+        repository.deleteAll()
+        repository.saveAll(initialTestData)
     }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

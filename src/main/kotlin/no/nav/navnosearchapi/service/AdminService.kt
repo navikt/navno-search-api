@@ -1,39 +1,40 @@
 package no.nav.navnosearchapi.service
 
 import no.nav.navnosearchapi.dto.ContentDto
-import no.nav.navnosearchapi.dto.ContentSearchPage
-import no.nav.navnosearchapi.exception.NoIndexForAppException
+import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 import no.nav.navnosearchapi.mapper.inbound.ContentMapper
-import no.nav.navnosearchapi.model.ContentDao
-import no.nav.navnosearchapi.service.search.SearchHelper
-import no.nav.navnosearchapi.service.search.findAllByIndexQuery
-import no.nav.navnosearchapi.utils.indexCoordinates
-import no.nav.navnosearchapi.utils.indexName
-import org.springframework.data.elasticsearch.NoSuchIndexException
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
+import no.nav.navnosearchapi.repository.ContentRepository
+import no.nav.navnosearchapi.utils.createInternalId
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
 class AdminService(
-    val operations: ElasticsearchOperations,
-    val searchHelper: SearchHelper,
-    val mapper: ContentMapper,
+    val contentSearchPageMapper: ContentSearchPageMapper,
+    val contentMapper: ContentMapper,
+    val repository: ContentRepository,
+    @Value("\${opensearch.page-size}") val pageSize: Int,
 ) {
 
-    fun saveAllContent(content: List<ContentDto>, appName: String): List<ContentDao> {
-        val mappedContent = content.map { mapper.toContentDao(it) }
-        return operations.save(mappedContent, indexCoordinates(appName)).toList()
+    fun saveAllContent(content: List<ContentDto>, teamName: String) {
+        val mappedContent = content.map { contentMapper.toContentDao(it, teamName) }
+        repository.saveAll(mappedContent)
     }
 
-    fun deleteContentByAppNameAndId(appName: String, id: String): String {
-        try {
-            return operations.delete(id, indexCoordinates(appName))
-        } catch (ex: NoSuchIndexException) {
-            throw NoIndexForAppException(appName, ex)
+    fun deleteContentByTeamNameAndId(teamName: String, externalId: String) {
+        val id = createInternalId(teamName, externalId)
+        if (repository.existsById(id)) {
+            repository.deleteById(id)
+        } else {
+            throw DocumentForTeamNameNotFoundException("Dokument med ekstern id $externalId finnes ikke for team $teamName")
         }
     }
 
-    fun getContentForAppName(appName: String, page: Int): ContentSearchPage {
-        return searchHelper.search(findAllByIndexQuery(indexName(appName)), page, false)
+    fun getContentForTeamName(teamName: String, page: Int): Page<ContentDto> {
+        val pageable = PageRequest.of(page, pageSize)
+        return repository.findAllByTeamOwnedBy(teamName, pageable).map { contentSearchPageMapper.toContentDto(it) }
     }
 }

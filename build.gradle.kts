@@ -35,9 +35,6 @@ dependencies {
     }
 
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
-        // todo: Følg opp
-        // Eksluderer modul midlertidig da den gir feilmelding hvert femte minutt.
-        // Bug rapportert her: https://github.com/opensearch-project/spring-data-opensearch/issues/121
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -49,9 +46,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}") {
-        // todo: Følg opp
-        // Eksluderer modul midlertidig da den gir feilmelding hvert femte minutt.
-        // Bug rapportert her: https://github.com/opensearch-project/spring-data-opensearch/issues/121
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
     testImplementation("org.springframework.boot:spring-boot-starter-test")

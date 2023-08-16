@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.service.search
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
 import no.nav.navnosearchapi.model.ContentDao
-import no.nav.navnosearchapi.utils.defaultIndexCoordinates
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -36,7 +35,7 @@ class SearchHelper(
             )
         }
 
-        val searchHits = operations.search(searchQuery, ContentDao::class.java, defaultIndexCoordinates())
+        val searchHits = operations.search(searchQuery, ContentDao::class.java)
         val searchPage: SearchPage<ContentDao> = SearchHitSupport.searchPageFor(searchHits, pageRequest)
 
         return mapper.toContentSearchPage(searchPage)
