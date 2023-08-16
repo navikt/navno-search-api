@@ -1,10 +1,9 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentDto
-import no.nav.navnosearchapi.model.ContentDao
+import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
 import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
-import no.nav.navnosearchapi.utils.createId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,31 +23,32 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testFetchingContent() {
-        val result = restTemplate.getForEntity<Map<String, Any>>("${host()}/content/testTeam?page=0")
+        val response = restTemplate.getForEntity<Map<String, Any>>("${host()}/content/$TEAM_NAME?page=0")
 
-        assertThat(result.body?.get("totalElements")).isEqualTo(10)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body?.get("totalElements")).isEqualTo(10)
     }
 
     @Test
     fun testSavingContent() {
-        val content: ResponseEntity<List<ContentDto>> = restTemplate.exchange(
-            "${host()}/content/testTeam",
+        val response: ResponseEntity<List<ContentDto>> = restTemplate.exchange(
+            "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(additionalTestData),
         )
 
-        val savedContent: ContentDto = content.body?.first()!!
+        val savedContent: ContentDto = response.body?.first()!!
 
-        operations.indexOps(ContentDao::class.java).refresh()
 
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(indexCount()).isEqualTo(11L)
-        assertThat(operations.exists(createId("testTeam", savedContent.id), ContentDao::class.java))
+        assertThat(!repository.existsById("$TEAM_NAME-${savedContent.id}"))
     }
 
     @Test
     fun testSavingContentWithMissingRequiredField() {
         val response: ResponseEntity<String> = restTemplate.exchange(
-            "${host()}/content/testTeam",
+            "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(additionalTestDataAsMapWithMissingIngress),
         )
@@ -60,7 +60,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
     @Test
     fun testSavingContentWithNonSupportedLanguage() {
         val response: ResponseEntity<String> = restTemplate.exchange(
-            "${host()}/content/testTeam",
+            "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(listOf(additionalTestData[0].copy(language = "unsupported"))),
         )
@@ -73,13 +73,12 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
     fun testDeletingContent() {
         val deletedId = "1"
         val response: ResponseEntity<String> =
-            restTemplate.exchange("${host()}/content/testTeam/$deletedId", HttpMethod.DELETE)
+            restTemplate.exchange("${host()}/content/$TEAM_NAME/$deletedId", HttpMethod.DELETE)
 
-        operations.indexOps(ContentDao::class.java).refresh()
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(indexCount()).isEqualTo(9L)
-        assertThat(!operations.exists(deletedId, ContentDao::class.java))
+        assertThat(!repository.existsById("$TEAM_NAME-$deletedId"))
     }
 
     @Test

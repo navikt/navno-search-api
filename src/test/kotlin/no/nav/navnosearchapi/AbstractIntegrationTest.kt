@@ -1,6 +1,5 @@
 package no.nav.navnosearchapi
 
-import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.repository.ContentRepository
 import no.nav.navnosearchapi.utils.initialTestData
 import org.opensearch.testcontainers.OpensearchContainer
@@ -11,7 +10,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -24,9 +22,6 @@ abstract class AbstractIntegrationTest {
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
-
-    @Autowired
-    lateinit var operations: ElasticsearchOperations
 
     @Autowired
     lateinit var repository: ContentRepository
@@ -45,8 +40,7 @@ abstract class AbstractIntegrationTest {
 
     fun setupIndex() {
         repository.deleteAll()
-        operations.save(initialTestData)
-        operations.indexOps(ContentDao::class.java).refresh()
+        repository.saveAll(initialTestData)
     }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
