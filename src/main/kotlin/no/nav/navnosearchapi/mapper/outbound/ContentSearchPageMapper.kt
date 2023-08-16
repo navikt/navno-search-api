@@ -7,6 +7,7 @@ import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.extractExternalId
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -25,7 +26,7 @@ class ContentSearchPageMapper {
 
     fun toContentDto(content: ContentDao): ContentDto {
         return ContentDto(
-            id = content.id,
+            id = extractExternalId(content.id, content.teamOwnedBy),
             href = content.href,
             name = languageSubfieldValue(content.name, content.language),
             ingress = languageSubfieldValue(content.ingress, content.language),

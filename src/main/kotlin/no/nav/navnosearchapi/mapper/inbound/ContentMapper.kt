@@ -5,13 +5,14 @@ import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.createInternalId
 import org.springframework.stereotype.Component
 
 @Component
 class ContentMapper {
     fun toContentDao(content: ContentDto, teamName: String): ContentDao {
         return ContentDao(
-            id = content.id,
+            id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
             name = toMultiLangField(content.name, content.language),

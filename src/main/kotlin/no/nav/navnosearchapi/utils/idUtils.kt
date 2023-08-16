@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 
-fun createId(teamName: String, externalId: String) = "$teamName-$externalId"
+fun createInternalId(teamName: String, externalId: String) = "$teamName-$externalId"
 
 fun extractExternalId(id: String, teamName: String): String {
     val expectedPrefix = "$teamName-"

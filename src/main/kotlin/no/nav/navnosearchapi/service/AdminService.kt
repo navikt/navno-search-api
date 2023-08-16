@@ -5,7 +5,7 @@ import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 import no.nav.navnosearchapi.mapper.inbound.ContentMapper
 import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
 import no.nav.navnosearchapi.repository.ContentRepository
-import no.nav.navnosearchapi.utils.createId
+import no.nav.navnosearchapi.utils.createInternalId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -25,7 +25,7 @@ class AdminService(
     }
 
     fun deleteContentByTeamNameAndId(teamName: String, externalId: String) {
-        val id = createId(teamName, externalId)
+        val id = createInternalId(teamName, externalId)
         if (repository.existsById(id)) {
             repository.deleteById(id)
         } else {
