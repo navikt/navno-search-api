@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.exception.handler
 
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import no.nav.navnosearchapi.exception.ContentValidationException
-import no.nav.navnosearchapi.exception.NoIndexForAppException
+import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -41,11 +41,10 @@ class ErrorHandler {
         return ResponseEntity.badRequest().body(msg)
     }
 
-    @ExceptionHandler(value = [NoIndexForAppException::class])
-    fun noSuchIndexHandler(ex: NoIndexForAppException): ResponseEntity<String> {
-        val msg = "Fant ingen index for app: ${ex.appName}"
-        logger.warn(msg, ex)
-        return ResponseEntity.badRequest().body(msg)
+    @ExceptionHandler(value = [DocumentForTeamNameNotFoundException::class])
+    fun documentForTeamNameNotFoundHandler(ex: DocumentForTeamNameNotFoundException): ResponseEntity<String> {
+        logger.warn(ex.message, ex)
+        return ResponseEntity.badRequest().body(ex.message)
     }
 
     @ExceptionHandler(value = [Throwable::class])

@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class ContentMapper {
-    fun toContentDao(content: ContentDto): ContentDao {
+    fun toContentDao(content: ContentDto, teamName: String): ContentDao {
         return ContentDao(
             id = content.id,
+            teamOwnedBy = teamName,
             href = content.href,
             name = toMultiLangField(content.name, content.language),
             ingress = toMultiLangField(content.ingress, content.language),

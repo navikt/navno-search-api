@@ -23,6 +23,18 @@ class ContentSearchPageMapper {
         )
     }
 
+    fun toContentDto(content: ContentDao): ContentDto {
+        return ContentDto(
+            id = content.id,
+            href = content.href,
+            name = languageSubfieldValue(content.name, content.language),
+            ingress = languageSubfieldValue(content.ingress, content.language),
+            text = languageSubfieldValue(content.text, content.language),
+            maalgruppe = content.maalgruppe,
+            language = content.language,
+        )
+    }
+
     private fun toContentSearchHit(searchHit: SearchHit<ContentDao>): ContentSearchHit {
         val language = searchHit.content.language
         return ContentSearchHit(
@@ -32,18 +44,6 @@ class ContentSearchPageMapper {
                 ingress = searchHit.getHighlightField(languageSubfieldKey(INGRESS, language)),
                 text = searchHit.getHighlightField(languageSubfieldKey(TEXT, language)),
             ),
-        )
-    }
-
-    private fun toContentDto(content: ContentDao): ContentDto {
-        return ContentDto(
-            id = content.id,
-            href = content.href,
-            name = languageSubfieldValue(content.name, content.language),
-            ingress = languageSubfieldValue(content.ingress, content.language),
-            text = languageSubfieldValue(content.text, content.language),
-            maalgruppe = content.maalgruppe,
-            language = content.language,
         )
     }
 

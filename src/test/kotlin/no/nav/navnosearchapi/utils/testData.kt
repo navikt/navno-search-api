@@ -7,7 +7,8 @@ import no.nav.navnosearchapi.model.MultiLangField
 
 val initialTestData = listOf(
     ContentDao(
-        "1",
+        "testTeam-1",
+        "testTeam",
         "https://first.com",
         MultiLangField(en = "First name"),
         MultiLangField(en = "First ingress"),
@@ -16,7 +17,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "2",
+        "testTeam-2",
+        "testTeam",
         "https://second.com",
         MultiLangField(en = "Second name"),
         MultiLangField(en = "Second ingress"),
@@ -25,7 +27,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "3",
+        "testTeam-3",
+        "testTeam",
         "https://third.com",
         MultiLangField(en = "Third name"),
         MultiLangField(en = "Third ingress"),
@@ -34,7 +37,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "4",
+        "testTeam-4",
+        "testTeam",
         "https://fourth.com",
         MultiLangField(en = "Fourth name"),
         MultiLangField(en = "Fourth ingress"),
@@ -43,7 +47,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "5",
+        "testTeam-5",
+        "testTeam",
         "https://fifth.com",
         MultiLangField(en = "Fifth name"),
         MultiLangField(en = "Fifth ingress"),
@@ -52,7 +57,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "6",
+        "testTeam-6",
+        "testTeam",
         "https://sixth.com",
         MultiLangField(en = "Sixth name"),
         MultiLangField(en = "Sixth ingress"),
@@ -61,7 +67,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "7",
+        "testTeam-7",
+        "testTeam",
         "https://seventh.com",
         MultiLangField(en = "Seventh name"),
         MultiLangField(en = "Seventh ingress"),
@@ -70,7 +77,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "8",
+        "testTeam-8",
+        "testTeam",
         "https://eighth.com",
         MultiLangField(en = "Eighth name"),
         MultiLangField(en = "Eighth ingress"),
@@ -79,7 +87,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "9",
+        "testTeam-9",
+        "testTeam",
         "https://ninth.com",
         MultiLangField(en = "Ninth name"),
         MultiLangField(en = "Ninth ingress"),
@@ -88,7 +97,8 @@ val initialTestData = listOf(
         "en"
     ),
     ContentDao(
-        "10",
+        "testTeam-10",
+        "testTeam",
         "https://tenth.com",
         MultiLangField(en = "Tenth name"),
         MultiLangField(en = "Tenth ingress"),

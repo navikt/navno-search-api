@@ -20,18 +20,6 @@ fun searchAllTextForPhraseQuery(term: String): String = """
     }
     """
 
-fun findAllByIndexQuery(index: String) = """
-    {
-      "bool": {
-        "filter": {
-          "terms": {
-            "_index": ["$index"]
-          }
-        }
-      }
-    }
-    """
-
 fun filteredQuery(query: String, filters: String): String = """
     {
       "bool": {
