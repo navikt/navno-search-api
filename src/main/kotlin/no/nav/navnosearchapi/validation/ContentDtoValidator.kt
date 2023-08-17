@@ -17,6 +17,6 @@ class ContentDtoValidator {
     }
 
     companion object {
-        private val VALID_LANGS = listOf(ENGLISH, NORWEGIAN)
+        val VALID_LANGS = listOf(ENGLISH, NORWEGIAN)
     }
 }
