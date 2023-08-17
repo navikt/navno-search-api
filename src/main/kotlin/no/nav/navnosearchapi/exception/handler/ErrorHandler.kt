@@ -6,6 +6,7 @@ import no.nav.navnosearchapi.exception.ContentValidationException
 import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.slf4j.event.Level
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -96,11 +97,8 @@ class ErrorHandler {
             message = message ?: ex.message,
             path = path
         )
-        if (status.is5xxServerError) {
-            logger.error(error.message, ex)
-        } else {
-            logger.warn(error.message, ex)
-        }
+
+        logger.atLevel(if (status.is5xxServerError) Level.ERROR else Level.WARN).log(error.message, ex)
         return ResponseEntity(error, status)
     }
 }
