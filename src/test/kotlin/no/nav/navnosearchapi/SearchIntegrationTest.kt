@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
+import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,9 +48,9 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSearchWithMissingParameter() {
-        val response = restTemplate.getForEntity<String>("${host()}/content/search")
+        val response = restTemplate.getForEntity<ErrorResponse>("${host()}/content/search")
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body).isEqualTo("Påkrevd request parameter mangler: term")
+        assertThat(response.body?.message).isEqualTo("Påkrevd request parameter mangler: term")
     }
 }

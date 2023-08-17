@@ -1,15 +1,18 @@
 package no.nav.navnosearchapi.exception.handler
 
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import jakarta.servlet.http.HttpServletRequest
 import no.nav.navnosearchapi.exception.ContentValidationException
 import no.nav.navnosearchapi.exception.DocumentForTeamNameNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import java.time.LocalDateTime
 
 
 @ControllerAdvice
@@ -18,39 +21,85 @@ class ErrorHandler {
     val logger: Logger = LoggerFactory.getLogger(ErrorHandler::class.java)
 
     @ExceptionHandler(value = [MissingServletRequestParameterException::class])
-    fun missingRequestParamHandler(ex: MissingServletRequestParameterException): ResponseEntity<String> {
-        val msg = "Påkrevd request parameter mangler: ${ex.parameterName}"
-        logger.warn(msg, ex)
-        return ResponseEntity.badRequest().body(msg)
+    fun missingRequestParamHandler(
+        ex: MissingServletRequestParameterException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return handleException(
+            HttpStatus.BAD_REQUEST,
+            "Påkrevd request parameter mangler: ${ex.parameterName}",
+            request.requestURI, ex
+        )
     }
 
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
-    fun missingRequiredFieldHandler(ex: HttpMessageNotReadableException): ResponseEntity<String> {
+    fun missingRequiredFieldHandler(
+        ex: HttpMessageNotReadableException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
         if (ex.cause is MissingKotlinParameterException) {
-            val msg = "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}"
-            logger.warn(msg, ex)
-            return ResponseEntity.badRequest().body(msg)
+            return handleException(
+                HttpStatus.BAD_REQUEST,
+                "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}",
+                request.requestURI,
+                ex
+            )
         }
-        return defaultExceptionHandler(ex)
+        return defaultExceptionHandler(ex, request)
     }
 
     @ExceptionHandler(value = [ContentValidationException::class])
-    fun contentValidationExceptionHandler(ex: ContentValidationException): ResponseEntity<String> {
-        val msg = "Validering feilet: ${ex.message}"
-        logger.warn(msg, ex)
-        return ResponseEntity.badRequest().body(msg)
+    fun contentValidationExceptionHandler(
+        ex: ContentValidationException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return handleException(
+            status = HttpStatus.BAD_REQUEST,
+            path = request.requestURI,
+            ex = ex
+        )
     }
 
     @ExceptionHandler(value = [DocumentForTeamNameNotFoundException::class])
-    fun documentForTeamNameNotFoundHandler(ex: DocumentForTeamNameNotFoundException): ResponseEntity<String> {
-        logger.warn(ex.message, ex)
-        return ResponseEntity.badRequest().body(ex.message)
+    fun documentForTeamNameNotFoundHandler(
+        ex: DocumentForTeamNameNotFoundException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return handleException(
+            status = HttpStatus.BAD_REQUEST,
+            path = request.requestURI,
+            ex = ex
+        )
     }
 
     @ExceptionHandler(value = [Throwable::class])
-    fun defaultExceptionHandler(ex: Throwable): ResponseEntity<String> {
-        val msg = "Ukjent feil"
-        logger.error(msg, ex)
-        return ResponseEntity.internalServerError().body(msg)
+    fun defaultExceptionHandler(ex: Throwable, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        return handleException(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Ukjent feil",
+            request.requestURI,
+            ex
+        )
+    }
+
+    private fun handleException(
+        status: HttpStatus,
+        message: String? = null,
+        path: String,
+        ex: Throwable
+    ): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
+            LocalDateTime.now(),
+            status.value(),
+            status.reasonPhrase,
+            message ?: ex.message,
+            path
+        )
+        if (status.is5xxServerError) {
+            logger.error(error.message, ex)
+        } else {
+            logger.warn(error.message, ex)
+        }
+        return ResponseEntity(error, status)
     }
 }
