@@ -26,9 +26,10 @@ class ErrorHandler {
         request: HttpServletRequest
     ): ResponseEntity<ErrorResponse> {
         return handleException(
-            HttpStatus.BAD_REQUEST,
-            "Påkrevd request parameter mangler: ${ex.parameterName}",
-            request.requestURI, ex
+            status = HttpStatus.BAD_REQUEST,
+            message = "Påkrevd request parameter mangler: ${ex.parameterName}",
+            path = request.requestURI,
+            ex = ex
         )
     }
 
@@ -39,10 +40,10 @@ class ErrorHandler {
     ): ResponseEntity<ErrorResponse> {
         if (ex.cause is MissingKotlinParameterException) {
             return handleException(
-                HttpStatus.BAD_REQUEST,
-                "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}",
-                request.requestURI,
-                ex
+                status = HttpStatus.BAD_REQUEST,
+                message = "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}",
+                path = request.requestURI,
+                ex = ex
             )
         }
         return defaultExceptionHandler(ex, request)
@@ -75,10 +76,10 @@ class ErrorHandler {
     @ExceptionHandler(value = [Throwable::class])
     fun defaultExceptionHandler(ex: Throwable, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
         return handleException(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "Ukjent feil",
-            request.requestURI,
-            ex
+            status = HttpStatus.INTERNAL_SERVER_ERROR,
+            message = "Ukjent feil",
+            path = request.requestURI,
+            ex = ex
         )
     }
 
@@ -89,11 +90,11 @@ class ErrorHandler {
         ex: Throwable
     ): ResponseEntity<ErrorResponse> {
         val error = ErrorResponse(
-            LocalDateTime.now(),
-            status.value(),
-            status.reasonPhrase,
-            message ?: ex.message,
-            path
+            timestamp = LocalDateTime.now(),
+            status = status.value(),
+            error = status.reasonPhrase,
+            message = message ?: ex.message,
+            path = path
         )
         if (status.is5xxServerError) {
             logger.error(error.message, ex)
