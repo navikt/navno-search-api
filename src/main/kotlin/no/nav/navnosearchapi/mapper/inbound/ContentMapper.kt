@@ -15,7 +15,7 @@ class ContentMapper {
             id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
-            name = toMultiLangField(content.name, content.language),
+            name = toMultiLangField(content.name, content.language, searchAsYouType = true),
             ingress = toMultiLangField(content.ingress, content.language),
             text = toMultiLangField(content.text, content.language),
             maalgruppe = content.maalgruppe,
@@ -23,10 +23,11 @@ class ContentMapper {
         )
     }
 
-    fun toMultiLangField(value: String, language: String): MultiLangField {
+    fun toMultiLangField(value: String, language: String, searchAsYouType: Boolean = false): MultiLangField {
         return MultiLangField(
             en = if (ENGLISH == language) value else null,
-            no = if (NORWEGIAN == language) value else null
+            no = if (NORWEGIAN == language) value else null,
+            searchAsYouType = if (searchAsYouType) value else null
         )
     }
 }

@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentDto
+import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
 import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
@@ -47,26 +48,26 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContentWithMissingRequiredField() {
-        val response: ResponseEntity<String> = restTemplate.exchange(
+        val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(additionalTestDataAsMapWithMissingIngress),
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body).isEqualTo("Påkrevd felt mangler: ingress")
+        assertThat(response.body?.message).isEqualTo("Påkrevd felt mangler: ingress")
     }
 
     @Test
     fun testSavingContentWithNonSupportedLanguage() {
-        val response: ResponseEntity<String> = restTemplate.exchange(
+        val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(listOf(additionalTestData[0].copy(language = "unsupported"))),
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body).isEqualTo("Validering feilet: language må være en av følgende gyldige verdier: [en, no]")
+        assertThat(response.body?.message).isEqualTo("language må være en av følgende gyldige verdier: [en, no]")
     }
 
     @Test
@@ -85,10 +86,10 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
     fun testDeletingContentForMissingApp() {
         val deletedId = "1"
         val teamName = "missing-team"
-        val response: ResponseEntity<String> =
+        val response: ResponseEntity<ErrorResponse> =
             restTemplate.exchange("${host()}/content/$teamName/$deletedId", HttpMethod.DELETE)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body).isEqualTo("Dokument med ekstern id $deletedId finnes ikke for team $teamName")
+        assertThat(response.body?.message).isEqualTo("Dokument med ekstern id $deletedId finnes ikke for team $teamName")
     }
 }
