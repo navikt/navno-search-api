@@ -40,6 +40,6 @@ class SearchHelper(
     }
 
     fun search(query: String, size: Int): SearchHits<ContentDao> {
-        return operations.search(StringQueryBuilder(query).withMaxResults(size).withMinScore(0.8F).build(), ContentDao::class.java)
+        return operations.search(StringQueryBuilder(query).withMaxResults(size).build(), ContentDao::class.java)
     }
 }
