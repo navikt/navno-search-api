@@ -2,8 +2,7 @@ package no.nav.navnosearchapi.validation
 
 import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.exception.ContentValidationException
-import no.nav.navnosearchapi.utils.ENGLISH
-import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.VALID_LANGS
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,9 +13,5 @@ class ContentDtoValidator {
                 throw ContentValidationException("language må være en av følgende gyldige verdier: $VALID_LANGS")
             }
         }
-    }
-
-    companion object {
-        val VALID_LANGS = listOf(ENGLISH, NORWEGIAN)
     }
 }

@@ -1,12 +1,18 @@
 package no.nav.navnosearchapi.service.search
 
-import no.nav.navnosearchapi.validation.ContentDtoValidator.Companion.VALID_LANGS
+import no.nav.navnosearchapi.utils.VALID_LANGS
+
+private const val NAME_WEIGHT = 3
+private const val INGRESS_WEIGHT = 2
+private const val TEXT_WEIGHT = 1
+
+private val fieldsToWeightMap = mapOf("name" to NAME_WEIGHT, "ingress" to INGRESS_WEIGHT, "text" to TEXT_WEIGHT)
 
 fun searchAllTextQuery(term: String): String = """
     {
       "multi_match": {
         "query": "$term",
-        "fields": [${fields(mapOf("name" to 3, "ingress" to 2, "text" to 1))}],
+        "fields": [${fields()}],
         "fuzziness": "auto"
       }
     }
@@ -17,7 +23,7 @@ fun searchAllTextForPhraseQuery(term: String): String = """
       "multi_match": {
         "query": $term,
         "type": "phrase",
-        "fields": [${fields(mapOf("name" to 3, "ingress" to 2, "text" to 1))}]
+        "fields": [${fields()}]
       }
     }
     """
@@ -41,11 +47,11 @@ fun filteredQuery(query: String, filters: String): String = """
     }
     """
 
-private fun fields(fieldToWeightMap: Map<String, Int>): String {
+private fun fields(): String {
     val fields = mutableListOf<String>()
 
-    fieldToWeightMap.forEach { (field, weight) ->
-        for (language in VALID_LANGS) { // todo: flytt denne lista
+    fieldsToWeightMap.forEach { (field, weight) ->
+        for (language in VALID_LANGS) {
             fields.add("\"${field}.$language^${weight}\"")
         }
     }
