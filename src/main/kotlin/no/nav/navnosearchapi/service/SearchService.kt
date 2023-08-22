@@ -7,6 +7,7 @@ import no.nav.navnosearchapi.service.search.SearchHelper
 import no.nav.navnosearchapi.service.search.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.searchAsYouTypeQuery
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Service
 
 
@@ -23,7 +24,7 @@ class SearchService(
             searchAllTextQuery(term)
         }
 
-        val searchResult = searchHelper.searchPage(query, page, maalgruppe?.let { filtersAsJson(it) })
+        val searchResult = searchHelper.searchPage(query, page, maalgruppe?.let { filtersAsJson(it) }, highlightFields)
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
     }
@@ -45,5 +46,7 @@ class SearchService(
     companion object {
         private const val MAALGRUPPE_KEYWORD = "maalgruppe"
         private const val MAX_SUGGESTIONS = 3
+
+        val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }
     }
 }

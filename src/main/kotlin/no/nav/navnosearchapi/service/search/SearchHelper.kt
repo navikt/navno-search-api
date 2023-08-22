@@ -19,9 +19,12 @@ class SearchHelper(
     @Value("\${opensearch.page-size}") val pageSize: Int,
     val operations: ElasticsearchOperations,
 ) {
-    val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }
-
-    fun searchPage(query: String, page: Int, filters: String?): SearchPage<ContentDao> {
+    fun searchPage(
+        query: String,
+        page: Int,
+        filters: String?,
+        highlightFields: List<HighlightField>
+    ): SearchPage<ContentDao> {
         val pageRequest = PageRequest.of(page, pageSize)
         val searchQuery = StringQuery(
             if (filters != null) filteredQuery(query, filters) else query,
