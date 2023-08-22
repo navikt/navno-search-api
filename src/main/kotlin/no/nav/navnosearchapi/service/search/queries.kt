@@ -24,14 +24,8 @@ fun searchAllTextForPhraseQuery(term: String): String = """
 
 fun searchAsYouTypeQuery(term: String): String = """
     {
-      "multi_match": {
-        "query": "$term",
-        "type": "bool_prefix",
-        "fields": [
-          "name.searchAsYouType",
-          "name.searchAsYouType._2gram",
-          "name.searchAsYouType._3gram"
-        ]
+      "match_phrase_prefix": {
+        "name.searchAsYouType": "$term"
       }
     }
     """
