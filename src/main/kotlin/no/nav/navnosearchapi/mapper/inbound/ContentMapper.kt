@@ -18,7 +18,7 @@ class ContentMapper {
             name = toMultiLangField(content.name, content.language, searchAsYouType = true),
             ingress = toMultiLangField(content.ingress, content.language),
             text = toMultiLangField(content.text, content.language),
-            maalgruppe = content.maalgruppe,
+            audience = content.audience,
             language = content.language,
         )
     }

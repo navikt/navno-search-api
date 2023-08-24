@@ -32,7 +32,7 @@ class ContentSearchPageMapper {
             name = languageSubfieldValue(content.name, content.language),
             ingress = languageSubfieldValue(content.ingress, content.language),
             text = languageSubfieldValue(content.text, content.language),
-            maalgruppe = content.maalgruppe,
+            audience = content.audience,
             language = content.language,
         )
     }

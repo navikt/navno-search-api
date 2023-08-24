@@ -127,7 +127,7 @@ val additionalTestDataAsMapWithMissingIngress = listOf(
         "href" to "https://eleventh.com",
         "name" to "Eleventh name",
         "text" to "Eleventh text",
-        "maalgruppe" to "Samarbeidspartner",
+        "audience" to "Samarbeidspartner",
         "language" to "en"
     )
 )

@@ -12,9 +12,9 @@ class SearchController(val service: SearchService) {
     @GetMapping("/content/search")
     fun searchAllText(
         @RequestParam term: String,
-        @RequestParam(required = false) maalgruppe: List<String>?,
+        @RequestParam(required = false) audience: List<String>?,
         @RequestParam page: Int
     ): ContentSearchPage {
-        return service.searchAllText(term, maalgruppe, page)
+        return service.searchAllText(term, audience, page)
     }
 }

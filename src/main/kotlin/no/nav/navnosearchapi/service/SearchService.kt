@@ -17,14 +17,14 @@ class SearchService(
     val objectMapper: ObjectMapper,
     val mapper: ContentSearchPageMapper
 ) {
-    fun searchAllText(term: String, maalgruppe: List<String>?, page: Int): ContentSearchPage {
+    fun searchAllText(term: String, audience: List<String>?, page: Int): ContentSearchPage {
         val query = if (isInQuotes(term)) {
             searchAllTextForPhraseQuery(term)
         } else {
             searchAllTextQuery(term)
         }
 
-        val searchResult = searchHelper.searchPage(query, page, maalgruppe?.let { filtersAsJson(it) }, highlightFields)
+        val searchResult = searchHelper.searchPage(query, page, audience?.let { filtersAsJson(it) }, highlightFields)
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
     }
@@ -39,12 +39,12 @@ class SearchService(
         return term.startsWith('"') && term.endsWith('"')
     }
 
-    private fun filtersAsJson(maalgruppe: List<String>?): String {
-        return objectMapper.writeValueAsString(mapOf(MAALGRUPPE_KEYWORD to maalgruppe))
+    private fun filtersAsJson(audience: List<String>?): String {
+        return objectMapper.writeValueAsString(mapOf(AUDIENCE_KEYWORD to audience))
     }
 
     companion object {
-        private const val MAALGRUPPE_KEYWORD = "maalgruppe"
+        private const val AUDIENCE_KEYWORD = "audience"
         private const val MAX_SUGGESTIONS = 3
 
         val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }

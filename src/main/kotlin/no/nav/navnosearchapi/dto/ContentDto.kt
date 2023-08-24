@@ -6,6 +6,6 @@ data class ContentDto(
     val name: String,
     val ingress: String,
     val text: String,
-    val maalgruppe: String,
+    val audience: String,
     val language: String,
 )

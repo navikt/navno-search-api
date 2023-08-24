@@ -26,11 +26,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun testSearchForTextWithMaalgruppeFilter() {
+    fun testSearchForTextWithAudienceFilter() {
         val term = "First text"
-        val maalgruppe = "Privatperson"
+        val audience = "Privatperson"
 
-        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term, maalgruppe = maalgruppe)).body!!
+        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term, audience = audience)).body!!
 
         assertThat(result.totalElements).isEqualTo(4L)
         assertThat(result.totalPages).isEqualTo(1L)
