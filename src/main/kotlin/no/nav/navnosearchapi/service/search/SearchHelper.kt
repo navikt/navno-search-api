@@ -1,8 +1,11 @@
 package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.model.ContentDao
+import no.nav.navnosearchapi.utils.AUDIENCE
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.WrapperQueryBuilder
+import org.opensearch.search.aggregations.AggregationBuilders
+import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -32,10 +35,15 @@ class SearchHelper(
             .withQuery(WrapperQueryBuilder(if (filters != null) filteredQuery(query, filters) else query))
             .withPageable(pageRequest)
             .withHighlightQuery(highlightQuery(highlightFields))
+            .withAggregations(aggregations())
             .build()
 
         val searchHits = operations.search(searchQuery, ContentDao::class.java)
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
+    }
+
+    private fun aggregations(): List<TermsAggregationBuilder> {
+        return listOf(AggregationBuilders.terms(AUDIENCE).field(AUDIENCE))
     }
 
     fun search(query: String, size: Int): SearchHits<ContentDao> {
