@@ -2,6 +2,9 @@ package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.exception.handler.ErrorResponse
+import no.nav.navnosearchapi.utils.ARBEIDSGIVER
+import no.nav.navnosearchapi.utils.PRIVATPERSON
+import no.nav.navnosearchapi.utils.SAMARBEIDSPARTNER
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,17 +26,23 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.totalElements).isEqualTo(10L)
         assertThat(result.totalPages).isEqualTo(1L)
+
+        assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
+        assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(3L)
+        assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(3L)
     }
 
     @Test
-    fun testSearchForTextWithMaalgruppeFilter() {
+    fun testSearchForTextWithAudienceFilter() {
         val term = "First text"
-        val maalgruppe = "Privatperson"
 
-        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term, maalgruppe = maalgruppe)).body!!
+        val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term, audience = PRIVATPERSON)).body!!
 
         assertThat(result.totalElements).isEqualTo(4L)
         assertThat(result.totalPages).isEqualTo(1L)
+        assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
+        assertThat(!result.aggregations.audience.keys.contains(ARBEIDSGIVER))
+        assertThat(!result.aggregations.audience.keys.contains(SAMARBEIDSPARTNER))
     }
 
     @Test
@@ -44,6 +53,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.totalElements).isEqualTo(1L)
         assertThat(result.totalPages).isEqualTo(1L)
+
+        assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(1L)
+        assertThat(!result.aggregations.audience.keys.contains(ARBEIDSGIVER))
+        assertThat(!result.aggregations.audience.keys.contains(SAMARBEIDSPARTNER))
+
     }
 
     @Test

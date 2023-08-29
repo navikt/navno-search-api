@@ -33,9 +33,9 @@ abstract class AbstractIntegrationTest {
 
     fun indexCount() = repository.count()
 
-    fun searchUrl(term: String, page: Int = 0, maalgruppe: String? = null): String {
-        val maalgruppeParam = maalgruppe?.let { "&maalgruppe=$it" } ?: ""
-        return "${host()}/content/search?page=$page&term=$term$maalgruppeParam"
+    fun searchUrl(term: String, page: Int = 0, audience: String? = null): String {
+        val audienceParam = audience?.let { "&audience=$it" } ?: ""
+        return "${host()}/content/search?page=$page&term=$term$audienceParam"
     }
 
     fun setupIndex() {

@@ -1,13 +1,18 @@
 package no.nav.navnosearchapi.mapper.outbound
 
+import no.nav.navnosearchapi.dto.ContentAggregations
 import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentHighlight
 import no.nav.navnosearchapi.dto.ContentSearchHit
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
+import no.nav.navnosearchapi.utils.AUDIENCE
 import no.nav.navnosearchapi.utils.NORWEGIAN
 import no.nav.navnosearchapi.utils.extractExternalId
+import org.opensearch.data.client.orhlc.OpenSearchAggregations
+import org.opensearch.search.aggregations.Aggregations
+import org.opensearch.search.aggregations.bucket.terms.Terms
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -22,6 +27,7 @@ class ContentSearchPageMapper {
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
+            aggregations = toContentAggregations(searchPage.searchHits.aggregations as OpenSearchAggregations)
         )
     }
 
@@ -32,7 +38,7 @@ class ContentSearchPageMapper {
             name = languageSubfieldValue(content.name, content.language),
             ingress = languageSubfieldValue(content.ingress, content.language),
             text = languageSubfieldValue(content.text, content.language),
-            maalgruppe = content.maalgruppe,
+            audience = content.audience,
             language = content.language,
         )
     }
@@ -47,6 +53,14 @@ class ContentSearchPageMapper {
                 text = searchHit.getHighlightField(languageSubfieldKey(TEXT, language)),
             ),
         )
+    }
+
+    private fun toContentAggregations(aggregations: OpenSearchAggregations): ContentAggregations {
+        return ContentAggregations(audience = getAggregations(aggregations.aggregations(), AUDIENCE))
+    }
+
+    private fun getAggregations(aggregations: Aggregations, name: String): Map<String, Long> {
+        return aggregations.get<Terms>(name).buckets.associate { it.keyAsString to it.docCount }
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String) = "$parentKey.$language"
