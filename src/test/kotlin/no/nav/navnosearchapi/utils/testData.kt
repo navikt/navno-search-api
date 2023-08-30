@@ -37,7 +37,7 @@ val initialTestData = listOf(
         true,
         AGDER,
         listOf(STATISTIKK)
-        ),
+    ),
     ContentDao(
         "$TEAM_NAME-3",
         TEAM_NAME,
@@ -50,7 +50,7 @@ val initialTestData = listOf(
         true,
         AGDER,
         listOf(STATISTIKK)
-        ),
+    ),
     ContentDao(
         "$TEAM_NAME-4",
         TEAM_NAME,
@@ -123,17 +123,7 @@ val initialTestData = listOf(
     ),
 )
 
-val additionalTestData = listOf(
-    ContentDto(
-        "11",
-        "https://eleventh.com",
-        "Eleventh name",
-        "Eleventh ingress",
-        "Eleventh text",
-        listOf(SAMARBEIDSPARTNER),
-        ENGLISH
-    )
-)
+val additionalTestData = listOf(dummyContentDto())
 
 val additionalTestDataAsMapWithMissingIngress = listOf(
     mapOf(
@@ -144,4 +134,14 @@ val additionalTestDataAsMapWithMissingIngress = listOf(
         "audience" to listOf(SAMARBEIDSPARTNER),
         "language" to ENGLISH
     )
+)
+
+fun dummyContentDto() = ContentDto(
+    "11",
+    "https://eleventh.com",
+    "Eleventh name",
+    "Eleventh ingress",
+    "Eleventh text",
+    listOf(SAMARBEIDSPARTNER),
+    ENGLISH
 )

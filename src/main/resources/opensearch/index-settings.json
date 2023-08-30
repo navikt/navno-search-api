@@ -44,6 +44,12 @@
           "english_stop",
           "english_stemmer"
         ]
+      },
+      "standard_with_html_strip": {
+        "type": "custom",
+        "tokenizer":  "standard",
+        "char_filter": "html_strip",
+        "filter": ["lowercase"]
       }
     }
   }

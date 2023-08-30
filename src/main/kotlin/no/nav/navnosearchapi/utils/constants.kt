@@ -1,8 +1,12 @@
 package no.nav.navnosearchapi.utils
 
-const val NORWEGIAN = "no"
-const val ENGLISH = "en"
+import no.nav.navnosearchapi.validation.ValidLanguages
+
+val NORWEGIAN = ValidLanguages.NO.toString()
+val ENGLISH = ValidLanguages.EN.toString()
+val OTHER = ValidLanguages.OTHER.toString()
 
 const val AUDIENCE = "audience"
-
-val VALID_LANGS = listOf(ENGLISH, NORWEGIAN)
+const val TITLE = "title"
+const val INGRESS = "ingress"
+const val TEXT = "text"
