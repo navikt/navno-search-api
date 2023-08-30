@@ -5,9 +5,9 @@ import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 
 const val TEAM_NAME = "test-team"
-const val PRIVATPERSON = "Privatperson"
-const val ARBEIDSGIVER = "Arbeidsgiver"
-const val SAMARBEIDSPARTNER = "Samarbeidspartner"
+const val PRIVATPERSON = "privatperson"
+const val ARBEIDSGIVER = "arbeidsgiver"
+const val SAMARBEIDSPARTNER = "samarbeidspartner"
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
 
