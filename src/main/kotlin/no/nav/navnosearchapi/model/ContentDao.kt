@@ -20,9 +20,12 @@ data class ContentDao(
     @Id @Field(type = FieldType.Keyword) val id: String,
     @Field(type = FieldType.Keyword) val teamOwnedBy: String,
     @Field(type = FieldType.Text) val href: String,
-    @Field(type = FieldType.Object) val name: MultiLangField,
+    @Field(type = FieldType.Object) val title: MultiLangField,
     @Field(type = FieldType.Object) val ingress: MultiLangField,
     @Field(type = FieldType.Object) val text: MultiLangField,
     @Field(type = FieldType.Keyword) val audience: List<String>,
     @Field(type = FieldType.Keyword) val language: String,
+    @Field(type = FieldType.Boolean) val isFile: Boolean? = null,
+    @Field(type = FieldType.Keyword) val fylke: String? = null,
+    @Field(type = FieldType.Keyword) val metatags: List<String>? = null,
 )

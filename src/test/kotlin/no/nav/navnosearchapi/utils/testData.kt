@@ -8,6 +8,8 @@ const val TEAM_NAME = "test-team"
 const val PRIVATPERSON = "Privatperson"
 const val ARBEIDSGIVER = "Arbeidsgiver"
 const val SAMARBEIDSPARTNER = "Samarbeidspartner"
+const val AGDER = "agder"
+const val STATISTIKK = "statistikk"
 
 val initialTestData = listOf(
     ContentDao(
@@ -18,7 +20,10 @@ val initialTestData = listOf(
         MultiLangField(en = "First ingress"),
         MultiLangField(en = "First text"),
         listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        ENGLISH
+        ENGLISH,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
     ),
     ContentDao(
         "$TEAM_NAME-2",
@@ -28,8 +33,11 @@ val initialTestData = listOf(
         MultiLangField(en = "Second ingress"),
         MultiLangField(en = "Second text"),
         listOf(PRIVATPERSON),
-        ENGLISH
-    ),
+        ENGLISH,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
+        ),
     ContentDao(
         "$TEAM_NAME-3",
         TEAM_NAME,
@@ -38,8 +46,11 @@ val initialTestData = listOf(
         MultiLangField(en = "Third ingress"),
         MultiLangField(en = "Third text"),
         listOf(PRIVATPERSON),
-        ENGLISH
-    ),
+        ENGLISH,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
+        ),
     ContentDao(
         "$TEAM_NAME-4",
         TEAM_NAME,
@@ -128,7 +139,7 @@ val additionalTestDataAsMapWithMissingIngress = listOf(
     mapOf(
         "id" to "11",
         "href" to "https://eleventh.com",
-        "name" to "Eleventh name",
+        "title" to "Eleventh name",
         "text" to "Eleventh text",
         "audience" to listOf(SAMARBEIDSPARTNER),
         "language" to ENGLISH

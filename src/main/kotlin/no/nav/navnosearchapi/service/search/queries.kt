@@ -2,11 +2,11 @@ package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.utils.VALID_LANGS
 
-private const val NAME_WEIGHT = 3
+private const val TITLE_WEIGHT = 3
 private const val INGRESS_WEIGHT = 2
 private const val TEXT_WEIGHT = 1
 
-private val fieldsToWeightMap = mapOf("name" to NAME_WEIGHT, "ingress" to INGRESS_WEIGHT, "text" to TEXT_WEIGHT)
+private val fieldsToWeightMap = mapOf("title" to TITLE_WEIGHT, "ingress" to INGRESS_WEIGHT, "text" to TEXT_WEIGHT)
 
 fun searchAllTextQuery(term: String): String = """
     {
@@ -31,7 +31,7 @@ fun searchAllTextForPhraseQuery(term: String): String = """
 fun searchAsYouTypeQuery(term: String): String = """
     {
       "match_phrase_prefix": {
-        "name.searchAsYouType": "$term"
+        "title.searchAsYouType": "$term"
       }
     }
     """

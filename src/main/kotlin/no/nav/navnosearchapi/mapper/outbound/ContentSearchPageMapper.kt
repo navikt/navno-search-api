@@ -35,11 +35,14 @@ class ContentSearchPageMapper {
         return ContentDto(
             id = extractExternalId(content.id, content.teamOwnedBy),
             href = content.href,
-            name = languageSubfieldValue(content.name, content.language),
+            title = languageSubfieldValue(content.title, content.language),
             ingress = languageSubfieldValue(content.ingress, content.language),
             text = languageSubfieldValue(content.text, content.language),
             audience = content.audience,
             language = content.language,
+            isFile = content.isFile,
+            fylke = content.fylke,
+            metatags = content.metatags,
         )
     }
 
@@ -48,7 +51,7 @@ class ContentSearchPageMapper {
         return ContentSearchHit(
             content = toContentDto(searchHit.content),
             highlight = ContentHighlight(
-                name = searchHit.getHighlightField(languageSubfieldKey(NAME, language)),
+                title = searchHit.getHighlightField(languageSubfieldKey(TITLE, language)),
                 ingress = searchHit.getHighlightField(languageSubfieldKey(INGRESS, language)),
                 text = searchHit.getHighlightField(languageSubfieldKey(TEXT, language)),
             ),
@@ -69,7 +72,7 @@ class ContentSearchPageMapper {
         (if (NORWEGIAN == language) field.no else field.en) ?: ""
 
     companion object {
-        private const val NAME = "name"
+        private const val TITLE = "title"
         private const val INGRESS = "ingress"
         private const val TEXT = "text"
     }

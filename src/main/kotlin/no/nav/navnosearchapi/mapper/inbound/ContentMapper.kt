@@ -15,11 +15,14 @@ class ContentMapper {
             id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
-            name = toMultiLangField(content.name, content.language, searchAsYouType = true),
+            title = toMultiLangField(content.title, content.language, searchAsYouType = true),
             ingress = toMultiLangField(content.ingress, content.language),
             text = toMultiLangField(content.text, content.language),
             audience = content.audience,
             language = content.language,
+            isFile = content.isFile,
+            fylke = content.fylke,
+            metatags = content.metatags,
         )
     }
 
