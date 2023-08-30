@@ -23,6 +23,6 @@ data class ContentDao(
     @Field(type = FieldType.Object) val name: MultiLangField,
     @Field(type = FieldType.Object) val ingress: MultiLangField,
     @Field(type = FieldType.Object) val text: MultiLangField,
-    @Field(type = FieldType.Keyword) val audience: String,
+    @Field(type = FieldType.Keyword) val audience: List<String>,
     @Field(type = FieldType.Keyword) val language: String,
 )

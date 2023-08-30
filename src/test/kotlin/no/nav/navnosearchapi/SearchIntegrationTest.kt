@@ -28,8 +28,8 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.totalPages).isEqualTo(1L)
 
         assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
-        assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(3L)
-        assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(3L)
+        assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(4L)
+        assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(4L)
     }
 
     @Test
@@ -40,14 +40,15 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.totalElements).isEqualTo(4L)
         assertThat(result.totalPages).isEqualTo(1L)
+
         assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
-        assertThat(!result.aggregations.audience.keys.contains(ARBEIDSGIVER))
-        assertThat(!result.aggregations.audience.keys.contains(SAMARBEIDSPARTNER))
+        assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(1L)
+        assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(1L)
     }
 
     @Test
     fun testSearchForPhrase() {
-        val term = "\"First text\""
+        val term = "\"Second text\""
 
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term)).body!!
 

@@ -6,6 +6,9 @@ data class ContentDto(
     val name: String,
     val ingress: String,
     val text: String,
-    val audience: String,
+    val audience: List<String>,
     val language: String,
+    //val isFile: Boolean,
+    //val fylke: String,
+    //val metatags: List<String>
 )
