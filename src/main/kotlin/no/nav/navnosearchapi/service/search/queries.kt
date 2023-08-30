@@ -4,7 +4,7 @@ import no.nav.navnosearchapi.utils.INGRESS
 import no.nav.navnosearchapi.utils.TEXT
 import no.nav.navnosearchapi.utils.TITLE
 import no.nav.navnosearchapi.utils.enumDescriptors
-import no.nav.navnosearchapi.validation.ValidLanguages
+import no.nav.navnosearchapi.validation.enums.ValidLanguages
 
 private const val TITLE_WEIGHT = 3
 private const val INGRESS_WEIGHT = 2

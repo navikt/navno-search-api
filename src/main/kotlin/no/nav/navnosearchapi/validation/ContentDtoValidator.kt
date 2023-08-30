@@ -4,6 +4,7 @@ import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.exception.ContentValidationException
 import no.nav.navnosearchapi.utils.enumContains
 import no.nav.navnosearchapi.utils.enumDescriptors
+import no.nav.navnosearchapi.validation.enums.ValidLanguages
 import org.springframework.stereotype.Component
 
 @Component

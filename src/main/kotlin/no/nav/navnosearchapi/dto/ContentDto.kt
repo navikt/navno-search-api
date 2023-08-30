@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.dto
 
-import no.nav.navnosearchapi.validation.ValidLanguages
+import no.nav.navnosearchapi.validation.enums.ValidLanguages
 
 data class ContentDto(
     val id: String,
