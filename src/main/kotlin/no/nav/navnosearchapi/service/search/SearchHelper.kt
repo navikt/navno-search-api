@@ -58,7 +58,6 @@ class SearchHelper(
         val sevenDaysAgo = now.minusDays(7)
         val thirtyDaysAgo = now.minusDays(30)
         val twelveMonthsAgo = now.minusMonths(12)
-        val foreverAgo = now.minusYears(1000)
 
         return listOf(
             AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
@@ -69,7 +68,7 @@ class SearchHelper(
             AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo, now).field(LAST_UPDATED),
             AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo, now).field(LAST_UPDATED),
             AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo, now).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addRange(foreverAgo, twelveMonthsAgo)
+            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo)
                 .field(LAST_UPDATED),
         )
     }
