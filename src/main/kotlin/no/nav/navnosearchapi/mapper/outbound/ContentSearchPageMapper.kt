@@ -3,6 +3,7 @@ package no.nav.navnosearchapi.mapper.outbound
 import no.nav.navnosearchapi.dto.ContentAggregations
 import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentHighlight
+import no.nav.navnosearchapi.dto.ContentMetadata
 import no.nav.navnosearchapi.dto.ContentSearchHit
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
@@ -41,17 +42,19 @@ class ContentSearchPageMapper {
         return ContentDto(
             id = extractExternalId(content.id, content.teamOwnedBy),
             href = content.href,
-            title = languageSubfieldValue(content.title, content.language) ?: handleMissingValue(content.id, TITLE),
-            ingress = languageSubfieldValue(content.ingress, content.language) ?: handleMissingValue(
-                content.id,
-                INGRESS
-            ),
-            text = languageSubfieldValue(content.text, content.language) ?: handleMissingValue(content.id, TEXT),
-            audience = content.audience,
-            language = content.language,
-            isFile = content.isFile,
-            fylke = content.fylke,
-            metatags = content.metatags,
+            title = languageSubfieldValue(content.title, content.language)
+                ?: handleMissingValue(content.id, TITLE),
+            ingress = languageSubfieldValue(content.ingress, content.language)
+                ?: handleMissingValue(content.id, INGRESS),
+            text = languageSubfieldValue(content.text, content.language)
+                ?: handleMissingValue(content.id, TEXT),
+            ContentMetadata(
+                audience = content.audience,
+                language = content.language,
+                isFile = content.isFile,
+                fylke = content.fylke,
+                metatags = content.metatags,
+            )
         )
     }
 

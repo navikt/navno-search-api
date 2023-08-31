@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchapi.dto.ContentDto
+import no.nav.navnosearchapi.dto.ContentMetadata
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 
@@ -136,12 +137,28 @@ val additionalTestDataAsMapWithMissingIngress = listOf(
     )
 )
 
-fun dummyContentDto() = ContentDto(
-    "11",
-    "https://eleventh.com",
-    "Eleventh name",
-    "Eleventh ingress",
-    "Eleventh text",
-    listOf(SAMARBEIDSPARTNER),
-    ENGLISH
+fun dummyContentDto(
+    id: String = "11",
+    href: String = "https://eleventh.com",
+    title: String = "Eleventh name",
+    ingress: String = "Eleventh ingress",
+    text: String = "Eleventh text",
+    audience: List<String> = listOf(SAMARBEIDSPARTNER),
+    language: String = ENGLISH,
+    isFile: Boolean? = null,
+    fylke: String? = null,
+    metatags: List<String>? = null,
+) = ContentDto(
+    id,
+    href,
+    title,
+    ingress,
+    text,
+    ContentMetadata(
+        audience,
+        language,
+        isFile,
+        fylke,
+        metatags,
+    )
 )
