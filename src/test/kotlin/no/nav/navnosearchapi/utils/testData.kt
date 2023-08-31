@@ -21,7 +21,7 @@ val initialTestData = listOf(
         MultiLangField(en = "First ingress"),
         MultiLangField(en = "First text"),
         listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        ENGLISH,
+        NORWEGIAN,
         true,
         AGDER,
         listOf(STATISTIKK)
@@ -34,7 +34,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Second ingress"),
         MultiLangField(en = "Second text"),
         listOf(PRIVATPERSON),
-        ENGLISH,
+        NORWEGIAN,
         true,
         AGDER,
         listOf(STATISTIKK)
@@ -47,7 +47,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Third ingress"),
         MultiLangField(en = "Third text"),
         listOf(PRIVATPERSON),
-        ENGLISH,
+        NORWEGIAN,
         true,
         AGDER,
         listOf(STATISTIKK)
@@ -90,7 +90,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Seventh ingress"),
         MultiLangField(en = "Seventh text"),
         listOf(ARBEIDSGIVER),
-        ENGLISH
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-8",
@@ -100,7 +100,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Eighth ingress"),
         MultiLangField(en = "Eighth text"),
         listOf(SAMARBEIDSPARTNER),
-        ENGLISH
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-9",
@@ -110,7 +110,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Ninth ingress"),
         MultiLangField(en = "Ninth text"),
         listOf(SAMARBEIDSPARTNER),
-        ENGLISH
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-10",
@@ -120,7 +120,7 @@ val initialTestData = listOf(
         MultiLangField(en = "Tenth ingress"),
         MultiLangField(en = "Tenth text"),
         listOf(SAMARBEIDSPARTNER),
-        ENGLISH
+        OTHER
     ),
 )
 

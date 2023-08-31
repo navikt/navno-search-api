@@ -2,9 +2,15 @@ package no.nav.navnosearchapi
 
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.exception.handler.ErrorResponse
+import no.nav.navnosearchapi.utils.AGDER
 import no.nav.navnosearchapi.utils.ARBEIDSGIVER
+import no.nav.navnosearchapi.utils.ENGLISH
+import no.nav.navnosearchapi.utils.IS_FILE
+import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.PRIVATPERSON
 import no.nav.navnosearchapi.utils.SAMARBEIDSPARTNER
+import no.nav.navnosearchapi.utils.STATISTIKK
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,6 +36,14 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
         assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(4L)
         assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(4L)
+
+        assertThat(result.aggregations.language[NORWEGIAN]).isEqualTo(3L)
+        assertThat(result.aggregations.language[ENGLISH]).isEqualTo(3L)
+        assertThat(result.aggregations.language[OTHER]).isEqualTo(4L)
+
+        assertThat(result.aggregations.fylke[AGDER]).isEqualTo(3L)
+        assertThat(result.aggregations.metatags[STATISTIKK]).isEqualTo(3L)
+        assertThat(result.aggregations.isFile[IS_FILE]).isEqualTo(3L)
     }
 
     @Test

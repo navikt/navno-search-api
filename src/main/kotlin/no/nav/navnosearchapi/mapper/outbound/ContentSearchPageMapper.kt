@@ -10,10 +10,15 @@ import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.AUDIENCE
 import no.nav.navnosearchapi.utils.ENGLISH
+import no.nav.navnosearchapi.utils.FYLKE
+import no.nav.navnosearchapi.utils.IS_FILE
+import no.nav.navnosearchapi.utils.LANGUAGE
+import no.nav.navnosearchapi.utils.METATAGS
 import no.nav.navnosearchapi.utils.NORWEGIAN
 import no.nav.navnosearchapi.utils.extractExternalId
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
+import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.opensearch.search.aggregations.bucket.terms.Terms
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -71,11 +76,21 @@ class ContentSearchPageMapper {
     }
 
     private fun toContentAggregations(aggregations: OpenSearchAggregations): ContentAggregations {
-        return ContentAggregations(audience = getAggregations(aggregations.aggregations(), AUDIENCE))
+        return ContentAggregations(
+            audience = getTermAggregation(aggregations.aggregations(), AUDIENCE),
+            language = getTermAggregation(aggregations.aggregations(), LANGUAGE),
+            fylke = getTermAggregation(aggregations.aggregations(), FYLKE),
+            metatags = getTermAggregation(aggregations.aggregations(), METATAGS),
+            isFile = getFilterAggregation(aggregations.aggregations(), IS_FILE)
+        )
     }
 
-    private fun getAggregations(aggregations: Aggregations, name: String): Map<String, Long> {
+    private fun getTermAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
         return aggregations.get<Terms>(name).buckets.associate { it.keyAsString to it.docCount }
+    }
+
+    private fun getFilterAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
+        return mapOf(aggregations.get<Filter>(name).let { it.name to it.docCount })
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String) = "$parentKey.$language"

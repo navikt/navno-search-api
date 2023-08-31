@@ -2,10 +2,15 @@ package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.utils.AUDIENCE
+import no.nav.navnosearchapi.utils.FYLKE
+import no.nav.navnosearchapi.utils.IS_FILE
+import no.nav.navnosearchapi.utils.LANGUAGE
+import no.nav.navnosearchapi.utils.METATAGS
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
+import org.opensearch.index.query.QueryBuilders
 import org.opensearch.index.query.WrapperQueryBuilder
+import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
-import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -42,8 +47,14 @@ class SearchHelper(
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
     }
 
-    private fun aggregations(): List<TermsAggregationBuilder> {
-        return listOf(AggregationBuilders.terms(AUDIENCE).field(AUDIENCE))
+    private fun aggregations(): List<AbstractAggregationBuilder<*>> {
+        return listOf(
+            AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
+            AggregationBuilders.terms(LANGUAGE).field(LANGUAGE),
+            AggregationBuilders.terms(FYLKE).field(FYLKE),
+            AggregationBuilders.terms(METATAGS).field(METATAGS),
+            AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true))
+        )
     }
 
     fun search(query: String, size: Int): SearchHits<ContentDao> {
