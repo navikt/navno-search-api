@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Field
 import org.springframework.data.elasticsearch.annotations.FieldType
 import org.springframework.data.elasticsearch.annotations.Setting
 import org.springframework.data.elasticsearch.annotations.WriteTypeHint
+import java.time.ZonedDateTime
 
 @Document(
     indexName = "search-content-v2",
@@ -23,6 +24,8 @@ data class ContentDao(
     @Field(type = FieldType.Object) val title: MultiLangField,
     @Field(type = FieldType.Object) val ingress: MultiLangField,
     @Field(type = FieldType.Object) val text: MultiLangField,
+    @Field(type = FieldType.Date) val createdAt: ZonedDateTime,
+    @Field(type = FieldType.Date) val lastUpdated: ZonedDateTime,
     @Field(type = FieldType.Keyword) val audience: List<String>,
     @Field(type = FieldType.Keyword) val language: String,
     @Field(type = FieldType.Boolean) val isFile: Boolean? = null,

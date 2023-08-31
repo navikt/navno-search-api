@@ -8,6 +8,7 @@ import no.nav.navnosearchapi.utils.NORWEGIAN
 import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.createInternalId
 import org.springframework.stereotype.Component
+import java.time.ZoneId
 
 @Component
 class ContentMapper {
@@ -19,6 +20,8 @@ class ContentMapper {
             title = toMultiLangField(content.title, content.metadata.language, searchAsYouType = true),
             ingress = toMultiLangField(content.ingress, content.metadata.language),
             text = toMultiLangField(content.text, content.metadata.language),
+            createdAt = content.metadata.createdAt.atZone(ZoneId.systemDefault()),
+            lastUpdated = content.metadata.lastUpdated.atZone(ZoneId.systemDefault()),
             audience = content.metadata.audience,
             language = content.metadata.language,
             isFile = content.metadata.isFile,

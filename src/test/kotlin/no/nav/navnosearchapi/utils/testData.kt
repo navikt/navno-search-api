@@ -4,6 +4,8 @@ import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentMetadata
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
 const val PRIVATPERSON = "privatperson"
@@ -11,6 +13,10 @@ const val ARBEIDSGIVER = "arbeidsgiver"
 const val SAMARBEIDSPARTNER = "samarbeidspartner"
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
+
+val datetimeNow = ZonedDateTime.now()
+val datetimeLastWeek = ZonedDateTime.now().minusWeeks(1L)
+val datetimeLastMonth = ZonedDateTime.now().minusMonths(1L)
 
 val initialTestData = listOf(
     ContentDao(
@@ -20,6 +26,8 @@ val initialTestData = listOf(
         MultiLangField(en = "First name"),
         MultiLangField(en = "First ingress"),
         MultiLangField(en = "First text"),
+        datetimeNow,
+        datetimeNow,
         listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
         NORWEGIAN,
         true,
@@ -33,6 +41,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Second name"),
         MultiLangField(en = "Second ingress"),
         MultiLangField(en = "Second text"),
+        datetimeNow,
+        datetimeNow,
         listOf(PRIVATPERSON),
         NORWEGIAN,
         true,
@@ -46,6 +56,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Third name"),
         MultiLangField(en = "Third ingress"),
         MultiLangField(en = "Third text"),
+        datetimeNow,
+        datetimeNow,
         listOf(PRIVATPERSON),
         NORWEGIAN,
         true,
@@ -59,6 +71,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Fourth name"),
         MultiLangField(en = "Fourth ingress"),
         MultiLangField(en = "Fourth text"),
+        datetimeLastWeek,
+        datetimeLastWeek,
         listOf(PRIVATPERSON),
         ENGLISH
     ),
@@ -69,6 +83,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Fifth name"),
         MultiLangField(en = "Fifth ingress"),
         MultiLangField(en = "Fifth text"),
+        datetimeLastWeek,
+        datetimeLastWeek,
         listOf(ARBEIDSGIVER),
         ENGLISH
     ),
@@ -79,6 +95,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Sixth name"),
         MultiLangField(en = "Sixth ingress"),
         MultiLangField(en = "Sixth text"),
+        datetimeLastWeek,
+        datetimeLastWeek,
         listOf(ARBEIDSGIVER),
         ENGLISH
     ),
@@ -89,6 +107,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Seventh name"),
         MultiLangField(en = "Seventh ingress"),
         MultiLangField(en = "Seventh text"),
+        datetimeLastMonth,
+        datetimeLastMonth,
         listOf(ARBEIDSGIVER),
         OTHER
     ),
@@ -99,6 +119,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Eighth name"),
         MultiLangField(en = "Eighth ingress"),
         MultiLangField(en = "Eighth text"),
+        datetimeLastMonth,
+        datetimeLastMonth,
         listOf(SAMARBEIDSPARTNER),
         OTHER
     ),
@@ -109,6 +131,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Ninth name"),
         MultiLangField(en = "Ninth ingress"),
         MultiLangField(en = "Ninth text"),
+        datetimeLastMonth,
+        datetimeLastMonth,
         listOf(SAMARBEIDSPARTNER),
         OTHER
     ),
@@ -119,6 +143,8 @@ val initialTestData = listOf(
         MultiLangField(en = "Tenth name"),
         MultiLangField(en = "Tenth ingress"),
         MultiLangField(en = "Tenth text"),
+        datetimeLastMonth,
+        datetimeLastMonth,
         listOf(SAMARBEIDSPARTNER),
         OTHER
     ),
@@ -143,6 +169,8 @@ fun dummyContentDto(
     title: String = "Eleventh name",
     ingress: String = "Eleventh ingress",
     text: String = "Eleventh text",
+    createdAt: LocalDateTime = datetimeNow.toLocalDateTime(),
+    lastUpdated: LocalDateTime = datetimeNow.toLocalDateTime(),
     audience: List<String> = listOf(SAMARBEIDSPARTNER),
     language: String = ENGLISH,
     isFile: Boolean? = null,
@@ -155,6 +183,8 @@ fun dummyContentDto(
     ingress,
     text,
     ContentMetadata(
+        createdAt,
+        lastUpdated,
         audience,
         language,
         isFile,
