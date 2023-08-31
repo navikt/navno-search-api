@@ -1,13 +1,23 @@
 package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchapi.dto.ContentDto
+import no.nav.navnosearchapi.dto.ContentMetadata
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
-const val PRIVATPERSON = "Privatperson"
-const val ARBEIDSGIVER = "Arbeidsgiver"
-const val SAMARBEIDSPARTNER = "Samarbeidspartner"
+const val PRIVATPERSON = "privatperson"
+const val ARBEIDSGIVER = "arbeidsgiver"
+const val SAMARBEIDSPARTNER = "samarbeidspartner"
+const val AGDER = "agder"
+const val STATISTIKK = "statistikk"
+
+val now: ZonedDateTime = ZonedDateTime.now()
+val nowMinusTwoYears: ZonedDateTime = ZonedDateTime.now().minusYears(2)
+val nowMinus10Days: ZonedDateTime = ZonedDateTime.now().minusDays(10)
+val nowMinus50Days: ZonedDateTime = ZonedDateTime.now().minusDays(50)
 
 val initialTestData = listOf(
     ContentDao(
@@ -17,8 +27,13 @@ val initialTestData = listOf(
         MultiLangField(en = "First name"),
         MultiLangField(en = "First ingress"),
         MultiLangField(en = "First text"),
-        PRIVATPERSON,
-        ENGLISH
+        now,
+        now,
+        listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
+        NORWEGIAN,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
     ),
     ContentDao(
         "$TEAM_NAME-2",
@@ -27,8 +42,13 @@ val initialTestData = listOf(
         MultiLangField(en = "Second name"),
         MultiLangField(en = "Second ingress"),
         MultiLangField(en = "Second text"),
-        PRIVATPERSON,
-        ENGLISH
+        now,
+        now,
+        listOf(PRIVATPERSON),
+        NORWEGIAN,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
     ),
     ContentDao(
         "$TEAM_NAME-3",
@@ -37,8 +57,13 @@ val initialTestData = listOf(
         MultiLangField(en = "Third name"),
         MultiLangField(en = "Third ingress"),
         MultiLangField(en = "Third text"),
-        PRIVATPERSON,
-        ENGLISH
+        nowMinusTwoYears,
+        nowMinusTwoYears,
+        listOf(PRIVATPERSON),
+        NORWEGIAN,
+        true,
+        AGDER,
+        listOf(STATISTIKK)
     ),
     ContentDao(
         "$TEAM_NAME-4",
@@ -47,7 +72,9 @@ val initialTestData = listOf(
         MultiLangField(en = "Fourth name"),
         MultiLangField(en = "Fourth ingress"),
         MultiLangField(en = "Fourth text"),
-        PRIVATPERSON,
+        nowMinusTwoYears,
+        nowMinusTwoYears,
+        listOf(PRIVATPERSON),
         ENGLISH
     ),
     ContentDao(
@@ -57,7 +84,9 @@ val initialTestData = listOf(
         MultiLangField(en = "Fifth name"),
         MultiLangField(en = "Fifth ingress"),
         MultiLangField(en = "Fifth text"),
-        ARBEIDSGIVER,
+        nowMinus10Days,
+        nowMinus10Days,
+        listOf(ARBEIDSGIVER),
         ENGLISH
     ),
     ContentDao(
@@ -67,7 +96,9 @@ val initialTestData = listOf(
         MultiLangField(en = "Sixth name"),
         MultiLangField(en = "Sixth ingress"),
         MultiLangField(en = "Sixth text"),
-        ARBEIDSGIVER,
+        nowMinus10Days,
+        nowMinus10Days,
+        listOf(ARBEIDSGIVER),
         ENGLISH
     ),
     ContentDao(
@@ -77,8 +108,10 @@ val initialTestData = listOf(
         MultiLangField(en = "Seventh name"),
         MultiLangField(en = "Seventh ingress"),
         MultiLangField(en = "Seventh text"),
-        ARBEIDSGIVER,
-        ENGLISH
+        nowMinus50Days,
+        nowMinus50Days,
+        listOf(ARBEIDSGIVER),
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-8",
@@ -87,8 +120,10 @@ val initialTestData = listOf(
         MultiLangField(en = "Eighth name"),
         MultiLangField(en = "Eighth ingress"),
         MultiLangField(en = "Eighth text"),
-        SAMARBEIDSPARTNER,
-        ENGLISH
+        nowMinus50Days,
+        nowMinus50Days,
+        listOf(SAMARBEIDSPARTNER),
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-9",
@@ -97,8 +132,10 @@ val initialTestData = listOf(
         MultiLangField(en = "Ninth name"),
         MultiLangField(en = "Ninth ingress"),
         MultiLangField(en = "Ninth text"),
-        SAMARBEIDSPARTNER,
-        ENGLISH
+        nowMinus50Days,
+        nowMinus50Days,
+        listOf(SAMARBEIDSPARTNER),
+        OTHER
     ),
     ContentDao(
         "$TEAM_NAME-10",
@@ -107,30 +144,52 @@ val initialTestData = listOf(
         MultiLangField(en = "Tenth name"),
         MultiLangField(en = "Tenth ingress"),
         MultiLangField(en = "Tenth text"),
-        SAMARBEIDSPARTNER,
-        ENGLISH
+        nowMinus50Days,
+        nowMinus50Days,
+        listOf(SAMARBEIDSPARTNER),
+        OTHER
     ),
 )
 
-val additionalTestData = listOf(
-    ContentDto(
-        "11",
-        "https://eleventh.com",
-        "Eleventh name",
-        "Eleventh ingress",
-        "Eleventh text",
-        SAMARBEIDSPARTNER,
-        ENGLISH
-    )
-)
+val additionalTestData = listOf(dummyContentDto())
 
 val additionalTestDataAsMapWithMissingIngress = listOf(
     mapOf(
         "id" to "11",
         "href" to "https://eleventh.com",
-        "name" to "Eleventh name",
+        "title" to "Eleventh name",
         "text" to "Eleventh text",
-        "audience" to SAMARBEIDSPARTNER,
+        "audience" to listOf(SAMARBEIDSPARTNER),
         "language" to ENGLISH
+    )
+)
+
+fun dummyContentDto(
+    id: String = "11",
+    href: String = "https://eleventh.com",
+    title: String = "Eleventh name",
+    ingress: String = "Eleventh ingress",
+    text: String = "Eleventh text",
+    createdAt: LocalDateTime = now.toLocalDateTime(),
+    lastUpdated: LocalDateTime = now.toLocalDateTime(),
+    audience: List<String> = listOf(SAMARBEIDSPARTNER),
+    language: String = ENGLISH,
+    isFile: Boolean? = null,
+    fylke: String? = null,
+    metatags: List<String>? = null,
+) = ContentDto(
+    id,
+    href,
+    title,
+    ingress,
+    text,
+    ContentMetadata(
+        createdAt,
+        lastUpdated,
+        audience,
+        language,
+        isFile,
+        fylke,
+        metatags,
     )
 )

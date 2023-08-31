@@ -32,7 +32,7 @@ class SearchService(
     private fun suggestions(term: String): List<String?> {
         val query = searchAsYouTypeQuery(term.removeSurrounding("\""))
         val searchResult = searchHelper.search(query, MAX_SUGGESTIONS)
-        return searchResult.map { hit -> hit.content.name.searchAsYouType }.toList()
+        return searchResult.map { hit -> hit.content.title.searchAsYouType }.toList()
     }
 
     private fun isInQuotes(term: String): Boolean {
@@ -47,6 +47,6 @@ class SearchService(
         private const val AUDIENCE_KEYWORD = "audience"
         private const val MAX_SUGGESTIONS = 3
 
-        val highlightFields = listOf("name.*", "ingress.*", "text.*").map { HighlightField(it) }
+        val highlightFields = listOf("title.*", "ingress.*", "text.*").map { HighlightField(it) }
     }
 }

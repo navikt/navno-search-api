@@ -5,6 +5,7 @@ import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
 import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
+import no.nav.navnosearchapi.utils.dummyContentDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -63,11 +64,11 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
         val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
-            HttpEntity(listOf(additionalTestData[0].copy(language = "unsupported"))),
+            HttpEntity(listOf(dummyContentDto(language = "unsupported"))),
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("language må være en av følgende gyldige verdier: [en, no]")
+        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [no, en, other]")
     }
 
     @Test
