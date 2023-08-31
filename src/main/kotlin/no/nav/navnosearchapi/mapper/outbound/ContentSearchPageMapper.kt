@@ -9,6 +9,10 @@ import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.AUDIENCE
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_12_MONTHS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.FYLKE
 import no.nav.navnosearchapi.utils.IS_FILE
@@ -19,6 +23,7 @@ import no.nav.navnosearchapi.utils.extractExternalId
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
+import org.opensearch.search.aggregations.bucket.range.Range
 import org.opensearch.search.aggregations.bucket.terms.Terms
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -39,7 +44,7 @@ class ContentSearchPageMapper {
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
-            aggregations = toContentAggregations(searchPage.searchHits.aggregations as OpenSearchAggregations)
+            aggregations = toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
         )
     }
 
@@ -77,13 +82,19 @@ class ContentSearchPageMapper {
         )
     }
 
-    private fun toContentAggregations(aggregations: OpenSearchAggregations): ContentAggregations {
+    private fun toContentAggregations(aggregations: Aggregations): ContentAggregations {
         return ContentAggregations(
-            audience = getTermAggregation(aggregations.aggregations(), AUDIENCE),
-            language = getTermAggregation(aggregations.aggregations(), LANGUAGE),
-            fylke = getTermAggregation(aggregations.aggregations(), FYLKE),
-            metatags = getTermAggregation(aggregations.aggregations(), METATAGS),
-            isFile = getFilterAggregation(aggregations.aggregations(), IS_FILE)
+            audience = getTermAggregation(aggregations, AUDIENCE),
+            language = getTermAggregation(aggregations, LANGUAGE),
+            fylke = getTermAggregation(aggregations, FYLKE),
+            metatags = getTermAggregation(aggregations, METATAGS),
+            isFile = getFilterAggregation(aggregations, IS_FILE),
+            dateRangeAggregations = mapOf(
+                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_7_DAYS),
+                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_30_DAYS),
+                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_12_MONTHS),
+                getDateRangeAggregation(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS),
+            )
         )
     }
 
@@ -93,6 +104,10 @@ class ContentSearchPageMapper {
 
     private fun getFilterAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
         return mapOf(aggregations.get<Filter>(name).let { it.name to it.docCount })
+    }
+
+    private fun getDateRangeAggregation(aggregations: Aggregations, name: String): Pair<String, Long> {
+        return aggregations.get<Range>(name).let { it.name to it.buckets.first().docCount }
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String) = "$parentKey.$language"

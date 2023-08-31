@@ -4,6 +4,10 @@ import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.AGDER
 import no.nav.navnosearchapi.utils.ARBEIDSGIVER
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_12_MONTHS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.IS_FILE
 import no.nav.navnosearchapi.utils.NORWEGIAN
@@ -44,6 +48,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.aggregations.fylke[AGDER]).isEqualTo(3L)
         assertThat(result.aggregations.metatags[STATISTIKK]).isEqualTo(3L)
         assertThat(result.aggregations.isFile[IS_FILE]).isEqualTo(3L)
+
+        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_7_DAYS]).isEqualTo(2L)
+        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_30_DAYS]).isEqualTo(4L)
+        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_12_MONTHS]).isEqualTo(8L)
+        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_OLDER_THAN_12_MONTHS]).isEqualTo(2L)
     }
 
     @Test
@@ -72,7 +81,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(1L)
         assertThat(!result.aggregations.audience.keys.contains(ARBEIDSGIVER))
         assertThat(!result.aggregations.audience.keys.contains(SAMARBEIDSPARTNER))
-
     }
 
     @Test
