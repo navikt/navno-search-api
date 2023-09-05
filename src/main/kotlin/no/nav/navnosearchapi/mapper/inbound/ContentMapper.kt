@@ -4,7 +4,8 @@ import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.model.ContentDao
 import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.ENGLISH
-import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchapi.utils.NORWEGIAN_NYNORSK
 import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.createInternalId
 import org.springframework.stereotype.Component
@@ -34,7 +35,7 @@ class ContentMapper {
     fun toMultiLangField(value: String, language: String): MultiLangField {
         return MultiLangField(
             en = if (ENGLISH == language) value else null,
-            no = if (NORWEGIAN == language) value else null,
+            no = if (NORWEGIAN_BOKMAAL == language || NORWEGIAN_NYNORSK == language) value else null,
             other = if (OTHER == language) value else null,
         )
     }

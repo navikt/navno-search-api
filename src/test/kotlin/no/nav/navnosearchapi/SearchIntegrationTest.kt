@@ -10,7 +10,7 @@ import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.IS_FILE
-import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.PRIVATPERSON
 import no.nav.navnosearchapi.utils.SAMARBEIDSPARTNER
@@ -41,7 +41,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.aggregations.audience[ARBEIDSGIVER]).isEqualTo(4L)
         assertThat(result.aggregations.audience[SAMARBEIDSPARTNER]).isEqualTo(4L)
 
-        assertThat(result.aggregations.language[NORWEGIAN]).isEqualTo(3L)
+        assertThat(result.aggregations.language[NORWEGIAN_BOKMAAL]).isEqualTo(3L)
         assertThat(result.aggregations.language[ENGLISH]).isEqualTo(3L)
         assertThat(result.aggregations.language[OTHER]).isEqualTo(4L)
 

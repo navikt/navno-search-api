@@ -31,7 +31,7 @@ val initialTestData = listOf(
         now,
         now,
         listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        NORWEGIAN,
+        NORWEGIAN_BOKMAAL,
         true,
         AGDER,
         listOf(STATISTIKK)
@@ -47,7 +47,7 @@ val initialTestData = listOf(
         now,
         now,
         listOf(PRIVATPERSON),
-        NORWEGIAN,
+        NORWEGIAN_BOKMAAL,
         true,
         AGDER,
         listOf(STATISTIKK)
@@ -63,7 +63,7 @@ val initialTestData = listOf(
         nowMinusTwoYears,
         nowMinusTwoYears,
         listOf(PRIVATPERSON),
-        NORWEGIAN,
+        NORWEGIAN_BOKMAAL,
         true,
         AGDER,
         listOf(STATISTIKK)

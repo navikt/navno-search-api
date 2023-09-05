@@ -18,7 +18,8 @@ import no.nav.navnosearchapi.utils.FYLKE
 import no.nav.navnosearchapi.utils.IS_FILE
 import no.nav.navnosearchapi.utils.LANGUAGE
 import no.nav.navnosearchapi.utils.METATAGS
-import no.nav.navnosearchapi.utils.NORWEGIAN
+import no.nav.navnosearchapi.utils.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchapi.utils.NORWEGIAN_NYNORSK
 import no.nav.navnosearchapi.utils.extractExternalId
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
@@ -114,7 +115,7 @@ class ContentSearchPageMapper {
 
     private fun languageSubfieldValue(field: MultiLangField, language: String): String? {
         return when (language) {
-            NORWEGIAN -> field.no
+            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no
             ENGLISH -> field.en
             else -> field.other
         }

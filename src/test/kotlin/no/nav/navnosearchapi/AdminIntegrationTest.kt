@@ -68,7 +68,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [no, en, other]")
+        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [nb, nn, en, se, pl, uk, ru, other]")
     }
 
     @Test
