@@ -19,10 +19,10 @@ class AdminController(val service: AdminService, val validator: ContentDtoValida
     fun saveContent(
         @RequestBody content: List<ContentDto>,
         @PathVariable teamName: String
-    ): List<ContentDto> {
+    ): String {
         validator.validate(content)
         service.saveAllContent(content, teamName)
-        return content
+        return "${content.size} dokumenter indeksert"
     }
 
     @GetMapping("/content/{teamName}")
@@ -36,6 +36,6 @@ class AdminController(val service: AdminService, val validator: ContentDtoValida
     @DeleteMapping("/content/{teamName}/{id}")
     fun deleteContentByTeamNameAndId(@PathVariable teamName: String, @PathVariable id: String): String {
         service.deleteContentByTeamNameAndId(teamName, id)
-        return id
+        return "Dokument med id $id slettet"
     }
 }
