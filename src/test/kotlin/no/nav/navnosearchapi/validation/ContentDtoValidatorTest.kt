@@ -35,7 +35,7 @@ class ContentDtoValidatorTest {
     fun testValidationWithInvalidLanguage() {
         val content = listOf(dummyContentDto(language = invalidValue))
         val exception = assertThrows<ContentValidationException> { validator.validate(content) }
-        assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.language: $invalidValue. Gyldige verdier: [no, en, other]")
+        assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.language: $invalidValue. Gyldige verdier: [nb, nn, en, se, pl, uk, ru, other]")
     }
 
     @Test
