@@ -44,8 +44,27 @@ fun filteredQuery(query: String, filters: String): String = """
     {
       "bool": {
         "must": $query,
-        "filter": {
-          "terms": $filters
+        "filter": $filters
+      }
+    }
+    """
+
+fun termsQuery(field: String, values: List<String>) = """
+    {
+      "terms": {
+        "$field": [
+          ${values.joinToString(", ") { "\"$it\"" }}
+        ]
+      }
+    }
+    """
+
+fun rangeQuery(field: String, gte: String?, lte: String?) = """
+    {
+      "range": {
+        "$field": {
+          "gte": "",
+          "lte": ""
         }
       }
     }

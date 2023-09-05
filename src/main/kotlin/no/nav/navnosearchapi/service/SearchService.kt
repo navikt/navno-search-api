@@ -1,32 +1,77 @@
 package no.nav.navnosearchapi.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
+import no.nav.navnosearchapi.service.search.Filters
 import no.nav.navnosearchapi.service.search.SearchHelper
 import no.nav.navnosearchapi.service.search.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.searchAsYouTypeQuery
+import no.nav.navnosearchapi.service.search.termsQuery
+import no.nav.navnosearchapi.utils.AUDIENCE
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_12_MONTHS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
+import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
+import no.nav.navnosearchapi.utils.FYLKE
+import no.nav.navnosearchapi.utils.IS_FILE
+import no.nav.navnosearchapi.utils.LANGUAGE
+import no.nav.navnosearchapi.utils.LAST_UPDATED
+import no.nav.navnosearchapi.utils.METATAGS
+import org.opensearch.index.query.QueryBuilders
+import org.opensearch.search.aggregations.AbstractAggregationBuilder
+import org.opensearch.search.aggregations.AggregationBuilders
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 
 
 @Service
 class SearchService(
     val searchHelper: SearchHelper,
-    val objectMapper: ObjectMapper,
-    val mapper: ContentSearchPageMapper
+    val mapper: ContentSearchPageMapper,
 ) {
-    fun searchAllText(term: String, audience: List<String>?, page: Int): ContentSearchPage {
-        val query = if (isInQuotes(term)) {
+    fun searchAllText(term: String, page: Int, filters: Filters): ContentSearchPage {
+        val baseQuery = if (isInQuotes(term)) {
             searchAllTextForPhraseQuery(term)
         } else {
             searchAllTextQuery(term)
         }
 
-        val searchResult = searchHelper.searchPage(query, page, audience?.let { filtersAsJson(it) }, highlightFields)
+        val searchResult = searchHelper.searchPage(baseQuery, page, filtersAsString(filters), aggregations(), highlightFields)
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
+    }
+
+    private fun aggregations(): List<AbstractAggregationBuilder<*>> {
+        val now = ZonedDateTime.now()
+        val sevenDaysAgo = now.minusDays(7)
+        val thirtyDaysAgo = now.minusDays(30)
+        val twelveMonthsAgo = now.minusMonths(12)
+
+        return listOf(
+            AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
+            AggregationBuilders.terms(LANGUAGE).field(LANGUAGE),
+            AggregationBuilders.terms(FYLKE).field(FYLKE),
+            AggregationBuilders.terms(METATAGS).field(METATAGS),
+            AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true)),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo, now).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo, now).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo, now).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo)
+                .field(LAST_UPDATED),
+        )
+    }
+
+    private fun filtersAsString(request: Filters): String {
+        val filters = mutableListOf<String>()
+
+        request.audience?.let { filters.add(termsQuery(AUDIENCE, it)) }
+        request.language?.let { filters.add(termsQuery(LANGUAGE, it)) }
+        request.fylke?.let { filters.add(termsQuery(FYLKE, it)) }
+        request.metatags?.let { filters.add(termsQuery(METATAGS, it)) }
+
+        return filters.joinToString(", ", "[", "]")
     }
 
     private fun suggestions(term: String): List<String?> {
@@ -39,12 +84,7 @@ class SearchService(
         return term.startsWith('"') && term.endsWith('"')
     }
 
-    private fun filtersAsJson(audience: List<String>?): String {
-        return objectMapper.writeValueAsString(mapOf(AUDIENCE_KEYWORD to audience))
-    }
-
     companion object {
-        private const val AUDIENCE_KEYWORD = "audience"
         private const val MAX_SUGGESTIONS = 3
 
         val highlightFields = listOf("title.*", "ingress.*", "text.*").map { HighlightField(it) }
