@@ -17,14 +17,21 @@ private const val TITLE_WEIGHT = 3.0f
 private const val INGRESS_WEIGHT = 2.0f
 private const val TEXT_WEIGHT = 1.0f
 
+private const val SEARCH_AS_YOU_TYPE_FIELD = "title.searchAsYouType"
+
 private val fieldsToWeightMap = mapOf(TITLE to TITLE_WEIGHT, INGRESS to INGRESS_WEIGHT, TEXT to TEXT_WEIGHT)
 
-fun searchAllTextQuery(term: String): MultiMatchQueryBuilder = MultiMatchQueryBuilder(term).fields(fields())
+fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
+    return MultiMatchQueryBuilder(term).fields(fields())
+}
 
-fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder =
-    MultiMatchQueryBuilder(term).fields(fields()).type(MultiMatchQueryBuilder.Type.PHRASE)
+fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
+    return MultiMatchQueryBuilder(term).fields(fields()).type(MultiMatchQueryBuilder.Type.PHRASE)
+}
 
-fun searchAsYouTypeQuery(term: String) = MatchPhrasePrefixQueryBuilder("title.searchAsYouType", term)
+fun searchAsYouTypeQuery(term: String): MatchPhrasePrefixQueryBuilder {
+    return MatchPhrasePrefixQueryBuilder(SEARCH_AS_YOU_TYPE_FIELD, term)
+}
 
 fun filteredQuery(baseQuery: QueryBuilder, filters: List<QueryBuilder>): BoolQueryBuilder {
     val query = BoolQueryBuilder().must(baseQuery)
@@ -32,9 +39,13 @@ fun filteredQuery(baseQuery: QueryBuilder, filters: List<QueryBuilder>): BoolQue
     return query
 }
 
-fun termsQuery(field: String, values: List<String>) = TermsQueryBuilder(field, values)
+fun termsQuery(field: String, values: List<String>): TermsQueryBuilder {
+    return TermsQueryBuilder(field, values)
+}
 
-fun rangeQuery(field: String, gte: ZonedDateTime?, lte: ZonedDateTime?) = RangeQueryBuilder(field).from(gte).to(lte)
+fun rangeQuery(field: String, gte: ZonedDateTime?, lte: ZonedDateTime?): RangeQueryBuilder {
+    return RangeQueryBuilder(field).from(gte).to(lte)
+}
 
 private fun fields(): Map<String, Float> {
     return fieldsToWeightMap.flatMap { (field, weight) ->
