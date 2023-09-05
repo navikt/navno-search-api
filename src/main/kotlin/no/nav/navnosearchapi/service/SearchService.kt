@@ -4,6 +4,7 @@ import no.nav.navnosearchapi.dto.ContentSearchPage
 import no.nav.navnosearchapi.mapper.outbound.ContentSearchPageMapper
 import no.nav.navnosearchapi.service.search.Filters
 import no.nav.navnosearchapi.service.search.SearchHelper
+import no.nav.navnosearchapi.service.search.rangeQuery
 import no.nav.navnosearchapi.service.search.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.searchAsYouTypeQuery
@@ -18,11 +19,13 @@ import no.nav.navnosearchapi.utils.IS_FILE
 import no.nav.navnosearchapi.utils.LANGUAGE
 import no.nav.navnosearchapi.utils.LAST_UPDATED
 import no.nav.navnosearchapi.utils.METATAGS
+import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Service
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 
@@ -38,7 +41,8 @@ class SearchService(
             searchAllTextQuery(term)
         }
 
-        val searchResult = searchHelper.searchPage(baseQuery, page, filtersAsString(filters), aggregations(), highlightFields)
+        val searchResult =
+            searchHelper.searchPage(baseQuery, page, filterList(filters), aggregations(), highlightFields)
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
     }
@@ -63,19 +67,30 @@ class SearchService(
         )
     }
 
-    private fun filtersAsString(request: Filters): String {
-        val filters = mutableListOf<String>()
+    private fun filterList(filters: Filters): List<QueryBuilder> {
+        val filterList = mutableListOf<QueryBuilder>()
 
-        request.audience?.let { filters.add(termsQuery(AUDIENCE, it)) }
-        request.language?.let { filters.add(termsQuery(LANGUAGE, it)) }
-        request.fylke?.let { filters.add(termsQuery(FYLKE, it)) }
-        request.metatags?.let { filters.add(termsQuery(METATAGS, it)) }
+        filters.audience?.let { filterList.add(termsQuery(AUDIENCE, it)) }
+        filters.language?.let { filterList.add(termsQuery(LANGUAGE, it)) }
+        filters.fylke?.let { filterList.add(termsQuery(FYLKE, it)) }
+        filters.metatags?.let { filterList.add(termsQuery(METATAGS, it)) }
+        filters.isFile?.let { filterList.add(termsQuery(IS_FILE, it)) }
 
-        return filters.joinToString(", ", "[", "]")
+        if (filters.lastUpdatedFrom != null || filters.lastUpdatedTo != null) {
+            filterList.add(
+                rangeQuery(
+                    LAST_UPDATED,
+                    filters.lastUpdatedFrom?.atZone(ZoneId.systemDefault()),
+                    filters.lastUpdatedTo?.atZone(ZoneId.systemDefault())
+                )
+            )
+        }
+
+        return filterList
     }
 
     private fun suggestions(term: String): List<String?> {
-        val query = searchAsYouTypeQuery(term.removeSurrounding("\""))
+        val query = searchAsYouTypeQuery(term)
         val searchResult = searchHelper.search(query, MAX_SUGGESTIONS)
         return searchResult.map { hit -> hit.content.title.searchAsYouType }.toList()
     }
