@@ -15,10 +15,13 @@ import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.FYLKE
+import no.nav.navnosearchapi.utils.INGRESS_WILDCARD
 import no.nav.navnosearchapi.utils.IS_FILE
 import no.nav.navnosearchapi.utils.LANGUAGE
 import no.nav.navnosearchapi.utils.LAST_UPDATED
 import no.nav.navnosearchapi.utils.METATAGS
+import no.nav.navnosearchapi.utils.TEXT_WILDCARD
+import no.nav.navnosearchapi.utils.TITLE_WILDCARD
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
@@ -34,6 +37,8 @@ class SearchService(
     val searchHelper: SearchHelper,
     val mapper: ContentSearchPageMapper,
 ) {
+    val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map { HighlightField(it) }
+
     fun searchAllText(term: String, page: Int, filters: Filters): ContentSearchPage {
         val baseQuery = if (isInQuotes(term)) {
             searchAllTextForPhraseQuery(term)
@@ -41,8 +46,13 @@ class SearchService(
             searchAllTextQuery(term)
         }
 
-        val searchResult =
-            searchHelper.searchPage(baseQuery, page, filterList(filters), aggregations(), highlightFields)
+        val searchResult = searchHelper.searchPage(
+            baseQuery,
+            page,
+            filterList(filters),
+            aggregations(),
+            highlightFields
+        )
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
     }
@@ -91,17 +101,11 @@ class SearchService(
 
     private fun suggestions(term: String): List<String?> {
         val query = searchAsYouTypeQuery(term)
-        val searchResult = searchHelper.search(query, MAX_SUGGESTIONS)
-        return searchResult.map { hit -> hit.content.title.searchAsYouType }.toList()
+        val searchResult = searchHelper.search(query)
+        return searchResult.map { hit -> hit.content.searchAsYouType }.toList()
     }
 
     private fun isInQuotes(term: String): Boolean {
         return term.startsWith('"') && term.endsWith('"')
-    }
-
-    companion object {
-        private const val MAX_SUGGESTIONS = 3
-
-        val highlightFields = listOf("title.*", "ingress.*", "text.*").map { HighlightField(it) }
     }
 }

@@ -6,6 +6,7 @@ val NORWEGIAN = ValidLanguages.NO.descriptor
 val ENGLISH = ValidLanguages.EN.descriptor
 val OTHER = ValidLanguages.OTHER.descriptor
 
+const val SEARCH_AS_YOU_TYPE = "searchAsYouType"
 const val TITLE = "title"
 const val INGRESS = "ingress"
 const val TEXT = "text"
@@ -15,10 +16,15 @@ const val LANGUAGE = "language"
 const val FYLKE = "fylke"
 const val METATAGS = "metatags"
 const val IS_FILE = "isFile"
+
 const val METADATA_AUDIENCE = "metadata.audience"
 const val METADATA_LANGUAGE = "metadata.language"
 const val METADATA_FYLKE = "metadata.fylke"
 const val METADATA_METATAGS = "metadata.metatags"
+
+const val TITLE_WILDCARD = "$TITLE.*"
+const val INGRESS_WILDCARD = "$INGRESS.*"
+const val TEXT_WILDCARD = "$TEXT.*"
 
 const val DATE_RANGE_LAST_7_DAYS = "Siste 7 dager"
 const val DATE_RANGE_LAST_30_DAYS = "Siste 30 dager"

@@ -21,6 +21,7 @@ data class ContentDao(
     @Id @Field(type = FieldType.Keyword) val id: String,
     @Field(type = FieldType.Keyword) val teamOwnedBy: String,
     @Field(type = FieldType.Text) val href: String,
+    @Field(type = FieldType.Search_As_You_Type) val searchAsYouType: String? = null,
     @Field(type = FieldType.Object) val title: MultiLangField,
     @Field(type = FieldType.Object) val ingress: MultiLangField,
     @Field(type = FieldType.Object) val text: MultiLangField,

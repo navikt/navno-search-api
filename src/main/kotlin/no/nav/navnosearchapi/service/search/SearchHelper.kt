@@ -46,9 +46,9 @@ class SearchHelper(
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
     }
 
-    fun search(query: QueryBuilder, size: Int): SearchHits<ContentDao> {
+    fun search(query: QueryBuilder, maxResults: Int = 3): SearchHits<ContentDao> {
         return operations.search(
-            NativeSearchQueryBuilder().withQuery(query).withMaxResults(3).build(),
+            NativeSearchQueryBuilder().withQuery(query).withMaxResults(maxResults).build(),
             ContentDao::class.java
         )
     }
