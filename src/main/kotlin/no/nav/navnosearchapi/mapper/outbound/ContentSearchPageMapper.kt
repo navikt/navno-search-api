@@ -111,7 +111,14 @@ class ContentSearchPageMapper {
         return aggregations.get<Range>(name).let { it.name to it.buckets.first().docCount }
     }
 
-    private fun languageSubfieldKey(parentKey: String, language: String) = "$parentKey.$language"
+    private fun languageSubfieldKey(parentKey: String, language: String): String {
+        val suffix = when (language) {
+            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> NORWEGIAN_SUFFIX
+            ENGLISH -> ENGLISH_SUFFIX
+            else -> OTHER_SUFFIX
+        }
+        return parentKey + suffix
+    }
 
     private fun languageSubfieldValue(field: MultiLangField, language: String): String? {
         return when (language) {
@@ -130,5 +137,9 @@ class ContentSearchPageMapper {
         private const val TITLE = "title"
         private const val INGRESS = "ingress"
         private const val TEXT = "text"
+
+        private const val NORWEGIAN_SUFFIX = ".no"
+        private const val ENGLISH_SUFFIX = ".en"
+        private const val OTHER_SUFFIX = ".other"
     }
 }
