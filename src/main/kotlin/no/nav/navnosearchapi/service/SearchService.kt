@@ -10,6 +10,7 @@ import no.nav.navnosearchapi.service.search.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.searchAsYouTypeQuery
 import no.nav.navnosearchapi.service.search.termsQuery
 import no.nav.navnosearchapi.utils.AUDIENCE
+import no.nav.navnosearchapi.utils.AUTOCOMPLETE_KEYWORD
 import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
@@ -50,7 +51,9 @@ class SearchService(
             highlightFields
         )
 
-        return mapper.toContentSearchPage(searchResult, suggestions(term))
+        val suggestions = suggestions(term, filters)
+
+        return mapper.toContentSearchPage(searchResult, suggestions)
     }
 
     private fun baseQuery(term: String): AbstractQueryBuilder<*> {
@@ -105,10 +108,14 @@ class SearchService(
         return filterList
     }
 
-    private fun suggestions(term: String): List<String?> {
+    private fun suggestions(term: String, filters: Filters): List<String?> {
         val query = searchAsYouTypeQuery(term)
-        val searchResult = searchHelper.search(query)
-        return searchResult.map { hit -> hit.content.searchAsYouType }.toList()
+        val searchResult = searchHelper.search(
+            baseQuery = query,
+            filters = filterList(filters),
+            collapseField = AUTOCOMPLETE_KEYWORD
+        )
+        return searchResult.map { hit -> hit.content.autocomplete }.toList()
     }
 
     private fun isInQuotes(term: String): Boolean {

@@ -18,7 +18,7 @@ class ContentMapper {
             id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
-            searchAsYouType = content.title,
+            autocomplete = content.title,
             title = toMultiLangField(content.title, content.metadata.language),
             ingress = toMultiLangField(content.ingress, content.metadata.language),
             text = toMultiLangField(content.text, content.metadata.language),

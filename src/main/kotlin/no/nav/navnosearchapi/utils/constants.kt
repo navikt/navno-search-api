@@ -7,7 +7,6 @@ val NORWEGIAN_NYNORSK = ValidLanguages.NN.descriptor
 val ENGLISH = ValidLanguages.EN.descriptor
 val OTHER = ValidLanguages.OTHER.descriptor
 
-const val SEARCH_AS_YOU_TYPE = "searchAsYouType"
 const val TITLE = "title"
 const val INGRESS = "ingress"
 const val TEXT = "text"
@@ -17,6 +16,9 @@ const val LANGUAGE = "language"
 const val FYLKE = "fylke"
 const val METATAGS = "metatags"
 const val IS_FILE = "isFile"
+
+const val AUTOCOMPLETE_SEARCH_AS_YOU_TYPE = "autocomplete.searchAsYouType"
+const val AUTOCOMPLETE_KEYWORD = "autocomplete.keyword"
 
 const val METADATA_AUDIENCE = "metadata.audience"
 const val METADATA_LANGUAGE = "metadata.language"

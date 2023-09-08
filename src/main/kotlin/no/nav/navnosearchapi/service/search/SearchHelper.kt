@@ -46,11 +46,22 @@ class SearchHelper(
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
     }
 
-    fun search(query: QueryBuilder, maxResults: Int = 3): SearchHits<ContentDao> {
-        return operations.search(
-            NativeSearchQueryBuilder().withQuery(query).withMaxResults(maxResults).build(),
-            ContentDao::class.java
-        )
+    fun search(
+        baseQuery: QueryBuilder,
+        filters: List<QueryBuilder>,
+        maxResults: Int = 3,
+        collapseField: String? = null
+    ): SearchHits<ContentDao> {
+        val query = if (filters.isNotEmpty()) {
+            filteredQuery(baseQuery, filters)
+        } else {
+            baseQuery
+        }
+
+        val searchQuery = NativeSearchQueryBuilder().withQuery(query).withMaxResults(maxResults)
+        collapseField?.let { searchQuery.withCollapseField(it) }
+
+        return operations.search(searchQuery.build(), ContentDao::class.java)
     }
 
     private fun highlightQuery(highlightFields: List<HighlightField>): HighlightQuery {
