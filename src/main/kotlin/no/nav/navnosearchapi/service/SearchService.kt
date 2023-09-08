@@ -50,7 +50,9 @@ class SearchService(
             highlightFields
         )
 
-        return mapper.toContentSearchPage(searchResult, suggestions(term))
+        val suggestions = suggestions(term, filters)
+
+        return mapper.toContentSearchPage(searchResult, suggestions)
     }
 
     private fun baseQuery(term: String): AbstractQueryBuilder<*> {
@@ -105,10 +107,10 @@ class SearchService(
         return filterList
     }
 
-    private fun suggestions(term: String): List<String?> {
+    private fun suggestions(term: String, filters: Filters): List<String?> {
         val query = searchAsYouTypeQuery(term)
-        val searchResult = searchHelper.search(query)
-        return searchResult.map { hit -> hit.content.searchAsYouType }.toList()
+        val searchResult = searchHelper.search(query, filterList(filters))
+        return searchResult.map { hit -> hit.content.autocomplete }.toList()
     }
 
     private fun isInQuotes(term: String): Boolean {

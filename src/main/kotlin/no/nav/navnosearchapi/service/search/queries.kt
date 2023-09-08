@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi.service.search
 
+import no.nav.navnosearchapi.utils.AUTOCOMPLETE_SEARCH_AS_YOU_TYPE
 import no.nav.navnosearchapi.utils.INGRESS_WILDCARD
-import no.nav.navnosearchapi.utils.SEARCH_AS_YOU_TYPE
 import no.nav.navnosearchapi.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.utils.TITLE_WILDCARD
 import org.opensearch.index.query.BoolQueryBuilder
@@ -31,7 +31,7 @@ fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
 }
 
 fun searchAsYouTypeQuery(term: String): MatchPhrasePrefixQueryBuilder {
-    return MatchPhrasePrefixQueryBuilder(SEARCH_AS_YOU_TYPE, term)
+    return MatchPhrasePrefixQueryBuilder(AUTOCOMPLETE_SEARCH_AS_YOU_TYPE, term)
 }
 
 fun filteredQuery(baseQuery: QueryBuilder, filters: List<QueryBuilder>): BoolQueryBuilder {
