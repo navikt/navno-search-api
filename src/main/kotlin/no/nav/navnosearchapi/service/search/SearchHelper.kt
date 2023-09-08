@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchapi.model.ContentDao
-import no.nav.navnosearchapi.utils.AUTOCOMPLETE_KEYWORD
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
@@ -50,8 +49,8 @@ class SearchHelper(
     fun search(
         baseQuery: QueryBuilder,
         filters: List<QueryBuilder>,
-        collapseField: String = AUTOCOMPLETE_KEYWORD,
-        maxResults: Int = 3
+        maxResults: Int = 3,
+        collapseField: String? = null
     ): SearchHits<ContentDao> {
         val query = if (filters.isNotEmpty()) {
             filteredQuery(baseQuery, filters)
@@ -59,12 +58,10 @@ class SearchHelper(
             baseQuery
         }
 
-        val searchQuery = NativeSearchQueryBuilder().withQuery(query)
-            .withMaxResults(maxResults)
-            .withCollapseField(collapseField)
-            .build()
+        val searchQuery = NativeSearchQueryBuilder().withQuery(query).withMaxResults(maxResults)
+        collapseField?.let { searchQuery.withCollapseField(it) }
 
-        return operations.search(searchQuery, ContentDao::class.java)
+        return operations.search(searchQuery.build(), ContentDao::class.java)
     }
 
     private fun highlightQuery(highlightFields: List<HighlightField>): HighlightQuery {
