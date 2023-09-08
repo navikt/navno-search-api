@@ -22,6 +22,8 @@ import no.nav.navnosearchapi.utils.LAST_UPDATED
 import no.nav.navnosearchapi.utils.METATAGS
 import no.nav.navnosearchapi.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.utils.TITLE_WILDCARD
+import org.opensearch.index.query.AbstractQueryBuilder
+import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
@@ -40,14 +42,8 @@ class SearchService(
     val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map { HighlightField(it) }
 
     fun searchAllText(term: String, page: Int, filters: Filters): ContentSearchPage {
-        val baseQuery = if (isInQuotes(term)) {
-            searchAllTextForPhraseQuery(term)
-        } else {
-            searchAllTextQuery(term)
-        }
-
         val searchResult = searchHelper.searchPage(
-            baseQuery,
+            baseQuery(term),
             page,
             filterList(filters),
             aggregations(),
@@ -55,6 +51,16 @@ class SearchService(
         )
 
         return mapper.toContentSearchPage(searchResult, suggestions(term))
+    }
+
+    private fun baseQuery(term: String): AbstractQueryBuilder<*> {
+        return if (term.isBlank()) {
+            MatchAllQueryBuilder()
+        } else if (isInQuotes(term)) {
+            searchAllTextForPhraseQuery(term)
+        } else {
+            searchAllTextQuery(term)
+        }
     }
 
     private fun aggregations(): List<AbstractAggregationBuilder<*>> {

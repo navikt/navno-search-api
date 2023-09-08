@@ -27,6 +27,9 @@ const val TITLE_WILDCARD = "$TITLE.*"
 const val INGRESS_WILDCARD = "$INGRESS.*"
 const val TEXT_WILDCARD = "$TEXT.*"
 
+const val LAST_UPDATED_FROM = "lastUpdatedFrom"
+const val LAST_UPDATED_TO = "lastUpdatedTo"
+
 const val DATE_RANGE_LAST_7_DAYS = "Siste 7 dager"
 const val DATE_RANGE_LAST_30_DAYS = "Siste 30 dager"
 const val DATE_RANGE_LAST_12_MONTHS = "Siste 12 måneder"
