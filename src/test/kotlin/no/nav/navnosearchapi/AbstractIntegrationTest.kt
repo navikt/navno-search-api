@@ -11,6 +11,8 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.util.MultiValueMapAdapter
+import org.springframework.web.util.UriComponentsBuilder
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
@@ -33,9 +35,13 @@ abstract class AbstractIntegrationTest {
 
     fun indexCount() = repository.count()
 
-    fun searchUrl(term: String, page: Int = 0, audience: String? = null): String {
-        val audienceParam = audience?.let { "&audience=$it" } ?: ""
-        return "${host()}/content/search?page=$page&term=$term$audienceParam"
+    fun searchUrl(term: String, page: Int = 0, filters: Map<String, List<String>> = emptyMap()): String {
+        return UriComponentsBuilder.fromHttpUrl(host())
+            .path("/content/search")
+            .queryParam("term", term)
+            .queryParam("page", page)
+            .queryParams(MultiValueMapAdapter(filters))
+            .build().toUriString()
     }
 
     fun setupIndex() {

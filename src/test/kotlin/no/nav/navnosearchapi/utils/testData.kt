@@ -20,134 +20,76 @@ val nowMinus10Days: ZonedDateTime = ZonedDateTime.now().minusDays(10)
 val nowMinus50Days: ZonedDateTime = ZonedDateTime.now().minusDays(50)
 
 val initialTestData = listOf(
-    ContentDao(
-        "$TEAM_NAME-1",
-        TEAM_NAME,
-        "https://first.com",
-        MultiLangField(en = "First name"),
-        MultiLangField(en = "First ingress"),
-        MultiLangField(en = "First text"),
-        now,
-        now,
-        listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        NORWEGIAN,
-        true,
-        AGDER,
-        listOf(STATISTIKK)
+    dummyContentDao(
+        externalId = "1",
+        textPrefix = "First",
+        audience = listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
+        isFile = true,
+        fylke = AGDER,
+        metatags = listOf(STATISTIKK)
     ),
-    ContentDao(
-        "$TEAM_NAME-2",
-        TEAM_NAME,
-        "https://second.com",
-        MultiLangField(en = "Second name"),
-        MultiLangField(en = "Second ingress"),
-        MultiLangField(en = "Second text"),
-        now,
-        now,
-        listOf(PRIVATPERSON),
-        NORWEGIAN,
-        true,
-        AGDER,
-        listOf(STATISTIKK)
+    dummyContentDao(
+        externalId = "2",
+        textPrefix = "Second",
+        isFile = true,
+        fylke = AGDER,
+        metatags = listOf(STATISTIKK)
     ),
-    ContentDao(
-        "$TEAM_NAME-3",
-        TEAM_NAME,
-        "https://third.com",
-        MultiLangField(en = "Third name"),
-        MultiLangField(en = "Third ingress"),
-        MultiLangField(en = "Third text"),
-        nowMinusTwoYears,
-        nowMinusTwoYears,
-        listOf(PRIVATPERSON),
-        NORWEGIAN,
-        true,
-        AGDER,
-        listOf(STATISTIKK)
+    dummyContentDao(
+        externalId = "3",
+        textPrefix = "Third",
+        timestamp = nowMinusTwoYears,
+        isFile = true,
+        fylke = AGDER,
+        metatags = listOf(STATISTIKK)
     ),
-    ContentDao(
-        "$TEAM_NAME-4",
-        TEAM_NAME,
-        "https://fourth.com",
-        MultiLangField(en = "Fourth name"),
-        MultiLangField(en = "Fourth ingress"),
-        MultiLangField(en = "Fourth text"),
-        nowMinusTwoYears,
-        nowMinusTwoYears,
-        listOf(PRIVATPERSON),
-        ENGLISH
+    dummyContentDao(
+        externalId = "4",
+        textPrefix = "Fourth",
+        timestamp = nowMinusTwoYears,
+        language = ENGLISH
     ),
-    ContentDao(
-        "$TEAM_NAME-5",
-        TEAM_NAME,
-        "https://fifth.com",
-        MultiLangField(en = "Fifth name"),
-        MultiLangField(en = "Fifth ingress"),
-        MultiLangField(en = "Fifth text"),
-        nowMinus10Days,
-        nowMinus10Days,
-        listOf(ARBEIDSGIVER),
-        ENGLISH
+    dummyContentDao(
+        externalId = "5",
+        textPrefix = "Fifth",
+        timestamp = nowMinus10Days,
+        audience = listOf(ARBEIDSGIVER),
+        language = ENGLISH,
     ),
-    ContentDao(
-        "$TEAM_NAME-6",
-        TEAM_NAME,
-        "https://sixth.com",
-        MultiLangField(en = "Sixth name"),
-        MultiLangField(en = "Sixth ingress"),
-        MultiLangField(en = "Sixth text"),
-        nowMinus10Days,
-        nowMinus10Days,
-        listOf(ARBEIDSGIVER),
-        ENGLISH
+    dummyContentDao(
+        externalId = "6",
+        textPrefix = "Sixth",
+        timestamp = nowMinus10Days,
+        audience = listOf(ARBEIDSGIVER),
+        language = ENGLISH,
     ),
-    ContentDao(
-        "$TEAM_NAME-7",
-        TEAM_NAME,
-        "https://seventh.com",
-        MultiLangField(en = "Seventh name"),
-        MultiLangField(en = "Seventh ingress"),
-        MultiLangField(en = "Seventh text"),
-        nowMinus50Days,
-        nowMinus50Days,
-        listOf(ARBEIDSGIVER),
-        OTHER
+    dummyContentDao(
+        externalId = "7",
+        textPrefix = "Seventh",
+        timestamp = nowMinus50Days,
+        audience = listOf(ARBEIDSGIVER),
+        language = OTHER,
     ),
-    ContentDao(
-        "$TEAM_NAME-8",
-        TEAM_NAME,
-        "https://eighth.com",
-        MultiLangField(en = "Eighth name"),
-        MultiLangField(en = "Eighth ingress"),
-        MultiLangField(en = "Eighth text"),
-        nowMinus50Days,
-        nowMinus50Days,
-        listOf(SAMARBEIDSPARTNER),
-        OTHER
+    dummyContentDao(
+        externalId = "8",
+        textPrefix = "Eighth",
+        timestamp = nowMinus50Days,
+        audience = listOf(SAMARBEIDSPARTNER),
+        language = OTHER,
     ),
-    ContentDao(
-        "$TEAM_NAME-9",
-        TEAM_NAME,
-        "https://ninth.com",
-        MultiLangField(en = "Ninth name"),
-        MultiLangField(en = "Ninth ingress"),
-        MultiLangField(en = "Ninth text"),
-        nowMinus50Days,
-        nowMinus50Days,
-        listOf(SAMARBEIDSPARTNER),
-        OTHER
+    dummyContentDao(
+        externalId = "9",
+        textPrefix = "Ninth",
+        timestamp = nowMinus50Days,
+        audience = listOf(SAMARBEIDSPARTNER),
+        language = OTHER,
     ),
-    ContentDao(
-        "$TEAM_NAME-10",
-        TEAM_NAME,
-        "https://tenth.com",
-        MultiLangField(en = "Tenth name"),
-        MultiLangField(en = "Tenth ingress"),
-        MultiLangField(en = "Tenth text"),
-        nowMinus50Days,
-        nowMinus50Days,
-        listOf(SAMARBEIDSPARTNER),
-        OTHER
+    dummyContentDao(
+        externalId = "10",
+        textPrefix = "Tenth",
+        timestamp = nowMinus50Days,
+        audience = listOf(SAMARBEIDSPARTNER),
+        language = OTHER,
     ),
 )
 
@@ -157,17 +99,46 @@ val additionalTestDataAsMapWithMissingIngress = listOf(
     mapOf(
         "id" to "11",
         "href" to "https://eleventh.com",
-        "title" to "Eleventh name",
+        "title" to "Eleventh title",
         "text" to "Eleventh text",
         "audience" to listOf(SAMARBEIDSPARTNER),
         "language" to ENGLISH
     )
 )
 
+fun dummyContentDao(
+    teamName: String = TEAM_NAME,
+    externalId: String,
+    textPrefix: String,
+    timestamp: ZonedDateTime = now,
+    audience: List<String> = listOf(PRIVATPERSON),
+    language: String = NORWEGIAN_BOKMAAL,
+    isFile: Boolean? = null,
+    fylke: String? = null,
+    metatags: List<String>? = null
+): ContentDao {
+    return ContentDao(
+        "$teamName-$externalId",
+        teamName,
+        "https://$textPrefix.com",
+        "$textPrefix title",
+        MultiLangField(no = "$textPrefix title"),
+        MultiLangField(no = "$textPrefix ingress"),
+        MultiLangField(no = "$textPrefix text"),
+        timestamp,
+        timestamp,
+        audience,
+        language,
+        isFile,
+        fylke,
+        metatags
+    )
+}
+
 fun dummyContentDto(
     id: String = "11",
     href: String = "https://eleventh.com",
-    title: String = "Eleventh name",
+    title: String = "Eleventh title",
     ingress: String = "Eleventh ingress",
     text: String = "Eleventh text",
     createdAt: LocalDateTime = now.toLocalDateTime(),

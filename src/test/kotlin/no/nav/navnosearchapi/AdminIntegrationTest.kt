@@ -1,6 +1,5 @@
 package no.nav.navnosearchapi
 
-import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
@@ -33,18 +32,15 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContent() {
-        val response: ResponseEntity<List<ContentDto>> = restTemplate.exchange(
+        val response: ResponseEntity<String> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(additionalTestData),
         )
 
-        val savedContent: ContentDto = response.body?.first()!!
-
-
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(indexCount()).isEqualTo(11L)
-        assertThat(!repository.existsById("$TEAM_NAME-${savedContent.id}"))
+        assertThat(!repository.existsById("$TEAM_NAME-${additionalTestData.first().id}"))
     }
 
     @Test
@@ -68,7 +64,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [no, en, other]")
+        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [nb, nn, en, se, pl, uk, ru, other]")
     }
 
     @Test
