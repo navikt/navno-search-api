@@ -11,13 +11,13 @@ import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.FYLKE
+import no.nav.navnosearchapi.utils.HINDI
 import no.nav.navnosearchapi.utils.IS_FILE
 import no.nav.navnosearchapi.utils.LANGUAGE
 import no.nav.navnosearchapi.utils.LAST_UPDATED_FROM
 import no.nav.navnosearchapi.utils.LAST_UPDATED_TO
 import no.nav.navnosearchapi.utils.METATAGS
 import no.nav.navnosearchapi.utils.NORWEGIAN_BOKMAAL
-import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.PRIVATPERSON
 import no.nav.navnosearchapi.utils.SAMARBEIDSPARTNER
 import no.nav.navnosearchapi.utils.STATISTIKK
@@ -49,7 +49,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.aggregations.language[NORWEGIAN_BOKMAAL]).isEqualTo(3L)
         assertThat(result.aggregations.language[ENGLISH]).isEqualTo(3L)
-        assertThat(result.aggregations.language[OTHER]).isEqualTo(4L)
+        assertThat(result.aggregations.language[HINDI]).isEqualTo(4L)
 
         assertThat(result.aggregations.fylke[AGDER]).isEqualTo(3L)
         assertThat(result.aggregations.metatags[STATISTIKK]).isEqualTo(3L)

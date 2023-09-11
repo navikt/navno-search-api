@@ -1,11 +1,9 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.validation.enums.ValidLanguages
-
-val NORWEGIAN_BOKMAAL = ValidLanguages.NB.descriptor
-val NORWEGIAN_NYNORSK = ValidLanguages.NN.descriptor
-val ENGLISH = ValidLanguages.EN.descriptor
-val OTHER = ValidLanguages.OTHER.descriptor
+val NORWEGIAN_BOKMAAL = "nb"
+val NORWEGIAN_NYNORSK = "nn"
+val ENGLISH = "en"
+val supportedLanguages = listOf(NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK, ENGLISH)
 
 const val TITLE = "title"
 const val INGRESS = "ingress"
@@ -21,7 +19,6 @@ const val AUTOCOMPLETE_SEARCH_AS_YOU_TYPE = "autocomplete.searchAsYouType"
 const val AUTOCOMPLETE_KEYWORD = "autocomplete.keyword"
 
 const val METADATA_AUDIENCE = "metadata.audience"
-const val METADATA_LANGUAGE = "metadata.language"
 const val METADATA_FYLKE = "metadata.fylke"
 const val METADATA_METATAGS = "metadata.metatags"
 

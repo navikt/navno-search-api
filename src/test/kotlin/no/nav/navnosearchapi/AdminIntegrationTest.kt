@@ -1,25 +1,42 @@
 package no.nav.navnosearchapi
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import no.nav.navnosearchapi.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
 import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
 import no.nav.navnosearchapi.utils.dummyContentDto
+import no.nav.navnosearchapi.utils.mockedKodeverkResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 
 class AdminIntegrationTest : AbstractIntegrationTest() {
 
+    val objectMapper = ObjectMapper()
+
     @BeforeEach
     fun setup() {
         setupIndex()
+        stubFor(
+            get(urlPathMatching("/kodeverk")).willReturn(
+                aResponse().withStatus(HttpStatus.OK.value())
+                    .withBody(objectMapper.writeValueAsString(mockedKodeverkResponse))
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            )
+        )
     }
 
     @Test
@@ -64,7 +81,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Ugyldig verdi for metadata.language: unsupported. Gyldige verdier: [nb, nn, en, se, pl, uk, ru, other]")
+        assertThat(response.body?.message).isEqualTo("Ugyldig språkkode: unsupported. Må være tobokstavs språkkode fra kodeverk-api.")
     }
 
     @Test

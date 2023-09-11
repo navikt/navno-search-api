@@ -15,3 +15,7 @@ management:
       exposure:
         include: prometheus,health
       base-path: /internal
+
+kodeverk:
+  spraak:
+    url: ${KODEVERK_SPRAAK_URL}

@@ -6,8 +6,8 @@ import no.nav.navnosearchapi.model.MultiLangField
 import no.nav.navnosearchapi.utils.ENGLISH
 import no.nav.navnosearchapi.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.utils.NORWEGIAN_NYNORSK
-import no.nav.navnosearchapi.utils.OTHER
 import no.nav.navnosearchapi.utils.createInternalId
+import no.nav.navnosearchapi.utils.supportedLanguages
 import org.springframework.stereotype.Component
 import java.time.ZoneId
 
@@ -36,7 +36,7 @@ class ContentMapper {
         return MultiLangField(
             en = if (ENGLISH == language) value else null,
             no = if (NORWEGIAN_BOKMAAL == language || NORWEGIAN_NYNORSK == language) value else null,
-            other = if (OTHER == language) value else null,
+            other = if (!supportedLanguages.contains(language)) value else null,
         )
     }
 }

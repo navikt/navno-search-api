@@ -1,22 +1,21 @@
 package no.nav.navnosearchapi.validation
 
+import no.nav.navnosearchapi.consumer.kodeverk.KodeverkConsumer
 import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.exception.ContentValidationException
 import no.nav.navnosearchapi.utils.METADATA_AUDIENCE
 import no.nav.navnosearchapi.utils.METADATA_FYLKE
-import no.nav.navnosearchapi.utils.METADATA_LANGUAGE
 import no.nav.navnosearchapi.utils.METADATA_METATAGS
 import no.nav.navnosearchapi.utils.enumContains
 import no.nav.navnosearchapi.utils.enumDescriptors
 import no.nav.navnosearchapi.validation.enums.DescriptorProvider
 import no.nav.navnosearchapi.validation.enums.ValidAudiences
 import no.nav.navnosearchapi.validation.enums.ValidFylker
-import no.nav.navnosearchapi.validation.enums.ValidLanguages
 import no.nav.navnosearchapi.validation.enums.ValidMetatags
 import org.springframework.stereotype.Component
 
 @Component
-class ContentDtoValidator {
+class ContentDtoValidator(val kodeverkConsumer: KodeverkConsumer) {
     fun validate(content: List<ContentDto>) {
         content.forEach {
             validateAudience(it.metadata.audience)
@@ -32,7 +31,10 @@ class ContentDtoValidator {
     }
 
     private fun validateLanguage(language: String) {
-        validateValueIsValid<ValidLanguages>(language, METADATA_LANGUAGE)
+        val validLanguages = kodeverkConsumer.fetchSpraakKoder().koder
+        if (!validLanguages.contains(language.uppercase())) {
+            throw ContentValidationException("Ugyldig språkkode: $language. Må være tobokstavs språkkode fra kodeverk-api.")
+        }
     }
 
     private fun validateFylke(fylke: String) {
