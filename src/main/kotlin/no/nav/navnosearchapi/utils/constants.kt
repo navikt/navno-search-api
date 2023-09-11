@@ -1,9 +1,12 @@
 package no.nav.navnosearchapi.utils
 
+val NORWEGIAN = "no"
 val NORWEGIAN_BOKMAAL = "nb"
 val NORWEGIAN_NYNORSK = "nn"
 val ENGLISH = "en"
-val supportedLanguages = listOf(NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK, ENGLISH)
+
+val norwegianLanguageCodes = listOf(NORWEGIAN, NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK)
+val supportedLanguages = norwegianLanguageCodes + ENGLISH
 
 const val TITLE = "title"
 const val INGRESS = "ingress"
