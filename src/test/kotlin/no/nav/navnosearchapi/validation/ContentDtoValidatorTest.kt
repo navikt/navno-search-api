@@ -1,15 +1,30 @@
 package no.nav.navnosearchapi.validation
 
+import no.nav.navnosearchapi.consumer.kodeverk.KodeverkConsumer
 import no.nav.navnosearchapi.exception.ContentValidationException
 import no.nav.navnosearchapi.utils.dummyContentDto
+import no.nav.navnosearchapi.utils.mockedKodeverkResponse
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 
-class ContentDtoValidatorTest {
-    private val validator = ContentDtoValidator()
+@ExtendWith(MockitoExtension::class)
+class ContentDtoValidatorTest(@Mock val kodeverkConsumer: KodeverkConsumer) {
+
     private val invalidValue = "invalidValue"
+
+    private val validator = ContentDtoValidator(kodeverkConsumer)
+
+    @BeforeEach
+    fun setup() {
+        Mockito.`when`(kodeverkConsumer.fetchSpraakKoder()).thenReturn(mockedKodeverkResponse)
+    }
 
     @Test
     fun testValidation() {
@@ -32,13 +47,6 @@ class ContentDtoValidatorTest {
     }
 
     @Test
-    fun testValidationWithInvalidLanguage() {
-        val content = listOf(dummyContentDto(language = invalidValue))
-        val exception = assertThrows<ContentValidationException> { validator.validate(content) }
-        assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.language: $invalidValue. Gyldige verdier: [nb, nn, en, se, pl, uk, ru, other]")
-    }
-
-    @Test
     fun testValidationWithInvalidFylke() {
         val content = listOf(dummyContentDto(fylke = invalidValue))
         val exception = assertThrows<ContentValidationException> { validator.validate(content) }
@@ -50,5 +58,12 @@ class ContentDtoValidatorTest {
         val content = listOf(dummyContentDto(metatags = listOf(invalidValue)))
         val exception = assertThrows<ContentValidationException> { validator.validate(content) }
         assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.metatags: $invalidValue. Gyldige verdier: [kontor, skjema, nyhet, pressemelding, nav-og-samfunn, analyse, statistikk]")
+    }
+
+    @Test
+    fun testValidationWithInvalidLanguage() {
+        val content = listOf(dummyContentDto(language = invalidValue))
+        val exception = assertThrows<ContentValidationException> { validator.validate(content) }
+        assertThat(exception.message).isEqualTo("Ugyldig språkkode: invalidValue. Må være tobokstavs språkkode fra kodeverk-api.")
     }
 }

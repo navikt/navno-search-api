@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.utils
 
+import no.nav.navnosearchapi.consumer.kodeverk.dto.KodeverkResponse
 import no.nav.navnosearchapi.dto.ContentDto
 import no.nav.navnosearchapi.dto.ContentMetadata
 import no.nav.navnosearchapi.model.ContentDao
@@ -13,6 +14,9 @@ const val ARBEIDSGIVER = "arbeidsgiver"
 const val SAMARBEIDSPARTNER = "samarbeidspartner"
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
+const val HINDI = "hi"
+
+val mockedKodeverkResponse = KodeverkResponse(listOf("NB", "NN", "EN", "SE", "PL", "UK", "RU"))
 
 val now: ZonedDateTime = ZonedDateTime.now()
 val nowMinusTwoYears: ZonedDateTime = ZonedDateTime.now().minusYears(2)
@@ -68,28 +72,28 @@ val initialTestData = listOf(
         textPrefix = "Seventh",
         timestamp = nowMinus50Days,
         audience = listOf(ARBEIDSGIVER),
-        language = OTHER,
+        language = HINDI,
     ),
     dummyContentDao(
         externalId = "8",
         textPrefix = "Eighth",
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
-        language = OTHER,
+        language = HINDI,
     ),
     dummyContentDao(
         externalId = "9",
         textPrefix = "Ninth",
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
-        language = OTHER,
+        language = HINDI,
     ),
     dummyContentDao(
         externalId = "10",
         textPrefix = "Tenth",
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
-        language = OTHER,
+        language = HINDI,
     ),
 )
 
