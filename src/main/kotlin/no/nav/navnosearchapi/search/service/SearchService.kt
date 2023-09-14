@@ -42,7 +42,7 @@ class SearchService(
 ) {
     val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map { HighlightField(it) }
 
-    fun searchAllText(term: String, page: Int, filters: Filters): ContentSearchPage {
+    fun search(term: String, page: Int, filters: Filters): ContentSearchPage {
         val searchResult = searchHelper.searchPage(
             baseQuery(term),
             page,

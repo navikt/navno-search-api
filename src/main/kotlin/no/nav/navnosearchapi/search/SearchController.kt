@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 class SearchController(val service: SearchService) {
 
     @GetMapping("/content/search")
-    fun searchAllText(
+    fun search(
         @RequestParam term: String,
         @RequestParam page: Int,
         @ModelAttribute filters: Filters
     ): ContentSearchPage {
-        return service.searchAllText(term, page, filters)
+        return service.search(term, page, filters)
     }
 }
