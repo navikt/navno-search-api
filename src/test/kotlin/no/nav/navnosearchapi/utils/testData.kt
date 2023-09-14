@@ -1,10 +1,12 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.consumer.kodeverk.dto.KodeverkResponse
-import no.nav.navnosearchapi.dto.ContentDto
-import no.nav.navnosearchapi.dto.ContentMetadata
-import no.nav.navnosearchapi.model.ContentDao
-import no.nav.navnosearchapi.model.MultiLangField
+import no.nav.navnosearchapi.admin.consumer.kodeverk.dto.KodeverkResponse
+import no.nav.navnosearchapi.common.dto.ContentDto
+import no.nav.navnosearchapi.common.dto.ContentMetadata
+import no.nav.navnosearchapi.common.model.ContentDao
+import no.nav.navnosearchapi.common.model.MultiLangField
+import no.nav.navnosearchapi.common.utils.ENGLISH
+import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
