@@ -2,7 +2,7 @@ opensearch:
   uris: ${OPEN_SEARCH_URI}
   username: ${OPEN_SEARCH_USERNAME}
   password: ${OPEN_SEARCH_PASSWORD}
-  page-size: ${OPEN_SEARCH_PAGE_SIZE:10}
+  page-size: ${OPEN_SEARCH_PAGE_SIZE:20}
 
 spring:
   jackson:

@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.admin.validation.enums
+package no.nav.navnosearchapi.common.enums
 
 enum class ValidFylker(override val descriptor: String) : DescriptorProvider {
     AGDER("agder"),

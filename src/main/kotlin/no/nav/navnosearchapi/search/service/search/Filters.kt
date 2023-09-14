@@ -3,11 +3,11 @@ package no.nav.navnosearchapi.search.service.search
 import java.time.LocalDateTime
 
 data class Filters(
-    val audience: List<String>?,
-    val language: List<String>?,
-    val fylke: List<String>?,
-    val metatags: List<String>?,
-    val isFile: List<String>?,
-    val lastUpdatedFrom: LocalDateTime?,
-    val lastUpdatedTo: LocalDateTime?
+    val audience: List<String>? = null,
+    val language: List<String>? = null,
+    val fylke: List<String>? = null,
+    val metatags: List<String>? = null,
+    val isFile: List<String>? = null,
+    val lastUpdatedFrom: LocalDateTime? = null,
+    val lastUpdatedTo: LocalDateTime? = null,
 )
