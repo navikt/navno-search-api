@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi
 
-import no.nav.navnosearchapi.repository.ContentRepository
+import no.nav.navnosearchapi.admin.repository.ContentRepository
 import no.nav.navnosearchapi.utils.initialTestData
 import org.junit.jupiter.api.extension.ExtendWith
 import org.opensearch.testcontainers.OpensearchContainer
