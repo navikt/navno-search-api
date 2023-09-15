@@ -29,17 +29,19 @@ class SearchHelper(
     ): SearchPage<ContentDao> {
         val pageRequest = PageRequest.of(page, pageSize)
 
-        val query = if (filters.isNotEmpty()) {
-            filteredQuery(baseQuery, filters)
-        } else {
-            baseQuery
-        }
+        //val query = if (filters.isNotEmpty()) {
+        //    filteredQuery(baseQuery, filters)
+        //} else {
+        //    baseQuery
+        //}
 
         val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(query)
+            .withQuery(baseQuery)
+            .withFilter(filterQuery(filters))
             .withPageable(pageRequest)
             .withHighlightQuery(highlightQuery(highlightFields))
             .withAggregations(aggregations)
+            .withTrackTotalHits(true)
             .build()
 
         val searchHits = operations.search(searchQuery, ContentDao::class.java)

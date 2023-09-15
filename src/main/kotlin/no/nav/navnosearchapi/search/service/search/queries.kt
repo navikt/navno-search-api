@@ -40,6 +40,11 @@ fun filteredQuery(baseQuery: QueryBuilder, filters: List<QueryBuilder>): BoolQue
     return query
 }
 
+fun filterQuery(filters: List<QueryBuilder>): BoolQueryBuilder {
+    val query = BoolQueryBuilder()
+    filters.forEach { query.should(it) }
+    return query}
+
 fun termsQuery(field: String, values: List<String>): TermsQueryBuilder {
     return TermsQueryBuilder(field, values)
 }

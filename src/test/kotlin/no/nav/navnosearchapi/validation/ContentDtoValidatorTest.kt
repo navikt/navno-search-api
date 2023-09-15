@@ -58,7 +58,7 @@ class ContentDtoValidatorTest(@Mock val kodeverkConsumer: KodeverkConsumer) {
     fun testValidationWithInvalidMetatag() {
         val content = listOf(dummyContentDto(metatags = listOf(invalidValue)))
         val exception = assertThrows<ContentValidationException> { validator.validate(content) }
-        assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.metatags: $invalidValue. Gyldige verdier: [kontor, skjema, nyhet, pressemelding, nav-og-samfunn, analyse, statistikk]")
+        assertThat(exception.message).isEqualTo("Ugyldig verdi for metadata.metatags: $invalidValue. Gyldige verdier: [innhold, informasjon, kontor, skjema, nyhet, presse, pressemelding, nav-og-samfunn, analyse, statistikk]")
     }
 
     @Test

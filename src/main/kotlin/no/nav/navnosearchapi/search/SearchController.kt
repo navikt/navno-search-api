@@ -20,7 +20,7 @@ class SearchController(val searchService: SearchService, val compatibilityServic
         @RequestParam page: Int,
         @ModelAttribute filters: Filters
     ): ContentSearchPage {
-        return searchService.search(term, page, filters)
+        return searchService.search(term, page, filters.toQueryList())
     }
 
     @GetMapping("/content/compatible-search")
