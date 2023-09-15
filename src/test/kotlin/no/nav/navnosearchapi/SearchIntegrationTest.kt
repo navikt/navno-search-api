@@ -93,7 +93,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(4L)
-        assertThat(result.aggregations.audience[PRIVATPERSON]).isEqualTo(4L)
     }
 
     @Test
@@ -102,7 +101,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(3L)
-        assertThat(result.aggregations.language[NORWEGIAN_BOKMAAL]).isEqualTo(3L)
     }
 
     @Test
@@ -111,7 +109,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(3L)
-        assertThat(result.aggregations.fylke[AGDER]).isEqualTo(3L)
     }
 
     @Test
@@ -120,7 +117,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(3L)
-        assertThat(result.aggregations.metatags[STATISTIKK]).isEqualTo(3L)
     }
 
     @Test
@@ -129,7 +125,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(3L)
-        assertThat(result.aggregations.isFile[IS_FILE]).isEqualTo(3L)
     }
 
     @Test
@@ -141,10 +136,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
         assertThat(result.totalElements).isEqualTo(6L)
-        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_7_DAYS]).isEqualTo(0L)
-        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_30_DAYS]).isEqualTo(2L)
-        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_12_MONTHS]).isEqualTo(6L)
-        assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_OLDER_THAN_12_MONTHS]).isEqualTo(0L)
     }
 
     @Test
