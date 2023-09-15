@@ -4,6 +4,7 @@ import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE_SEARCH_AS_YOU_TYPE
 import no.nav.navnosearchapi.common.utils.INGRESS_WILDCARD
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
+import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchPhrasePrefixQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
@@ -23,7 +24,7 @@ private val fieldsToWeightMap = mapOf(
 )
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
-    return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap)
+    return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).fuzziness(Fuzziness.AUTO)
 }
 
 fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
