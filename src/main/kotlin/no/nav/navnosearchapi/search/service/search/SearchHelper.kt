@@ -6,6 +6,7 @@ import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHitSupport
 import org.springframework.data.elasticsearch.core.SearchHits
@@ -25,15 +26,10 @@ class SearchHelper(
         page: Int,
         filters: List<QueryBuilder>,
         aggregations: List<AbstractAggregationBuilder<*>>,
-        highlightFields: List<HighlightField>
+        highlightFields: List<HighlightField>,
+        sort: Sort? = null
     ): SearchPage<ContentDao> {
         val pageRequest = PageRequest.of(page, pageSize)
-
-        //val query = if (filters.isNotEmpty()) {
-        //    filteredQuery(baseQuery, filters)
-        //} else {
-        //    baseQuery
-        //}
 
         val searchQuery = NativeSearchQueryBuilder()
             .withQuery(baseQuery)
@@ -42,9 +38,10 @@ class SearchHelper(
             .withHighlightQuery(highlightQuery(highlightFields))
             .withAggregations(aggregations)
             .withTrackTotalHits(true)
-            .build()
 
-        val searchHits = operations.search(searchQuery, ContentDao::class.java)
+        sort?.let { searchQuery.withSort(it) }
+
+        val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
     }
 

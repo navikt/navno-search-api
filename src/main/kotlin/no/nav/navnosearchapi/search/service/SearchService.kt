@@ -28,6 +28,7 @@ import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
+import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
@@ -44,14 +45,16 @@ class SearchService(
         term: String,
         page: Int,
         filters: List<QueryBuilder>,
-        aggregations: List<AbstractAggregationBuilder<*>> = aggregations()
+        aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
+        sort: Sort? = null,
     ): ContentSearchPage {
         val searchResult = searchHelper.searchPage(
             baseQuery(term),
             page,
             filters,
             aggregations,
-            highlightFields
+            highlightFields,
+            sort
         )
 
         val suggestions = suggestions(term, filters)
