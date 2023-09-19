@@ -207,8 +207,7 @@ class SearchResultMapper {
                                 FacetBucket(
                                     key = "8",
                                     name = "Vestfold og Telemark",
-                                    docCount = aggregations.fylke[ValidFylker.VESTFOLD_OG_TELEMARK.descriptor] ?: 0
-                                    ?: 0,
+                                    docCount = aggregations.fylke[ValidFylker.VESTFOLD_OG_TELEMARK.descriptor] ?: 0,
                                     checked = params.uf.contains("8"),
                                 ),
                                 FacetBucket(
@@ -241,7 +240,7 @@ class SearchResultMapper {
                 )
             ),
             tidsperiode = DateRange(
-                docCount = totalElements, // todo: Må endres, er et estimat. Brukes kanskje også andre steder
+                docCount = totalElements,
                 checked = params.daterange == -1,
                 buckets = listOf(
                     toDateRangeBucket(DATE_RANGE_OLDER_THAN_12_MONTHS, aggregations, params.daterange == 0),
