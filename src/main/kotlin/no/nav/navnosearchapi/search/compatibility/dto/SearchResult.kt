@@ -10,6 +10,5 @@ data class SearchResult(
     val fasettKey: String,
     val aggregations: Aggregations,
     val hits: List<SearchHit>,
-    val isInitialResult: Boolean,
     val autoComplete: String?
 )
