@@ -48,7 +48,7 @@ class ContentDtoMapper {
     }
 
     private fun handleMissingValue(id: String, field: String): String {
-        logger.warn("Mapping av felt $field feilet for dokument ned id $id. Returnerer tom string.")
+        logger.warn("Mapping av felt $field feilet for dokument med id $id. Returnerer tom string.")
         return ""
     }
 
