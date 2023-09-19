@@ -35,7 +35,8 @@ class SearchResultMapper {
             fasettKey = params.f,
             aggregations = toAggregations(result.aggregations, params, result.totalElements),
             hits = result.hits.map { toHit(it) },
-            isInitialResult = false, // todo: fix
+            isInitialResult = false, // todo: fix,
+            autoComplete = result.suggestions.firstOrNull(),
         )
     }
 

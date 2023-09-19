@@ -11,4 +11,5 @@ data class SearchResult(
     val aggregations: Aggregations,
     val hits: List<SearchHit>,
     val isInitialResult: Boolean,
+    val autoComplete: String?
 )
