@@ -3,6 +3,7 @@ package no.nav.navnosearchapi.admin.consumer.kodeverk
 import no.nav.navnosearchapi.admin.consumer.kodeverk.dto.KodeverkResponse
 import no.nav.navnosearchapi.common.exception.KodeverkConsumerException
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -13,6 +14,8 @@ import java.util.*
 
 @Component
 class KodeverkConsumer(val restTemplate: RestTemplate, @Value("\${kodeverk.spraak.url}") val kodeverkUrl: String) {
+
+    @Cacheable("spraakkoder")
     fun fetchSpraakKoder(): KodeverkResponse {
         try {
             val response = restTemplate.exchange(
