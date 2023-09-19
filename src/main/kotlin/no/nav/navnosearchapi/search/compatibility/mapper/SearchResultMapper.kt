@@ -35,7 +35,6 @@ class SearchResultMapper {
             fasettKey = params.f,
             aggregations = toAggregations(result.aggregations, params),
             hits = result.hits.map { toHit(it) },
-            isInitialResult = false, // todo: fix,
             autoComplete = result.suggestions.firstOrNull(),
         )
     }
@@ -44,13 +43,21 @@ class SearchResultMapper {
         return SearchHit(
             displayName = searchHit.content.title,
             href = searchHit.content.href,
-            highlight = searchHit.highlight.ingress.firstOrNull()
-                ?: searchHit.highlight.text.firstOrNull()
-                ?: searchHit.content.ingress,
+            highlight = toHighlight(searchHit),
             modifiedTime = searchHit.content.metadata.lastUpdated.toString(),
             audience = searchHit.content.metadata.audience,
             language = searchHit.content.metadata.language,
         )
+    }
+
+    private fun toHighlight(searchHit: ContentSearchHit): String {
+        return if (searchHit.content.metadata.metatags?.contains(ValidMetatags.KONTOR.descriptor) == true) {
+            searchHit.content.ingress
+        } else {
+            searchHit.highlight.ingress.firstOrNull()
+                ?: searchHit.highlight.text.firstOrNull()
+                ?: searchHit.content.ingress
+        }
     }
 
     private fun toAggregations(aggregations: ContentAggregations, params: Params): Aggregations {
