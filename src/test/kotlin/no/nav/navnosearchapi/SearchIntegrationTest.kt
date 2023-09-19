@@ -53,7 +53,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.aggregations.fylke[AGDER]).isEqualTo(3L)
         assertThat(result.aggregations.metatags[STATISTIKK]).isEqualTo(3L)
-        assertThat(result.aggregations.isFile[IS_FILE]).isEqualTo(3L)
+        assertThat(result.aggregations.isFile).isEqualTo(3L)
 
         assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_7_DAYS]).isEqualTo(2L)
         assertThat(result.aggregations.dateRangeAggregations[DATE_RANGE_LAST_30_DAYS]).isEqualTo(4L)

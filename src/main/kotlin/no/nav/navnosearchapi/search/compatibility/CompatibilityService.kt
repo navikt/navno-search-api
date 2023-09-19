@@ -4,6 +4,7 @@ import no.nav.navnosearchapi.common.enums.ValidAudiences
 import no.nav.navnosearchapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.utils.ENGLISH
+import no.nav.navnosearchapi.common.utils.enumDescriptors
 import no.nav.navnosearchapi.search.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.search.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
@@ -54,7 +55,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
             "4" -> {
                 if (uf.isNullOrEmpty()) {
                     Filters(
-                        fylke = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
+                        fylke = enumDescriptors<ValidFylker>() // Alle fylker
                     )
                 } else {
                     val fylke = mutableListOf<String>()

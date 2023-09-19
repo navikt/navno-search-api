@@ -14,6 +14,7 @@ import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.METATAGS
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_NYNORSK
+import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.search.dto.ContentAggregations
 import no.nav.navnosearchapi.search.dto.ContentHighlight
 import no.nav.navnosearchapi.search.dto.ContentSearchHit
@@ -23,6 +24,7 @@ import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.opensearch.search.aggregations.bucket.range.Range
 import org.opensearch.search.aggregations.bucket.terms.Terms
+import org.opensearch.search.aggregations.metrics.Cardinality
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -65,7 +67,8 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
                 getDateRangeAggregation(aggregations, DATE_RANGE_LAST_30_DAYS),
                 getDateRangeAggregation(aggregations, DATE_RANGE_LAST_12_MONTHS),
                 getDateRangeAggregation(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS),
-            )
+            ),
+            totalCount = getCardinalityAggregation(aggregations, TOTAL_COUNT)
         )
     }
 
@@ -73,12 +76,16 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
         return aggregations.get<Terms>(name).buckets.associate { it.keyAsString to it.docCount }
     }
 
-    private fun getFilterAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
-        return mapOf(aggregations.get<Filter>(name).let { it.name to it.docCount })
-    }
-
     private fun getDateRangeAggregation(aggregations: Aggregations, name: String): Pair<String, Long> {
         return aggregations.get<Range>(name).let { it.name to it.buckets.first().docCount }
+    }
+
+    private fun getFilterAggregation(aggregations: Aggregations, name: String): Long {
+        return aggregations.get<Filter>(name).docCount
+    }
+
+    private fun getCardinalityAggregation(aggregations: Aggregations, name: String): Long {
+        return aggregations.get<Cardinality>(name).value
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String): String {

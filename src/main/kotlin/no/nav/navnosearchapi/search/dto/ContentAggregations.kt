@@ -5,6 +5,7 @@ data class ContentAggregations(
     val language: Map<String, Long>,
     val fylke: Map<String, Long>,
     val metatags: Map<String, Long>,
-    val isFile: Map<String, Long>,
-    val dateRangeAggregations: Map<String, Long>
+    val dateRangeAggregations: Map<String, Long>,
+    val isFile: Long,
+    val totalCount: Long,
 )

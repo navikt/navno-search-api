@@ -9,13 +9,16 @@ import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.common.utils.FYLKE
+import no.nav.navnosearchapi.common.utils.ID
 import no.nav.navnosearchapi.common.utils.INGRESS_WILDCARD
 import no.nav.navnosearchapi.common.utils.IS_FILE
 import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
+import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
+import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.search.service.search.SearchHelper
@@ -79,9 +82,10 @@ class SearchService(
         val twelveMonthsAgo = now.minusMonths(12)
 
         return listOf(
+            AggregationBuilders.cardinality(TOTAL_COUNT).field(ID),
             AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
             AggregationBuilders.terms(LANGUAGE).field(LANGUAGE).size(20),
-            AggregationBuilders.terms(FYLKE).field(FYLKE).size((ValidFylker.entries.size)),
+            AggregationBuilders.terms(FYLKE).field(FYLKE).size((ValidFylker.entries.size)).missing(MISSING_FYLKE),
             AggregationBuilders.terms(METATAGS).field(METATAGS).size(ValidMetatags.entries.size),
             AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true)),
             AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo, now).field(LAST_UPDATED),

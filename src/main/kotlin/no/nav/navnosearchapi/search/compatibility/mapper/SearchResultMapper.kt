@@ -8,7 +8,7 @@ import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.common.utils.ENGLISH
-import no.nav.navnosearchapi.common.utils.IS_FILE
+import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
 import no.nav.navnosearchapi.search.compatibility.Params
 import no.nav.navnosearchapi.search.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.search.compatibility.dto.DateRange
@@ -33,7 +33,7 @@ class SearchResultMapper {
             word = params.ord,
             total = result.totalElements,
             fasettKey = params.f,
-            aggregations = toAggregations(result.aggregations, params, result.totalElements),
+            aggregations = toAggregations(result.aggregations, params),
             hits = result.hits.map { toHit(it) },
             isInitialResult = false, // todo: fix,
             autoComplete = result.suggestions.firstOrNull(),
@@ -53,7 +53,7 @@ class SearchResultMapper {
         )
     }
 
-    private fun toAggregations(aggregations: ContentAggregations, params: Params, totalElements: Long): Aggregations {
+    private fun toAggregations(aggregations: ContentAggregations, params: Params): Aggregations {
         return Aggregations(
             fasetter = UnderAggregations(
                 buckets = listOf(
@@ -152,7 +152,7 @@ class SearchResultMapper {
                     FacetBucket(
                         key = "4",
                         name = "Innhold fra fylker",
-                        docCount = aggregations.fylke[ValidFylker.AGDER.descriptor] ?: 0, //todo: alle fylker
+                        docCount = aggregations.totalCount - (aggregations.fylke[MISSING_FYLKE] ?: 0),
                         checked = "4" == params.f,
                         underaggregeringer = UnderAggregations(
                             listOf(
@@ -234,13 +234,13 @@ class SearchResultMapper {
                     FacetBucket(
                         key = "2",
                         name = "Filer",
-                        docCount = aggregations.isFile[IS_FILE] ?: 0,
+                        docCount = aggregations.isFile,
                         checked = "2" == params.f,
                     ),
                 )
             ),
             tidsperiode = DateRange(
-                docCount = totalElements,
+                docCount = aggregations.totalCount,
                 checked = params.daterange == -1,
                 buckets = listOf(
                     toDateRangeBucket(DATE_RANGE_OLDER_THAN_12_MONTHS, aggregations, params.daterange == 0),
