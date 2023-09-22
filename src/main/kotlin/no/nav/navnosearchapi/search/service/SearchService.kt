@@ -21,10 +21,6 @@ import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.search.service.search.SearchHelper
-import no.nav.navnosearchapi.search.service.search.searchAllTextForPhraseQuery
-import no.nav.navnosearchapi.search.service.search.searchAllTextQuery
-import org.opensearch.index.query.AbstractQueryBuilder
-import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
@@ -50,7 +46,7 @@ class SearchService(
         sort: Sort? = null,
     ): ContentSearchPage {
         val searchResult = searchHelper.searchPage(
-            baseQuery(term),
+            term,
             page,
             filters,
             aggregations,
@@ -59,16 +55,6 @@ class SearchService(
         )
 
         return mapper.toContentSearchPage(searchResult)
-    }
-
-    private fun baseQuery(term: String): AbstractQueryBuilder<*> {
-        return if (term.isBlank()) {
-            MatchAllQueryBuilder()
-        } else if (isInQuotes(term)) {
-            searchAllTextForPhraseQuery(term)
-        } else {
-            searchAllTextQuery(term)
-        }
     }
 
     private fun aggregations(): List<AbstractAggregationBuilder<*>> {
@@ -90,9 +76,5 @@ class SearchService(
             AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo)
                 .field(LAST_UPDATED),
         )
-    }
-
-    private fun isInQuotes(term: String): Boolean {
-        return term.startsWith('"') && term.endsWith('"')
     }
 }

@@ -1,12 +1,10 @@
 package no.nav.navnosearchapi.search.service.search
 
-import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE_SEARCH_AS_YOU_TYPE
 import no.nav.navnosearchapi.common.utils.INGRESS_WILDCARD
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
-import org.opensearch.index.query.MatchPhrasePrefixQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.RangeQueryBuilder
@@ -31,20 +29,11 @@ fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).type(MultiMatchQueryBuilder.Type.PHRASE)
 }
 
-fun searchAsYouTypeQuery(term: String): MatchPhrasePrefixQueryBuilder {
-    return MatchPhrasePrefixQueryBuilder(AUTOCOMPLETE_SEARCH_AS_YOU_TYPE, term)
-}
-
-fun filteredQuery(baseQuery: QueryBuilder, filters: List<QueryBuilder>): BoolQueryBuilder {
-    val query = BoolQueryBuilder().must(baseQuery)
-    filters.forEach { query.filter(it) }
-    return query
-}
-
 fun filterQuery(filters: List<QueryBuilder>): BoolQueryBuilder {
     val query = BoolQueryBuilder()
     filters.forEach { query.should(it) }
-    return query}
+    return query
+}
 
 fun termsQuery(field: String, values: List<String>): TermsQueryBuilder {
     return TermsQueryBuilder(field, values)

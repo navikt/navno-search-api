@@ -19,8 +19,7 @@ const val FYLKE = "fylke"
 const val METATAGS = "metatags"
 const val IS_FILE = "isFile"
 
-const val AUTOCOMPLETE_SEARCH_AS_YOU_TYPE = "autocomplete.searchAsYouType"
-const val AUTOCOMPLETE_KEYWORD = "autocomplete.keyword"
+const val AUTOCOMPLETE = "autocomplete"
 
 const val METADATA_AUDIENCE = "metadata.audience"
 const val METADATA_FYLKE = "metadata.fylke"
