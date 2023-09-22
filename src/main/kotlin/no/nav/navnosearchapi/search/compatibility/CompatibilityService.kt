@@ -8,7 +8,7 @@ import no.nav.navnosearchapi.common.utils.enumDescriptors
 import no.nav.navnosearchapi.search.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.search.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
-import no.nav.navnosearchapi.search.service.search.Filters
+import no.nav.navnosearchapi.search.service.search.Filter
 import org.opensearch.index.query.QueryBuilder
 import org.springframework.stereotype.Component
 
@@ -22,7 +22,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         val filters = when (f) {
             "0" -> {
                 if (uf.isNullOrEmpty()) {
-                    Filters(
+                    Filter(
                         metatags = listOf(
                             ValidMetatags.INFORMASJON.descriptor,
                             ValidMetatags.KONTOR.descriptor,
@@ -34,14 +34,14 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
                     if (uf.contains("0")) metatags.add(ValidMetatags.INFORMASJON.descriptor)
                     if (uf.contains("1")) metatags.add(ValidMetatags.KONTOR.descriptor)
                     if (uf.contains("2")) metatags.add(ValidMetatags.SKJEMA.descriptor)
-                    Filters(metatags = metatags)
+                    Filter(metatags = metatags)
                 }
             }
 
-            "en" -> Filters(language = listOf(ENGLISH))
+            "en" -> Filter(language = listOf(ENGLISH))
             "1" -> {
                 if (uf.isNullOrEmpty()) {
-                    Filters(metatags = listOf(ValidMetatags.NYHET.descriptor))
+                    Filter(metatags = listOf(ValidMetatags.NYHET.descriptor))
                 } else {
                     val metatags = mutableListOf<String>()
                     val audience = mutableListOf<String>()
@@ -51,15 +51,15 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
                     if (uf.contains("0")) metatags.add(ValidMetatags.PRESSE.descriptor)
                     if (uf.contains("pm")) metatags.add(ValidMetatags.PRESSEMELDING.descriptor)
                     if (uf.contains("5")) metatags.add(ValidMetatags.NAV_OG_SAMFUNN.descriptor)
-                    Filters(metatags = metatags, audience = audience)
+                    Filter(metatags = metatags, audience = audience)
                 }
             }
 
-            "5" -> Filters(metatags = listOf(ValidMetatags.ANALYSE.descriptor))
-            "3" -> Filters(metatags = listOf(ValidMetatags.STATISTIKK.descriptor))
+            "5" -> Filter(metatags = listOf(ValidMetatags.ANALYSE.descriptor))
+            "3" -> Filter(metatags = listOf(ValidMetatags.STATISTIKK.descriptor))
             "4" -> {
                 if (uf.isNullOrEmpty()) {
-                    Filters(
+                    Filter(
                         fylke = enumDescriptors<ValidFylker>() // Alle fylker
                     )
                 } else {
@@ -77,13 +77,13 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
                     if (uf.contains("10")) fylke.add(ValidFylker.VEST_VIKEN.descriptor)
                     if (uf.contains("11")) fylke.add(ValidFylker.OST_VIKEN.descriptor)
 
-                    Filters(fylke = fylke)
+                    Filter(fylke = fylke)
                 }
             }
 
-            "2" -> Filters(isFile = listOf(true.toString()))
-            else -> Filters()
+            "2" -> Filter(isFile = listOf(true.toString()))
+            else -> Filter()
         }
-        return filters.toQueryList()
+        return listOf(filters.toQuery())
     }
 }

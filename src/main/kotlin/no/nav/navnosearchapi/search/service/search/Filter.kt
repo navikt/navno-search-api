@@ -6,30 +6,34 @@ import no.nav.navnosearchapi.common.utils.IS_FILE
 import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
-import org.opensearch.index.query.QueryBuilder
+import org.opensearch.index.query.BoolQueryBuilder
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-data class Filters(
+data class Filter(
     val audience: List<String>? = null,
     val language: List<String>? = null,
     val fylke: List<String>? = null,
     val metatags: List<String>? = null,
     val isFile: List<String>? = null,
+    val excludeMetatags: List<String>? = null,
     val lastUpdatedFrom: LocalDateTime? = null,
     val lastUpdatedTo: LocalDateTime? = null,
 ) {
-    fun toQueryList(): List<QueryBuilder> {
-        val filterList = mutableListOf<QueryBuilder>()
+    fun toQuery(): BoolQueryBuilder {
+        val query = BoolQueryBuilder()
 
-        audience?.let { filterList.add(termsQuery(AUDIENCE, it)) }
-        language?.let { filterList.add(termsQuery(LANGUAGE, it)) }
-        fylke?.let { filterList.add(termsQuery(FYLKE, it)) }
-        metatags?.let { filterList.add(termsQuery(METATAGS, it)) }
-        isFile?.let { filterList.add(termsQuery(IS_FILE, it)) }
+        audience?.let { it.forEach { term -> query.must(termQuery(AUDIENCE, term)) } }
+        language?.let { it.forEach { term -> query.must(termQuery(LANGUAGE, term)) } }
+        fylke?.let { it.forEach { term -> query.must(termQuery(FYLKE, term)) } }
+        metatags?.let { it.forEach { term -> query.must(termQuery(METATAGS, term)) } }
+        isFile?.let { it.forEach { term -> query.must(termQuery(IS_FILE, term)) } }
+
+        excludeMetatags?.let { it.forEach { term -> query.mustNot(termQuery(METATAGS, term)) } }
+
 
         if (lastUpdatedFrom != null || lastUpdatedTo != null) {
-            filterList.add(
+            query.must(
                 rangeQuery(
                     LAST_UPDATED,
                     lastUpdatedFrom?.atZone(ZoneId.systemDefault()),
@@ -38,6 +42,6 @@ data class Filters(
             )
         }
 
-        return filterList
+        return query
     }
 }
