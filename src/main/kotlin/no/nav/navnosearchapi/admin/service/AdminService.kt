@@ -18,7 +18,6 @@ class AdminService(
     val repository: ContentRepository,
     @Value("\${opensearch.page-size}") val pageSize: Int,
 ) {
-
     fun saveAllContent(content: List<ContentDto>, teamName: String) {
         val mappedContent = content.map { contentMapper.toContentDao(it, teamName) }
         repository.saveAll(mappedContent)
