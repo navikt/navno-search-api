@@ -21,7 +21,7 @@ import java.time.ZonedDateTime
 @Setting(settingPath = "opensearch/index-settings.json")
 data class ContentDao(
     @Id @Field(type = FieldType.Keyword) val id: String,
-    @CompletionField val autocomplete: Completion? = null,
+    @CompletionField val autocomplete: Completion,
     @Field(type = FieldType.Keyword) val teamOwnedBy: String,
     @Field(type = FieldType.Text) val href: String,
     @Field(type = FieldType.Object) val title: MultiLangField,
@@ -31,7 +31,7 @@ data class ContentDao(
     @Field(type = FieldType.Date) val lastUpdated: ZonedDateTime,
     @Field(type = FieldType.Keyword) val audience: List<String>,
     @Field(type = FieldType.Keyword) val language: String,
-    @Field(type = FieldType.Boolean) val isFile: Boolean? = null,
+    @Field(type = FieldType.Boolean) val isFile: Boolean,
     @Field(type = FieldType.Keyword) val fylke: String? = null,
-    @Field(type = FieldType.Keyword) val metatags: List<String>? = null,
+    @Field(type = FieldType.Keyword) val metatags: List<String>,
 )

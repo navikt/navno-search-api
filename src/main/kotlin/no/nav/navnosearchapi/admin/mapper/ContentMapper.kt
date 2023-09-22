@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.admin.mapper
 
 import no.nav.navnosearchapi.common.dto.ContentDto
+import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
@@ -30,8 +31,15 @@ class ContentMapper {
             language = resolveLanguage(content.metadata.language),
             isFile = content.metadata.isFile,
             fylke = content.metadata.fylke,
-            metatags = content.metadata.metatags,
+            metatags = resolveMetatags(content.metadata.metatags, content.metadata.fylke, content.metadata.isFile),
         )
+    }
+
+    fun resolveMetatags(metatags: List<String>, fylke: String?, isFile: Boolean): List<String> {
+        if (metatags.isEmpty() && fylke != null && !isFile) {
+            return listOf(ValidMetatags.INFORMASJON.descriptor)
+        }
+        return metatags
     }
 
     fun resolveLanguage(language: String): String {

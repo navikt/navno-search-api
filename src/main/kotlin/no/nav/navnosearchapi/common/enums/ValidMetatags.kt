@@ -1,8 +1,7 @@
 package no.nav.navnosearchapi.common.enums
 
 enum class ValidMetatags(override val descriptor: String) : DescriptorProvider {
-    INNHOLD("innhold"), //todo: fjerne
-    INFORMASJON("informasjon"), //todo: sette som default dersom ingen andre metatags, ingen fylker, ikke fil
+    INFORMASJON("informasjon"),
     KONTOR("kontor"),
     SKJEMA("skjema"),
     NYHET("nyhet"),

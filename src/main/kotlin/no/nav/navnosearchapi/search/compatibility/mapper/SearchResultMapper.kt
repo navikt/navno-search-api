@@ -67,7 +67,7 @@ class SearchResultMapper {
                     FacetBucket(
                         key = "0",
                         name = "Innhold",
-                        docCount = aggregations.metatags[ValidMetatags.INNHOLD.descriptor] ?: 0,
+                        docCount = aggregations.metatags[ValidMetatags.INFORMASJON.descriptor] ?: 0, //todo: fikse
                         checked = "0" == params.f,
                         underaggregeringer = UnderAggregations(
                             listOf(

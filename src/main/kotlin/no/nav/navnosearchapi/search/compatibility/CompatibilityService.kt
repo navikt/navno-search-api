@@ -22,7 +22,13 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         val filters = when (f) {
             "0" -> {
                 if (uf.isNullOrEmpty()) {
-                    Filters(metatags = listOf(ValidMetatags.INNHOLD.descriptor))
+                    Filters(
+                        metatags = listOf(
+                            ValidMetatags.INFORMASJON.descriptor,
+                            ValidMetatags.KONTOR.descriptor,
+                            ValidMetatags.SKJEMA.descriptor
+                        )
+                    )
                 } else {
                     val metatags = mutableListOf<String>()
                     if (uf.contains("0")) metatags.add(ValidMetatags.INFORMASJON.descriptor)
