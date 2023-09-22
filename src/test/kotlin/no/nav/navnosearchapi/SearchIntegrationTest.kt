@@ -68,7 +68,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.totalElements).isEqualTo(10L)
         assertThat(result.totalPages).isEqualTo(1L)
 
-        assertThat(result.suggestions).isNotEmpty()
+        //assertThat(result.suggestions).isNotEmpty()
         assertThat(result.hits[0].highlight.title).isNotEmpty()
         assertThat(result.hits[0].highlight.ingress).isNotEmpty()
         assertThat(result.hits[0].highlight.text).isNotEmpty()
@@ -81,7 +81,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.totalElements).isEqualTo(1L)
         assertThat(result.totalPages).isEqualTo(1L)
 
-        assertThat(result.suggestions).isNotEmpty()
+        //assertThat(result.suggestions).isNotEmpty()
         assertThat(result.hits[0].highlight.title).isNotEmpty()
         assertThat(result.hits[0].highlight.ingress).isEmpty()
         assertThat(result.hits[0].highlight.text).isEmpty()

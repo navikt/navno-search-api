@@ -9,6 +9,7 @@ import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.common.utils.createInternalId
 import no.nav.navnosearchapi.common.utils.norwegianLanguageCodes
 import no.nav.navnosearchapi.common.utils.supportedLanguages
+import org.springframework.data.elasticsearch.core.suggest.Completion
 import org.springframework.stereotype.Component
 import java.time.ZoneId
 
@@ -19,7 +20,7 @@ class ContentMapper {
             id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
-            autocomplete = content.title,
+            autocomplete = Completion(listOf(content.title)),
             title = toMultiLangField(content.title, content.metadata.language),
             ingress = toMultiLangField(content.ingress, content.metadata.language),
             text = toMultiLangField(content.text, content.metadata.language),

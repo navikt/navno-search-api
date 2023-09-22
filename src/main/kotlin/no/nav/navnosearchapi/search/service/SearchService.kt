@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.search.service
 import no.nav.navnosearchapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.utils.AUDIENCE
-import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE_KEYWORD
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
@@ -24,7 +23,6 @@ import no.nav.navnosearchapi.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.search.service.search.SearchHelper
 import no.nav.navnosearchapi.search.service.search.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.search.service.search.searchAllTextQuery
-import no.nav.navnosearchapi.search.service.search.searchAsYouTypeQuery
 import org.opensearch.index.query.AbstractQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
@@ -60,9 +58,7 @@ class SearchService(
             sort
         )
 
-        val suggestions = suggestions(term, filters)
-
-        return mapper.toContentSearchPage(searchResult, suggestions)
+        return mapper.toContentSearchPage(searchResult)
     }
 
     private fun baseQuery(term: String): AbstractQueryBuilder<*> {
@@ -94,16 +90,6 @@ class SearchService(
             AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo)
                 .field(LAST_UPDATED),
         )
-    }
-
-    private fun suggestions(term: String, filters: List<QueryBuilder>): List<String?> {
-        val query = searchAsYouTypeQuery(term)
-        val searchResult = searchHelper.search(
-            baseQuery = query,
-            filters = filters,
-            collapseField = AUTOCOMPLETE_KEYWORD
-        )
-        return searchResult.map { hit -> hit.content.autocomplete }.toList()
     }
 
     private fun isInQuotes(term: String): Boolean {

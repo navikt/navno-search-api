@@ -7,6 +7,7 @@ import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
+import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
@@ -125,12 +126,12 @@ fun dummyContentDao(
 ): ContentDao {
     return ContentDao(
         "$teamName-$externalId",
+        Completion(listOf("$textPrefix title")),
         teamName,
         "https://$textPrefix.com",
-        "$textPrefix title",
-        MultiLangField(no = "$textPrefix title"),
-        MultiLangField(no = "$textPrefix ingress"),
-        MultiLangField(no = "$textPrefix text"),
+        MultiLangField(value = "$textPrefix title", language = language),
+        MultiLangField(value = "$textPrefix ingress", language = language),
+        MultiLangField(value = "$textPrefix text", language = language),
         timestamp,
         timestamp,
         audience,

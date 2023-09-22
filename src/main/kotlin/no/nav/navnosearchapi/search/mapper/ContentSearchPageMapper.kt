@@ -31,9 +31,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
-    fun toContentSearchPage(searchPage: SearchPage<ContentDao>, suggestions: List<String?>): ContentSearchPage {
+    fun toContentSearchPage(searchPage: SearchPage<ContentDao>): ContentSearchPage {
         return ContentSearchPage(
-            suggestions = suggestions,
+            suggestions = searchPage.searchHits.suggest?.suggestions?.map { it.name },
             hits = searchPage.searchHits.searchHits.map { toContentSearchHit(it) },
             totalPages = searchPage.totalPages,
             totalElements = searchPage.totalElements,
