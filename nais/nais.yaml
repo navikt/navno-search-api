@@ -32,7 +32,7 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: { { kodeverk-host } }
+        - host: {{ kodeverk-host }}
   ingresses:
   {{#each ingresses}}
      - "{{this}}"
