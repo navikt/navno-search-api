@@ -18,6 +18,10 @@ import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
+import no.nav.navnosearchapi.common.utils.now
+import no.nav.navnosearchapi.common.utils.sevenDaysAgo
+import no.nav.navnosearchapi.common.utils.thirtyDaysAgo
+import no.nav.navnosearchapi.common.utils.twelveMonthsAgo
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.search.service.search.SearchHelper
@@ -28,7 +32,6 @@ import org.opensearch.search.aggregations.AggregationBuilders
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
 import org.springframework.stereotype.Service
-import java.time.ZonedDateTime
 
 
 @Service
@@ -58,11 +61,6 @@ class SearchService(
     }
 
     private fun aggregations(): List<AbstractAggregationBuilder<*>> {
-        val now = ZonedDateTime.now()
-        val sevenDaysAgo = now.minusDays(7)
-        val thirtyDaysAgo = now.minusDays(30)
-        val twelveMonthsAgo = now.minusMonths(12)
-
         return listOf(
             AggregationBuilders.cardinality(TOTAL_COUNT).field(ID),
             AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
@@ -70,10 +68,10 @@ class SearchService(
             AggregationBuilders.terms(FYLKE).field(FYLKE).size((ValidFylker.entries.size)).missing(MISSING_FYLKE),
             AggregationBuilders.terms(METATAGS).field(METATAGS).size(ValidMetatags.entries.size),
             AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true)),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo, now).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo, now).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo, now).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo)
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo(), now()).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo(), now()).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo(), now()).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo())
                 .field(LAST_UPDATED),
         )
     }

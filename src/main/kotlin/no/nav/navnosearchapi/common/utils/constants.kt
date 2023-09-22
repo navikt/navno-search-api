@@ -36,6 +36,6 @@ const val LAST_UPDATED_TO = "lastUpdatedTo"
 const val DATE_RANGE_LAST_7_DAYS = "Siste 7 dager"
 const val DATE_RANGE_LAST_30_DAYS = "Siste 30 dager"
 const val DATE_RANGE_LAST_12_MONTHS = "Siste 12 måneder"
-
 const val DATE_RANGE_OLDER_THAN_12_MONTHS = "Eldre enn 12 måneder"
+
 const val MISSING_FYLKE = "Uten fylke"

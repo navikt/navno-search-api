@@ -9,39 +9,7 @@ import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
-import no.nav.navnosearchapi.search.compatibility.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.search.compatibility.FASETT_ENGLISH
-import no.nav.navnosearchapi.search.compatibility.FASETT_FILER
-import no.nav.navnosearchapi.search.compatibility.FASETT_INNHOLD
-import no.nav.navnosearchapi.search.compatibility.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.search.compatibility.FASETT_NYHETER
-import no.nav.navnosearchapi.search.compatibility.FASETT_STATISTIKK
 import no.nav.navnosearchapi.search.compatibility.Params
-import no.nav.navnosearchapi.search.compatibility.TIDSPERIODE_LAST_12_MONTHS
-import no.nav.navnosearchapi.search.compatibility.TIDSPERIODE_LAST_30_DAYS
-import no.nav.navnosearchapi.search.compatibility.TIDSPERIODE_LAST_7_DAYS
-import no.nav.navnosearchapi.search.compatibility.TIDSPERIODE_OLDER_THAN_12_MONTHS
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_AGDER
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_ARBEIDSGIVER
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_INFORMASJON
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_INNLANDET
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_KONTOR
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_MORE_OG_ROMSDAL
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_NAV_OG_SAMFUNN
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_NORDLAND
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_OSLO
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_OST_VIKEN
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_PRESSE
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_PRESSEMELDINGER
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_PRIVATPERSON
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_ROGALAND
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_SOKNAD_OG_SKJEMA
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_STATISTIKK
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_TROMS_OG_FINNMARK
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_TRONDELAG
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_VESTFOLD_OG_TELEMARK
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_VESTLAND
-import no.nav.navnosearchapi.search.compatibility.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.search.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.search.compatibility.dto.DateRange
 import no.nav.navnosearchapi.search.compatibility.dto.DateRangeBucket
@@ -49,6 +17,38 @@ import no.nav.navnosearchapi.search.compatibility.dto.FacetBucket
 import no.nav.navnosearchapi.search.compatibility.dto.SearchHit
 import no.nav.navnosearchapi.search.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.search.compatibility.dto.UnderAggregations
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_ENGLISH
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_FILER
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_NYHETER
+import no.nav.navnosearchapi.search.compatibility.utils.FASETT_STATISTIKK
+import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_12_MONTHS
+import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
+import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
+import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_AGDER
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_INFORMASJON
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_INNLANDET
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_NORDLAND
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_OSLO
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_OST_VIKEN
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_PRESSE
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_PRESSEMELDINGER
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_PRIVATPERSON
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_ROGALAND
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_STATISTIKK
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_TRONDELAG
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTFOLD_OG_TELEMARK
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND
+import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.search.dto.ContentAggregations
 import no.nav.navnosearchapi.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
@@ -104,7 +104,7 @@ class SearchResultMapper {
                         underaggregeringer = UnderAggregations(
                             listOf(
                                 FacetBucket(
-                                    key =UNDERFASETT_INFORMASJON,
+                                    key = UNDERFASETT_INFORMASJON,
                                     name = "Informasjon",
                                     docCount = aggregations.metatags[ValidMetatags.INFORMASJON.descriptor] ?: 0,
                                     checked = params.uf.contains("0"),
@@ -282,10 +282,26 @@ class SearchResultMapper {
                 docCount = aggregations.totalCount,
                 checked = params.daterange == -1,
                 buckets = listOf(
-                    toDateRangeBucket(DATE_RANGE_OLDER_THAN_12_MONTHS, aggregations, params.daterange == TIDSPERIODE_OLDER_THAN_12_MONTHS),
-                    toDateRangeBucket(DATE_RANGE_LAST_12_MONTHS, aggregations, params.daterange == TIDSPERIODE_LAST_12_MONTHS),
-                    toDateRangeBucket(DATE_RANGE_LAST_30_DAYS, aggregations, params.daterange == TIDSPERIODE_LAST_30_DAYS),
-                    toDateRangeBucket(DATE_RANGE_LAST_7_DAYS, aggregations, params.daterange == TIDSPERIODE_LAST_7_DAYS),
+                    toDateRangeBucket(
+                        DATE_RANGE_OLDER_THAN_12_MONTHS,
+                        aggregations,
+                        params.daterange == TIDSPERIODE_OLDER_THAN_12_MONTHS
+                    ),
+                    toDateRangeBucket(
+                        DATE_RANGE_LAST_12_MONTHS,
+                        aggregations,
+                        params.daterange == TIDSPERIODE_LAST_12_MONTHS
+                    ),
+                    toDateRangeBucket(
+                        DATE_RANGE_LAST_30_DAYS,
+                        aggregations,
+                        params.daterange == TIDSPERIODE_LAST_30_DAYS
+                    ),
+                    toDateRangeBucket(
+                        DATE_RANGE_LAST_7_DAYS,
+                        aggregations,
+                        params.daterange == TIDSPERIODE_LAST_7_DAYS
+                    ),
                 ),
             )
         )

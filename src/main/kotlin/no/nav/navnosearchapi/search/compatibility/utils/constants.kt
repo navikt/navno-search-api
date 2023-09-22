@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.compatibility
+package no.nav.navnosearchapi.search.compatibility.utils
 
 const val FASETT_INNHOLD = "0"
 const val FASETT_ENGLISH = "en"
