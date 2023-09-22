@@ -2,6 +2,7 @@
   "ingresses": [
     "https://www.nav.no/navno-search-api"
   ],
+  "kodeverk-host": "kodeverk.prod-fss-pub.nais.io",
   "min-replicas": 2,
   "max-replicas": 4
 }

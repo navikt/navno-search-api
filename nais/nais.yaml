@@ -29,6 +29,10 @@ spec:
   openSearch:
     access: admin
     instance: navno-search
+  accessPolicy:
+    outbound:
+      external:
+        - host: { { kodeverk-host } }
   ingresses:
   {{#each ingresses}}
      - "{{this}}"
