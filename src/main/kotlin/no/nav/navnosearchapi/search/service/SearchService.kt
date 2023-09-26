@@ -46,6 +46,7 @@ class SearchService(
         page: Int,
         filters: List<QueryBuilder>,
         aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
+        mapCustomAggregations: Boolean = false,
         sort: Sort? = null,
     ): ContentSearchPage {
         val searchResult = searchHelper.searchPage(
@@ -57,7 +58,7 @@ class SearchService(
             sort
         )
 
-        return mapper.toContentSearchPage(searchResult)
+        return mapper.toContentSearchPage(searchResult, mapCustomAggregations)
     }
 
     private fun aggregations(): List<AbstractAggregationBuilder<*>> {

@@ -29,10 +29,15 @@ class SearchController(val searchService: SearchService, val compatibilityServic
     fun searchBackwardsCompatible(
         @ModelAttribute params: Params
     ): SearchResult {
+        val filters = compatibilityService.toFilters(params.f, params.uf, params.daterange)
+        val aggregations = compatibilityService.aggregations(filters)
+
         val result = searchService.search(
             term = params.ord,
             page = params.start,
-            filters = compatibilityService.toFilters(params.f, params.uf, params.daterange),
+            filters = filters,
+            aggregations = aggregations,
+            mapCustomAggregations = true,
             sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null
         )
 

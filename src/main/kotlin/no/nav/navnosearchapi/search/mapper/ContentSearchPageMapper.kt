@@ -14,7 +14,6 @@ import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.METATAGS
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_NYNORSK
-import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.search.dto.ContentAggregations
 import no.nav.navnosearchapi.search.dto.ContentHighlight
 import no.nav.navnosearchapi.search.dto.ContentSearchHit
@@ -31,7 +30,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
-    fun toContentSearchPage(searchPage: SearchPage<ContentDao>): ContentSearchPage {
+    fun toContentSearchPage(searchPage: SearchPage<ContentDao>, mapCustomAggregations: Boolean): ContentSearchPage {
         return ContentSearchPage(
             suggestions = searchPage.searchHits.suggest?.suggestions?.first()?.entries?.flatMap { entry -> entry.options.map { it.text } },
             hits = searchPage.searchHits.searchHits.map { toContentSearchHit(it) },
@@ -39,7 +38,11 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
-            aggregations = toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            aggregations = if (mapCustomAggregations) {
+                toCustomAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            } else {
+                toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            }
         )
     }
 
@@ -68,8 +71,11 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
                 getDateRangeAggregation(aggregations, DATE_RANGE_LAST_12_MONTHS),
                 getDateRangeAggregation(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS),
             ),
-            totalCount = getCardinalityAggregation(aggregations, TOTAL_COUNT)
         )
+    }
+
+    private fun toCustomAggregations(aggregations: Aggregations): ContentAggregations {
+        return ContentAggregations(custom = aggregations.associate { it.name to (it as Filter).docCount })
     }
 
     private fun getTermAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
