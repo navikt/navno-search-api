@@ -19,7 +19,7 @@ import org.opensearch.index.query.ExistsQueryBuilder
 val fasettFilters = mapOf(
     FASETT_INNHOLD to FilterEntry(
         name = "Innhold",
-        filters = underfasettFilters[UNDERFASETT_INFORMASJON]!!.filters + underfasettFilters[UNDERFASETT_KONTOR]!!.filters + underfasettFilters[UNDERFASETT_SOKNAD_OG_SKJEMA]!!.filters
+        filters = innholdFilters[UNDERFASETT_INFORMASJON]!!.filters + innholdFilters[UNDERFASETT_KONTOR]!!.filters + innholdFilters[UNDERFASETT_SOKNAD_OG_SKJEMA]!!.filters
     ),
     FASETT_ENGLISH to FilterEntry(name = "English", filters = listOf(Filter(language = listOf(ENGLISH)).toQuery())),
     FASETT_NYHETER to FilterEntry(

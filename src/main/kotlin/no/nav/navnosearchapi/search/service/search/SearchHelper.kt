@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.search.service.search
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
-import org.opensearch.index.query.AbstractQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
@@ -55,7 +54,7 @@ class SearchHelper(
         return SearchHitSupport.searchPageFor(searchHits, pageRequest)
     }
 
-    private fun baseQuery(term: String): AbstractQueryBuilder<*> {
+    private fun baseQuery(term: String): QueryBuilder {
         return if (term.isBlank()) {
             MatchAllQueryBuilder()
         } else if (isInQuotes(term)) {
