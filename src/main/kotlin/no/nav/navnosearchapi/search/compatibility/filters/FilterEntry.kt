@@ -7,16 +7,23 @@ import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 
 data class FilterEntry(val name: String, val filters: List<QueryBuilder>) {
     fun toAggregation(additionalFilters: List<QueryBuilder> = emptyList()): FilterAggregationBuilder? {
-        return AggregationBuilders.filter( //todo: Funker ikke for tidsperiode-filtre
-            name,
-            toBoolQuery(filters, additionalFilters)
-        )
+        return if (additionalFilters.isEmpty()) {
+            AggregationBuilders.filter(
+                name,
+                toBoolQuery(filters)
+            )
+        } else {
+            // For tidsperiode-filtre
+            AggregationBuilders.filter(
+                name,
+                BoolQueryBuilder().must(toBoolQuery(filters)).must(toBoolQuery(additionalFilters))
+            )
+        }
     }
 
-    private fun toBoolQuery(shouldQueries: List<QueryBuilder>, mustQueries: List<QueryBuilder>): BoolQueryBuilder {
+    private fun toBoolQuery(filters: List<QueryBuilder>): BoolQueryBuilder {
         val boolQuery = BoolQueryBuilder()
-        shouldQueries.forEach { boolQuery.should(it) }
-        mustQueries.forEach { boolQuery.must(it) }
+        filters.forEach { boolQuery.should(it) }
         return boolQuery
     }
 }

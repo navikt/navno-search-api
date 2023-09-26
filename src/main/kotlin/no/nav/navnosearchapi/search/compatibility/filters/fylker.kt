@@ -28,7 +28,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN_N
 import no.nav.navnosearchapi.search.service.search.Filter
 
 val fylkeFilters = mapOf(
-    UNDERFASETT_AGDER to FilterEntry( // todo: generaliser slike filtre som har mye til felles
+    UNDERFASETT_AGDER to FilterEntry(
         name = UNDERFASETT_AGDER_NAME, filters = listOf(
             Filter(
                 fylke = listOf(ValidFylker.AGDER.descriptor),
