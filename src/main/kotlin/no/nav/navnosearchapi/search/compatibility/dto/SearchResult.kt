@@ -8,7 +8,7 @@ data class SearchResult(
     val word: String,
     val total: Long,
     val fasettKey: String,
+    val autoComplete: List<String>?,
     val aggregations: Aggregations,
-    val hits: List<SearchHit>,
-    val autoComplete: String?
+    val hits: List<SearchHit>
 )
