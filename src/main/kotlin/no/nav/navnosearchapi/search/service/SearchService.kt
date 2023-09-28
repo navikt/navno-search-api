@@ -31,6 +31,7 @@ import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters.HighlightFieldParametersBuilder
 import org.springframework.stereotype.Service
 
 
@@ -39,7 +40,12 @@ class SearchService(
     val searchHelper: SearchHelper,
     val mapper: ContentSearchPageMapper,
 ) {
-    val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map { HighlightField(it) }
+    val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
+        HighlightField(
+            it,
+            HighlightFieldParametersBuilder().withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
+        )
+    }
 
     fun search(
         term: String,
@@ -71,9 +77,15 @@ class SearchService(
             AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true)),
             AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo(), now()).field(LAST_UPDATED),
             AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo(), now()).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo(), now()).field(LAST_UPDATED),
+            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo(), now())
+                .field(LAST_UPDATED),
             AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo())
                 .field(LAST_UPDATED),
         )
+    }
+
+    companion object {
+        private const val BOLD_PRETAG = "<b>"
+        private const val BOLD_POSTTAG = "</b>"
     }
 }
