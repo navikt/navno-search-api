@@ -21,14 +21,18 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.search.service.search.Filter
-import org.opensearch.index.query.ExistsQueryBuilder
 
 val fasettFilters = mapOf(
     FASETT_INNHOLD to FilterEntry(
         name = FASETT_INNHOLD_NAME,
-        filters = innholdFilters[UNDERFASETT_INFORMASJON]!!.filters + innholdFilters[UNDERFASETT_KONTOR]!!.filters + innholdFilters[UNDERFASETT_SOKNAD_OG_SKJEMA]!!.filters
+        filters = (innholdFilters[UNDERFASETT_INFORMASJON]?.filters ?: emptyList())
+                + (innholdFilters[UNDERFASETT_KONTOR]?.filters ?: emptyList())
+                + (innholdFilters[UNDERFASETT_SOKNAD_OG_SKJEMA]?.filters ?: emptyList())
     ),
-    FASETT_ENGLISH to FilterEntry(name = FASETT_ENGLISH_NAME, filters = listOf(Filter(language = listOf(ENGLISH)).toQuery())),
+    FASETT_ENGLISH to FilterEntry(
+        name = FASETT_ENGLISH_NAME,
+        filters = listOf(Filter(language = listOf(ENGLISH)).toQuery())
+    ),
     FASETT_NYHETER to FilterEntry(
         name = FASETT_NYHETER_NAME,
         filters = listOf(
@@ -57,8 +61,10 @@ val fasettFilters = mapOf(
     ),
     FASETT_INNHOLD_FRA_FYLKER to FilterEntry(
         name = FASETT_INNHOLD_FRA_FYLKER_NAME, filters = listOf(
-            Filter(isFile = listOf(false.toString())).toQuery(),
-            ExistsQueryBuilder(FYLKE)
+            Filter(
+                isFile = listOf(false.toString()),
+                requiredFields = listOf(FYLKE)
+            ).toQuery()
         )
     ),
     FASETT_FILER to FilterEntry(

@@ -5,6 +5,7 @@ import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.RangeQueryBuilder
@@ -37,6 +38,10 @@ fun filterQuery(filters: List<QueryBuilder>): BoolQueryBuilder {
 
 fun termQuery(field: String, value: String): TermQueryBuilder {
     return TermQueryBuilder(field, value)
+}
+
+fun existsQuery(field: String): ExistsQueryBuilder {
+    return ExistsQueryBuilder(field)
 }
 
 fun rangeQuery(field: String, gte: ZonedDateTime?, lte: ZonedDateTime?): RangeQueryBuilder {

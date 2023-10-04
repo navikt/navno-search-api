@@ -28,101 +28,59 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN_N
 import no.nav.navnosearchapi.search.service.search.Filter
 
 val fylkeFilters = mapOf(
-    UNDERFASETT_AGDER to FilterEntry(
-        name = UNDERFASETT_AGDER_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.AGDER.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_AGDER to fylkeFilter(
+        name = UNDERFASETT_AGDER_NAME,
+        requiredFylke = ValidFylker.AGDER.descriptor
     ),
-    UNDERFASETT_INNLANDET to FilterEntry(
-        name = UNDERFASETT_INNLANDET_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.INNLANDET.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_INNLANDET to fylkeFilter(
+        name = UNDERFASETT_INNLANDET_NAME,
+        requiredFylke = ValidFylker.INNLANDET.descriptor
     ),
-    UNDERFASETT_MORE_OG_ROMSDAL to FilterEntry(
-        name = UNDERFASETT_MORE_OG_ROMSDAL_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.MORE_OG_ROMSDAL.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_MORE_OG_ROMSDAL to fylkeFilter(
+        name = UNDERFASETT_MORE_OG_ROMSDAL_NAME,
+        requiredFylke = ValidFylker.MORE_OG_ROMSDAL.descriptor
     ),
-    UNDERFASETT_NORDLAND to FilterEntry(
-        name = UNDERFASETT_NORDLAND_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.NORDLAND.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_NORDLAND to fylkeFilter(
+        name = UNDERFASETT_NORDLAND_NAME,
+        requiredFylke = ValidFylker.NORDLAND.descriptor
     ),
-    UNDERFASETT_OSLO to FilterEntry(
-        name = UNDERFASETT_OSLO_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.OSLO.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_OSLO to fylkeFilter(
+        name = UNDERFASETT_OSLO_NAME,
+        requiredFylke = ValidFylker.OSLO.descriptor
     ),
-    UNDERFASETT_ROGALAND to FilterEntry(
-        name = UNDERFASETT_ROGALAND_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.ROGALAND.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_ROGALAND to fylkeFilter(
+        name = UNDERFASETT_ROGALAND_NAME,
+        requiredFylke = ValidFylker.ROGALAND.descriptor
     ),
-    UNDERFASETT_TROMS_OG_FINNMARK to FilterEntry(
-        name = UNDERFASETT_TROMS_OG_FINNMARK_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.TROMS_OG_FINNMARK.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_TROMS_OG_FINNMARK to fylkeFilter(
+        name = UNDERFASETT_TROMS_OG_FINNMARK_NAME,
+        requiredFylke = ValidFylker.TROMS_OG_FINNMARK.descriptor
     ),
-    UNDERFASETT_TRONDELAG to FilterEntry(
-        name = UNDERFASETT_TRONDELAG_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.TRONDELAG.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_TRONDELAG to fylkeFilter(
+        name = UNDERFASETT_TRONDELAG_NAME,
+        requiredFylke = ValidFylker.TRONDELAG.descriptor
     ),
-    UNDERFASETT_VESTFOLD_OG_TELEMARK to FilterEntry(
+    UNDERFASETT_VESTFOLD_OG_TELEMARK to fylkeFilter(
         name = UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME,
-        filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.VESTFOLD_OG_TELEMARK.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+        requiredFylke = ValidFylker.VESTFOLD_OG_TELEMARK.descriptor
     ),
-    UNDERFASETT_VESTLAND to FilterEntry(
-        name = UNDERFASETT_VESTLAND_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.VESTLAND.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_VESTLAND to fylkeFilter(
+        name = UNDERFASETT_VESTLAND_NAME,
+        requiredFylke = ValidFylker.VESTLAND.descriptor
     ),
-    UNDERFASETT_VEST_VIKEN to FilterEntry(
-        name = UNDERFASETT_VEST_VIKEN_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.VEST_VIKEN.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_VEST_VIKEN to fylkeFilter(
+        name = UNDERFASETT_VEST_VIKEN_NAME,
+        requiredFylke = ValidFylker.VEST_VIKEN.descriptor
     ),
-    UNDERFASETT_OST_VIKEN to FilterEntry(
-        name = UNDERFASETT_OST_VIKEN_NAME, filters = listOf(
-            Filter(
-                fylke = listOf(ValidFylker.OST_VIKEN.descriptor),
-                isFile = listOf(false.toString())
-            ).toQuery()
-        )
+    UNDERFASETT_OST_VIKEN to fylkeFilter(
+        name = UNDERFASETT_OST_VIKEN_NAME,
+        requiredFylke = ValidFylker.OST_VIKEN.descriptor
     ),
 )
+
+private fun fylkeFilter(name: String, requiredFylke: String): FilterEntry {
+    return FilterEntry(
+        name = name,
+        filters = listOf(Filter(fylke = listOf(requiredFylke), isFile = listOf(false.toString())).toQuery())
+    )
+}

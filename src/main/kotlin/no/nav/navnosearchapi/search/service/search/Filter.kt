@@ -17,6 +17,8 @@ data class Filter(
     val metatags: List<String>? = null,
     val isFile: List<String>? = null,
     val excludeMetatags: List<String>? = null,
+    val requiredFields: List<String>? = null,
+    val requiredMissingFields: List<String>? = null,
     val lastUpdatedFrom: LocalDateTime? = null,
     val lastUpdatedTo: LocalDateTime? = null,
 ) {
@@ -30,7 +32,8 @@ data class Filter(
         isFile?.let { it.forEach { term -> query.must(termQuery(IS_FILE, term)) } }
 
         excludeMetatags?.let { it.forEach { term -> query.mustNot(termQuery(METATAGS, term)) } }
-
+        requiredFields?.let { it.forEach { field -> query.must(existsQuery(field)) } }
+        requiredMissingFields?.let { it.forEach { field -> query.mustNot(existsQuery(field)) } }
 
         if (lastUpdatedFrom != null || lastUpdatedTo != null) {
             query.must(
