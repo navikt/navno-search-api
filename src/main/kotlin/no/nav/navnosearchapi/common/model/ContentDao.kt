@@ -12,7 +12,7 @@ import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
 @Document(
-    indexName = "search-content-v6",
+    indexName = "search-content-v7",
     dynamic = Dynamic.STRICT,
     /* Disabler type hints da det lager et _class-felt i mappingen som gir problemer for wildcard-søk.
        Bør skrives om dersom vi trenger polymorfisk data. */
