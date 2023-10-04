@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.admin.mapper
 
 import no.nav.navnosearchapi.common.dto.ContentDto
+import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
@@ -9,6 +10,7 @@ import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchapi.common.utils.createInternalId
 import no.nav.navnosearchapi.common.utils.norwegianLanguageCodes
 import no.nav.navnosearchapi.common.utils.supportedLanguages
+import org.springframework.data.elasticsearch.core.suggest.Completion
 import org.springframework.stereotype.Component
 import java.time.ZoneId
 
@@ -19,7 +21,7 @@ class ContentMapper {
             id = createInternalId(teamName, content.id),
             teamOwnedBy = teamName,
             href = content.href,
-            autocomplete = content.title,
+            autocomplete = Completion(listOf(content.title)),
             title = toMultiLangField(content.title, content.metadata.language),
             ingress = toMultiLangField(content.ingress, content.metadata.language),
             text = toMultiLangField(content.text, content.metadata.language),
@@ -29,8 +31,16 @@ class ContentMapper {
             language = resolveLanguage(content.metadata.language),
             isFile = content.metadata.isFile,
             fylke = content.metadata.fylke,
-            metatags = content.metadata.metatags,
+            metatags = resolveMetatags(content.metadata.metatags, content.metadata.fylke, content.metadata.isFile),
+            keywords = content.metadata.keywords,
         )
+    }
+
+    fun resolveMetatags(metatags: List<String>, fylke: String?, isFile: Boolean): List<String> {
+        if (metatags.isEmpty() && fylke != null && !isFile) {
+            return listOf(ValidMetatags.INFORMASJON.descriptor)
+        }
+        return metatags
     }
 
     fun resolveLanguage(language: String): String {

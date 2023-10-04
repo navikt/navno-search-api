@@ -1,11 +1,11 @@
 package no.nav.navnosearchapi.admin.validation
 
 import no.nav.navnosearchapi.admin.consumer.kodeverk.KodeverkConsumer
-import no.nav.navnosearchapi.admin.validation.enums.DescriptorProvider
-import no.nav.navnosearchapi.admin.validation.enums.ValidAudiences
-import no.nav.navnosearchapi.admin.validation.enums.ValidFylker
-import no.nav.navnosearchapi.admin.validation.enums.ValidMetatags
 import no.nav.navnosearchapi.common.dto.ContentDto
+import no.nav.navnosearchapi.common.enums.DescriptorProvider
+import no.nav.navnosearchapi.common.enums.ValidAudiences
+import no.nav.navnosearchapi.common.enums.ValidFylker
+import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.exception.ContentValidationException
 import no.nav.navnosearchapi.common.utils.METADATA_AUDIENCE
 import no.nav.navnosearchapi.common.utils.METADATA_FYLKE

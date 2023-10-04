@@ -23,21 +23,26 @@ import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.opensearch.search.aggregations.bucket.range.Range
 import org.opensearch.search.aggregations.bucket.terms.Terms
+import org.opensearch.search.aggregations.metrics.Cardinality
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
 
 @Component
 class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
-    fun toContentSearchPage(searchPage: SearchPage<ContentDao>, suggestions: List<String?>): ContentSearchPage {
+    fun toContentSearchPage(searchPage: SearchPage<ContentDao>, mapCustomAggregations: Boolean): ContentSearchPage {
         return ContentSearchPage(
-            suggestions = suggestions,
+            suggestions = searchPage.searchHits.suggest?.suggestions?.first()?.entries?.flatMap { entry -> entry.options.map { it.text } },
             hits = searchPage.searchHits.searchHits.map { toContentSearchHit(it) },
             totalPages = searchPage.totalPages,
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
-            aggregations = toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            aggregations = if (mapCustomAggregations) {
+                toCustomAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            } else {
+                toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            }
         )
     }
 
@@ -65,20 +70,28 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
                 getDateRangeAggregation(aggregations, DATE_RANGE_LAST_30_DAYS),
                 getDateRangeAggregation(aggregations, DATE_RANGE_LAST_12_MONTHS),
                 getDateRangeAggregation(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS),
-            )
+            ),
         )
+    }
+
+    private fun toCustomAggregations(aggregations: Aggregations): ContentAggregations {
+        return ContentAggregations(custom = aggregations.associate { it.name to (it as Filter).docCount })
     }
 
     private fun getTermAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
         return aggregations.get<Terms>(name).buckets.associate { it.keyAsString to it.docCount }
     }
 
-    private fun getFilterAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
-        return mapOf(aggregations.get<Filter>(name).let { it.name to it.docCount })
-    }
-
     private fun getDateRangeAggregation(aggregations: Aggregations, name: String): Pair<String, Long> {
         return aggregations.get<Range>(name).let { it.name to it.buckets.first().docCount }
+    }
+
+    private fun getFilterAggregation(aggregations: Aggregations, name: String): Long {
+        return aggregations.get<Filter>(name).docCount
+    }
+
+    private fun getCardinalityAggregation(aggregations: Aggregations, name: String): Long {
+        return aggregations.get<Cardinality>(name).value
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String): String {

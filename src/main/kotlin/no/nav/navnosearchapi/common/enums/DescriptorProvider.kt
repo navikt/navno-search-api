@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.admin.validation.enums
+package no.nav.navnosearchapi.common.enums
 
 interface DescriptorProvider {
     val descriptor: String

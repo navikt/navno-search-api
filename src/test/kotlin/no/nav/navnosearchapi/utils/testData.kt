@@ -7,6 +7,7 @@ import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
+import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
@@ -119,18 +120,18 @@ fun dummyContentDao(
     timestamp: ZonedDateTime = now,
     audience: List<String> = listOf(PRIVATPERSON),
     language: String = NORWEGIAN_BOKMAAL,
-    isFile: Boolean? = null,
+    isFile: Boolean = false,
     fylke: String? = null,
-    metatags: List<String>? = null
+    metatags: List<String> = emptyList()
 ): ContentDao {
     return ContentDao(
         "$teamName-$externalId",
+        Completion(listOf("$textPrefix title")),
         teamName,
         "https://$textPrefix.com",
-        "$textPrefix title",
-        MultiLangField(no = "$textPrefix title"),
-        MultiLangField(no = "$textPrefix ingress"),
-        MultiLangField(no = "$textPrefix text"),
+        MultiLangField(value = "$textPrefix title", language = language),
+        MultiLangField(value = "$textPrefix ingress", language = language),
+        MultiLangField(value = "$textPrefix text", language = language),
         timestamp,
         timestamp,
         audience,
@@ -151,9 +152,9 @@ fun dummyContentDto(
     lastUpdated: LocalDateTime = now.toLocalDateTime(),
     audience: List<String> = listOf(SAMARBEIDSPARTNER),
     language: String = ENGLISH,
-    isFile: Boolean? = null,
+    isFile: Boolean = false,
     fylke: String? = null,
-    metatags: List<String>? = null,
+    metatags: List<String> = emptyList(),
 ) = ContentDto(
     id,
     href,

@@ -7,7 +7,8 @@ data class ContentMetadata(
     val lastUpdated: LocalDateTime,
     val audience: List<String>,
     val language: String,
-    val isFile: Boolean? = null,
+    val isFile: Boolean = false,
     val fylke: String? = null,
-    val metatags: List<String>? = null,
+    val metatags: List<String> = emptyList(),
+    val keywords: List<String> = emptyList(),
 )
