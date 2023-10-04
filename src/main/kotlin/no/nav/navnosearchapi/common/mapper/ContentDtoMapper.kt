@@ -35,6 +35,7 @@ class ContentDtoMapper {
                 isFile = content.isFile,
                 fylke = content.fylke,
                 metatags = content.metatags,
+                keywords = content.keywords,
             )
         )
     }
