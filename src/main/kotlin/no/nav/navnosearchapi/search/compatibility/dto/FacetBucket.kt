@@ -1,9 +1,9 @@
 package no.nav.navnosearchapi.search.compatibility.dto
 
 data class FacetBucket(
-    val key: String,
+    override val key: String,
+    override val docCount: Long,
+    override val checked: Boolean,
     val name: String,
-    val docCount: Long,
-    val checked: Boolean,
     val underaggregeringer: UnderAggregations? = UnderAggregations()
-)
+): Bucket

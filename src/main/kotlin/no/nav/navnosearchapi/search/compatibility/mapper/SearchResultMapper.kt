@@ -7,6 +7,7 @@ import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.search.compatibility.Params
 import no.nav.navnosearchapi.search.compatibility.dto.Aggregations
+import no.nav.navnosearchapi.search.compatibility.dto.Bucket
 import no.nav.navnosearchapi.search.compatibility.dto.DateRange
 import no.nav.navnosearchapi.search.compatibility.dto.DateRangeBucket
 import no.nav.navnosearchapi.search.compatibility.dto.FacetBucket
@@ -128,7 +129,7 @@ class SearchResultMapper {
                         docCount = customAggs[FASETT_INNHOLD_NAME] ?: 0,
                         checked = FASETT_INNHOLD == params.f,
                         underaggregeringer = UnderAggregations(
-                            listOf(
+                            filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_INFORMASJON,
                                     name = UNDERFASETT_INFORMASJON_NAME,
@@ -162,7 +163,7 @@ class SearchResultMapper {
                         docCount = customAggs[FASETT_NYHETER_NAME] ?: 0,
                         checked = FASETT_NYHETER == params.f,
                         underaggregeringer = UnderAggregations(
-                            listOf(
+                            filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_PRIVATPERSON,
                                     name = UNDERFASETT_PRIVATPERSON_NAME,
@@ -220,7 +221,7 @@ class SearchResultMapper {
                         docCount = customAggs[FASETT_INNHOLD_FRA_FYLKER_NAME] ?: 0,
                         checked = FASETT_INNHOLD_FRA_FYLKER == params.f,
                         underaggregeringer = UnderAggregations(
-                            listOf(
+                            filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_AGDER,
                                     name = UNDERFASETT_AGDER_NAME,
@@ -331,6 +332,10 @@ class SearchResultMapper {
                 ),
             )
         )
+    }
+
+    private fun <T> filteredBuckets(vararg buckets: T): List<T> where T : Bucket {
+        return buckets.filter { b -> b.docCount > 0 }
     }
 
     private fun toDateRangeBucket(key: String, aggregations: Map<String, Long>, checked: Boolean): DateRangeBucket {

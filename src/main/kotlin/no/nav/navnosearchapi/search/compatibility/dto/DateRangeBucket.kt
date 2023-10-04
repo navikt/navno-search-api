@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi.search.compatibility.dto
 
 data class DateRangeBucket(
-    val key: String,
-    val docCount: Long,
-    val checked: Boolean,
-)
+    override val key: String,
+    override val docCount: Long,
+    override val checked: Boolean,
+): Bucket
