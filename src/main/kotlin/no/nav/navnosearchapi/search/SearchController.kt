@@ -31,9 +31,10 @@ class SearchController(val searchService: SearchService, val compatibilityServic
     ): SearchResult {
         val filters = compatibilityService.toFilters(params.f, params.uf, params.daterange)
         val aggregations = compatibilityService.aggregations(filters)
+        val term = compatibilityService.term(params.ord)
 
         val result = searchService.search(
-            term = params.ord,
+            term = term,
             page = params.start,
             filters = filters,
             aggregations = aggregations,
