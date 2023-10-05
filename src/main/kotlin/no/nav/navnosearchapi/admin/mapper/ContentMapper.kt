@@ -37,7 +37,7 @@ class ContentMapper {
     }
 
     fun resolveMetatags(metatags: List<String>, fylke: String?, isFile: Boolean): List<String> {
-        if (metatags.isEmpty() && fylke != null && !isFile) {
+        if (metatags.isEmpty() && fylke == null && !isFile) {
             return listOf(ValidMetatags.INFORMASJON.descriptor)
         }
         return metatags

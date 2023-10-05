@@ -21,7 +21,7 @@ class ContentDtoValidator(val kodeverkConsumer: KodeverkConsumer) {
             validateAudience(it.metadata.audience)
             validateLanguage(it.metadata.language)
             it.metadata.fylke?.let { fylke -> validateFylke(fylke) }
-            it.metadata.metatags?.let { metatags -> validateMetatags(metatags) }
+            it.metadata.metatags.let { metatags -> validateMetatags(metatags) }
         }
     }
 
