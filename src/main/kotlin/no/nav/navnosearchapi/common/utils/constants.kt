@@ -17,6 +17,7 @@ const val AUDIENCE = "audience"
 const val LANGUAGE = "language"
 const val FYLKE = "fylke"
 const val METATAGS = "metatags"
+const val KEYWORDS = "keywords"
 const val IS_FILE = "isFile"
 
 const val AUTOCOMPLETE = "autocomplete"
