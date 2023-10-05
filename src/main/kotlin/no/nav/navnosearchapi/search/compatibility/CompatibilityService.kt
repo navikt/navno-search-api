@@ -18,10 +18,15 @@ import no.nav.navnosearchapi.search.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.search.dto.ContentSearchPage
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class CompatibilityService(val searchResultMapper: SearchResultMapper) {
+
+    val logger: Logger = LoggerFactory.getLogger(CompatibilityService::class.java)
+
     fun toSearchResult(params: Params, result: ContentSearchPage): SearchResult {
         return searchResultMapper.toSearchResult(params, result)
     }
@@ -66,5 +71,37 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
                 filters
             )!!
         }
+    }
+
+    fun term(term: String): String {
+        if (isSkjemanummer(term)) {
+            return toExactSkjemanummerTerm(term)
+        }
+        return term
+    }
+
+    private fun toExactSkjemanummerTerm(term: String): String {
+        val digits = term.filter { it.isDigit() }
+
+        if (digits.length != SKJEMANUMMER_DIGITS_LENGTH) {
+            logger.warn("Skjemanummer kunne ikke formateres: $term. Bruker uformatert søkeord.")
+            return term
+        }
+
+        val firstPart = digits.substring(0, 2)
+        val secondPart = digits.substring(2, 4)
+        val thirdPart = digits.substring(4, 6)
+
+        return "\"NAV $firstPart-$secondPart.$thirdPart\""
+    }
+
+    private fun isSkjemanummer(term: String): Boolean {
+        return term.matches(skjemanummerRegex)
+    }
+
+    companion object {
+        private const val SKJEMANUMMER_DIGITS_LENGTH = 6
+        private const val SKJEMANUMMER_FORMAT = "^((NAV|nav).?)?([0-9]{2}).?([0-9]{2}).?([0-9]{2})$"
+        private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }
