@@ -2,6 +2,9 @@ package no.nav.navnosearchapi.search.service.search
 
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE
+import no.nav.navnosearchapi.common.utils.INGRESS_WILDCARD
+import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
+import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
@@ -17,6 +20,7 @@ import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.data.elasticsearch.core.query.HighlightQuery
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters
 import org.springframework.stereotype.Component
 
 @Component
@@ -29,7 +33,6 @@ class SearchHelper(
         page: Int,
         filters: List<QueryBuilder>,
         aggregations: List<AbstractAggregationBuilder<*>>,
-        highlightFields: List<HighlightField>,
         sort: Sort? = null
     ): SearchPage<ContentDao> {
         val pageRequest = PageRequest.of(page, pageSize)
@@ -38,7 +41,7 @@ class SearchHelper(
             .withQuery(baseQuery(term))
             .withFilter(filterQuery(filters))
             .withPageable(pageRequest)
-            .withHighlightQuery(highlightQuery(highlightFields))
+            .withHighlightQuery(highlightQuery)
             .withAggregations(aggregations)
             .withSuggestBuilder(
                 SuggestBuilder().addSuggestion(
@@ -68,14 +71,22 @@ class SearchHelper(
         return term.startsWith(QUOTE) && term.endsWith(QUOTE)
     }
 
-    private fun highlightQuery(highlightFields: List<HighlightField>): HighlightQuery {
-        return HighlightQuery(
+    companion object {
+        private const val QUOTE = '"'
+        private const val BOLD_PRETAG = "<b>"
+        private const val BOLD_POSTTAG = "</b>"
+
+        private val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
+            HighlightField(
+                it,
+                HighlightFieldParameters.HighlightFieldParametersBuilder()
+                    .withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
+            )
+        }
+
+        private val highlightQuery = HighlightQuery(
             Highlight(highlightFields),
             ContentDao::class.java
         )
-    }
-
-    companion object {
-        private const val QUOTE = '"'
     }
 }

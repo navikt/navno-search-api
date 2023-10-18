@@ -9,14 +9,11 @@ import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.common.utils.FYLKE
 import no.nav.navnosearchapi.common.utils.ID
-import no.nav.navnosearchapi.common.utils.INGRESS_WILDCARD
 import no.nav.navnosearchapi.common.utils.IS_FILE
 import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
 import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
-import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
-import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.common.utils.now
 import no.nav.navnosearchapi.common.utils.sevenDaysAgo
@@ -30,8 +27,6 @@ import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.springframework.data.domain.Sort
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters.HighlightFieldParametersBuilder
 import org.springframework.stereotype.Service
 
 
@@ -40,13 +35,6 @@ class SearchService(
     val searchHelper: SearchHelper,
     val mapper: ContentSearchPageMapper,
 ) {
-    val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
-        HighlightField(
-            it,
-            HighlightFieldParametersBuilder().withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
-        )
-    }
-
     fun search(
         term: String,
         page: Int,
@@ -60,7 +48,6 @@ class SearchService(
             page,
             filters,
             aggregations,
-            highlightFields,
             sort
         )
 
@@ -82,10 +69,5 @@ class SearchService(
             AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo())
                 .field(LAST_UPDATED),
         )
-    }
-
-    companion object {
-        private const val BOLD_PRETAG = "<b>"
-        private const val BOLD_POSTTAG = "</b>"
     }
 }
