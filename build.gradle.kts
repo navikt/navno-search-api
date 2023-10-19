@@ -4,9 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     val versions = object {
         val kotlin = "1.9.0"
-        val springBoot = "3.1.2"
-        val springDepMgmt = "1.1.2"
-        val versions = "0.47.0"
+        val springBoot = "3.1.4"
+        val springDepMgmt = "1.1.3"
+        val versions = "0.49.0"
     }
 
     kotlin("jvm") version (versions.kotlin)
@@ -31,7 +31,7 @@ dependencies {
         val logstash = "7.4"
         val opensearch = "1.2.0"
         val opensearchTestcontainers = "2.0.0"
-        val testcontainers = "1.18.3"
+        val testcontainers = "1.19.1"
     }
 
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
