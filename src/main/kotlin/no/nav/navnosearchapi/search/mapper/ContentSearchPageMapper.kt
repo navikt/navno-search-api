@@ -23,7 +23,6 @@ import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.opensearch.search.aggregations.bucket.range.Range
 import org.opensearch.search.aggregations.bucket.terms.Terms
-import org.opensearch.search.aggregations.metrics.Cardinality
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -88,10 +87,6 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
 
     private fun getFilterAggregation(aggregations: Aggregations, name: String): Long {
         return aggregations.get<Filter>(name).docCount
-    }
-
-    private fun getCardinalityAggregation(aggregations: Aggregations, name: String): Long {
-        return aggregations.get<Cardinality>(name).value
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String): String {
