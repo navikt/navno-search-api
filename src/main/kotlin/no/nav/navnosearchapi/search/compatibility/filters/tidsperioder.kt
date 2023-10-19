@@ -12,7 +12,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_12_MONT
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
-import no.nav.navnosearchapi.search.service.search.Filter
+import no.nav.navnosearchapi.search.search.Filter
 
 
 val tidsperiodeFilters = mapOf(

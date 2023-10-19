@@ -15,7 +15,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_PRIVATPERSON
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_PRIVATPERSON_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_STATISTIKK
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.search.service.search.Filter
+import no.nav.navnosearchapi.search.search.Filter
 
 val nyheterFilters = mapOf(
     UNDERFASETT_PRIVATPERSON to nyhetFilter(

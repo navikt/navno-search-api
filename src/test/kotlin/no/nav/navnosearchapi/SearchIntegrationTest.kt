@@ -14,7 +14,7 @@ import no.nav.navnosearchapi.common.utils.LAST_UPDATED_FROM
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED_TO
 import no.nav.navnosearchapi.common.utils.METATAGS
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
-import no.nav.navnosearchapi.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.utils.AGDER
 import no.nav.navnosearchapi.utils.ARBEIDSGIVER
 import no.nav.navnosearchapi.utils.HINDI
