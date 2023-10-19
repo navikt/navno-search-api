@@ -8,7 +8,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.search.service.search.Filter
+import no.nav.navnosearchapi.search.search.Filter
 
 val innholdFilters = mapOf(
     UNDERFASETT_INFORMASJON to innholdFilter(

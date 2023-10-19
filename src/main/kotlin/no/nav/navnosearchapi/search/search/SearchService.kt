@@ -1,8 +1,10 @@
-package no.nav.navnosearchapi.search.service
+package no.nav.navnosearchapi.search.search
 
 import no.nav.navnosearchapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.common.enums.ValidMetatags
+import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.utils.AUDIENCE
+import no.nav.navnosearchapi.common.utils.AUTOCOMPLETE
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
@@ -22,49 +24,77 @@ import no.nav.navnosearchapi.common.utils.now
 import no.nav.navnosearchapi.common.utils.sevenDaysAgo
 import no.nav.navnosearchapi.common.utils.thirtyDaysAgo
 import no.nav.navnosearchapi.common.utils.twelveMonthsAgo
-import no.nav.navnosearchapi.search.dto.ContentSearchPage
-import no.nav.navnosearchapi.search.mapper.ContentSearchPageMapper
-import no.nav.navnosearchapi.search.service.search.SearchHelper
+import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.mapper.ContentSearchPageMapper
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
+import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
+import org.opensearch.search.suggest.SuggestBuilder
+import org.opensearch.search.suggest.completion.CompletionSuggestionBuilder
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.SearchHitSupport
+import org.springframework.data.elasticsearch.core.query.HighlightQuery
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters.HighlightFieldParametersBuilder
-import org.springframework.stereotype.Service
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters
+import org.springframework.stereotype.Component
 
-
-@Service
+@Component
 class SearchService(
-    val searchHelper: SearchHelper,
+    @Value("\${opensearch.page-size}") val pageSize: Int,
+    val operations: ElasticsearchOperations,
     val mapper: ContentSearchPageMapper,
 ) {
-    val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
-        HighlightField(
-            it,
-            HighlightFieldParametersBuilder().withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
-        )
-    }
-
     fun search(
         term: String,
         page: Int,
         filters: List<QueryBuilder>,
         aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
         mapCustomAggregations: Boolean = false,
-        sort: Sort? = null,
+        sort: Sort? = null
     ): ContentSearchPage {
-        val searchResult = searchHelper.searchPage(
-            term,
-            page,
-            filters,
-            aggregations,
-            highlightFields,
-            sort
-        )
+        val pageRequest = PageRequest.of(page, pageSize)
 
-        return mapper.toContentSearchPage(searchResult, mapCustomAggregations)
+        val searchQuery = NativeSearchQueryBuilder()
+            .withQuery(baseQuery(term))
+            .withFilter(filterQuery(filters))
+            .withPageable(pageRequest)
+            .withHighlightQuery(highlightQuery)
+            .withAggregations(aggregations)
+            .withSuggestBuilder(
+                SuggestBuilder().addSuggestion(
+                    AUTOCOMPLETE,
+                    CompletionSuggestionBuilder(AUTOCOMPLETE).prefix(term).skipDuplicates(true).size(3)
+                )
+            )
+            .withTrackTotalHits(true)
+
+        sort?.let { searchQuery.withSort(it) }
+
+        val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
+        val searchPage = SearchHitSupport.searchPageFor(searchHits, pageRequest)
+
+        return mapper.toContentSearchPage(searchPage, mapCustomAggregations)
+    }
+
+    private fun baseQuery(term: String): QueryBuilder {
+        return if (term.isBlank()) {
+            MatchAllQueryBuilder()
+        } else if (isInQuotes(term)) {
+            searchAllTextForPhraseQuery(term)
+        } else {
+            searchAllTextQuery(term)
+        }
+    }
+
+    private fun isInQuotes(term: String): Boolean {
+        return term.startsWith(QUOTE) && term.endsWith(QUOTE)
     }
 
     private fun aggregations(): List<AbstractAggregationBuilder<*>> {
@@ -85,7 +115,21 @@ class SearchService(
     }
 
     companion object {
+        private const val QUOTE = '"'
         private const val BOLD_PRETAG = "<b>"
         private const val BOLD_POSTTAG = "</b>"
+
+        private val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
+            HighlightField(
+                it,
+                HighlightFieldParameters.HighlightFieldParametersBuilder()
+                    .withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
+            )
+        }
+
+        private val highlightQuery = HighlightQuery(
+            Highlight(highlightFields),
+            ContentDao::class.java
+        )
     }
 }

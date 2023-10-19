@@ -75,9 +75,9 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
-import no.nav.navnosearchapi.search.dto.ContentAggregations
-import no.nav.navnosearchapi.search.dto.ContentSearchHit
-import no.nav.navnosearchapi.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.dto.ContentAggregations
+import no.nav.navnosearchapi.search.search.dto.ContentSearchHit
+import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.dto
+package no.nav.navnosearchapi.search.search.dto
 
 data class ContentAggregations(
     val audience: Map<String, Long>? = null,

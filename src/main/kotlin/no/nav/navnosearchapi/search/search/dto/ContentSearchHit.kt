@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.dto
+package no.nav.navnosearchapi.search.search.dto
 
 import no.nav.navnosearchapi.common.dto.ContentDto
 

@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.service.search
+package no.nav.navnosearchapi.search.search
 
 import no.nav.navnosearchapi.common.utils.AUDIENCE
 import no.nav.navnosearchapi.common.utils.FYLKE

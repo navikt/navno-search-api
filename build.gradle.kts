@@ -4,9 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     val versions = object {
         val kotlin = "1.9.0"
-        val springBoot = "3.1.2"
-        val springDepMgmt = "1.1.2"
-        val versions = "0.47.0"
+        val springBoot = "3.1.4"
+        val springDepMgmt = "1.1.3"
+        val versions = "0.49.0"
     }
 
     kotlin("jvm") version (versions.kotlin)

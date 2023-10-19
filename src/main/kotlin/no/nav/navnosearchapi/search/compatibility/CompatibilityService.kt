@@ -15,7 +15,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_STATISTIKK
-import no.nav.navnosearchapi.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.slf4j.Logger
