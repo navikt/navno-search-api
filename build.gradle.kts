@@ -31,7 +31,7 @@ dependencies {
         val logstash = "7.4"
         val opensearch = "1.2.0"
         val opensearchTestcontainers = "2.0.0"
-        val testcontainers = "1.19.1"
+        val testcontainers = "1.18.3"
     }
 
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
