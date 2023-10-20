@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.time.LocalDateTime
+import java.time.format.DateTimeParseException
 
 
 @ControllerAdvice
@@ -43,6 +44,14 @@ class ErrorHandler {
             return handleException(
                 status = HttpStatus.BAD_REQUEST,
                 message = "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}",
+                path = request.requestURI,
+                ex = ex
+            )
+        }
+        if (ex.cause?.cause is DateTimeParseException) {
+            return handleException(
+                status = HttpStatus.BAD_REQUEST,
+                message = "Dato-felt er på feil format. Må være en date-time med tidssone.",
                 path = request.requestURI,
                 ex = ex
             )
