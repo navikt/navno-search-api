@@ -130,8 +130,8 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     @Test
     fun testSearchWithRangeFilter() {
         val filter = mapOf(
-            LAST_UPDATED_FROM to listOf(nowMinus50Days.toLocalDateTime().toString()),
-            LAST_UPDATED_TO to listOf(nowMinus10Days.toLocalDateTime().toString())
+            LAST_UPDATED_FROM to listOf(nowMinus50Days.toString()),
+            LAST_UPDATED_TO to listOf(nowMinus10Days.toString())
         )
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 

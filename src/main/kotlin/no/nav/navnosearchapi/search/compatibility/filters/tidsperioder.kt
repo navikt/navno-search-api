@@ -18,14 +18,14 @@ import no.nav.navnosearchapi.search.search.Filter
 val tidsperiodeFilters = mapOf(
     TIDSPERIODE_OLDER_THAN_12_MONTHS to FilterEntry(
         name = DATE_RANGE_OLDER_THAN_12_MONTHS,
-        filters = listOf(Filter(lastUpdatedTo = twelveMonthsAgo().toLocalDateTime()).toQuery())
+        filters = listOf(Filter(lastUpdatedTo = twelveMonthsAgo()).toQuery())
     ),
     TIDSPERIODE_LAST_12_MONTHS to FilterEntry(
         name = DATE_RANGE_LAST_12_MONTHS,
         filters = listOf(
             Filter(
-                lastUpdatedFrom = twelveMonthsAgo().toLocalDateTime(),
-                lastUpdatedTo = now().toLocalDateTime()
+                lastUpdatedFrom = twelveMonthsAgo(),
+                lastUpdatedTo = now()
             ).toQuery()
         )
     ),
@@ -33,8 +33,8 @@ val tidsperiodeFilters = mapOf(
         name = DATE_RANGE_LAST_30_DAYS,
         filters = listOf(
             Filter(
-                lastUpdatedFrom = thirtyDaysAgo().toLocalDateTime(),
-                lastUpdatedTo = now().toLocalDateTime()
+                lastUpdatedFrom = thirtyDaysAgo(),
+                lastUpdatedTo = now()
             ).toQuery()
         )
     ),
@@ -42,8 +42,8 @@ val tidsperiodeFilters = mapOf(
         name = DATE_RANGE_LAST_7_DAYS,
         filters = listOf(
             Filter(
-                lastUpdatedFrom = sevenDaysAgo().toLocalDateTime(),
-                lastUpdatedTo = now().toLocalDateTime()
+                lastUpdatedFrom = sevenDaysAgo(),
+                lastUpdatedTo = now()
             ).toQuery()
         )
     ),

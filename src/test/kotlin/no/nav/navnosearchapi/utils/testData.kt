@@ -8,7 +8,6 @@ import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import org.springframework.data.elasticsearch.core.suggest.Completion
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
@@ -148,8 +147,8 @@ fun dummyContentDto(
     title: String = "Eleventh title",
     ingress: String = "Eleventh ingress",
     text: String = "Eleventh text",
-    createdAt: LocalDateTime = now.toLocalDateTime(),
-    lastUpdated: LocalDateTime = now.toLocalDateTime(),
+    createdAt: ZonedDateTime = now,
+    lastUpdated: ZonedDateTime = now,
     audience: List<String> = listOf(SAMARBEIDSPARTNER),
     language: String = ENGLISH,
     isFile: Boolean = false,

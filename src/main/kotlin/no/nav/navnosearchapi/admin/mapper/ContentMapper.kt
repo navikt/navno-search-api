@@ -12,7 +12,6 @@ import no.nav.navnosearchapi.common.utils.norwegianLanguageCodes
 import no.nav.navnosearchapi.common.utils.supportedLanguages
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import org.springframework.stereotype.Component
-import java.time.ZoneId
 
 @Component
 class ContentMapper {
@@ -25,8 +24,8 @@ class ContentMapper {
             title = toMultiLangField(content.title, content.metadata.language),
             ingress = toMultiLangField(content.ingress, content.metadata.language),
             text = toMultiLangField(content.text, content.metadata.language),
-            createdAt = content.metadata.createdAt.atZone(ZoneId.systemDefault()),
-            lastUpdated = content.metadata.lastUpdated.atZone(ZoneId.systemDefault()),
+            createdAt = content.metadata.createdAt,
+            lastUpdated = content.metadata.lastUpdated,
             audience = content.metadata.audience,
             language = resolveLanguage(content.metadata.language),
             isFile = content.metadata.isFile,
