@@ -109,13 +109,17 @@ class SearchResultMapper {
     }
 
     private fun toHighlight(searchHit: ContentSearchHit): String {
-        return if (searchHit.content.metadata.metatags.contains(ValidMetatags.KONTOR.descriptor)) {
+        val highlight = if (searchHit.content.metadata.metatags.contains(ValidMetatags.KONTOR.descriptor)) {
             searchHit.content.ingress
         } else {
             searchHit.highlight.ingress.firstOrNull()
                 ?: searchHit.highlight.text.firstOrNull()
                 ?: searchHit.content.ingress
         }
+
+        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
+            highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+        } else highlight
     }
 
     private fun toAggregations(aggregations: ContentAggregations, params: Params, totalElements: Long): Aggregations {
@@ -344,5 +348,10 @@ class SearchResultMapper {
             docCount = aggregations[key] ?: 0,
             checked = checked,
         )
+    }
+
+    companion object {
+        private const val HIGHLIGHT_MAX_LENGTH = 200
+        private const val CUTOFF_POSTFIX = "..."
     }
 }
