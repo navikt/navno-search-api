@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import no.nav.navnosearchapi.admin.dto.SaveContentResponse
 import no.nav.navnosearchapi.common.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
 import no.nav.navnosearchapi.utils.additionalTestData
@@ -49,7 +50,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContent() {
-        val response: ResponseEntity<String> = restTemplate.exchange(
+        val response: ResponseEntity<SaveContentResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(additionalTestData),
@@ -74,14 +75,14 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContentWithNonSupportedLanguage() {
-        val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
+        val response: ResponseEntity<SaveContentResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
             HttpEntity(listOf(dummyContentDto(language = "unsupported"))),
         )
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Ugyldig språkkode: unsupported. Må være tobokstavs språkkode fra kodeverk-api.")
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body!!.validationErrors["11"]!!.first()).isEqualTo("Ugyldig språkkode: unsupported. Må være tobokstavs språkkode fra kodeverk-api.")
     }
 
     @Test

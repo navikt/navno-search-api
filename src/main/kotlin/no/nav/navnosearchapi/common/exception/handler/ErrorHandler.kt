@@ -2,7 +2,6 @@ package no.nav.navnosearchapi.common.exception.handler
 
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import jakarta.servlet.http.HttpServletRequest
-import no.nav.navnosearchapi.common.exception.ContentValidationException
 import no.nav.navnosearchapi.common.exception.DocumentForTeamNameNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,18 +56,6 @@ class ErrorHandler {
             )
         }
         return defaultExceptionHandler(ex, request)
-    }
-
-    @ExceptionHandler(value = [ContentValidationException::class])
-    fun contentValidationExceptionHandler(
-        ex: ContentValidationException,
-        request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
-        return handleException(
-            status = HttpStatus.BAD_REQUEST,
-            path = request.requestURI,
-            ex = ex
-        )
     }
 
     @ExceptionHandler(value = [DocumentForTeamNameNotFoundException::class])

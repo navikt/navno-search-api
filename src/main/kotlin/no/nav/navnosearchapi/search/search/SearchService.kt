@@ -18,6 +18,7 @@ import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
 import no.nav.navnosearchapi.common.utils.MISSING_FYLKE
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
+import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import no.nav.navnosearchapi.common.utils.TOTAL_COUNT
 import no.nav.navnosearchapi.common.utils.now
 import no.nav.navnosearchapi.common.utils.sevenDaysAgo
@@ -118,16 +119,24 @@ class SearchService(
         private const val BOLD_PRETAG = "<b>"
         private const val BOLD_POSTTAG = "</b>"
 
-        private const val INGRESS_HIGHLIGHT_NUM_FRAGMENTS = 0
-        private const val TEXT_HIGHLIGHT_FRAGMENT_SIZE = 200
+        private const val UNFRAGMENTED = 0
+        private const val MAX_FRAGMENT_SIZE = 200
 
         private val highlightFields = listOf(
+            HighlightField(
+                TITLE_WILDCARD,
+                HighlightFieldParameters.HighlightFieldParametersBuilder()
+                    .withPreTags(BOLD_PRETAG)
+                    .withPostTags(BOLD_POSTTAG)
+                    .withNumberOfFragments(UNFRAGMENTED)
+                    .build()
+            ),
             HighlightField(
                 INGRESS_WILDCARD,
                 HighlightFieldParameters.HighlightFieldParametersBuilder()
                     .withPreTags(BOLD_PRETAG)
                     .withPostTags(BOLD_POSTTAG)
-                    .withNumberOfFragments(INGRESS_HIGHLIGHT_NUM_FRAGMENTS)
+                    .withNumberOfFragments(UNFRAGMENTED)
                     .build()
             ),
             HighlightField(
@@ -135,7 +144,7 @@ class SearchService(
                 HighlightFieldParameters.HighlightFieldParametersBuilder()
                     .withPreTags(BOLD_PRETAG)
                     .withPostTags(BOLD_POSTTAG)
-                    .withFragmentSize(TEXT_HIGHLIGHT_FRAGMENT_SIZE)
+                    .withFragmentSize(MAX_FRAGMENT_SIZE)
                     .build()
             )
         )
