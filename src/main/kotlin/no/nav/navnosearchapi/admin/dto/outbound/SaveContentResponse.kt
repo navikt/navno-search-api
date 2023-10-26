@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.admin.dto
+package no.nav.navnosearchapi.admin.dto.outbound
 
 data class SaveContentResponse(
     val numberOfIndexedDocuments: Int,

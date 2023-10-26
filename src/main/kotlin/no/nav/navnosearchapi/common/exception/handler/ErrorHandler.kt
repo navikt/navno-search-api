@@ -1,19 +1,17 @@
 package no.nav.navnosearchapi.common.exception.handler
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import jakarta.servlet.http.HttpServletRequest
 import no.nav.navnosearchapi.common.exception.DocumentForTeamNameNotFoundException
+import no.nav.navnosearchapi.common.exception.MissingIdException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.time.LocalDateTime
-import java.time.format.DateTimeParseException
 
 
 @ControllerAdvice
@@ -34,28 +32,17 @@ class ErrorHandler {
         )
     }
 
-    @ExceptionHandler(value = [HttpMessageNotReadableException::class])
-    fun missingRequiredFieldHandler(
-        ex: HttpMessageNotReadableException,
+    @ExceptionHandler(value = [MissingIdException::class])
+    fun missingIdException(
+        ex: MissingIdException,
         request: HttpServletRequest
     ): ResponseEntity<ErrorResponse> {
-        if (ex.cause is MissingKotlinParameterException) {
-            return handleException(
-                status = HttpStatus.BAD_REQUEST,
-                message = "Påkrevd felt mangler: ${(ex.cause as MissingKotlinParameterException).parameter.name}",
-                path = request.requestURI,
-                ex = ex
-            )
-        }
-        if (ex.cause?.cause is DateTimeParseException) {
-            return handleException(
-                status = HttpStatus.BAD_REQUEST,
-                message = "Dato-felt er på feil format. Må være en date-time med tidssone.",
-                path = request.requestURI,
-                ex = ex
-            )
-        }
-        return defaultExceptionHandler(ex, request)
+        return handleException(
+            status = HttpStatus.BAD_REQUEST,
+            message = "Id er påkrevd for alle dokumenter",
+            path = request.requestURI,
+            ex = ex
+        )
     }
 
     @ExceptionHandler(value = [DocumentForTeamNameNotFoundException::class])

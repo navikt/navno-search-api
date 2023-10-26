@@ -1,12 +1,12 @@
 package no.nav.navnosearchapi.admin.service
 
-import no.nav.navnosearchapi.admin.dto.SaveContentResponse
+import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
+import no.nav.navnosearchapi.admin.dto.outbound.SaveContentResponse
+import no.nav.navnosearchapi.admin.mapper.ContentDtoMapper
 import no.nav.navnosearchapi.admin.mapper.ContentMapper
 import no.nav.navnosearchapi.admin.repository.ContentRepository
 import no.nav.navnosearchapi.admin.validation.ContentDtoValidator
-import no.nav.navnosearchapi.common.dto.ContentDto
 import no.nav.navnosearchapi.common.exception.DocumentForTeamNameNotFoundException
-import no.nav.navnosearchapi.common.mapper.ContentDtoMapper
 import no.nav.navnosearchapi.common.utils.createInternalId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

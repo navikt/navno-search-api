@@ -1,12 +1,12 @@
-package no.nav.navnosearchapi.common.dto
+package no.nav.navnosearchapi.admin.dto.inbound
 
 import java.time.ZonedDateTime
 
 data class ContentMetadata(
-    val createdAt: ZonedDateTime,
-    val lastUpdated: ZonedDateTime,
-    val audience: List<String>,
-    val language: String,
+    val createdAt: ZonedDateTime? = null,
+    val lastUpdated: ZonedDateTime? = null,
+    val audience: List<String>? = null,
+    val language: String? = null,
     val isFile: Boolean = false,
     val fylke: String? = null,
     val metatags: List<String> = emptyList(),

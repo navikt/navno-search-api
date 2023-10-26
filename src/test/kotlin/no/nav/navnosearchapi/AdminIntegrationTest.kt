@@ -5,11 +5,9 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import no.nav.navnosearchapi.admin.dto.SaveContentResponse
+import no.nav.navnosearchapi.admin.dto.outbound.SaveContentResponse
 import no.nav.navnosearchapi.common.exception.handler.ErrorResponse
 import no.nav.navnosearchapi.utils.TEAM_NAME
-import no.nav.navnosearchapi.utils.additionalTestData
-import no.nav.navnosearchapi.utils.additionalTestDataAsMapWithMissingIngress
 import no.nav.navnosearchapi.utils.dummyContentDto
 import no.nav.navnosearchapi.utils.mockedKodeverkResponse
 import org.assertj.core.api.Assertions.assertThat
@@ -50,27 +48,45 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSavingContent() {
+        val content = dummyContentDto()
+
         val response: ResponseEntity<SaveContentResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
-            HttpEntity(additionalTestData),
+            HttpEntity(listOf(content)),
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(indexCount()).isEqualTo(11L)
-        assertThat(!repository.existsById("$TEAM_NAME-${additionalTestData.first().id}"))
+        assertThat(!repository.existsById("$TEAM_NAME-${content.id}"))
+    }
+
+    @Test
+    fun testSavingContentWithMissingId() {
+        val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
+            "${host()}/content/$TEAM_NAME",
+            HttpMethod.POST,
+            HttpEntity(listOf(dummyContentDto(id = null))),
+        )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(response.body?.message).isEqualTo("Id er påkrevd for alle dokumenter")
     }
 
     @Test
     fun testSavingContentWithMissingRequiredField() {
-        val response: ResponseEntity<ErrorResponse> = restTemplate.exchange(
+        val content = dummyContentDto(ingress = null)
+
+        val response: ResponseEntity<SaveContentResponse> = restTemplate.exchange(
             "${host()}/content/$TEAM_NAME",
             HttpMethod.POST,
-            HttpEntity(additionalTestDataAsMapWithMissingIngress),
+            HttpEntity(listOf(content)),
         )
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Påkrevd felt mangler: ingress")
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body?.numberOfIndexedDocuments).isEqualTo(0)
+        assertThat(response.body?.numberOfFailedDocuments).isEqualTo(1)
+        assertThat(response.body!!.validationErrors[content.id]!!.first()).isEqualTo("Påkrevd felt mangler: ingress")
     }
 
     @Test

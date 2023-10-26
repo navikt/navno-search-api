@@ -1,8 +1,8 @@
 package no.nav.navnosearchapi.admin
 
-import no.nav.navnosearchapi.admin.dto.SaveContentResponse
+import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
+import no.nav.navnosearchapi.admin.dto.outbound.SaveContentResponse
 import no.nav.navnosearchapi.admin.service.AdminService
-import no.nav.navnosearchapi.common.dto.ContentDto
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
