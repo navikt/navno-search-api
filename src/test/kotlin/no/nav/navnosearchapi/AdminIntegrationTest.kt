@@ -70,7 +70,7 @@ class AdminIntegrationTest : AbstractIntegrationTest() {
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Id er påkrevd for alle dokumenter")
+        assertThat(response.body?.message).isEqualTo("id er påkrevd for alle dokumenter")
     }
 
     @Test

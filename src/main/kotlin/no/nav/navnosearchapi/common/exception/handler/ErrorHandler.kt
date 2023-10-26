@@ -39,7 +39,7 @@ class ErrorHandler {
     ): ResponseEntity<ErrorResponse> {
         return handleException(
             status = HttpStatus.BAD_REQUEST,
-            message = "Id er påkrevd for alle dokumenter",
+            message = "id er påkrevd for alle dokumenter",
             path = request.requestURI,
             ex = ex
         )
