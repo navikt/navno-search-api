@@ -25,7 +25,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
-import no.nav.navnosearchapi.search.search.Filter
+import no.nav.navnosearchapi.search.search.filter.Filter
 
 val fylkeFilters = mapOf(
     UNDERFASETT_AGDER to fylkeFilter(

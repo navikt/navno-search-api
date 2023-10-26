@@ -8,14 +8,19 @@ import no.nav.navnosearchapi.common.utils.now
 import no.nav.navnosearchapi.common.utils.sevenDaysAgo
 import no.nav.navnosearchapi.common.utils.thirtyDaysAgo
 import no.nav.navnosearchapi.common.utils.twelveMonthsAgo
+import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_ALL_DATES
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_12_MONTHS
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
 import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
-import no.nav.navnosearchapi.search.search.Filter
+import no.nav.navnosearchapi.search.search.filter.Filter
 
 
-val tidsperiodeFilters = mapOf(
+val tidsperiodeFilters: Map<String, FilterEntry> = mapOf(
+    TIDSPERIODE_ALL_DATES to FilterEntry(
+        name = TIDSPERIODE_ALL_DATES,
+        filters = emptyList()
+    ),
     TIDSPERIODE_OLDER_THAN_12_MONTHS to FilterEntry(
         name = DATE_RANGE_OLDER_THAN_12_MONTHS,
         filters = listOf(Filter(lastUpdatedTo = twelveMonthsAgo()).toQuery())

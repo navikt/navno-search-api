@@ -5,10 +5,8 @@ import no.nav.navnosearchapi.common.utils.KEYWORDS
 import no.nav.navnosearchapi.common.utils.TEXT_WILDCARD
 import no.nav.navnosearchapi.common.utils.TITLE_WILDCARD
 import org.opensearch.common.unit.Fuzziness
-import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
-import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.RangeQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 import java.time.ZonedDateTime
@@ -31,12 +29,6 @@ fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
 
 fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).type(MultiMatchQueryBuilder.Type.PHRASE)
-}
-
-fun filterQuery(filters: List<QueryBuilder>): BoolQueryBuilder {
-    val query = BoolQueryBuilder()
-    filters.forEach { query.should(it) }
-    return query
 }
 
 fun termQuery(field: String, value: String): TermQueryBuilder {

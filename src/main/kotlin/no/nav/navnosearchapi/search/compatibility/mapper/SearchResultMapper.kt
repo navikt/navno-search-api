@@ -309,7 +309,7 @@ class SearchResultMapper {
                 )
             ),
             tidsperiode = DateRange(
-                docCount = totalElements,
+                docCount = customAggs[TIDSPERIODE_ALL_DATES] ?: 0,
                 checked = params.daterange == TIDSPERIODE_ALL_DATES.toInt(),
                 buckets = listOf(
                     toDateRangeBucket(

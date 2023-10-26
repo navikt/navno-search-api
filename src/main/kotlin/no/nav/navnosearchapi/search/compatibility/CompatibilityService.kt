@@ -16,6 +16,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD_FRA_FYLKE
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.filter.Filters
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.slf4j.Logger
@@ -31,7 +32,11 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return searchResultMapper.toSearchResult(params, result)
     }
 
-    fun toFilters(f: String?, uf: List<String>?, daterange: Int?): List<QueryBuilder> {
+    fun toFilters(f: String?, uf: List<String>?, daterange: Int?): Filters {
+        return Filters(fasetter = fasettFilters(f, uf), tidsperioder = tidsperiodeFilters(daterange))
+    }
+
+    fun fasettFilters(f: String?, uf: List<String>?): List<QueryBuilder> {
         return when (f) {
             FASETT_INNHOLD -> {
                 if (uf.isNullOrEmpty()) {
@@ -65,10 +70,14 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         } ?: emptyList()
     }
 
-    fun aggregations(filters: List<QueryBuilder>): List<FilterAggregationBuilder> {
+    fun tidsperiodeFilters(daterange: Int?): List<QueryBuilder> {
+        return tidsperiodeFilters[daterange.toString()]?.filters ?: emptyList()
+    }
+
+    fun aggregations(filters: Filters): List<FilterAggregationBuilder> {
         return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map { it.toAggregation()!! } + (tidsperiodeFilters.values).map {
             it.toAggregation(
-                filters
+                filters.fasetter
             )!!
         }
     }

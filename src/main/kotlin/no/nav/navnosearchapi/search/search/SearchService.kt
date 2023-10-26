@@ -25,6 +25,7 @@ import no.nav.navnosearchapi.common.utils.sevenDaysAgo
 import no.nav.navnosearchapi.common.utils.thirtyDaysAgo
 import no.nav.navnosearchapi.common.utils.twelveMonthsAgo
 import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.search.search.filter.Filters
 import no.nav.navnosearchapi.search.search.mapper.ContentSearchPageMapper
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
@@ -54,7 +55,7 @@ class SearchService(
     fun search(
         term: String,
         page: Int,
-        filters: List<QueryBuilder>,
+        filters: Filters,
         aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
         mapCustomAggregations: Boolean = false,
         sort: Sort? = null
@@ -63,7 +64,7 @@ class SearchService(
 
         val searchQuery = NativeSearchQueryBuilder()
             .withQuery(baseQuery(term))
-            .withFilter(filterQuery(filters))
+            .withFilter(filters.toQuery())
             .withPageable(pageRequest)
             .withHighlightQuery(highlightQuery)
             .withAggregations(aggregations)

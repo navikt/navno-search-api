@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.search
+package no.nav.navnosearchapi.search.search.filter
 
 import no.nav.navnosearchapi.common.utils.AUDIENCE
 import no.nav.navnosearchapi.common.utils.FYLKE
@@ -6,6 +6,9 @@ import no.nav.navnosearchapi.common.utils.IS_FILE
 import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
+import no.nav.navnosearchapi.search.search.existsQuery
+import no.nav.navnosearchapi.search.search.rangeQuery
+import no.nav.navnosearchapi.search.search.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import java.time.ZonedDateTime
 
