@@ -53,13 +53,11 @@ private fun nyhetFilter(
 ): FilterEntry {
     return FilterEntry(
         name = name,
-        filters = listOf(
-            Filter(
-                metatags = requiredMetatags,
-                audience = listOfNotNull(requiredAudience),
-                isFile = listOf(false.toString()),
-                requiredMissingFields = listOf(FYLKE)
-            ).toQuery()
-        )
+        filterQuery = Filter(
+            metatags = requiredMetatags,
+            audience = listOfNotNull(requiredAudience),
+            isFile = listOf(false.toString()),
+            requiredMissingFields = listOf(FYLKE)
+        ).toQuery()
     )
 }

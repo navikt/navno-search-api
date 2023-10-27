@@ -7,7 +7,6 @@ import no.nav.navnosearchapi.search.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.search.search.SearchService
 import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.search.search.filter.Filter
-import no.nav.navnosearchapi.search.search.filter.Filters
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -26,21 +25,21 @@ class SearchController(
         @RequestParam page: Int,
         @ModelAttribute filter: Filter
     ): ContentSearchPage {
-        return searchService.search(term, page, Filters(fasetter = listOf(filter.toQuery())))
+        return searchService.search(term, page, filter.toQuery())
     }
 
     @GetMapping("/content/compatible-search")
     fun searchBackwardsCompatible(
         @ModelAttribute params: Params
     ): SearchResult {
-        val filters = compatibilityService.toFilters(params.f, params.uf, params.daterange)
-        val aggregations = compatibilityService.aggregations(filters)
+        val filterQuery = compatibilityService.toFilterQuery(params.f, params.uf, params.daterange)
+        val aggregations = compatibilityService.aggregations(params.f, params.uf)
         val term = compatibilityService.term(params.ord)
 
         val result = searchService.search(
             term = term,
             page = params.start,
-            filters = filters,
+            filters = filterQuery,
             aggregations = aggregations,
             mapCustomAggregations = true,
             sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null

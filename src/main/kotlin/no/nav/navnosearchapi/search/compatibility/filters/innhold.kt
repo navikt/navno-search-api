@@ -28,12 +28,10 @@ val innholdFilters = mapOf(
 private fun innholdFilter(name: String, requiredMetatag: String): FilterEntry {
     return FilterEntry(
         name = name,
-        filters = listOf(
-            Filter(
-                metatags = listOf(requiredMetatag),
-                isFile = listOf(false.toString()),
-                requiredMissingFields = listOf(FYLKE)
-            ).toQuery()
-        )
+        filterQuery = Filter(
+            metatags = listOf(requiredMetatag),
+            isFile = listOf(false.toString()),
+            requiredMissingFields = listOf(FYLKE)
+        ).toQuery()
     )
 }

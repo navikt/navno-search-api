@@ -81,6 +81,6 @@ val fylkeFilters = mapOf(
 private fun fylkeFilter(name: String, requiredFylke: String): FilterEntry {
     return FilterEntry(
         name = name,
-        filters = listOf(Filter(fylke = listOf(requiredFylke), isFile = listOf(false.toString())).toQuery())
+        filterQuery = Filter(fylke = listOf(requiredFylke), isFile = listOf(false.toString())).toQuery()
     )
 }

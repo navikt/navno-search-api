@@ -16,40 +16,25 @@ import no.nav.navnosearchapi.search.compatibility.utils.TIDSPERIODE_OLDER_THAN_1
 import no.nav.navnosearchapi.search.search.filter.Filter
 
 
-val tidsperiodeFilters: Map<String, FilterEntry> = mapOf(
+val tidsperiodeFilters = mapOf(
     TIDSPERIODE_ALL_DATES to FilterEntry(
         name = TIDSPERIODE_ALL_DATES,
-        filters = emptyList()
+        filterQuery = Filter().toQuery()
     ),
     TIDSPERIODE_OLDER_THAN_12_MONTHS to FilterEntry(
         name = DATE_RANGE_OLDER_THAN_12_MONTHS,
-        filters = listOf(Filter(lastUpdatedTo = twelveMonthsAgo()).toQuery())
+        filterQuery = Filter(lastUpdatedTo = twelveMonthsAgo()).toQuery()
     ),
     TIDSPERIODE_LAST_12_MONTHS to FilterEntry(
         name = DATE_RANGE_LAST_12_MONTHS,
-        filters = listOf(
-            Filter(
-                lastUpdatedFrom = twelveMonthsAgo(),
-                lastUpdatedTo = now()
-            ).toQuery()
-        )
+        filterQuery = Filter(lastUpdatedFrom = twelveMonthsAgo(), lastUpdatedTo = now()).toQuery()
     ),
     TIDSPERIODE_LAST_30_DAYS to FilterEntry(
         name = DATE_RANGE_LAST_30_DAYS,
-        filters = listOf(
-            Filter(
-                lastUpdatedFrom = thirtyDaysAgo(),
-                lastUpdatedTo = now()
-            ).toQuery()
-        )
+        filterQuery = Filter(lastUpdatedFrom = thirtyDaysAgo(), lastUpdatedTo = now()).toQuery()
     ),
     TIDSPERIODE_LAST_7_DAYS to FilterEntry(
         name = DATE_RANGE_LAST_7_DAYS,
-        filters = listOf(
-            Filter(
-                lastUpdatedFrom = sevenDaysAgo(),
-                lastUpdatedTo = now()
-            ).toQuery()
-        )
+        filterQuery = Filter(lastUpdatedFrom = sevenDaysAgo(), lastUpdatedTo = now()).toQuery()
     ),
 )
