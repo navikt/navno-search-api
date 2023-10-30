@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 class ContentDtoValidatorTest(@Mock val kodeverkConsumer: KodeverkConsumer) {
 
     private val invalidValue = "invalidValue"
-    private val id = "11"
+    private val id = dummyContentDto().id
 
     private val validator = ContentDtoValidator(kodeverkConsumer)
 
@@ -40,6 +40,16 @@ class ContentDtoValidatorTest(@Mock val kodeverkConsumer: KodeverkConsumer) {
         assertThat(validationErrors).hasSize(1)
         assertThat(validationErrors[id]).hasSize(1)
         assertThat(validationErrors[id]!!.first()).isEqualTo("metadata.audience må inneholde minst ett element")
+    }
+
+    @Test
+    fun testValidationWithMissingRequiredField() {
+        val content = listOf(dummyContentDto(text = null))
+        val validationErrors = validator.validate(content)
+
+        assertThat(validationErrors).hasSize(1)
+        assertThat(validationErrors[id]).hasSize(1)
+        assertThat(validationErrors[id]!!.first()).isEqualTo("Påkrevd felt mangler: text")
     }
 
     @Test
