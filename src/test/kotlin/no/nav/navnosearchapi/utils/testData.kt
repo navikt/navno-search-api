@@ -1,9 +1,7 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.common.model.ContentDao
-import no.nav.navnosearchapi.common.model.MultiLangField
-import no.nav.navnosearchapi.common.utils.ENGLISH
-import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchapi.model.ContentDao
+import no.nav.navnosearchapi.model.MultiLangField
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
