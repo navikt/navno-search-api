@@ -27,12 +27,8 @@ spec:
     min: {{ min-replicas }}
     max: {{ max-replicas }}
   openSearch:
-    access: admin
+    access: read
     instance: navno-search
-  accessPolicy:
-    outbound:
-      external:
-        - host: {{ kodeverk-host }}
   inbound:
     rules:
       - application: navno-search-frontend

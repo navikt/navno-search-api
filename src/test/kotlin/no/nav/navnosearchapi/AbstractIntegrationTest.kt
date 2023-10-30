@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi
 
-import no.nav.navnosearchapi.admin.repository.ContentRepository
+import no.nav.navnosearchapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.utils.initialTestData
 import org.junit.jupiter.api.extension.ExtendWith
 import org.opensearch.testcontainers.OpensearchContainer
@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ActiveProfiles
@@ -26,7 +25,6 @@ import java.time.Duration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension::class)
-@AutoConfigureWireMock(port = 0)
 abstract class AbstractIntegrationTest {
 
     @Autowired
@@ -39,8 +37,6 @@ abstract class AbstractIntegrationTest {
     var serverPort: Int? = null
 
     fun host() = "http://localhost:$serverPort"
-
-    fun indexCount() = repository.count()
 
     fun searchUrl(term: String, page: Int = 0, filters: Map<String, List<String>> = emptyMap()): String {
         return UriComponentsBuilder.fromHttpUrl(host())

@@ -1,8 +1,6 @@
 package no.nav.navnosearchapi.common.exception.handler
 
 import jakarta.servlet.http.HttpServletRequest
-import no.nav.navnosearchapi.common.exception.DocumentForTeamNameNotFoundException
-import no.nav.navnosearchapi.common.exception.MissingIdException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
@@ -27,31 +25,6 @@ class ErrorHandler {
         return handleException(
             status = HttpStatus.BAD_REQUEST,
             message = "Påkrevd request parameter mangler: ${ex.parameterName}",
-            path = request.requestURI,
-            ex = ex
-        )
-    }
-
-    @ExceptionHandler(value = [MissingIdException::class])
-    fun missingIdException(
-        ex: MissingIdException,
-        request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
-        return handleException(
-            status = HttpStatus.BAD_REQUEST,
-            message = "id er påkrevd for alle dokumenter",
-            path = request.requestURI,
-            ex = ex
-        )
-    }
-
-    @ExceptionHandler(value = [DocumentForTeamNameNotFoundException::class])
-    fun documentForTeamNameNotFoundHandler(
-        ex: DocumentForTeamNameNotFoundException,
-        request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
-        return handleException(
-            status = HttpStatus.BAD_REQUEST,
             path = request.requestURI,
             ex = ex
         )

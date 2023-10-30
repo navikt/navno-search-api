@@ -9,7 +9,6 @@ val norwegianLanguageCodes = listOf(NORWEGIAN, NORWEGIAN_BOKMAAL, NORWEGIAN_NYNO
 val supportedLanguages = norwegianLanguageCodes + ENGLISH
 
 const val ID = "id"
-const val HREF = "href"
 const val TITLE = "title"
 const val INGRESS = "ingress"
 const val TEXT = "text"
@@ -22,14 +21,6 @@ const val KEYWORDS = "keywords"
 const val IS_FILE = "isFile"
 
 const val AUTOCOMPLETE = "autocomplete"
-
-const val METADATA = "metadata"
-const val METADATA_CREATED_AT = "metadata.createdAt"
-const val METADATA_LAST_UPDATED = "metadata.lastUpdated"
-const val METADATA_AUDIENCE = "metadata.audience"
-const val METADATA_LANGUAGE = "metadata.language"
-const val METADATA_FYLKE = "metadata.fylke"
-const val METADATA_METATAGS = "metadata.metatags"
 
 const val TITLE_WILDCARD = "$TITLE.*"
 const val INGRESS_WILDCARD = "$INGRESS.*"

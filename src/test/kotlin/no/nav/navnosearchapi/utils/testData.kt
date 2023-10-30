@@ -1,8 +1,5 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.admin.consumer.kodeverk.dto.KodeverkResponse
-import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
-import no.nav.navnosearchapi.admin.dto.inbound.ContentMetadata
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
@@ -17,8 +14,6 @@ const val SAMARBEIDSPARTNER = "samarbeidspartner"
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
 const val HINDI = "hi"
-
-val mockedKodeverkResponse = KodeverkResponse(listOf("NB", "NN", "EN", "SE", "PL", "UK", "RU"))
 
 val now: ZonedDateTime = ZonedDateTime.now()
 val nowMinusTwoYears: ZonedDateTime = ZonedDateTime.now().minusYears(2)
@@ -127,33 +122,3 @@ fun dummyContentDao(
         metatags
     )
 }
-
-fun dummyContentDto(
-    id: String? = "11",
-    href: String? = "https://eleventh.com",
-    title: String? = "Eleventh title",
-    ingress: String? = "Eleventh ingress",
-    text: String? = "Eleventh text",
-    createdAt: ZonedDateTime? = now,
-    lastUpdated: ZonedDateTime? = now,
-    audience: List<String>? = listOf(SAMARBEIDSPARTNER),
-    language: String? = ENGLISH,
-    isFile: Boolean = false,
-    fylke: String? = null,
-    metatags: List<String> = emptyList(),
-) = ContentDto(
-    id,
-    href,
-    title,
-    ingress,
-    text,
-    ContentMetadata(
-        createdAt,
-        lastUpdated,
-        audience,
-        language,
-        isFile,
-        fylke,
-        metatags,
-    )
-)

@@ -11,6 +11,8 @@ import org.springframework.data.elasticsearch.annotations.WriteTypeHint
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
+
+// Todo: Finne en annen måte å genere mappings og data i integrajonstester. Da kan mye kode fjernes.
 @Document(
     indexName = "search-content-v7",
     dynamic = Dynamic.STRICT,
