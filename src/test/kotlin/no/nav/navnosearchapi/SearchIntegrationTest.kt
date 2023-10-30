@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
+import java.time.format.DateTimeFormatter
 
 class SearchIntegrationTest : AbstractIntegrationTest() {
 
@@ -130,8 +131,8 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     @Test
     fun testSearchWithRangeFilter() {
         val filter = mapOf(
-            LAST_UPDATED_FROM to listOf(nowMinus50Days.toLocalDateTime().toString()),
-            LAST_UPDATED_TO to listOf(nowMinus10Days.toLocalDateTime().toString())
+            LAST_UPDATED_FROM to listOf(nowMinus50Days.format(DateTimeFormatter.ISO_INSTANT)),
+            LAST_UPDATED_TO to listOf(nowMinus10Days.format(DateTimeFormatter.ISO_INSTANT))
         )
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 

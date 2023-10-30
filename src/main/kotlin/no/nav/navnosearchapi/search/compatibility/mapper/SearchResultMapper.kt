@@ -1,6 +1,5 @@
 package no.nav.navnosearchapi.search.compatibility.mapper
 
-import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_7_DAYS
@@ -99,23 +98,27 @@ class SearchResultMapper {
 
     private fun toHit(searchHit: ContentSearchHit): SearchHit {
         return SearchHit(
-            displayName = searchHit.content.title,
-            href = searchHit.content.href,
+            displayName = searchHit.title,
+            href = searchHit.href,
             highlight = toHighlight(searchHit),
-            modifiedTime = searchHit.content.metadata.lastUpdated.toString(),
-            audience = searchHit.content.metadata.audience,
-            language = searchHit.content.metadata.language,
+            modifiedTime = searchHit.lastUpdated.toString(),
+            audience = searchHit.audience,
+            language = searchHit.language,
         )
     }
 
     private fun toHighlight(searchHit: ContentSearchHit): String {
-        return if (searchHit.content.metadata.metatags.contains(ValidMetatags.KONTOR.descriptor)) {
-            searchHit.content.ingress
+        val highlight = if (searchHit.isKontor) {
+            searchHit.ingress
         } else {
             searchHit.highlight.ingress.firstOrNull()
                 ?: searchHit.highlight.text.firstOrNull()
-                ?: searchHit.content.ingress
+                ?: searchHit.ingress
         }
+
+        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
+            highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+        } else highlight
     }
 
     private fun toAggregations(aggregations: ContentAggregations, params: Params, totalElements: Long): Aggregations {
@@ -306,7 +309,7 @@ class SearchResultMapper {
                 )
             ),
             tidsperiode = DateRange(
-                docCount = totalElements,
+                docCount = customAggs[TIDSPERIODE_ALL_DATES] ?: 0,
                 checked = params.daterange == TIDSPERIODE_ALL_DATES.toInt(),
                 buckets = listOf(
                     toDateRangeBucket(
@@ -344,5 +347,10 @@ class SearchResultMapper {
             docCount = aggregations[key] ?: 0,
             checked = checked,
         )
+    }
+
+    companion object {
+        private const val HIGHLIGHT_MAX_LENGTH = 200
+        private const val CUTOFF_POSTFIX = "..."
     }
 }

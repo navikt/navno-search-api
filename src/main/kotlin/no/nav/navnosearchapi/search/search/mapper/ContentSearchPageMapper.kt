@@ -1,7 +1,8 @@
 package no.nav.navnosearchapi.search.search.mapper
 
-import no.nav.navnosearchapi.common.mapper.ContentDtoMapper
+import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.model.ContentDao
+import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.AUDIENCE
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchapi.common.utils.DATE_RANGE_LAST_30_DAYS
@@ -23,12 +24,16 @@ import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.opensearch.search.aggregations.bucket.range.Range
 import org.opensearch.search.aggregations.bucket.terms.Terms
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
 
 @Component
-class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
+class ContentSearchPageMapper {
+    val logger: Logger = LoggerFactory.getLogger(ContentSearchPageMapper::class.java)
+
     fun toContentSearchPage(searchPage: SearchPage<ContentDao>, mapCustomAggregations: Boolean): ContentSearchPage {
         return ContentSearchPage(
             suggestions = searchPage.searchHits.suggest?.suggestions?.first()?.entries?.flatMap { entry -> entry.options.map { it.text } },
@@ -46,14 +51,24 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
     }
 
     private fun toContentSearchHit(searchHit: SearchHit<ContentDao>): ContentSearchHit {
-        val language = searchHit.content.language
+        val content = searchHit.content
         return ContentSearchHit(
-            content = contentDtoMapper.toContentDto(searchHit.content),
+            href = content.href,
+            title = languageSubfieldValue(content.title, content.language)
+                ?: handleMissingValue(content.id, TITLE),
+            ingress = languageSubfieldValue(content.ingress, content.language)
+                ?: handleMissingValue(content.id, INGRESS),
+            text = languageSubfieldValue(content.text, content.language)
+                ?: handleMissingValue(content.id, TEXT),
+            audience = content.audience,
+            language = content.language,
+            lastUpdated = content.lastUpdated,
             highlight = ContentHighlight(
-                title = searchHit.getHighlightField(languageSubfieldKey(TITLE, language)),
-                ingress = searchHit.getHighlightField(languageSubfieldKey(INGRESS, language)),
-                text = searchHit.getHighlightField(languageSubfieldKey(TEXT, language)),
+                title = searchHit.getHighlightField(languageSubfieldKey(TITLE, content.language)),
+                ingress = searchHit.getHighlightField(languageSubfieldKey(INGRESS, content.language)),
+                text = searchHit.getHighlightField(languageSubfieldKey(TEXT, content.language)),
             ),
+            isKontor = searchHit.content.metatags.contains(ValidMetatags.KONTOR.descriptor)
         )
     }
 
@@ -96,6 +111,19 @@ class ContentSearchPageMapper(val contentDtoMapper: ContentDtoMapper) {
             else -> OTHER_SUFFIX
         }
         return parentKey + suffix
+    }
+
+    private fun languageSubfieldValue(field: MultiLangField, language: String): String? {
+        return when (language) {
+            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no
+            ENGLISH -> field.en
+            else -> field.other
+        }
+    }
+
+    private fun handleMissingValue(id: String, field: String): String {
+        logger.warn("Mapping av felt $field feilet for dokument med id $id. Returnerer tom string.")
+        return ""
     }
 
     companion object {

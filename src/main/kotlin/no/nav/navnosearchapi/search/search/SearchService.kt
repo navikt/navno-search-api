@@ -27,6 +27,7 @@ import no.nav.navnosearchapi.common.utils.twelveMonthsAgo
 import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.search.search.mapper.ContentSearchPageMapper
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
+import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.QueryBuilders
@@ -54,7 +55,7 @@ class SearchService(
     fun search(
         term: String,
         page: Int,
-        filters: List<QueryBuilder>,
+        filters: BoolQueryBuilder,
         aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
         mapCustomAggregations: Boolean = false,
         sort: Sort? = null
@@ -63,7 +64,7 @@ class SearchService(
 
         val searchQuery = NativeSearchQueryBuilder()
             .withQuery(baseQuery(term))
-            .withFilter(filterQuery(filters))
+            .withFilter(filters)
             .withPageable(pageRequest)
             .withHighlightQuery(highlightQuery)
             .withAggregations(aggregations)
@@ -119,13 +120,35 @@ class SearchService(
         private const val BOLD_PRETAG = "<b>"
         private const val BOLD_POSTTAG = "</b>"
 
-        private val highlightFields = listOf(TITLE_WILDCARD, INGRESS_WILDCARD, TEXT_WILDCARD).map {
+        private const val UNFRAGMENTED = 0
+        private const val MAX_FRAGMENT_SIZE = 200
+
+        private val highlightFields = listOf(
             HighlightField(
-                it,
+                TITLE_WILDCARD,
                 HighlightFieldParameters.HighlightFieldParametersBuilder()
-                    .withPreTags(BOLD_PRETAG).withPostTags(BOLD_POSTTAG).build()
+                    .withPreTags(BOLD_PRETAG)
+                    .withPostTags(BOLD_POSTTAG)
+                    .withNumberOfFragments(UNFRAGMENTED)
+                    .build()
+            ),
+            HighlightField(
+                INGRESS_WILDCARD,
+                HighlightFieldParameters.HighlightFieldParametersBuilder()
+                    .withPreTags(BOLD_PRETAG)
+                    .withPostTags(BOLD_POSTTAG)
+                    .withNumberOfFragments(UNFRAGMENTED)
+                    .build()
+            ),
+            HighlightField(
+                TEXT_WILDCARD,
+                HighlightFieldParameters.HighlightFieldParametersBuilder()
+                    .withPreTags(BOLD_PRETAG)
+                    .withPostTags(BOLD_POSTTAG)
+                    .withFragmentSize(MAX_FRAGMENT_SIZE)
+                    .build()
             )
-        }
+        )
 
         private val highlightQuery = HighlightQuery(
             Highlight(highlightFields),

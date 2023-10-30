@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.admin.mapper
 
-import no.nav.navnosearchapi.common.dto.ContentDto
+import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
 import no.nav.navnosearchapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
@@ -12,22 +12,21 @@ import no.nav.navnosearchapi.common.utils.norwegianLanguageCodes
 import no.nav.navnosearchapi.common.utils.supportedLanguages
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import org.springframework.stereotype.Component
-import java.time.ZoneId
 
 @Component
 class ContentMapper {
     fun toContentDao(content: ContentDto, teamName: String): ContentDao {
         return ContentDao(
-            id = createInternalId(teamName, content.id),
+            id = createInternalId(teamName, content.id!!),
             teamOwnedBy = teamName,
-            href = content.href,
+            href = content.href!!,
             autocomplete = Completion(listOf(content.title)),
-            title = toMultiLangField(content.title, content.metadata.language),
-            ingress = toMultiLangField(content.ingress, content.metadata.language),
-            text = toMultiLangField(content.text, content.metadata.language),
-            createdAt = content.metadata.createdAt.atZone(ZoneId.systemDefault()),
-            lastUpdated = content.metadata.lastUpdated.atZone(ZoneId.systemDefault()),
-            audience = content.metadata.audience,
+            title = toMultiLangField(content.title!!, content.metadata!!.language!!),
+            ingress = toMultiLangField(content.ingress!!, content.metadata.language!!),
+            text = toMultiLangField(content.text!!, content.metadata.language),
+            createdAt = content.metadata.createdAt!!,
+            lastUpdated = content.metadata.lastUpdated!!,
+            audience = content.metadata.audience!!,
             language = resolveLanguage(content.metadata.language),
             isFile = content.metadata.isFile,
             fylke = content.metadata.fylke,

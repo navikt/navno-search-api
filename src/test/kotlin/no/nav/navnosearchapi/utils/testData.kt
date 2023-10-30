@@ -1,14 +1,13 @@
 package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchapi.admin.consumer.kodeverk.dto.KodeverkResponse
-import no.nav.navnosearchapi.common.dto.ContentDto
-import no.nav.navnosearchapi.common.dto.ContentMetadata
+import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
+import no.nav.navnosearchapi.admin.dto.inbound.ContentMetadata
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.common.utils.NORWEGIAN_BOKMAAL
 import org.springframework.data.elasticsearch.core.suggest.Completion
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
@@ -100,19 +99,6 @@ val initialTestData = listOf(
     ),
 )
 
-val additionalTestData = listOf(dummyContentDto())
-
-val additionalTestDataAsMapWithMissingIngress = listOf(
-    mapOf(
-        "id" to "11",
-        "href" to "https://eleventh.com",
-        "title" to "Eleventh title",
-        "text" to "Eleventh text",
-        "audience" to listOf(SAMARBEIDSPARTNER),
-        "language" to ENGLISH
-    )
-)
-
 fun dummyContentDao(
     teamName: String = TEAM_NAME,
     externalId: String,
@@ -143,15 +129,15 @@ fun dummyContentDao(
 }
 
 fun dummyContentDto(
-    id: String = "11",
-    href: String = "https://eleventh.com",
-    title: String = "Eleventh title",
-    ingress: String = "Eleventh ingress",
-    text: String = "Eleventh text",
-    createdAt: LocalDateTime = now.toLocalDateTime(),
-    lastUpdated: LocalDateTime = now.toLocalDateTime(),
-    audience: List<String> = listOf(SAMARBEIDSPARTNER),
-    language: String = ENGLISH,
+    id: String? = "11",
+    href: String? = "https://eleventh.com",
+    title: String? = "Eleventh title",
+    ingress: String? = "Eleventh ingress",
+    text: String? = "Eleventh text",
+    createdAt: ZonedDateTime? = now,
+    lastUpdated: ZonedDateTime? = now,
+    audience: List<String>? = listOf(SAMARBEIDSPARTNER),
+    language: String? = ENGLISH,
     isFile: Boolean = false,
     fylke: String? = null,
     metatags: List<String> = emptyList(),

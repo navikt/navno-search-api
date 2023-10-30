@@ -1,7 +1,7 @@
-package no.nav.navnosearchapi.common.mapper
+package no.nav.navnosearchapi.admin.mapper
 
-import no.nav.navnosearchapi.common.dto.ContentDto
-import no.nav.navnosearchapi.common.dto.ContentMetadata
+import no.nav.navnosearchapi.admin.dto.inbound.ContentDto
+import no.nav.navnosearchapi.admin.dto.inbound.ContentMetadata
 import no.nav.navnosearchapi.common.model.ContentDao
 import no.nav.navnosearchapi.common.model.MultiLangField
 import no.nav.navnosearchapi.common.utils.ENGLISH
@@ -28,8 +28,8 @@ class ContentDtoMapper {
             text = languageSubfieldValue(content.text, content.language)
                 ?: handleMissingValue(content.id, TEXT),
             ContentMetadata(
-                createdAt = content.createdAt.toLocalDateTime(),
-                lastUpdated = content.lastUpdated.toLocalDateTime(),
+                createdAt = content.createdAt,
+                lastUpdated = content.lastUpdated,
                 audience = content.audience,
                 language = content.language,
                 isFile = content.isFile,

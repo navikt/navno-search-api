@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.search.compatibility
 
+import joinClausesToSingleQuery
 import no.nav.navnosearchapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.search.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.search.compatibility.filters.fasettFilters
@@ -16,7 +17,8 @@ import no.nav.navnosearchapi.search.compatibility.utils.FASETT_INNHOLD_FRA_FYLKE
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.search.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.search.search.dto.ContentSearchPage
-import org.opensearch.index.query.QueryBuilder
+import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,46 +33,62 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return searchResultMapper.toSearchResult(params, result)
     }
 
-    fun toFilters(f: String?, uf: List<String>?, daterange: Int?): List<QueryBuilder> {
+    fun toFilterQuery(f: String?, uf: List<String>?, daterange: Int?): BoolQueryBuilder {
+        return joinClausesToSingleQuery(
+            mustClauses = listOf(
+                activeFasettFilterQuery(f, uf),
+                activeTidsperiodeFilterQuery(daterange)
+            )
+        )
+    }
+
+    fun aggregations(f: String?, uf: List<String>?): List<FilterAggregationBuilder> {
+        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
+            AggregationBuilders.filter(it.name, it.filterQuery)
+        } + tidsperiodeFilters.values.map {
+            AggregationBuilders.filter(
+                it.name,
+                joinClausesToSingleQuery(mustClauses = listOf(activeFasettFilterQuery(f, uf), it.filterQuery))
+            )
+        }
+    }
+
+    fun activeFasettFilterQuery(f: String?, uf: List<String>?): BoolQueryBuilder {
         return when (f) {
             FASETT_INNHOLD -> {
                 if (uf.isNullOrEmpty()) {
-                    fasettFilters[FASETT_INNHOLD]?.filters
+                    fasettFilters[FASETT_INNHOLD]?.filterQuery!!
                 } else {
-                    uf.flatMap { innholdFilters[it]?.filters ?: emptyList() }
+                    joinClausesToSingleQuery(shouldClauses = uf.map { innholdFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_ENGLISH -> fasettFilters[ENGLISH]?.filters
+            FASETT_ENGLISH -> fasettFilters[ENGLISH]!!.filterQuery
             FASETT_NYHETER -> {
                 if (uf.isNullOrEmpty()) {
-                    fasettFilters[FASETT_NYHETER]?.filters
+                    fasettFilters[FASETT_NYHETER]!!.filterQuery
                 } else {
-                    uf.flatMap { nyheterFilters[it]?.filters ?: emptyList() }
+                    joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]?.filters
-            FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]?.filters
+            FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
+            FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
                 if (uf.isNullOrEmpty()) {
-                    fasettFilters[FASETT_INNHOLD_FRA_FYLKER]?.filters
+                    fasettFilters[FASETT_INNHOLD_FRA_FYLKER]!!.filterQuery
                 } else {
-                    uf.flatMap { fylkeFilters[it]?.filters ?: emptyList() }
+                    joinClausesToSingleQuery(shouldClauses = uf.map { fylkeFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_FILER -> fasettFilters[FASETT_FILER]?.filters
-            else -> emptyList()
-        } ?: emptyList()
+            FASETT_FILER -> fasettFilters[FASETT_FILER]!!.filterQuery
+            else -> BoolQueryBuilder()
+        }
     }
 
-    fun aggregations(filters: List<QueryBuilder>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map { it.toAggregation()!! } + (tidsperiodeFilters.values).map {
-            it.toAggregation(
-                filters
-            )!!
-        }
+    fun activeTidsperiodeFilterQuery(daterange: Int?): BoolQueryBuilder {
+        return tidsperiodeFilters[daterange.toString()]!!.filterQuery
     }
 
     fun term(term: String): String {

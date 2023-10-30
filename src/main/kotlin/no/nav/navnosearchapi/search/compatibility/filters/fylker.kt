@@ -25,7 +25,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VESTLAND_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
-import no.nav.navnosearchapi.search.search.Filter
+import no.nav.navnosearchapi.search.search.filter.Filter
 
 val fylkeFilters = mapOf(
     UNDERFASETT_AGDER to fylkeFilter(
@@ -81,6 +81,6 @@ val fylkeFilters = mapOf(
 private fun fylkeFilter(name: String, requiredFylke: String): FilterEntry {
     return FilterEntry(
         name = name,
-        filters = listOf(Filter(fylke = listOf(requiredFylke), isFile = listOf(false.toString())).toQuery())
+        filterQuery = Filter(fylke = listOf(requiredFylke), isFile = listOf(false.toString())).toQuery()
     )
 }

@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.search.search
+package no.nav.navnosearchapi.search.search.filter
 
 import no.nav.navnosearchapi.common.utils.AUDIENCE
 import no.nav.navnosearchapi.common.utils.FYLKE
@@ -6,9 +6,11 @@ import no.nav.navnosearchapi.common.utils.IS_FILE
 import no.nav.navnosearchapi.common.utils.LANGUAGE
 import no.nav.navnosearchapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.common.utils.METATAGS
+import no.nav.navnosearchapi.search.search.existsQuery
+import no.nav.navnosearchapi.search.search.rangeQuery
+import no.nav.navnosearchapi.search.search.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZonedDateTime
 
 data class Filter(
     val audience: List<String>? = null,
@@ -19,8 +21,8 @@ data class Filter(
     val excludeMetatags: List<String>? = null,
     val requiredFields: List<String>? = null,
     val requiredMissingFields: List<String>? = null,
-    val lastUpdatedFrom: LocalDateTime? = null,
-    val lastUpdatedTo: LocalDateTime? = null,
+    val lastUpdatedFrom: ZonedDateTime? = null,
+    val lastUpdatedTo: ZonedDateTime? = null,
 ) {
     fun toQuery(): BoolQueryBuilder {
         val query = BoolQueryBuilder()
@@ -36,13 +38,7 @@ data class Filter(
         requiredMissingFields?.let { it.forEach { field -> query.mustNot(existsQuery(field)) } }
 
         if (lastUpdatedFrom != null || lastUpdatedTo != null) {
-            query.must(
-                rangeQuery(
-                    LAST_UPDATED,
-                    lastUpdatedFrom?.atZone(ZoneId.systemDefault()),
-                    lastUpdatedTo?.atZone(ZoneId.systemDefault())
-                )
-            )
+            query.must(rangeQuery(LAST_UPDATED, lastUpdatedFrom, lastUpdatedTo))
         }
 
         return query

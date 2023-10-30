@@ -8,7 +8,7 @@ import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.search.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.search.search.Filter
+import no.nav.navnosearchapi.search.search.filter.Filter
 
 val innholdFilters = mapOf(
     UNDERFASETT_INFORMASJON to innholdFilter(
@@ -28,12 +28,10 @@ val innholdFilters = mapOf(
 private fun innholdFilter(name: String, requiredMetatag: String): FilterEntry {
     return FilterEntry(
         name = name,
-        filters = listOf(
-            Filter(
-                metatags = listOf(requiredMetatag),
-                isFile = listOf(false.toString()),
-                requiredMissingFields = listOf(FYLKE)
-            ).toQuery()
-        )
+        filterQuery = Filter(
+            metatags = listOf(requiredMetatag),
+            isFile = listOf(false.toString()),
+            requiredMissingFields = listOf(FYLKE)
+        ).toQuery()
     )
 }
