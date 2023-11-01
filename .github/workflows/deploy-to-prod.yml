@@ -6,8 +6,9 @@ on:
 jobs:
   deploy:
     permissions:
-      contents: "read"
-      id-token: "write"
+      contents: read
+      id-token: write
+      packages: read
     runs-on: ubuntu-latest
     environment: prod-gcp:personbruker
     steps:
@@ -45,3 +46,4 @@ jobs:
           RESOURCE: ./nais/nais.yaml
           VAR: image=${{steps.docker-build-push.outputs.image}}
           VARS: ./nais/prod-gcp/personbruker.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

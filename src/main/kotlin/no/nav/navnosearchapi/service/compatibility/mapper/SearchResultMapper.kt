@@ -90,7 +90,7 @@ class SearchResultMapper {
             word = params.ord,
             total = result.totalElements,
             fasettKey = params.f,
-            aggregations = toAggregations(result.aggregations, params, result.totalElements),
+            aggregations = toAggregations(result.aggregations, params),
             hits = result.hits.map { toHit(it) },
             autoComplete = result.suggestions,
         )
@@ -121,7 +121,7 @@ class SearchResultMapper {
         } else highlight
     }
 
-    private fun toAggregations(aggregations: ContentAggregations, params: Params, totalElements: Long): Aggregations {
+    private fun toAggregations(aggregations: ContentAggregations, params: Params): Aggregations {
         val customAggs = aggregations.custom ?: emptyMap() //todo: Throw exception
         return Aggregations(
             fasetter = UnderAggregations(
