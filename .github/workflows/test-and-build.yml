@@ -6,8 +6,8 @@ jobs:
   build-branch:
     runs-on: ubuntu-latest
     permissions:
-      packages: read
-      contents: read
+      packages: write
+      contents: write
     steps:
       - name: Sjekk ut koden
         uses: actions/checkout@v2
