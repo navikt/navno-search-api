@@ -1,9 +1,9 @@
 package no.nav.navnosearchapi.service.compatibility.mapper
 
-import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
+import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
+import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
+import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
+import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.Bucket

@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
-import no.nav.navnosearchadminapi.common.utils.FYLKE
-import no.nav.navnosearchapi.enums.ValidMetatags
+import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR

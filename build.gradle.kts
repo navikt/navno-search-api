@@ -38,9 +38,10 @@ dependencies {
         val opensearch = "1.2.0"
         val opensearchTestcontainers = "2.0.0"
         val testcontainers = "1.18.3"
+        val navnoSearchCommon = "20231101102930-b4c6bc6"
     }
 
-    implementation("no.nav.navnosearchadminapi:common:20231031153857-7b88f91")
+    implementation("no.nav.navnosearchadminapi:common:${versions.navnoSearchCommon}")
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }

@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi.service.compatibility
 
 import joinClausesToSingleQuery
-import no.nav.navnosearchadminapi.common.utils.ENGLISH
+import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters

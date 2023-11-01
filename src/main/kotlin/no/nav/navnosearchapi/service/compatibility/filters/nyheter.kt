@@ -1,8 +1,8 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
-import no.nav.navnosearchadminapi.common.utils.FYLKE
-import no.nav.navnosearchapi.enums.ValidAudiences
-import no.nav.navnosearchapi.enums.ValidMetatags
+import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.enums.ValidAudiences
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN

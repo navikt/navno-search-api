@@ -1,9 +1,9 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
 import joinClausesToSingleQuery
-import no.nav.navnosearchadminapi.common.utils.ENGLISH
-import no.nav.navnosearchadminapi.common.utils.FYLKE
-import no.nav.navnosearchapi.enums.ValidMetatags
+import no.nav.navnosearchadminapi.common.constants.ENGLISH
+import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH

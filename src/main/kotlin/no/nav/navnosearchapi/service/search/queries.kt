@@ -1,9 +1,9 @@
 package no.nav.navnosearchapi.service.search
 
-import no.nav.navnosearchadminapi.common.utils.INGRESS_WILDCARD
-import no.nav.navnosearchadminapi.common.utils.KEYWORDS
-import no.nav.navnosearchadminapi.common.utils.TEXT_WILDCARD
-import no.nav.navnosearchadminapi.common.utils.TITLE_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.KEYWORDS
+import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder

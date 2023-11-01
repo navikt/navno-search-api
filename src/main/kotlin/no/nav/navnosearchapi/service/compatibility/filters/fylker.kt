@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
-import no.nav.navnosearchapi.enums.ValidFylker
+import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET

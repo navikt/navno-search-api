@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.rest
 
-import no.nav.navnosearchadminapi.common.utils.LAST_UPDATED
+import no.nav.navnosearchadminapi.common.constants.LAST_UPDATED
 import no.nav.navnosearchapi.service.compatibility.CompatibilityService
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
