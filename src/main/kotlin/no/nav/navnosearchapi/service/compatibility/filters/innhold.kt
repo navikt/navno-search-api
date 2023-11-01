@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
+import no.nav.navnosearchadminapi.common.utils.FYLKE
 import no.nav.navnosearchapi.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
@@ -8,7 +9,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
 import no.nav.navnosearchapi.service.search.filter.Filter
-import no.nav.navnosearchapi.utils.FYLKE
 
 val innholdFilters = mapOf(
     UNDERFASETT_INFORMASJON to innholdFilter(

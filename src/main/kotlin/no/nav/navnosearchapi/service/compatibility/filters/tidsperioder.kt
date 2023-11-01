@@ -1,15 +1,15 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
+import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_12_MONTHS
+import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_30_DAYS
+import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_LAST_7_DAYS
+import no.nav.navnosearchadminapi.common.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_ALL_DATES
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_12_MONTHS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.service.search.filter.Filter
-import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchapi.utils.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchapi.utils.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.utils.now
 import no.nav.navnosearchapi.utils.sevenDaysAgo
 import no.nav.navnosearchapi.utils.thirtyDaysAgo

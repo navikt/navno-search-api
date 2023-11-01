@@ -22,6 +22,12 @@ java {
 }
 
 repositories {
+    maven("https://maven.pkg.github.com/navikt/navno-search-admin-api") {
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")?: "x-access-token"
+            password = System.getenv("GITHUB_TOKEN")?: project.findProperty("githubPassword") as String
+        }
+    }
     mavenCentral()
 }
 
@@ -34,6 +40,7 @@ dependencies {
         val testcontainers = "1.18.3"
     }
 
+    implementation("no.nav.navnosearchadminapi:common:20231031153857-7b88f91")
     implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }

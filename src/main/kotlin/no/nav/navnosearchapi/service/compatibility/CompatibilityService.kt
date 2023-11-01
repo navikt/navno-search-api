@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.service.compatibility
 
 import joinClausesToSingleQuery
+import no.nav.navnosearchadminapi.common.utils.ENGLISH
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
@@ -16,7 +17,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
-import no.nav.navnosearchapi.utils.ENGLISH
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder

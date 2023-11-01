@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
+import no.nav.navnosearchadminapi.common.utils.FYLKE
 import no.nav.navnosearchapi.enums.ValidAudiences
 import no.nav.navnosearchapi.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
@@ -15,7 +16,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSO
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.search.filter.Filter
-import no.nav.navnosearchapi.utils.FYLKE
 
 val nyheterFilters = mapOf(
     UNDERFASETT_PRIVATPERSON to nyhetFilter(

@@ -1,12 +1,12 @@
 package no.nav.navnosearchapi.rest
 
+import no.nav.navnosearchadminapi.common.utils.LAST_UPDATED
 import no.nav.navnosearchapi.service.compatibility.CompatibilityService
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.search.SearchService
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.filter.Filter
-import no.nav.navnosearchapi.utils.LAST_UPDATED
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute

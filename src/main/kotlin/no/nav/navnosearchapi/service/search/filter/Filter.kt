@@ -1,14 +1,14 @@
 package no.nav.navnosearchapi.service.search.filter
 
+import no.nav.navnosearchadminapi.common.utils.AUDIENCE
+import no.nav.navnosearchadminapi.common.utils.FYLKE
+import no.nav.navnosearchadminapi.common.utils.IS_FILE
+import no.nav.navnosearchadminapi.common.utils.LANGUAGE
+import no.nav.navnosearchadminapi.common.utils.LAST_UPDATED
+import no.nav.navnosearchadminapi.common.utils.METATAGS
 import no.nav.navnosearchapi.service.search.existsQuery
 import no.nav.navnosearchapi.service.search.rangeQuery
 import no.nav.navnosearchapi.service.search.termQuery
-import no.nav.navnosearchapi.utils.AUDIENCE
-import no.nav.navnosearchapi.utils.FYLKE
-import no.nav.navnosearchapi.utils.IS_FILE
-import no.nav.navnosearchapi.utils.LANGUAGE
-import no.nav.navnosearchapi.utils.LAST_UPDATED
-import no.nav.navnosearchapi.utils.METATAGS
 import org.opensearch.index.query.BoolQueryBuilder
 import java.time.ZonedDateTime
 

@@ -1,6 +1,8 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
 import joinClausesToSingleQuery
+import no.nav.navnosearchadminapi.common.utils.ENGLISH
+import no.nav.navnosearchadminapi.common.utils.FYLKE
 import no.nav.navnosearchapi.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
@@ -17,8 +19,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.search.filter.Filter
-import no.nav.navnosearchapi.utils.ENGLISH
-import no.nav.navnosearchapi.utils.FYLKE
 
 val fasettFilters = mapOf(
     FASETT_INNHOLD to FilterEntry(
