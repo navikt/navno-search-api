@@ -25,7 +25,7 @@ repositories {
     maven("https://maven.pkg.github.com/navikt/navno-search-admin-api") {
         credentials {
             username = System.getenv("GITHUB_ACTOR")?: "x-access-token"
-            password = System.getenv("GITHUB_TOKEN")?: project.findProperty("githubPassword") as String
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
     mavenCentral()
