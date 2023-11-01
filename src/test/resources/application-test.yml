@@ -1,3 +1,0 @@
-kodeverk:
-  spraak:
-    url: http://localhost:${wiremock.server.port}/kodeverk
