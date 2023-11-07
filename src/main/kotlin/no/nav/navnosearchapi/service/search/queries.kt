@@ -11,8 +11,8 @@ import org.opensearch.index.query.RangeQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 import java.time.ZonedDateTime
 
-private const val TITLE_WEIGHT = 3.0f
-private const val INGRESS_WEIGHT = 2.0f
+private const val TITLE_WEIGHT = 7.0f
+private const val INGRESS_WEIGHT = 5.0f
 private const val TEXT_WEIGHT = 1.0f
 private const val KEYWORDS_WEIGHT = 7.0f
 
@@ -24,7 +24,10 @@ private val fieldsToWeightMap = mapOf(
 )
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
-    return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).fuzziness(Fuzziness.AUTO)
+    return MultiMatchQueryBuilder(term)
+        .fields(fieldsToWeightMap)
+        .fuzziness(Fuzziness.AUTO)
+        .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
 }
 
 fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
