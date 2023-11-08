@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi
+package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
@@ -53,8 +53,8 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.aggregations.language?.get(HINDI)).isEqualTo(4L)
 
         assertThat(result.aggregations.fylke?.get(AGDER)).isEqualTo(3L)
-        assertThat(result.aggregations.metatags?.get(STATISTIKK)).isEqualTo(3L)
-        assertThat(result.aggregations.isFile).isEqualTo(3L)
+        assertThat(result.aggregations.metatags?.get(STATISTIKK)).isEqualTo(2L)
+        assertThat(result.aggregations.isFile).isEqualTo(1L)
 
         assertThat(result.aggregations.dateRangeAggregations?.get(DATE_RANGE_LAST_7_DAYS)).isEqualTo(2L)
         assertThat(result.aggregations.dateRangeAggregations?.get(DATE_RANGE_LAST_30_DAYS)).isEqualTo(4L)
@@ -117,7 +117,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val filter = mapOf(METATAGS to listOf(STATISTIKK))
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
-        assertThat(result.totalElements).isEqualTo(3L)
+        assertThat(result.totalElements).isEqualTo(2L)
     }
 
     @Test
@@ -125,7 +125,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val filter = mapOf(IS_FILE to listOf(true.toString()))
         val result = restTemplate.getForEntity<ContentSearchPage>(searchUrl(term = EMPTY_TERM, filters = filter)).body!!
 
-        assertThat(result.totalElements).isEqualTo(3L)
+        assertThat(result.totalElements).isEqualTo(1L)
     }
 
     @Test
