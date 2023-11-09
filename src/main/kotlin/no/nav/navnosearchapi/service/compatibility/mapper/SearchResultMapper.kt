@@ -122,7 +122,7 @@ class SearchResultMapper {
     }
 
     private fun toAggregations(aggregations: ContentAggregations, params: Params): Aggregations {
-        val customAggs = aggregations.custom ?: emptyMap() //todo: Throw exception
+        val customAggs = aggregations.custom
         return Aggregations(
             fasetter = UnderAggregations(
                 buckets = listOf(

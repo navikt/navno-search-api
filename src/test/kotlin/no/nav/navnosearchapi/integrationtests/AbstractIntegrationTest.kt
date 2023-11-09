@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi
+package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchadminapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.utils.initialTestData
@@ -44,6 +44,27 @@ abstract class AbstractIntegrationTest {
             .queryParam("term", term)
             .queryParam("page", page)
             .queryParams(MultiValueMapAdapter(filters))
+            .build().toUriString()
+    }
+
+    fun searchUrlCompatible(
+        ord: String?,
+        c: String? = "1",
+        start: Int? = 0,
+        f: Int? = 0,
+        uf: List<String>? = emptyList(),
+        s: Int? = 0,
+        daterange: Int? = -1,
+    ): String {
+        return UriComponentsBuilder.fromHttpUrl(host())
+            .path("/content/compatible-search")
+            .queryParam("ord", ord)
+            .queryParam("c", c)
+            .queryParam("start", start)
+            .queryParam("f", f)
+            .queryParam("uf", uf)
+            .queryParam("s", s)
+            .queryParam("daterange", daterange)
             .build().toUriString()
     }
 

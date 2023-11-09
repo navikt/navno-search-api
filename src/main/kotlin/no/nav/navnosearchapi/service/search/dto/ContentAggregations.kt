@@ -8,5 +8,5 @@ data class ContentAggregations(
     val dateRangeAggregations: Map<String, Long>? = null,
     val isFile: Long? = null,
     val totalCount: Long? = null,
-    val custom: Map<String, Long>? = null
+    val custom: Map<String, Long> = emptyMap()
 )

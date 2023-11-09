@@ -13,6 +13,7 @@ const val ARBEIDSGIVER = "arbeidsgiver"
 const val SAMARBEIDSPARTNER = "samarbeidspartner"
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
+const val INFORMASJON = "informasjon"
 const val HINDI = "hi"
 
 val now: ZonedDateTime = ZonedDateTime.now()
@@ -27,35 +28,35 @@ val initialTestData = listOf(
         audience = listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
         isFile = true,
         fylke = AGDER,
-        metatags = listOf(STATISTIKK)
     ),
     dummyContentDao(
         externalId = "2",
         textPrefix = "Second",
-        isFile = true,
         fylke = AGDER,
-        metatags = listOf(STATISTIKK)
+        metatags = listOf(STATISTIKK),
     ),
     dummyContentDao(
         externalId = "3",
         textPrefix = "Third",
         timestamp = nowMinusTwoYears,
-        isFile = true,
         fylke = AGDER,
-        metatags = listOf(STATISTIKK)
+        metatags = listOf(STATISTIKK),
     ),
     dummyContentDao(
         externalId = "4",
         textPrefix = "Fourth",
         timestamp = nowMinusTwoYears,
-        language = ENGLISH
-    ),
+        language = ENGLISH,
+        metatags = listOf(INFORMASJON),
+
+        ),
     dummyContentDao(
         externalId = "5",
         textPrefix = "Fifth",
         timestamp = nowMinus10Days,
         audience = listOf(ARBEIDSGIVER),
         language = ENGLISH,
+        metatags = listOf(INFORMASJON),
     ),
     dummyContentDao(
         externalId = "6",
@@ -63,6 +64,7 @@ val initialTestData = listOf(
         timestamp = nowMinus10Days,
         audience = listOf(ARBEIDSGIVER),
         language = ENGLISH,
+        metatags = listOf(INFORMASJON),
     ),
     dummyContentDao(
         externalId = "7",
@@ -70,6 +72,7 @@ val initialTestData = listOf(
         timestamp = nowMinus50Days,
         audience = listOf(ARBEIDSGIVER),
         language = HINDI,
+        metatags = listOf(INFORMASJON),
     ),
     dummyContentDao(
         externalId = "8",
@@ -77,6 +80,7 @@ val initialTestData = listOf(
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
+        metatags = listOf(INFORMASJON),
     ),
     dummyContentDao(
         externalId = "9",
@@ -84,13 +88,16 @@ val initialTestData = listOf(
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
-    ),
+        metatags = listOf(INFORMASJON),
+
+        ),
     dummyContentDao(
         externalId = "10",
         textPrefix = "Tenth",
         timestamp = nowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
+        metatags = listOf(INFORMASJON),
     ),
 )
 
