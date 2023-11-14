@@ -21,6 +21,7 @@ import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.utils.now
 import no.nav.navnosearchapi.utils.sevenDaysAgo
@@ -82,6 +83,12 @@ class SearchService(
         val searchPage = SearchHitSupport.searchPageFor(searchHits, pageRequest)
 
         return mapper.toContentSearchPage(searchPage, mapCustomAggregations)
+    }
+
+    fun searchUrl(term: String): SearchUrlResponse {
+        val searchQuery = NativeSearchQueryBuilder().withQuery(searchUrlQuery(term))
+        val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
+        return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
     }
 
     private fun baseQuery(term: String): QueryBuilder {

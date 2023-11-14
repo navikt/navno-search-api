@@ -68,6 +68,13 @@ abstract class AbstractIntegrationTest {
             .build().toUriString()
     }
 
+    fun searchUrlUrl(term: String): String {
+        return UriComponentsBuilder.fromHttpUrl(host())
+            .path("/content/search-url")
+            .queryParam("term", term)
+            .build().toUriString()
+    }
+
     fun setupIndex() {
         repository.deleteAll()
         repository.saveAll(initialTestData)
