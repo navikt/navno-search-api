@@ -1,11 +1,13 @@
 package no.nav.navnosearchapi.service.search
 
+import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.ExistsQueryBuilder
+import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.RangeQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
@@ -32,6 +34,10 @@ fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
 
 fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).type(MultiMatchQueryBuilder.Type.PHRASE)
+}
+
+fun searchUrlQuery(term: String): MatchQueryBuilder {
+    return MatchQueryBuilder(HREF, term).fuzziness(Fuzziness.AUTO)
 }
 
 fun termQuery(field: String, value: String): TermQueryBuilder {

@@ -6,6 +6,7 @@ import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.search.SearchService
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.filter.Filter
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.GetMapping
@@ -46,6 +47,13 @@ class SearchController(
         )
 
         return compatibilityService.toSearchResult(params, result)
+    }
+
+    @GetMapping("/content/search-url")
+    fun searchUrl(
+        @RequestParam term: String,
+    ): SearchUrlResponse {
+        return searchService.searchUrl(term)
     }
 }
 
