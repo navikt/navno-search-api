@@ -1,6 +1,8 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.constants.IS_FILE
+import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
@@ -8,30 +10,32 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.service.search.filter.Filter
+import no.nav.navnosearchapi.service.search.existsQuery
+import no.nav.navnosearchapi.service.search.termQuery
+import org.opensearch.index.query.BoolQueryBuilder
 
 val innholdFilters = mapOf(
-    UNDERFASETT_INFORMASJON to innholdFilter(
+    UNDERFASETT_INFORMASJON to FilterEntry(
         name = UNDERFASETT_INFORMASJON_NAME,
-        requiredMetatag = ValidMetatags.INFORMASJON.descriptor
+        filterQuery = innholdFilter(ValidMetatags.INFORMASJON.descriptor)
     ),
-    UNDERFASETT_KONTOR to innholdFilter(
+    UNDERFASETT_KONTOR to FilterEntry(
         name = UNDERFASETT_KONTOR_NAME,
-        requiredMetatag = ValidMetatags.KONTOR.descriptor
+        filterQuery = innholdFilter(ValidMetatags.KONTOR.descriptor)
     ),
-    UNDERFASETT_SOKNAD_OG_SKJEMA to innholdFilter(
+    UNDERFASETT_SOKNAD_OG_SKJEMA to FilterEntry(
         name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-        requiredMetatag = ValidMetatags.SKJEMA.descriptor
+        filterQuery = innholdFilter(ValidMetatags.SKJEMA.descriptor)
     ),
 )
 
-private fun innholdFilter(name: String, requiredMetatag: String): FilterEntry {
-    return FilterEntry(
-        name = name,
-        filterQuery = Filter(
-            metatags = listOf(requiredMetatag),
-            isFile = listOf(false.toString()),
-            requiredMissingFields = listOf(FYLKE)
-        ).toQuery()
-    )
+private fun innholdFilter(requiredMetatag: String): BoolQueryBuilder {
+    return BoolQueryBuilder()
+        .must(termQuery(METATAGS, requiredMetatag))
+        .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
+        .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+        .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
+        .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+        .must(termQuery(IS_FILE, false.toString()))
+        .mustNot(existsQuery(FYLKE))
 }

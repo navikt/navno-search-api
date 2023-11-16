@@ -1,10 +1,17 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
+import no.nav.navnosearchadminapi.common.constants.AUDIENCE
+import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.constants.IS_FILE
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE
+import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
@@ -15,49 +22,62 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSO
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.search.filter.Filter
+import no.nav.navnosearchapi.service.search.existsQuery
+import no.nav.navnosearchapi.service.search.termQuery
+import org.opensearch.index.query.BoolQueryBuilder
 
 val nyheterFilters = mapOf(
-    UNDERFASETT_PRIVATPERSON to nyhetFilter(
+    UNDERFASETT_PRIVATPERSON to FilterEntry(
         name = UNDERFASETT_PRIVATPERSON_NAME,
-        requiredMetatags = listOf(ValidMetatags.NYHET.descriptor),
-        requiredAudience = ValidAudiences.PRIVATPERSON.descriptor
+        filterQuery = nyhetFilter(
+            requiredMetatags = listOf(ValidMetatags.NYHET.descriptor),
+            requiredAudience = ValidAudiences.PRIVATPERSON.descriptor
+        ),
     ),
-    UNDERFASETT_ARBEIDSGIVER to nyhetFilter(
+    UNDERFASETT_ARBEIDSGIVER to FilterEntry(
         name = UNDERFASETT_ARBEIDSGIVER_NAME,
-        requiredMetatags = listOf(ValidMetatags.NYHET.descriptor),
-        requiredAudience = ValidAudiences.ARBEIDSGIVER.descriptor
+        filterQuery = nyhetFilter(
+            requiredMetatags = listOf(ValidMetatags.NYHET.descriptor),
+            requiredAudience = ValidAudiences.ARBEIDSGIVER.descriptor
+        ),
     ),
-    UNDERFASETT_STATISTIKK to nyhetFilter(
+    UNDERFASETT_STATISTIKK to FilterEntry(
         name = UNDERFASETT_STATISTIKK_NAME,
-        requiredMetatags = listOf(ValidMetatags.NYHET.descriptor, ValidMetatags.STATISTIKK.descriptor)
+        filterQuery = nyhetFilter(listOf(ValidMetatags.NYHET.descriptor, ValidMetatags.STATISTIKK.descriptor)),
     ),
-    UNDERFASETT_PRESSE to nyhetFilter(
+    UNDERFASETT_PRESSE to FilterEntry(
         name = UNDERFASETT_PRESSE_NAME,
-        requiredMetatags = listOf(ValidMetatags.PRESSE.descriptor)
+        filterQuery = nyhetFilter(listOf(ValidMetatags.PRESSE.descriptor)),
     ),
-    UNDERFASETT_PRESSEMELDINGER to nyhetFilter(
+    UNDERFASETT_PRESSEMELDINGER to FilterEntry(
         name = UNDERFASETT_PRESSEMELDINGER_NAME,
-        requiredMetatags = listOf(ValidMetatags.PRESSEMELDING.descriptor)
+        filterQuery = nyhetFilter(listOf(ValidMetatags.PRESSEMELDING.descriptor)),
     ),
-    UNDERFASETT_NAV_OG_SAMFUNN to nyhetFilter(
+    UNDERFASETT_NAV_OG_SAMFUNN to FilterEntry(
         name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-        requiredMetatags = listOf(ValidMetatags.NAV_OG_SAMFUNN.descriptor)
+        filterQuery = nyhetFilter(listOf(ValidMetatags.NAV_OG_SAMFUNN.descriptor)),
+    ),
+    UNDERFASETT_ENGLISH_NEWS to FilterEntry(
+        name = UNDERFASETT_ENGLISH_NEWS_NAME,
+        filterQuery = nyhetFilter(
+            requiredMetatags = listOf(ValidMetatags.NYHET.descriptor),
+            requiredLanguage = ENGLISH
+        ),
     ),
 )
 
 private fun nyhetFilter(
-    name: String,
     requiredMetatags: List<String>,
-    requiredAudience: String? = null
-): FilterEntry {
-    return FilterEntry(
-        name = name,
-        filterQuery = Filter(
-            metatags = requiredMetatags,
-            audience = listOfNotNull(requiredAudience),
-            isFile = listOf(false.toString()),
-            requiredMissingFields = listOf(FYLKE)
-        ).toQuery()
-    )
+    requiredAudience: String? = null,
+    requiredLanguage: String? = null,
+): BoolQueryBuilder {
+    val query = BoolQueryBuilder()
+        .must(termQuery(IS_FILE, false.toString()))
+        .mustNot(existsQuery(FYLKE))
+
+    requiredMetatags.forEach { query.must(termQuery(METATAGS, it)) }
+    requiredAudience?.let { query.must(termQuery(AUDIENCE, it)) }
+    requiredLanguage?.let { query.must(termQuery(LANGUAGE, it)) }
+
+    return query
 }
