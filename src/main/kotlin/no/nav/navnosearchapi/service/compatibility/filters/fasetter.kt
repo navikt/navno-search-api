@@ -1,8 +1,10 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
-import joinClausesToSingleQuery
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.constants.IS_FILE
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE
+import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
@@ -18,50 +20,66 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.search.filter.Filter
+import no.nav.navnosearchapi.service.search.existsQuery
+import no.nav.navnosearchapi.service.search.termQuery
+import org.opensearch.index.query.BoolQueryBuilder
 
 val fasettFilters = mapOf(
     FASETT_INNHOLD to FilterEntry(
         name = FASETT_INNHOLD_NAME,
-        filterQuery = joinClausesToSingleQuery(shouldClauses = innholdFilters.values.map { it.filterQuery })
+        filterQuery = BoolQueryBuilder()
+            .must(
+                BoolQueryBuilder()
+                    .should(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
+                    .should(termQuery(METATAGS, ValidMetatags.KONTOR.descriptor))
+                    .should(termQuery(METATAGS, ValidMetatags.SKJEMA.descriptor))
+            )
+            .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
+            .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+            .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
+            .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+            .must(termQuery(IS_FILE, false.toString()))
+            .mustNot(existsQuery(FYLKE))
     ),
     FASETT_ENGLISH to FilterEntry(
         name = FASETT_ENGLISH_NAME,
-        filterQuery = Filter(language = listOf(ENGLISH)).toQuery()
+        filterQuery = BoolQueryBuilder()
+            .must(termQuery(LANGUAGE, ENGLISH))
+            .must(termQuery(IS_FILE, false.toString()))
     ),
     FASETT_NYHETER to FilterEntry(
         name = FASETT_NYHETER_NAME,
-        filterQuery = Filter(
-            metatags = listOf(ValidMetatags.NYHET.descriptor),
-            isFile = listOf(false.toString())
-        ).toQuery()
+        filterQuery = BoolQueryBuilder()
+            .must(
+                BoolQueryBuilder()
+                    .should(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
+                    .should(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+            )
+            .must(termQuery(IS_FILE, false.toString()))
+            .mustNot(existsQuery(FYLKE))
     ),
     FASETT_ANALYSER_OG_FORSKNING to FilterEntry(
         name = FASETT_ANALYSER_OG_FORSKNING_NAME,
-        filterQuery = Filter(
-            metatags = listOf(ValidMetatags.ANALYSE.descriptor),
-            isFile = listOf(false.toString())
-        ).toQuery()
+        filterQuery = BoolQueryBuilder()
+            .must(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
+            .must(termQuery(IS_FILE, false.toString()))
     ),
     FASETT_STATISTIKK to FilterEntry(
         name = FASETT_STATISTIKK_NAME,
-        filterQuery = Filter(
-            metatags = listOf(ValidMetatags.STATISTIKK.descriptor),
-            excludeMetatags = listOf(ValidMetatags.NYHET.descriptor),
-            isFile = listOf(false.toString())
-        ).toQuery()
+        filterQuery = BoolQueryBuilder()
+            .must(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+            .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
+            .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+            .must(termQuery(IS_FILE, false.toString())),
     ),
     FASETT_INNHOLD_FRA_FYLKER to FilterEntry(
         name = FASETT_INNHOLD_FRA_FYLKER_NAME,
-        filterQuery = Filter(
-            isFile = listOf(false.toString()),
-            requiredFields = listOf(FYLKE)
-        ).toQuery()
+        filterQuery = BoolQueryBuilder()
+            .must(existsQuery(FYLKE))
+            .must(termQuery(IS_FILE, false.toString()))
     ),
     FASETT_FILER to FilterEntry(
         name = FASETT_FILER_NAME,
-        filterQuery = Filter(
-            isFile = listOf(true.toString())
-        ).toQuery()
+        filterQuery = BoolQueryBuilder().must(termQuery(IS_FILE, true.toString()))
     ),
 )

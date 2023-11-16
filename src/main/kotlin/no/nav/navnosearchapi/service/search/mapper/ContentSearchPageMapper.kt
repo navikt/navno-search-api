@@ -1,29 +1,17 @@
 package no.nav.navnosearchapi.service.search.mapper
 
-import no.nav.navnosearchadminapi.common.constants.AUDIENCE
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
-import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.IS_FILE
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE
-import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
-import no.nav.navnosearchapi.service.search.dto.ContentAggregations
 import no.nav.navnosearchapi.service.search.dto.ContentHighlight
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
-import org.opensearch.search.aggregations.bucket.range.Range
-import org.opensearch.search.aggregations.bucket.terms.Terms
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.elasticsearch.core.SearchHit
@@ -42,11 +30,7 @@ class ContentSearchPageMapper {
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
-            aggregations = if (mapCustomAggregations) {
-                toCustomAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
-            } else {
-                toContentAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
-            }
+            aggregations = mapAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
         )
     }
 
@@ -72,36 +56,8 @@ class ContentSearchPageMapper {
         )
     }
 
-    private fun toContentAggregations(aggregations: Aggregations): ContentAggregations {
-        return ContentAggregations(
-            audience = getTermAggregation(aggregations, AUDIENCE),
-            language = getTermAggregation(aggregations, LANGUAGE),
-            fylke = getTermAggregation(aggregations, FYLKE),
-            metatags = getTermAggregation(aggregations, METATAGS),
-            isFile = getFilterAggregation(aggregations, IS_FILE),
-            dateRangeAggregations = mapOf(
-                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_7_DAYS),
-                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_30_DAYS),
-                getDateRangeAggregation(aggregations, DATE_RANGE_LAST_12_MONTHS),
-                getDateRangeAggregation(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS),
-            ),
-        )
-    }
-
-    private fun toCustomAggregations(aggregations: Aggregations): ContentAggregations {
-        return ContentAggregations(custom = aggregations.associate { it.name to (it as Filter).docCount })
-    }
-
-    private fun getTermAggregation(aggregations: Aggregations, name: String): Map<String, Long> {
-        return aggregations.get<Terms>(name).buckets.associate { it.keyAsString to it.docCount }
-    }
-
-    private fun getDateRangeAggregation(aggregations: Aggregations, name: String): Pair<String, Long> {
-        return aggregations.get<Range>(name).let { it.name to it.buckets.first().docCount }
-    }
-
-    private fun getFilterAggregation(aggregations: Aggregations, name: String): Long {
-        return aggregations.get<Filter>(name).docCount
+    private fun mapAggregations(aggregations: Aggregations): Map<String, Long> {
+        return aggregations.associate { it.name to (it as Filter).docCount }
     }
 
     private fun languageSubfieldKey(parentKey: String, language: String): String {

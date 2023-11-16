@@ -48,6 +48,6 @@ fun existsQuery(field: String): ExistsQueryBuilder {
     return ExistsQueryBuilder(field)
 }
 
-fun rangeQuery(field: String, gte: ZonedDateTime?, lte: ZonedDateTime?): RangeQueryBuilder {
+fun rangeQuery(field: String, gte: ZonedDateTime? = null, lte: ZonedDateTime? = null): RangeQueryBuilder {
     return RangeQueryBuilder(field).from(gte).to(lte)
 }

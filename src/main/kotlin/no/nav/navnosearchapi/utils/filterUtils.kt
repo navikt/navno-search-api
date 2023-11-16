@@ -1,3 +1,5 @@
+package no.nav.navnosearchapi.utils
+
 import org.opensearch.index.query.BoolQueryBuilder
 
 fun joinClausesToSingleQuery(
