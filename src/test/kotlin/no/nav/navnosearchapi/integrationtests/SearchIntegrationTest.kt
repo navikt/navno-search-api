@@ -115,7 +115,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     }
 
     companion object {
-        private const val TEXT_TERM = "First title"
+        private const val TEXT_TERM = "title"
         private const val PHRASE_TERM = "\"Sixth title\""
         private const val EMPTY_TERM = ""
     }
