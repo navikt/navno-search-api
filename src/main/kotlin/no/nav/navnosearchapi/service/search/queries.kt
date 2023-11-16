@@ -9,6 +9,7 @@ import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
+import org.opensearch.index.query.Operator
 import org.opensearch.index.query.RangeQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 import java.time.ZonedDateTime
@@ -30,10 +31,13 @@ fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.AUTO)
         .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
+        .operator(Operator.AND)
 }
 
 fun searchAllTextForPhraseQuery(term: String): MultiMatchQueryBuilder {
-    return MultiMatchQueryBuilder(term).fields(fieldsToWeightMap).type(MultiMatchQueryBuilder.Type.PHRASE)
+    return MultiMatchQueryBuilder(term)
+        .fields(fieldsToWeightMap)
+        .type(MultiMatchQueryBuilder.Type.PHRASE)
 }
 
 fun searchUrlQuery(term: String): MatchQueryBuilder {
