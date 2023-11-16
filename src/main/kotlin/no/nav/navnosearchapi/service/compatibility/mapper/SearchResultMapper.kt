@@ -74,7 +74,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
-import no.nav.navnosearchapi.service.search.dto.ContentAggregations
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import org.springframework.stereotype.Component
@@ -121,34 +120,33 @@ class SearchResultMapper {
         } else highlight
     }
 
-    private fun toAggregations(aggregations: ContentAggregations, params: Params): Aggregations {
-        val customAggs = aggregations.custom
+    private fun toAggregations(aggregations: Map<String, Long>, params: Params): Aggregations {
         return Aggregations(
             fasetter = UnderAggregations(
                 buckets = listOf(
                     FacetBucket(
                         key = FASETT_INNHOLD,
                         name = FASETT_INNHOLD_NAME,
-                        docCount = customAggs[FASETT_INNHOLD_NAME] ?: 0,
+                        docCount = aggregations[FASETT_INNHOLD_NAME] ?: 0,
                         checked = FASETT_INNHOLD == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_INFORMASJON,
                                     name = UNDERFASETT_INFORMASJON_NAME,
-                                    docCount = customAggs[UNDERFASETT_INFORMASJON_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_INFORMASJON_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_INFORMASJON),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_KONTOR,
                                     name = UNDERFASETT_KONTOR_NAME,
-                                    docCount = customAggs[UNDERFASETT_KONTOR_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_KONTOR_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_KONTOR),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_SOKNAD_OG_SKJEMA,
                                     name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-                                    docCount = customAggs[UNDERFASETT_SOKNAD_OG_SKJEMA_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_SOKNAD_OG_SKJEMA_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
                                 ),
                             )
@@ -157,50 +155,50 @@ class SearchResultMapper {
                     FacetBucket(
                         key = FASETT_ENGLISH,
                         name = FASETT_ENGLISH_NAME,
-                        docCount = customAggs[FASETT_ENGLISH_NAME] ?: 0,
+                        docCount = aggregations[FASETT_ENGLISH_NAME] ?: 0,
                         checked = FASETT_ENGLISH == params.f,
                     ),
                     FacetBucket(
                         key = FASETT_NYHETER,
                         name = FASETT_NYHETER_NAME,
-                        docCount = customAggs[FASETT_NYHETER_NAME] ?: 0,
+                        docCount = aggregations[FASETT_NYHETER_NAME] ?: 0,
                         checked = FASETT_NYHETER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_PRIVATPERSON,
                                     name = UNDERFASETT_PRIVATPERSON_NAME,
-                                    docCount = customAggs[UNDERFASETT_PRIVATPERSON_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_PRIVATPERSON_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_PRIVATPERSON),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_ARBEIDSGIVER,
                                     name = UNDERFASETT_ARBEIDSGIVER_NAME,
-                                    docCount = customAggs[UNDERFASETT_ARBEIDSGIVER_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_ARBEIDSGIVER_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_ARBEIDSGIVER),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_STATISTIKK,
                                     name = UNDERFASETT_STATISTIKK_NAME,
-                                    docCount = customAggs[UNDERFASETT_STATISTIKK_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_STATISTIKK_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_STATISTIKK),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_PRESSE,
                                     name = UNDERFASETT_PRESSE_NAME,
-                                    docCount = customAggs[UNDERFASETT_PRESSE_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_PRESSE_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_PRESSE),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_PRESSEMELDINGER,
                                     name = UNDERFASETT_PRESSEMELDINGER_NAME,
-                                    docCount = customAggs[UNDERFASETT_PRESSEMELDINGER_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_PRESSEMELDINGER_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_PRESSEMELDINGER),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_NAV_OG_SAMFUNN,
                                     name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-                                    docCount = customAggs[FASETT_ANALYSER_OG_FORSKNING] ?: 0,
+                                    docCount = aggregations[FASETT_ANALYSER_OG_FORSKNING] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
                                 ),
                             )
@@ -209,92 +207,92 @@ class SearchResultMapper {
                     FacetBucket(
                         key = FASETT_ANALYSER_OG_FORSKNING,
                         name = FASETT_ANALYSER_OG_FORSKNING_NAME,
-                        docCount = customAggs[FASETT_ANALYSER_OG_FORSKNING_NAME] ?: 0,
+                        docCount = aggregations[FASETT_ANALYSER_OG_FORSKNING_NAME] ?: 0,
                         checked = FASETT_ANALYSER_OG_FORSKNING == params.f,
                     ),
                     FacetBucket(
                         key = FASETT_STATISTIKK,
                         name = FASETT_STATISTIKK_NAME,
-                        docCount = customAggs[FASETT_STATISTIKK_NAME] ?: 0,
+                        docCount = aggregations[FASETT_STATISTIKK_NAME] ?: 0,
                         checked = FASETT_STATISTIKK == params.f,
                     ),
                     FacetBucket(
                         key = FASETT_INNHOLD_FRA_FYLKER,
                         name = FASETT_INNHOLD_FRA_FYLKER_NAME,
-                        docCount = customAggs[FASETT_INNHOLD_FRA_FYLKER_NAME] ?: 0,
+                        docCount = aggregations[FASETT_INNHOLD_FRA_FYLKER_NAME] ?: 0,
                         checked = FASETT_INNHOLD_FRA_FYLKER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_AGDER,
                                     name = UNDERFASETT_AGDER_NAME,
-                                    docCount = customAggs[UNDERFASETT_AGDER_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_AGDER_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_AGDER),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_INNLANDET,
                                     name = UNDERFASETT_INNLANDET_NAME,
-                                    docCount = customAggs[UNDERFASETT_INNLANDET_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_INNLANDET_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_INNLANDET),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_MORE_OG_ROMSDAL,
                                     name = UNDERFASETT_MORE_OG_ROMSDAL_NAME,
-                                    docCount = customAggs[UNDERFASETT_MORE_OG_ROMSDAL_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_MORE_OG_ROMSDAL_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_MORE_OG_ROMSDAL),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_NORDLAND,
                                     name = UNDERFASETT_NORDLAND_NAME,
-                                    docCount = customAggs[UNDERFASETT_NORDLAND_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_NORDLAND_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_NORDLAND),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_OSLO,
                                     name = UNDERFASETT_OSLO_NAME,
-                                    docCount = customAggs[UNDERFASETT_OSLO_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_OSLO_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_OSLO),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_ROGALAND,
                                     name = UNDERFASETT_ROGALAND_NAME,
-                                    docCount = customAggs[UNDERFASETT_ROGALAND_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_ROGALAND_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_ROGALAND),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_TROMS_OG_FINNMARK,
                                     name = UNDERFASETT_TROMS_OG_FINNMARK_NAME,
-                                    docCount = customAggs[UNDERFASETT_TROMS_OG_FINNMARK_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_TROMS_OG_FINNMARK_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_TROMS_OG_FINNMARK),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_TRONDELAG,
                                     name = UNDERFASETT_TRONDELAG_NAME,
-                                    docCount = customAggs[UNDERFASETT_TRONDELAG_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_TRONDELAG_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_TRONDELAG),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_VESTFOLD_OG_TELEMARK,
                                     name = UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME,
-                                    docCount = customAggs[UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_VESTFOLD_OG_TELEMARK),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_VESTLAND,
                                     name = UNDERFASETT_VESTLAND_NAME,
-                                    docCount = customAggs[UNDERFASETT_VESTLAND_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_VESTLAND_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_VESTLAND),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_VEST_VIKEN,
                                     name = UNDERFASETT_VEST_VIKEN_NAME,
-                                    docCount = customAggs[UNDERFASETT_VEST_VIKEN_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_VEST_VIKEN_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_VEST_VIKEN),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_OST_VIKEN,
                                     name = UNDERFASETT_OST_VIKEN_NAME,
-                                    docCount = customAggs[UNDERFASETT_OST_VIKEN_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_OST_VIKEN_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_OST_VIKEN),
                                 ),
                             )
@@ -303,33 +301,33 @@ class SearchResultMapper {
                     FacetBucket(
                         key = FASETT_FILER,
                         name = FASETT_FILER_NAME,
-                        docCount = customAggs[FASETT_FILER_NAME] ?: 0,
+                        docCount = aggregations[FASETT_FILER_NAME] ?: 0,
                         checked = FASETT_FILER == params.f,
                     ),
                 )
             ),
             tidsperiode = DateRange(
-                docCount = customAggs[TIDSPERIODE_ALL_DATES] ?: 0,
+                docCount = aggregations[TIDSPERIODE_ALL_DATES] ?: 0,
                 checked = params.daterange == TIDSPERIODE_ALL_DATES.toInt(),
                 buckets = listOf(
                     toDateRangeBucket(
                         DATE_RANGE_OLDER_THAN_12_MONTHS,
-                        customAggs,
+                        aggregations,
                         params.daterange == TIDSPERIODE_OLDER_THAN_12_MONTHS.toInt()
                     ),
                     toDateRangeBucket(
                         DATE_RANGE_LAST_12_MONTHS,
-                        customAggs,
+                        aggregations,
                         params.daterange == TIDSPERIODE_LAST_12_MONTHS.toInt()
                     ),
                     toDateRangeBucket(
                         DATE_RANGE_LAST_30_DAYS,
-                        customAggs,
+                        aggregations,
                         params.daterange == TIDSPERIODE_LAST_30_DAYS.toInt()
                     ),
                     toDateRangeBucket(
                         DATE_RANGE_LAST_7_DAYS,
-                        customAggs,
+                        aggregations,
                         params.daterange == TIDSPERIODE_LAST_7_DAYS.toInt()
                     ),
                 ),

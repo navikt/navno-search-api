@@ -1,39 +1,18 @@
 package no.nav.navnosearchapi.service.search
 
-import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.AUTOCOMPLETE
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
-import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.ID
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.IS_FILE
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE
-import no.nav.navnosearchadminapi.common.constants.LAST_UPDATED
-import no.nav.navnosearchadminapi.common.constants.METATAGS
-import no.nav.navnosearchadminapi.common.constants.MISSING_FYLKE
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.TOTAL_COUNT
-import no.nav.navnosearchadminapi.common.enums.ValidFylker
-import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
-import no.nav.navnosearchapi.utils.now
-import no.nav.navnosearchapi.utils.sevenDaysAgo
-import no.nav.navnosearchapi.utils.thirtyDaysAgo
-import no.nav.navnosearchapi.utils.twelveMonthsAgo
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
-import org.opensearch.index.query.QueryBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
-import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.suggest.SuggestBuilder
 import org.opensearch.search.suggest.completion.CompletionSuggestionBuilder
 import org.springframework.beans.factory.annotation.Value
@@ -57,7 +36,7 @@ class SearchService(
         term: String,
         page: Int,
         filters: BoolQueryBuilder,
-        aggregations: List<AbstractAggregationBuilder<*>> = aggregations(),
+        aggregations: List<AbstractAggregationBuilder<*>>,
         mapCustomAggregations: Boolean = false,
         sort: Sort? = null
     ): ContentSearchPage {
@@ -103,23 +82,6 @@ class SearchService(
 
     private fun isInQuotes(term: String): Boolean {
         return term.startsWith(QUOTE) && term.endsWith(QUOTE)
-    }
-
-    private fun aggregations(): List<AbstractAggregationBuilder<*>> {
-        return listOf(
-            AggregationBuilders.cardinality(TOTAL_COUNT).field(ID),
-            AggregationBuilders.terms(AUDIENCE).field(AUDIENCE),
-            AggregationBuilders.terms(LANGUAGE).field(LANGUAGE).size(20),
-            AggregationBuilders.terms(FYLKE).field(FYLKE).size((ValidFylker.entries.size)).missing(MISSING_FYLKE),
-            AggregationBuilders.terms(METATAGS).field(METATAGS).size(ValidMetatags.entries.size),
-            AggregationBuilders.filter(IS_FILE, QueryBuilders.termQuery(IS_FILE, true)),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_7_DAYS).addRange(sevenDaysAgo(), now()).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_30_DAYS).addRange(thirtyDaysAgo(), now()).field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_LAST_12_MONTHS).addRange(twelveMonthsAgo(), now())
-                .field(LAST_UPDATED),
-            AggregationBuilders.dateRange(DATE_RANGE_OLDER_THAN_12_MONTHS).addUnboundedTo(twelveMonthsAgo())
-                .field(LAST_UPDATED),
-        )
     }
 
     companion object {
