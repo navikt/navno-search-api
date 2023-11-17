@@ -30,7 +30,7 @@ fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term)
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.AUTO)
-        .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
+        .type(MultiMatchQueryBuilder.Type.BOOL_PREFIX)
         .operator(Operator.AND)
 }
 
