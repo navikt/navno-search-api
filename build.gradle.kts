@@ -36,7 +36,7 @@ dependencies {
         val logstash = "7.4"
         val opensearch = "1.2.1"
         val opensearchTestcontainers = "2.0.0"
-        val testcontainers = "1.19.2"
+        val testcontainers = "1.18.3"
         val navnoSearchCommon = "20231116150206-f0e0869"
     }
 
