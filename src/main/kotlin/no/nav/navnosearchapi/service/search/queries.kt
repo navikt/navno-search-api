@@ -7,6 +7,7 @@ import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
+import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
@@ -51,7 +52,7 @@ fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBui
                 ScoreFunctionBuilders.weightFactorFunction(it.value)
             )
         }.toTypedArray()
-    )
+    ).scoreMode(FunctionScoreQuery.ScoreMode.MAX)
 }
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
