@@ -30,6 +30,8 @@ private const val PRIVATPERSON_WEIGHT = 3.0f
 private const val ARBEIDSGIVER_WEIGHT = 2.0f
 private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 
+private const val WILDCARD = "*"
+
 private val fieldsToWeightMap = mapOf(
     TITLE_WILDCARD to TITLE_WEIGHT,
     INGRESS_WILDCARD to INGRESS_WEIGHT,
@@ -56,10 +58,10 @@ fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBui
 }
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
-    return MultiMatchQueryBuilder(term)
+    return MultiMatchQueryBuilder("$term$WILDCARD")
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.AUTO)
-        .type(MultiMatchQueryBuilder.Type.BOOL_PREFIX)
+        .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
         .operator(Operator.AND)
 }
 
