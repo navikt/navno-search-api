@@ -52,7 +52,8 @@ class ContentSearchPageMapper {
                 ingress = searchHit.getHighlightField(languageSubfieldKey(INGRESS, content.language)),
                 text = searchHit.getHighlightField(languageSubfieldKey(TEXT, content.language)),
             ),
-            isKontor = searchHit.content.metatags.contains(ValidMetatags.KONTOR.descriptor)
+            isKontor = searchHit.content.metatags.contains(ValidMetatags.KONTOR.descriptor),
+            score = searchHit.score
         )
     }
 

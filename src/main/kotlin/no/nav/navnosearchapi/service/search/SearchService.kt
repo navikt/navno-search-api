@@ -43,7 +43,7 @@ class SearchService(
         val pageRequest = PageRequest.of(page, pageSize)
 
         val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(baseQuery(term))
+            .withQuery(multiplyScoreByAudienceQuery(baseQuery(term)))
             .withFilter(filters)
             .withPageable(pageRequest)
             .withHighlightQuery(highlightQuery)
@@ -65,7 +65,7 @@ class SearchService(
     }
 
     fun searchUrl(term: String): SearchUrlResponse {
-        val searchQuery = NativeSearchQueryBuilder().withQuery(searchUrlQuery(term))
+        val searchQuery = NativeSearchQueryBuilder().withQuery(multiplyScoreByAudienceQuery(searchUrlQuery(term)))
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
     }

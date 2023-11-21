@@ -103,6 +103,7 @@ class SearchResultMapper {
             modifiedTime = searchHit.lastUpdated.toString(),
             audience = searchHit.audience,
             language = searchHit.language,
+            score = searchHit.score,
         )
     }
 

@@ -1,17 +1,23 @@
 package no.nav.navnosearchapi.service.search
 
+import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
+import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
+import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.RangeQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
+import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
+import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder.FilterFunctionBuilder
+import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 import java.time.ZonedDateTime
 
 private const val TITLE_WEIGHT = 7.0f
@@ -19,12 +25,34 @@ private const val INGRESS_WEIGHT = 5.0f
 private const val TEXT_WEIGHT = 1.0f
 private const val KEYWORDS_WEIGHT = 7.0f
 
+private const val PRIVATPERSON_WEIGHT = 3.0f
+private const val ARBEIDSGIVER_WEIGHT = 2.0f
+private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
+
 private val fieldsToWeightMap = mapOf(
     TITLE_WILDCARD to TITLE_WEIGHT,
     INGRESS_WILDCARD to INGRESS_WEIGHT,
     TEXT_WILDCARD to TEXT_WEIGHT,
     KEYWORDS to KEYWORDS_WEIGHT,
 )
+
+private val audienceToWeightMap = mapOf(
+    ValidAudiences.PRIVATPERSON.descriptor to PRIVATPERSON_WEIGHT,
+    ValidAudiences.ARBEIDSGIVER.descriptor to ARBEIDSGIVER_WEIGHT,
+    ValidAudiences.SAMARBEIDSPARTNER.descriptor to SAMARBEIDSPARTNER_WEIGHT,
+)
+
+fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
+    return FunctionScoreQueryBuilder(
+        baseQuery,
+        audienceToWeightMap.map {
+            FilterFunctionBuilder(
+                MatchQueryBuilder(AUDIENCE, it.key),
+                ScoreFunctionBuilders.weightFactorFunction(it.value)
+            )
+        }.toTypedArray()
+    )
+}
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term)
