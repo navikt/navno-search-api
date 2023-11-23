@@ -4,6 +4,9 @@ import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.KEYWORDS
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
@@ -30,6 +33,9 @@ private const val PRIVATPERSON_WEIGHT = 1.5f
 private const val ARBEIDSGIVER_WEIGHT = 1.25f
 private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 
+private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.5f
+private const val NORWEGIAN_NYNORSK_WEIGHT = 1.25f
+
 private const val FUZZY_LOW_DISTANCE = 4 // Ikke fuzzy søk på trebokstavs ord, da dette ofte er forkortelser
 private const val FUZZY_HIGH_DISTANCE = 6
 
@@ -46,17 +52,10 @@ private val audienceToWeightMap = mapOf(
     ValidAudiences.SAMARBEIDSPARTNER.descriptor to SAMARBEIDSPARTNER_WEIGHT,
 )
 
-fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
-    return FunctionScoreQueryBuilder(
-        baseQuery,
-        audienceToWeightMap.map {
-            FilterFunctionBuilder(
-                MatchQueryBuilder(AUDIENCE, it.key),
-                ScoreFunctionBuilders.weightFactorFunction(it.value)
-            )
-        }.toTypedArray()
-    ).scoreMode(FunctionScoreQuery.ScoreMode.MAX)
-}
+private val languageToWeightMap = mapOf(
+    NORWEGIAN_BOKMAAL to NORWEGIAN_BOKMAAL_WEIGHT,
+    NORWEGIAN_NYNORSK to NORWEGIAN_NYNORSK_WEIGHT,
+)
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
     return MultiMatchQueryBuilder(term)
@@ -86,4 +85,28 @@ fun existsQuery(field: String): ExistsQueryBuilder {
 
 fun rangeQuery(field: String, gte: ZonedDateTime? = null, lte: ZonedDateTime? = null): RangeQueryBuilder {
     return RangeQueryBuilder(field).from(gte).to(lte)
+}
+
+fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
+    return multiplyScoreByFieldValue(baseQuery, AUDIENCE, audienceToWeightMap)
+}
+
+fun multiplyScoreByLanguageQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
+    return multiplyScoreByFieldValue(baseQuery, LANGUAGE, languageToWeightMap)
+}
+
+private fun multiplyScoreByFieldValue(
+    baseQuery: QueryBuilder,
+    fieldName: String,
+    valueToWeightMap: Map<String, Float>
+): FunctionScoreQueryBuilder {
+    return FunctionScoreQueryBuilder(
+        baseQuery,
+        valueToWeightMap.map {
+            FilterFunctionBuilder(
+                MatchQueryBuilder(fieldName, it.key),
+                ScoreFunctionBuilders.weightFactorFunction(it.value)
+            )
+        }.toTypedArray()
+    ).scoreMode(FunctionScoreQuery.ScoreMode.MAX)
 }
