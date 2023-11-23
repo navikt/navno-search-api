@@ -87,12 +87,12 @@ fun rangeQuery(field: String, gte: ZonedDateTime? = null, lte: ZonedDateTime? = 
     return RangeQueryBuilder(field).from(gte).to(lte)
 }
 
-fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
-    return multiplyScoreByFieldValue(baseQuery, AUDIENCE, audienceToWeightMap)
+fun QueryBuilder.applyAudienceWeighting(): FunctionScoreQueryBuilder {
+    return multiplyScoreByFieldValue(this, AUDIENCE, audienceToWeightMap)
 }
 
-fun multiplyScoreByLanguageQuery(baseQuery: QueryBuilder): FunctionScoreQueryBuilder {
-    return multiplyScoreByFieldValue(baseQuery, LANGUAGE, languageToWeightMap)
+fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
+    return multiplyScoreByFieldValue(this, LANGUAGE, languageToWeightMap)
 }
 
 private fun multiplyScoreByFieldValue(

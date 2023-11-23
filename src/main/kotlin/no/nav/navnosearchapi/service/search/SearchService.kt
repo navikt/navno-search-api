@@ -71,7 +71,7 @@ class SearchService(
     }
 
     private fun applyWeightingFunctions(query: QueryBuilder): QueryBuilder {
-        return multiplyScoreByLanguageQuery(multiplyScoreByAudienceQuery(query))
+        return query.applyLanguageWeighting().applyAudienceWeighting()
     }
 
     private fun baseQuery(term: String): QueryBuilder {
