@@ -30,8 +30,6 @@ private const val PRIVATPERSON_WEIGHT = 1.5f
 private const val ARBEIDSGIVER_WEIGHT = 1.25f
 private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 
-private const val WILDCARD = "*"
-
 private const val FUZZY_LOW_DISTANCE = 4 // Ikke fuzzy søk på trebokstavs ord, da dette ofte er forkortelser
 private const val FUZZY_HIGH_DISTANCE = 6
 
@@ -61,7 +59,7 @@ fun multiplyScoreByAudienceQuery(baseQuery: QueryBuilder): FunctionScoreQueryBui
 }
 
 fun searchAllTextQuery(term: String): MultiMatchQueryBuilder {
-    return MultiMatchQueryBuilder("$term$WILDCARD")
+    return MultiMatchQueryBuilder(term)
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
         .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
