@@ -22,8 +22,8 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSO
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.search.existsQuery
-import no.nav.navnosearchapi.service.search.termQuery
+import no.nav.navnosearchapi.service.search.queries.existsQuery
+import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 
 val nyheterFilters = mapOf(

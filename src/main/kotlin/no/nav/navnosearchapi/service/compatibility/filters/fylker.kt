@@ -27,7 +27,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
-import no.nav.navnosearchapi.service.search.termQuery
+import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 
 val fylkeFilters = mapOf(

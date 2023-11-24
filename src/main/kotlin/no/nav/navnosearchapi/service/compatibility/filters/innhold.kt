@@ -10,8 +10,8 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.service.search.existsQuery
-import no.nav.navnosearchapi.service.search.termQuery
+import no.nav.navnosearchapi.service.search.queries.existsQuery
+import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 
 val innholdFilters = mapOf(

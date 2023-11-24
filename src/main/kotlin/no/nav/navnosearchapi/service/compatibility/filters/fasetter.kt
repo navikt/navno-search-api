@@ -20,8 +20,8 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.search.existsQuery
-import no.nav.navnosearchapi.service.search.termQuery
+import no.nav.navnosearchapi.service.search.queries.existsQuery
+import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 
 val fasettFilters = mapOf(
