@@ -1,13 +1,12 @@
 package no.nav.navnosearchapi.service.search.queries
 
-import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
-import no.nav.navnosearchadminapi.common.model.ContentDao
-import org.springframework.data.elasticsearch.core.query.HighlightQuery
-import org.springframework.data.elasticsearch.core.query.highlight.Highlight
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightField
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters.HighlightFieldParametersBuilder
+import no.nav.navnosearchadminapi.common.constants.INGRESS
+import no.nav.navnosearchadminapi.common.constants.TEXT
+import no.nav.navnosearchadminapi.common.constants.languageSubfields
+import org.opensearch.index.query.QueryBuilder
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_FRAGMENT_CHAR_SIZE
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_NUMBER_OF_FRAGMENTS
 
 private const val BOLD_PRETAG = "<b>"
 private const val BOLD_POSTTAG = "</b>"
@@ -15,35 +14,37 @@ private const val BOLD_POSTTAG = "</b>"
 private const val UNFRAGMENTED = 0
 private const val MAX_FRAGMENT_SIZE = 200
 
-private const val EMPTY_STRING = ""
-
-fun highlightQuery(isMatchPhraseQuery: Boolean = false): HighlightQuery {
-    val suffix = if (isMatchPhraseQuery) EXACT_INNER_FIELD_PATH else EMPTY_STRING
-    return HighlightQuery(
-        Highlight(
-            listOf(
-                highlightField(fieldName = TITLE_WILDCARD + suffix, isFragmented = false),
-                highlightField(fieldName = INGRESS_WILDCARD + suffix, isFragmented = false),
-                highlightField(fieldName = TEXT_WILDCARD + suffix, isFragmented = true),
-            )
-        ),
-        ContentDao::class.java
-    )
+fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): HighlightBuilder {
+    return HighlightBuilder()
+        .highlightQuery(query) // Må bruke query uten function score for å få riktige highlights
+        .preTags(BOLD_PRETAG)
+        .postTags(BOLD_POSTTAG)
+        .ingressHighlightFields(isMatchPhraseQuery)
+        .textHighlightFields(isMatchPhraseQuery)
 }
 
-private fun highlightField(fieldName: String, isFragmented: Boolean): HighlightField {
-    val highlightFieldParametersBuilder = HighlightFieldParametersBuilder()
-        .withPreTags(BOLD_PRETAG)
-        .withPostTags(BOLD_POSTTAG)
-
-    if (isFragmented) {
-        highlightFieldParametersBuilder.withFragmentSize(MAX_FRAGMENT_SIZE)
-    } else {
-        highlightFieldParametersBuilder.withNumberOfFragments(UNFRAGMENTED)
+private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
+    languageSubfields.forEach {
+        val fieldName = highlightFieldName(INGRESS, it, isMatchPhraseQuery)
+        this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
     }
+    return this
+}
 
-    return HighlightField(
-        fieldName,
-        highlightFieldParametersBuilder.build()
-    )
+private fun HighlightBuilder.textHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
+    languageSubfields.forEach {
+        val fieldName = highlightFieldName(TEXT, it, isMatchPhraseQuery)
+        this.field(fieldName, MAX_FRAGMENT_SIZE, DEFAULT_NUMBER_OF_FRAGMENTS)
+    }
+    return this
+}
+
+private fun highlightFieldName(baseField: String, languageSubfield: String, isMatchPhraseQuery: Boolean): String {
+    val fieldName = "$baseField.$languageSubfield"
+
+    return if (isMatchPhraseQuery) {
+        fieldName + EXACT_INNER_FIELD_PATH
+    } else {
+        fieldName
+    }
 }

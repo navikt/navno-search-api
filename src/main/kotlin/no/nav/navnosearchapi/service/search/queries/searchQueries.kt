@@ -61,36 +61,33 @@ private val languageToWeightMap = mapOf(
     NORWEGIAN_NYNORSK to NORWEGIAN_NYNORSK_WEIGHT,
 )
 
-fun searchAllTextQuery(term: String): FunctionScoreQueryBuilder {
+fun searchAllTextQuery(term: String): QueryBuilder {
     return MultiMatchQueryBuilder(term)
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
         .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
         .operator(Operator.AND)
-        .applyLanguageWeighting()
-        .applyAudienceWeighting()
 }
 
-fun searchAllTextForPhraseQuery(term: String): FunctionScoreQueryBuilder {
+fun searchAllTextForPhraseQuery(term: String): QueryBuilder {
     return MultiMatchQueryBuilder(term)
         .fields(exactInnerFieldsToWeightMap)
         .type(MultiMatchQueryBuilder.Type.PHRASE)
-        .applyLanguageWeighting()
-        .applyAudienceWeighting()
 }
 
-fun searchUrlQuery(term: String): FunctionScoreQueryBuilder {
-    return MatchQueryBuilder(HREF, term)
-        .fuzziness(Fuzziness.AUTO)
-        .applyLanguageWeighting()
-        .applyAudienceWeighting()
+fun searchUrlQuery(term: String): QueryBuilder {
+    return MatchQueryBuilder(HREF, term).fuzziness(Fuzziness.AUTO)
 }
 
-fun QueryBuilder.applyAudienceWeighting(): FunctionScoreQueryBuilder {
+fun QueryBuilder.applyWeighting(): FunctionScoreQueryBuilder {
+    return this.applyAudienceWeighting().applyLanguageWeighting()
+}
+
+private fun QueryBuilder.applyAudienceWeighting(): FunctionScoreQueryBuilder {
     return multiplyScoreByFieldValue(this, AUDIENCE, audienceToWeightMap)
 }
 
-fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
+private fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
     return multiplyScoreByFieldValue(this, LANGUAGE, languageToWeightMap)
 }
 
