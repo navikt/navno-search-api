@@ -32,7 +32,7 @@ private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.5f
 private const val NORWEGIAN_NYNORSK_WEIGHT = 1.25f
 
 private const val FUZZY_LOW_DISTANCE = 4 // Ikke fuzzy søk på trebokstavs ord, da dette ofte er forkortelser
-private const val FUZZY_HIGH_DISTANCE = 6
+private const val FUZZY_HIGH_DISTANCE = 8
 
 const val EXACT_INNER_FIELD_PATH = ".exact"
 
