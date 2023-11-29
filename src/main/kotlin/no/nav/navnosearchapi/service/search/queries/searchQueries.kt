@@ -19,10 +19,11 @@ import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
 import org.opensearch.index.query.QueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
 import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 
-private const val TITLE_WEIGHT = 10.0f
+private const val TITLE_WEIGHT = 12.0f
 private const val INGRESS_WEIGHT = 3.0f
 private const val TEXT_WEIGHT = 1.0f
 //private const val KEYWORDS_WEIGHT = 10.0f
@@ -104,7 +105,7 @@ private fun multiplyScoreByFieldValue(
         baseQuery,
         valueToWeightMap.map {
             FunctionScoreQueryBuilder.FilterFunctionBuilder(
-                MatchQueryBuilder(fieldName, it.key),
+                TermQueryBuilder(fieldName, it.key),
                 ScoreFunctionBuilders.weightFactorFunction(it.value)
             )
         }.toTypedArray()
