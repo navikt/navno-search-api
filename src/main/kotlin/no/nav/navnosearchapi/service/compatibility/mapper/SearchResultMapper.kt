@@ -350,6 +350,6 @@ class SearchResultMapper {
 
     companion object {
         private const val HIGHLIGHT_MAX_LENGTH = 200
-        private const val CUTOFF_POSTFIX = "..."
+        private const val CUTOFF_POSTFIX = "(...)"
     }
 }
