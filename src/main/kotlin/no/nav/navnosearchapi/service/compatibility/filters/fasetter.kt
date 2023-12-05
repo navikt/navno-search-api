@@ -5,7 +5,9 @@ import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.constants.IS_FILE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
+import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH
@@ -31,8 +33,9 @@ val fasettFilters = mapOf(
             .must(
                 BoolQueryBuilder()
                     .should(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
-                    .should(termQuery(METATAGS, ValidMetatags.KONTOR.descriptor))
-                    .should(termQuery(METATAGS, ValidMetatags.SKJEMA.descriptor))
+                    .should(termQuery(TYPE, ValidTypes.KONTOR.descriptor))
+                    .should(termQuery(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
+                    .should(termQuery(TYPE, ValidTypes.SKJEMA.descriptor))
             )
             .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
             .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))

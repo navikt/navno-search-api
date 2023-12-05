@@ -3,7 +3,9 @@ package no.nav.navnosearchapi.service.compatibility.filters
 import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.constants.IS_FILE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
+import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
@@ -17,21 +19,24 @@ import org.opensearch.index.query.BoolQueryBuilder
 val innholdFilters = mapOf(
     UNDERFASETT_INFORMASJON to FilterEntry(
         name = UNDERFASETT_INFORMASJON_NAME,
-        filterQuery = innholdFilter(ValidMetatags.INFORMASJON.descriptor)
+        filterQuery = innholdBaseFilter().must(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
     ),
     UNDERFASETT_KONTOR to FilterEntry(
         name = UNDERFASETT_KONTOR_NAME,
-        filterQuery = innholdFilter(ValidMetatags.KONTOR.descriptor)
+        filterQuery = innholdBaseFilter().must(
+            BoolQueryBuilder()
+                .should(termQuery(TYPE, ValidTypes.KONTOR.descriptor))
+                .should(termQuery(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
+        )
     ),
     UNDERFASETT_SOKNAD_OG_SKJEMA to FilterEntry(
         name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-        filterQuery = innholdFilter(ValidMetatags.SKJEMA.descriptor)
+        filterQuery = innholdBaseFilter().must(termQuery(TYPE, ValidTypes.SKJEMA.descriptor))
     ),
 )
 
-private fun innholdFilter(requiredMetatag: String): BoolQueryBuilder {
+private fun innholdBaseFilter(): BoolQueryBuilder {
     return BoolQueryBuilder()
-        .must(termQuery(METATAGS, requiredMetatag))
         .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
