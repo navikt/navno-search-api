@@ -4,6 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.Bucket
@@ -103,12 +104,13 @@ class SearchResultMapper {
             modifiedTime = searchHit.lastUpdated.toString(),
             audience = searchHit.audience,
             language = searchHit.language,
+            type = searchHit.type,
             score = searchHit.score,
         )
     }
 
     private fun toHighlight(searchHit: ContentSearchHit): String {
-        val highlight = if (searchHit.isKontor) {
+        val highlight = if (isKontor(searchHit)) {
             searchHit.ingress
         } else {
             searchHit.highlight.ingress.firstOrNull()
@@ -119,6 +121,10 @@ class SearchResultMapper {
         return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
             highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else highlight
+    }
+
+    private fun isKontor(searchHit: ContentSearchHit): Boolean {
+        return searchHit.type in arrayOf(ValidTypes.KONTOR.descriptor, ValidTypes.KONTOR_LEGACY.descriptor)
     }
 
     private fun toAggregations(aggregations: Map<String, Long>, params: Params): Aggregations {

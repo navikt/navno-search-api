@@ -7,5 +7,6 @@ data class SearchHit(
     val modifiedTime: String,
     val audience: List<String>,
     val language: String,
+    val type: String,
     val score: Float,
 )

@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.service.search.mapper
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
-import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.service.search.dto.ContentHighlight
@@ -60,10 +59,7 @@ class ContentSearchPageMapper {
                     languageSubfieldKey(TEXT, content.language, isMatchPhraseQuery)
                 ),
             ),
-            isKontor = searchHit.content.type in listOf(
-                ValidTypes.KONTOR.descriptor,
-                ValidTypes.KONTOR_LEGACY.descriptor
-            ),
+            type = searchHit.content.type,
             score = searchHit.score
         )
     }
