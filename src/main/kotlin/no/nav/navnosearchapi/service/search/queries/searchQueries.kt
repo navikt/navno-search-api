@@ -11,8 +11,10 @@ import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.MatchQueryBuilder
@@ -34,6 +36,11 @@ private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 
 private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.050f
 private const val NORWEGIAN_NYNORSK_WEIGHT = 1.025f
+
+private const val PRODUKTSIDE_WEIGHT = 8.0f
+private const val TEMASIDE_WEIGHT = 6.0f
+private const val SITUASJONSSIDE_WEIGHT = 4.0f
+private const val GUIDE_WEIGHT = 2.0f
 
 private const val FUZZY_LOW_DISTANCE = 4 // Ikke fuzzy søk på trebokstavs ord, da dette ofte er forkortelser
 private const val FUZZY_HIGH_DISTANCE = 8
@@ -61,6 +68,13 @@ private val audienceToWeightMap = mapOf(
     ValidAudiences.SAMARBEIDSPARTNER.descriptor to SAMARBEIDSPARTNER_WEIGHT,
 )
 
+private val typeToWeightMap = mapOf(
+    ValidTypes.PRODUKTSIDE.descriptor to PRODUKTSIDE_WEIGHT,
+    ValidTypes.TEMASIDE.descriptor to TEMASIDE_WEIGHT,
+    ValidTypes.SITUASJONSSIDE.descriptor to SITUASJONSSIDE_WEIGHT,
+    ValidTypes.GUIDE.descriptor to GUIDE_WEIGHT,
+)
+
 private val languageToWeightMap = mapOf(
     NORWEGIAN_BOKMAAL to NORWEGIAN_BOKMAAL_WEIGHT,
     NORWEGIAN_NYNORSK to NORWEGIAN_NYNORSK_WEIGHT,
@@ -85,11 +99,15 @@ fun searchUrlQuery(term: String): QueryBuilder {
 }
 
 fun QueryBuilder.applyWeighting(): FunctionScoreQueryBuilder {
-    return this.applyAudienceWeighting().applyLanguageWeighting()
+    return this.applyAudienceWeighting().applyTypeWeighting().applyLanguageWeighting()
 }
 
 private fun QueryBuilder.applyAudienceWeighting(): FunctionScoreQueryBuilder {
     return multiplyScoreByFieldValue(this, AUDIENCE, audienceToWeightMap)
+}
+
+private fun QueryBuilder.applyTypeWeighting(): FunctionScoreQueryBuilder {
+    return multiplyScoreByFieldValue(this, TYPE, typeToWeightMap)
 }
 
 private fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
