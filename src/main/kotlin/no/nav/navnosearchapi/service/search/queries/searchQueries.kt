@@ -34,8 +34,8 @@ private const val PRIVATPERSON_WEIGHT = 1.5f
 private const val ARBEIDSGIVER_WEIGHT = 1.25f
 private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 
-private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.050f
-private const val NORWEGIAN_NYNORSK_WEIGHT = 1.025f
+private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.40f
+private const val NORWEGIAN_NYNORSK_WEIGHT = 1.35f
 
 private const val PRODUKTSIDE_WEIGHT = 8.0f
 private const val TEMASIDE_WEIGHT = 6.0f
@@ -84,7 +84,7 @@ fun searchAllTextQuery(term: String): QueryBuilder {
     return MultiMatchQueryBuilder(term)
         .fields(fieldsToWeightMap)
         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
-        .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
+        .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
         .operator(Operator.AND)
 }
 
