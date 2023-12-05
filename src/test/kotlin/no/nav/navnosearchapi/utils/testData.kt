@@ -2,6 +2,7 @@ package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
 import org.springframework.data.elasticsearch.core.suggest.Completion
@@ -105,6 +106,7 @@ fun dummyContentDao(
     teamName: String = TEAM_NAME,
     externalId: String,
     textPrefix: String,
+    type: String = ValidTypes.ANDRE.descriptor,
     timestamp: ZonedDateTime = now,
     audience: List<String> = listOf(PRIVATPERSON),
     language: String = NORWEGIAN_BOKMAAL,
@@ -120,6 +122,7 @@ fun dummyContentDao(
         MultiLangField(value = "$textPrefix title", language = language),
         MultiLangField(value = "$textPrefix ingress", language = language),
         MultiLangField(value = "$textPrefix text", language = language),
+        type,
         timestamp,
         timestamp,
         audience,
