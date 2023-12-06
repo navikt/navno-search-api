@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.service.compatibility.filters
 import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.IS_FILE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
@@ -72,7 +71,7 @@ private fun nyhetFilter(
     requiredLanguage: String? = null,
 ): BoolQueryBuilder {
     val query = BoolQueryBuilder()
-        .must(termQuery(IS_FILE, false.toString()))
+        .mustNot(isFileFilter())
         .mustNot(existsQuery(FYLKE))
 
     requiredMetatags.forEach { query.must(termQuery(METATAGS, it)) }

@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.IS_FILE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
@@ -41,6 +40,6 @@ private fun innholdBaseFilter(): BoolQueryBuilder {
         .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-        .must(termQuery(IS_FILE, false.toString()))
+        .mustNot(isFileFilter())
         .mustNot(existsQuery(FYLKE))
 }

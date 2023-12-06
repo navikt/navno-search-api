@@ -27,7 +27,7 @@ val initialTestData = listOf(
         externalId = "1",
         textPrefix = "First",
         audience = listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        isFile = true,
+        type = ValidTypes.FIL_DOCUMENT.descriptor,
         fylke = AGDER,
     ),
     dummyContentDao(
@@ -110,7 +110,6 @@ fun dummyContentDao(
     timestamp: ZonedDateTime = now,
     audience: List<String> = listOf(PRIVATPERSON),
     language: String = NORWEGIAN_BOKMAAL,
-    isFile: Boolean = false,
     fylke: String? = null,
     metatags: List<String> = emptyList()
 ): ContentDao {
@@ -127,7 +126,6 @@ fun dummyContentDao(
         timestamp,
         audience,
         language,
-        isFile,
         fylke,
         metatags
     )

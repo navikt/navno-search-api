@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.IS_FILE
 import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
@@ -84,5 +83,5 @@ val fylkeFilters = mapOf(
 private fun fylkeFilter(requiredFylke: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .must(termQuery(FYLKE, requiredFylke))
-        .must(termQuery(IS_FILE, false.toString()))
+        .mustNot(isFileFilter())
 }
