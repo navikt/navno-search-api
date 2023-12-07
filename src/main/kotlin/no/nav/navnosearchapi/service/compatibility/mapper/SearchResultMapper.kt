@@ -114,6 +114,8 @@ class SearchResultMapper {
             toIngressHighlight(searchHit.ingress)
         } else if (facet == FASETT_INNHOLD) {
             toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
+        } else if (facet == FASETT_STATISTIKK && searchHit.ingress.isBlank()) {
+            TABELL
         } else {
             searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
                 ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
@@ -367,5 +369,7 @@ class SearchResultMapper {
         private const val CUTOFF_POSTFIX = " (...)"
         private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
         private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
+
+        private const val TABELL = "Tabell"
     }
 }
