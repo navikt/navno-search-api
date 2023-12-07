@@ -111,22 +111,24 @@ class SearchResultMapper {
 
     private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
         return if (isKontor(searchHit)) {
-            searchHit.ingress
+            toIngressHighlight(searchHit.ingress)
         } else if (facet == FASETT_INNHOLD) {
-            searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress
+            toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
         } else {
-            searchHit.highlight.ingress.firstOrNull()
+            searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
                 ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
-                ?: searchHit.ingress
+                ?: toIngressHighlight(searchHit.ingress)
         }
     }
 
     private fun toTextHighlight(highlight: String): String {
-        val highlightPruned = if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
+        return TEXT_HIGHLIGHT_PREFIX + highlight + TEXT_HIGHLIGHT_POSTFIX
+    }
+
+    private fun toIngressHighlight(highlight: String): String {
+        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
             highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else highlight
-
-        return TEXT_HIGHLIGHT_PREFIX + highlightPruned + TEXT_HIGHLIGHT_POSTFIX
     }
 
     private fun isKontor(searchHit: ContentSearchHit): Boolean {
@@ -361,7 +363,7 @@ class SearchResultMapper {
     }
 
     companion object {
-        private const val HIGHLIGHT_MAX_LENGTH = 200
+        private const val HIGHLIGHT_MAX_LENGTH = 220
         private const val CUTOFF_POSTFIX = " (...)"
         private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
         private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
