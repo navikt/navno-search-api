@@ -91,16 +91,16 @@ class SearchResultMapper {
             total = result.totalElements,
             fasettKey = params.f,
             aggregations = toAggregations(result.aggregations, params),
-            hits = result.hits.map { toHit(it) },
+            hits = result.hits.map { toHit(it, params.f) },
             autoComplete = result.suggestions,
         )
     }
 
-    private fun toHit(searchHit: ContentSearchHit): SearchHit {
+    private fun toHit(searchHit: ContentSearchHit, facet: String): SearchHit {
         return SearchHit(
             displayName = searchHit.title,
             href = searchHit.href,
-            highlight = toHighlight(searchHit),
+            highlight = toHighlight(searchHit, facet),
             modifiedTime = searchHit.lastUpdated.toString(),
             audience = searchHit.audience,
             language = searchHit.language,
@@ -109,12 +109,14 @@ class SearchResultMapper {
         )
     }
 
-    private fun toHighlight(searchHit: ContentSearchHit): String {
+    private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
         val highlight = if (isKontor(searchHit)) {
             searchHit.ingress
+        } else if (facet == FASETT_INNHOLD) {
+            searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress
         } else {
             searchHit.highlight.ingress.firstOrNull()
-                ?: searchHit.highlight.text.firstOrNull()
+                ?: searchHit.highlight.text.firstOrNull()?.let { TEXT_HIGHLIGHT_PREFIX + it + TEXT_HIGHLIGHT_POSTFIX }
                 ?: searchHit.ingress
         }
 
@@ -356,6 +358,8 @@ class SearchResultMapper {
 
     companion object {
         private const val HIGHLIGHT_MAX_LENGTH = 200
-        private const val CUTOFF_POSTFIX = "(...)"
+        private const val CUTOFF_POSTFIX = " (...)"
+        private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
+        private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
     }
 }
