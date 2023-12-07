@@ -110,19 +110,23 @@ class SearchResultMapper {
     }
 
     private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
-        val highlight = if (isKontor(searchHit)) {
+        return if (isKontor(searchHit)) {
             searchHit.ingress
         } else if (facet == FASETT_INNHOLD) {
             searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress
         } else {
             searchHit.highlight.ingress.firstOrNull()
-                ?: searchHit.highlight.text.firstOrNull()?.let { TEXT_HIGHLIGHT_PREFIX + it + TEXT_HIGHLIGHT_POSTFIX }
+                ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
                 ?: searchHit.ingress
         }
+    }
 
-        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
+    private fun toTextHighlight(highlight: String): String {
+        val highlightPruned = if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
             highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else highlight
+
+        return TEXT_HIGHLIGHT_PREFIX + highlightPruned + TEXT_HIGHLIGHT_POSTFIX
     }
 
     private fun isKontor(searchHit: ContentSearchHit): Boolean {
