@@ -37,6 +37,8 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
@@ -215,8 +217,14 @@ class SearchResultMapper {
                                 FacetBucket(
                                     key = UNDERFASETT_NAV_OG_SAMFUNN,
                                     name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-                                    docCount = aggregations[FASETT_ANALYSER_OG_FORSKNING] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_NAV_OG_SAMFUNN_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_ENGLISH_NEWS,
+                                    name = UNDERFASETT_ENGLISH_NEWS_NAME,
+                                    docCount = aggregations[UNDERFASETT_ENGLISH_NEWS_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_ENGLISH_NEWS),
                                 ),
                             )
                         ),
