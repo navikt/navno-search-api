@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.search.queries
 
+import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
 import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS
@@ -17,6 +18,7 @@ import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
+import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
@@ -45,6 +47,8 @@ private const val GUIDE_WEIGHT = 2.0f
 private const val FUZZY_LOW_DISTANCE = 5
 private const val FUZZY_HIGH_DISTANCE = 8
 
+private val WHITESPACE = "\\s+".toRegex()
+
 const val EXACT_INNER_FIELD_PATH = ".exact"
 
 // todo: Ta stilling til om keywords også bør være med her
@@ -55,6 +59,8 @@ private val fieldsToWeightMap = languageSubfields.flatMap {
         "$TEXT.$it" to TEXT_WEIGHT
     )
 }.toMap()
+
+private val allTextFields = languageSubfields.map { "$ALL_TEXT.$it" }
 
 private val exactInnerFieldsToWeightMap = mapOf(
     TITLE_WILDCARD + EXACT_INNER_FIELD_PATH to TITLE_WEIGHT,
@@ -81,11 +87,23 @@ private val languageToWeightMap = mapOf(
 )
 
 fun searchAllTextQuery(term: String): QueryBuilder {
-    return MultiMatchQueryBuilder(term)
-        .fields(fieldsToWeightMap)
-        .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
-        .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-        .operator(Operator.AND)
+    return BoolQueryBuilder()
+        .should(
+            MultiMatchQueryBuilder(term)
+                .fields(fieldsToWeightMap)
+                .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
+                .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
+        ).apply {
+            // Alle treff må inneholde alle søkeord
+            if (term.split(WHITESPACE).size > 1) {
+                this.filter(
+                    MultiMatchQueryBuilder(term)
+                        .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
+                        .operator(Operator.AND)
+                        .searchAllText()
+                )
+            }
+        }
 }
 
 fun searchAllTextForPhraseQuery(term: String): QueryBuilder {
@@ -112,6 +130,10 @@ private fun QueryBuilder.applyTypeWeighting(): FunctionScoreQueryBuilder {
 
 private fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
     return multiplyScoreByFieldValue(this, LANGUAGE, languageToWeightMap)
+}
+
+private fun MultiMatchQueryBuilder.searchAllText(): MultiMatchQueryBuilder {
+    return this.apply { allTextFields.forEach { this.field(it) } }
 }
 
 private fun multiplyScoreByFieldValue(
