@@ -21,14 +21,15 @@ class SearchController(
     fun search(
         @ModelAttribute params: Params
     ): SearchResult {
-        val filterQuery = compatibilityService.toFilterQuery(params.f, params.uf, params.daterange)
-        val aggregations = compatibilityService.aggregations(params.f, params.uf)
+        val filterQuery = compatibilityService.postAggregationFilters(params.f, params.uf, params.daterange)
+        val aggregations = compatibilityService.aggregations(params.f, params.uf, params.audience)
         val term = compatibilityService.term(params.ord)
 
         val result = searchService.search(
             term = term,
             page = params.start,
-            filters = filterQuery,
+            preAggregationFilters = compatibilityService.preAggregationFilters(params.audience),
+            postAggregationFilters = filterQuery,
             aggregations = aggregations,
             mapCustomAggregations = true,
             sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null
