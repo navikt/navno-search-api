@@ -39,10 +39,10 @@ private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
 private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.40f
 private const val NORWEGIAN_NYNORSK_WEIGHT = 1.35f
 
-private const val PRODUKTSIDE_WEIGHT = 8.0f
-private const val TEMASIDE_WEIGHT = 6.0f
-private const val SITUASJONSSIDE_WEIGHT = 4.0f
-private const val GUIDE_WEIGHT = 2.0f
+private const val PRODUKTSIDE_WEIGHT = 2.0f
+private const val TEMASIDE_WEIGHT = 1.75f
+private const val SITUASJONSSIDE_WEIGHT = 1.50f
+private const val GUIDE_WEIGHT = 1.25f
 
 private const val FUZZY_LOW_DISTANCE = 5
 private const val FUZZY_HIGH_DISTANCE = 8
@@ -92,7 +92,7 @@ fun searchAllTextQuery(term: String): QueryBuilder {
             MultiMatchQueryBuilder(term)
                 .fields(fieldsToWeightMap)
                 .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
-                .type(MultiMatchQueryBuilder.Type.MOST_FIELDS)
+                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
         ).apply {
             // Alle treff må inneholde alle søkeord
             if (term.split(WHITESPACE).size > 1) {
