@@ -4,9 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     val versions = object {
         val kotlin = "1.9.0"
-        val springBoot = "3.1.4"
-        val springDepMgmt = "1.1.3"
-        val versions = "0.49.0"
+        val springBoot = "3.2.0"
+        val springDepMgmt = "1.1.4"
+        val versions = "0.50.0"
     }
 
     kotlin("jvm") version (versions.kotlin)
@@ -34,10 +34,10 @@ repositories {
 dependencies {
     val versions = object {
         val logstash = "7.4"
-        val opensearch = "1.2.0"
+        val opensearch = "1.3.0"
         val opensearchTestcontainers = "2.0.0"
         val testcontainers = "1.18.3"
-        val navnoSearchCommon = "20231116150206-f0e0869"
+        val navnoSearchCommon = "20231211144857-70c6a9e"
     }
 
     implementation("no.nav.navnosearchadminapi:common:${versions.navnoSearchCommon}")

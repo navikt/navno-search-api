@@ -10,7 +10,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_12_MON
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
-import no.nav.navnosearchapi.service.search.rangeQuery
+import no.nav.navnosearchapi.service.search.queries.rangeQuery
 import no.nav.navnosearchapi.utils.now
 import no.nav.navnosearchapi.utils.sevenDaysAgo
 import no.nav.navnosearchapi.utils.thirtyDaysAgo

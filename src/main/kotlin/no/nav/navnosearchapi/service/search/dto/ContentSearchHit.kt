@@ -11,5 +11,6 @@ data class ContentSearchHit(
     val language: String,
     val lastUpdated: ZonedDateTime,
     val highlight: ContentHighlight,
-    val isKontor: Boolean,
+    val type: String,
+    val score: Float,
 )

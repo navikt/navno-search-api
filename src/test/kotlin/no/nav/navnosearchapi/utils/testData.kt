@@ -2,6 +2,7 @@ package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
 import org.springframework.data.elasticsearch.core.suggest.Completion
@@ -26,7 +27,7 @@ val initialTestData = listOf(
         externalId = "1",
         textPrefix = "First",
         audience = listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        isFile = true,
+        type = ValidTypes.FIL_DOCUMENT.descriptor,
         fylke = AGDER,
     ),
     dummyContentDao(
@@ -105,27 +106,33 @@ fun dummyContentDao(
     teamName: String = TEAM_NAME,
     externalId: String,
     textPrefix: String,
+    type: String = ValidTypes.ANDRE.descriptor,
     timestamp: ZonedDateTime = now,
     audience: List<String> = listOf(PRIVATPERSON),
     language: String = NORWEGIAN_BOKMAAL,
-    isFile: Boolean = false,
     fylke: String? = null,
     metatags: List<String> = emptyList()
 ): ContentDao {
+    val title = MultiLangField(value = "$textPrefix title", language = language)
+    val ingress = MultiLangField(value = "$textPrefix ingress", language = language)
+    val text = MultiLangField(value = "$textPrefix text", language = language)
+    val allText = MultiLangField(value = "$title $ingress $text", language = language)
+
     return ContentDao(
-        "$teamName-$externalId",
-        Completion(listOf("$textPrefix title")),
-        teamName,
-        "https://$textPrefix.com",
-        MultiLangField(value = "$textPrefix title", language = language),
-        MultiLangField(value = "$textPrefix ingress", language = language),
-        MultiLangField(value = "$textPrefix text", language = language),
-        timestamp,
-        timestamp,
-        audience,
-        language,
-        isFile,
-        fylke,
-        metatags
+        id = "$teamName-$externalId",
+        autocomplete = Completion(listOf("$textPrefix title")),
+        teamOwnedBy = teamName,
+        href = "https://$textPrefix.com",
+        title = title,
+        ingress = ingress,
+        text = text,
+        allText = allText,
+        type = type,
+        createdAt = timestamp,
+        lastUpdated = timestamp,
+        audience = audience,
+        language = language,
+        fylke = fylke,
+        metatags = metatags
     )
 }

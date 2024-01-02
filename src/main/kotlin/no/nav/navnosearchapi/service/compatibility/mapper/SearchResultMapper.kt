@@ -4,6 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
 import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
+import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.Bucket
@@ -36,6 +37,8 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
@@ -90,34 +93,50 @@ class SearchResultMapper {
             total = result.totalElements,
             fasettKey = params.f,
             aggregations = toAggregations(result.aggregations, params),
-            hits = result.hits.map { toHit(it) },
+            hits = result.hits.map { toHit(it, params.f) },
             autoComplete = result.suggestions,
         )
     }
 
-    private fun toHit(searchHit: ContentSearchHit): SearchHit {
+    private fun toHit(searchHit: ContentSearchHit, facet: String): SearchHit {
         return SearchHit(
             displayName = searchHit.title,
             href = searchHit.href,
-            highlight = toHighlight(searchHit),
+            highlight = toHighlight(searchHit, facet),
             modifiedTime = searchHit.lastUpdated.toString(),
             audience = searchHit.audience,
             language = searchHit.language,
+            type = searchHit.type,
+            score = searchHit.score,
         )
     }
 
-    private fun toHighlight(searchHit: ContentSearchHit): String {
-        val highlight = if (searchHit.isKontor) {
-            searchHit.ingress
+    private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
+        return if (isKontor(searchHit)) {
+            toIngressHighlight(searchHit.ingress)
+        } else if (facet == FASETT_INNHOLD) {
+            toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
+        } else if (facet == FASETT_STATISTIKK && searchHit.ingress.isBlank()) {
+            TABELL
         } else {
-            searchHit.highlight.ingress.firstOrNull()
-                ?: searchHit.highlight.text.firstOrNull()
-                ?: searchHit.ingress
+            searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
+                ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
+                ?: toIngressHighlight(searchHit.ingress)
         }
+    }
 
+    private fun toTextHighlight(highlight: String): String {
+        return TEXT_HIGHLIGHT_PREFIX + highlight + TEXT_HIGHLIGHT_POSTFIX
+    }
+
+    private fun toIngressHighlight(highlight: String): String {
         return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
             highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else highlight
+    }
+
+    private fun isKontor(searchHit: ContentSearchHit): Boolean {
+        return searchHit.type in arrayOf(ValidTypes.KONTOR.descriptor, ValidTypes.KONTOR_LEGACY.descriptor)
     }
 
     private fun toAggregations(aggregations: Map<String, Long>, params: Params): Aggregations {
@@ -198,8 +217,14 @@ class SearchResultMapper {
                                 FacetBucket(
                                     key = UNDERFASETT_NAV_OG_SAMFUNN,
                                     name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-                                    docCount = aggregations[FASETT_ANALYSER_OG_FORSKNING] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_NAV_OG_SAMFUNN_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_ENGLISH_NEWS,
+                                    name = UNDERFASETT_ENGLISH_NEWS_NAME,
+                                    docCount = aggregations[UNDERFASETT_ENGLISH_NEWS_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_ENGLISH_NEWS),
                                 ),
                             )
                         ),
@@ -348,7 +373,11 @@ class SearchResultMapper {
     }
 
     companion object {
-        private const val HIGHLIGHT_MAX_LENGTH = 200
-        private const val CUTOFF_POSTFIX = "..."
+        private const val HIGHLIGHT_MAX_LENGTH = 220
+        private const val CUTOFF_POSTFIX = " (...)"
+        private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
+        private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
+
+        private const val TABELL = "Tabell"
     }
 }
