@@ -48,7 +48,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         )
     }
 
-    fun aggregations(f: String, uf: List<String>, audience: List<String>): List<FilterAggregationBuilder> {
+    fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
         return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.name, it.filterQuery)
         } + tidsperiodeFilters.values.map {

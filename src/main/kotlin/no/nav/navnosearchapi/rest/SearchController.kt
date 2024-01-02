@@ -26,7 +26,7 @@ class SearchController(
             page = params.start,
             preAggregationFilters = compatibilityService.preAggregationFilters(params.audience),
             postAggregationFilters = compatibilityService.postAggregationFilters(params.f, params.uf, params.daterange),
-            aggregations = compatibilityService.aggregations(params.f, params.uf, params.audience),
+            aggregations = compatibilityService.aggregations(params.f, params.uf),
             mapCustomAggregations = true,
             sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null
         )

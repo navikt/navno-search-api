@@ -8,5 +8,5 @@ data class Params(
     val uf: List<String>, // Under-facet keys
     val s: Int, // Sort
     val daterange: Int, // Daterange key
-    val audience: List<String>,
+    val audience: List<String> = emptyList(),
 )
