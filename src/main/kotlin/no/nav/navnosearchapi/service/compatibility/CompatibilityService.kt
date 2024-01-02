@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility
 
+import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
@@ -18,6 +19,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.slf4j.Logger
@@ -33,16 +35,20 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return searchResultMapper.toSearchResult(params, result)
     }
 
-    fun toFilterQuery(f: String?, uf: List<String>?, daterange: Int?): BoolQueryBuilder {
+    fun preAggregationFilters(audience: List<String>): BoolQueryBuilder {
+        return activeAudienceFilterQuery(audience)
+    }
+
+    fun postAggregationFilters(f: String, uf: List<String>, daterange: Int): BoolQueryBuilder {
         return joinClausesToSingleQuery(
             mustClauses = listOf(
                 activeFasettFilterQuery(f, uf),
-                activeTidsperiodeFilterQuery(daterange)
+                activeTidsperiodeFilterQuery(daterange),
             )
         )
     }
 
-    fun aggregations(f: String?, uf: List<String>?): List<FilterAggregationBuilder> {
+    fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
         return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.name, it.filterQuery)
         } + tidsperiodeFilters.values.map {
@@ -53,7 +59,14 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         }
     }
 
-    fun activeFasettFilterQuery(f: String?, uf: List<String>?): BoolQueryBuilder {
+    fun term(term: String): String {
+        if (isSkjemanummer(term)) {
+            return toExactSkjemanummerTerm(term)
+        }
+        return term
+    }
+
+    private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
             FASETT_INNHOLD -> {
                 if (uf.isNullOrEmpty()) {
@@ -87,15 +100,12 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         }
     }
 
-    fun activeTidsperiodeFilterQuery(daterange: Int?): BoolQueryBuilder {
+    private fun activeTidsperiodeFilterQuery(daterange: Int): BoolQueryBuilder {
         return tidsperiodeFilters[daterange.toString()]!!.filterQuery
     }
 
-    fun term(term: String): String {
-        if (isSkjemanummer(term)) {
-            return toExactSkjemanummerTerm(term)
-        }
-        return term
+    private fun activeAudienceFilterQuery(audience: List<String>): BoolQueryBuilder {
+        return BoolQueryBuilder().apply { audience.forEach { this.should(TermQueryBuilder(AUDIENCE, it)) } }
     }
 
     private fun toExactSkjemanummerTerm(term: String): String {

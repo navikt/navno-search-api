@@ -5,6 +5,7 @@ import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
+import no.nav.navnosearchapi.service.search.queries.applyFilters
 import no.nav.navnosearchapi.service.search.queries.applyWeighting
 import no.nav.navnosearchapi.service.search.queries.highlightBuilder
 import no.nav.navnosearchapi.service.search.queries.searchAllTextForPhraseQuery
@@ -33,7 +34,8 @@ class SearchService(
     fun search(
         term: String,
         page: Int,
-        filters: BoolQueryBuilder,
+        preAggregationFilters: BoolQueryBuilder?,
+        postAggregationFilters: BoolQueryBuilder,
         aggregations: List<AbstractAggregationBuilder<*>>,
         mapCustomAggregations: Boolean = false,
         sort: Sort? = null
@@ -44,8 +46,8 @@ class SearchService(
         val baseQuery = baseQuery(term, isMatchPhraseQuery)
 
         val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(baseQuery.applyWeighting())
-            .withFilter(filters)
+            .withQuery(baseQuery.applyFilters(preAggregationFilters).applyWeighting())
+            .withFilter(postAggregationFilters)
             .withPageable(pageRequest)
             .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
             .withAggregations(aggregations)

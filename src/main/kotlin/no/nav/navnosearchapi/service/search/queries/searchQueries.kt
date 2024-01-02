@@ -116,6 +116,10 @@ fun searchUrlQuery(term: String): QueryBuilder {
     return MatchQueryBuilder(HREF, term).fuzziness(Fuzziness.AUTO)
 }
 
+fun QueryBuilder.applyFilters(filterQuery: BoolQueryBuilder?): QueryBuilder {
+    return filterQuery?.let { BoolQueryBuilder().must(this).filter(filterQuery) } ?: this
+}
+
 fun QueryBuilder.applyWeighting(): FunctionScoreQueryBuilder {
     return this.applyAudienceWeighting().applyTypeWeighting().applyLanguageWeighting()
 }

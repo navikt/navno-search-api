@@ -54,7 +54,7 @@ val nyheterFilters = mapOf(
     ),
     UNDERFASETT_NAV_OG_SAMFUNN to FilterEntry(
         name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-        filterQuery = nyhetFilter(listOf(ValidMetatags.NAV_OG_SAMFUNN.descriptor)),
+        filterQuery = nyhetFilter(listOf(ValidMetatags.NYHET.descriptor, ValidMetatags.NAV_OG_SAMFUNN.descriptor)),
     ),
     UNDERFASETT_ENGLISH_NEWS to FilterEntry(
         name = UNDERFASETT_ENGLISH_NEWS_NAME,
