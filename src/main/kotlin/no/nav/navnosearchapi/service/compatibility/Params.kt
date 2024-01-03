@@ -9,4 +9,5 @@ data class Params(
     val s: Int, // Sort
     val daterange: Int, // Daterange key
     val audience: List<String> = emptyList(),
+    val preferredLanguage: String? = null,
 )

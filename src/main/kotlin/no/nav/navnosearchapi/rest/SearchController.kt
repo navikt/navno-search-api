@@ -24,7 +24,7 @@ class SearchController(
         val result = searchService.search(
             term = compatibilityService.term(params.ord),
             page = params.start,
-            preAggregationFilters = compatibilityService.preAggregationFilters(params.audience),
+            preAggregationFilters = compatibilityService.preAggregationFilters(params.audience, params.preferredLanguage),
             postAggregationFilters = compatibilityService.postAggregationFilters(params.f, params.uf, params.daterange),
             aggregations = compatibilityService.aggregations(params.f, params.uf),
             mapCustomAggregations = true,

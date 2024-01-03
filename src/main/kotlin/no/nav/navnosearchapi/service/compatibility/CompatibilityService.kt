@@ -2,6 +2,10 @@ package no.nav.navnosearchapi.service.compatibility
 
 import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
@@ -35,17 +39,21 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return searchResultMapper.toSearchResult(params, result)
     }
 
-    fun preAggregationFilters(audience: List<String>): BoolQueryBuilder {
-        return activeAudienceFilterQuery(audience)
+    fun preAggregationFilters(audience: List<String>, preferredLanguage: String?): BoolQueryBuilder {
+        return BoolQueryBuilder().apply {
+            if (audience.isNotEmpty()) {
+                this.must(activeAudienceFilterQuery(audience))
+            }
+            if (preferredLanguage != null) {
+                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
+            }
+        }
     }
 
     fun postAggregationFilters(f: String, uf: List<String>, daterange: Int): BoolQueryBuilder {
-        return joinClausesToSingleQuery(
-            mustClauses = listOf(
-                activeFasettFilterQuery(f, uf),
-                activeTidsperiodeFilterQuery(daterange),
-            )
-        )
+        return BoolQueryBuilder()
+            .must(activeFasettFilterQuery(f, uf))
+            .must(activeTidsperiodeFilterQuery(daterange))
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
@@ -106,6 +114,39 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
 
     private fun activeAudienceFilterQuery(audience: List<String>): BoolQueryBuilder {
         return BoolQueryBuilder().apply { audience.forEach { this.should(TermQueryBuilder(AUDIENCE, it)) } }
+    }
+
+    private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
+        return BoolQueryBuilder().apply {
+            // Ikke vis treff som har en versjon på foretrukket språk
+            this.mustNot(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
+
+            when (preferredLanguage) {
+                NORWEGIAN_BOKMAAL ->
+                    // Ikke vis engelsk versjon dersom det finnes en nynorsk-versjon
+                    this.mustNot(
+                        BoolQueryBuilder()
+                            .must(TermQueryBuilder(LANGUAGE, ENGLISH))
+                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_NYNORSK))
+                    )
+
+                NORWEGIAN_NYNORSK ->
+                    // Ikke vis engelsk versjon dersom det finnes en bokmål-versjon
+                    this.mustNot(
+                        BoolQueryBuilder()
+                            .must(TermQueryBuilder(LANGUAGE, ENGLISH))
+                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
+                    )
+
+                ENGLISH ->
+                    // Ikke vis nynorsk-versjon dersom det finnes en engelsk versjon
+                    this.mustNot(
+                        BoolQueryBuilder()
+                            .must(TermQueryBuilder(LANGUAGE, NORWEGIAN_NYNORSK))
+                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
+                    )
+            }
+        }
     }
 
     private fun toExactSkjemanummerTerm(term: String): String {
