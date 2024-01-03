@@ -79,7 +79,7 @@ abstract class AbstractIntegrationTest {
 
     companion object {
         @Container
-        val opensearch: OpensearchContainer = OpensearchContainer("opensearchproject/opensearch:2.0.0")
+        val opensearch: OpensearchContainer<*> = OpensearchContainer("opensearchproject/opensearch:2.11.1")
             .withStartupAttempts(5)
             .withStartupTimeout(Duration.ofMinutes(2))
     }
