@@ -3,11 +3,11 @@ Søkebackend for nav.no
 
 Secrets ligger i [Google Secret Manager](https://doc.nais.io/security/secrets/google-secrets-manager/).
 
-## Nedlasting av av felles bibliotek
+## Henting av felles bibliotek
 
 Et felles bibliotek publiseres av [navno-search-admin-api](https://github.com/navikt/navno-search-admin-api). Biblioteket inneholder diverse konstanter, samt klassen som brukes for å opprette Opensearch-indexen. Ved deling og versjonering av denne er det mulig å opprette og populere en ny index før man skrur apiet over til å søke mot denne.
 
-For å laste ned dette biblioteket lokalt, må man opprette et PAT i Github og sette dette i `~/.gradle/gradle.properties`.
+For å kunne hente dette biblioteket lokalt, må man opprette et PAT i Github og sette dette i `~/.gradle/gradle.properties`.
 
 ```
 githubPassword=<PAT>
