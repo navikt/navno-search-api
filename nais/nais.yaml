@@ -29,9 +29,6 @@ spec:
   openSearch:
     access: read
     instance: navno-search
-  inbound:
-    rules:
-      - application: navno-search-frontend
   ingresses:
   {{#each ingresses}}
      - "{{this}}"
