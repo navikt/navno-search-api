@@ -4,6 +4,8 @@ data class SearchResult(
     val c: Int,
     val s: Int,
     val daterange: Int,
+    val audience: String?,
+    val preferredLanguage: String?,
     val isMore: Boolean,
     val word: String,
     val total: Long,

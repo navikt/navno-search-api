@@ -39,9 +39,9 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return searchResultMapper.toSearchResult(params, result)
     }
 
-    fun preAggregationFilters(audience: List<String>, preferredLanguage: String?): BoolQueryBuilder {
+    fun preAggregationFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
         return BoolQueryBuilder().apply {
-            if (audience.isNotEmpty()) {
+            if (audience != null) {
                 this.must(activeAudienceFilterQuery(audience))
             }
             if (preferredLanguage != null) {
@@ -112,8 +112,8 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return tidsperiodeFilters[daterange.toString()]!!.filterQuery
     }
 
-    private fun activeAudienceFilterQuery(audience: List<String>): BoolQueryBuilder {
-        return BoolQueryBuilder().apply { audience.forEach { this.should(TermQueryBuilder(AUDIENCE, it)) } }
+    private fun activeAudienceFilterQuery(audience: String): BoolQueryBuilder {
+        return BoolQueryBuilder().must(TermQueryBuilder(AUDIENCE, audience))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {

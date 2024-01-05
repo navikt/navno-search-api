@@ -88,6 +88,8 @@ class SearchResultMapper {
             c = params.c,
             s = params.s,
             daterange = params.daterange,
+            audience = params.audience,
+            preferredLanguage = params.preferredLanguage,
             isMore = result.totalPages > (result.pageNumber + 1),
             word = params.ord,
             total = result.totalElements,
