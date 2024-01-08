@@ -27,7 +27,7 @@ spec:
     min: {{ min-replicas }}
     max: {{ max-replicas }}
   openSearch:
-    access: read
+    access: readwrite
     instance: navno-search
   ingresses:
   {{#each ingresses}}
