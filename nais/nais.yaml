@@ -33,8 +33,6 @@ spec:
   {{#each ingresses}}
      - "{{this}}"
          {{/each}}
-  envFrom:
-    - secret: navno-search-api-secret
   secureLogs:
     enabled: true
   resources:
