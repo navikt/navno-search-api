@@ -30,7 +30,6 @@ import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 private const val TITLE_WEIGHT = 12.0f
 private const val INGRESS_WEIGHT = 3.0f
 private const val TEXT_WEIGHT = 1.0f
-//private const val KEYWORDS_WEIGHT = 10.0f
 
 private const val PRIVATPERSON_WEIGHT = 1.5f
 private const val ARBEIDSGIVER_WEIGHT = 1.25f
@@ -51,7 +50,6 @@ private val WHITESPACE = "\\s+".toRegex()
 
 const val EXACT_INNER_FIELD_PATH = ".exact"
 
-// todo: Ta stilling til om keywords også bør være med her
 private val fieldsToWeightMap = languageSubfields.flatMap {
     listOf(
         "$TITLE.$it" to TITLE_WEIGHT,
