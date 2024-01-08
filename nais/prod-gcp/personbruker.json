@@ -1,6 +1,6 @@
 {
   "ingresses": [
-    "https://www.nav.no/navno-search-api"
+    "https://navno-search-api.intern.nav.no"
   ],
   "min-replicas": 2,
   "max-replicas": 4
