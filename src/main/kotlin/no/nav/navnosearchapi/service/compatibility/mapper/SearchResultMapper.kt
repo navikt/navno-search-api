@@ -16,8 +16,6 @@ import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.UnderAggregations
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
@@ -35,10 +33,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ARBEIDSGIVER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ENGLISH_NEWS_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
@@ -47,26 +41,16 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSON
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRIVATPERSON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG
@@ -174,62 +158,10 @@ class SearchResultMapper {
                         ),
                     ),
                     FacetBucket(
-                        key = FASETT_ENGLISH,
-                        name = FASETT_ENGLISH_NAME,
-                        docCount = aggregations[FASETT_ENGLISH_NAME] ?: 0,
-                        checked = FASETT_ENGLISH == params.f,
-                    ),
-                    FacetBucket(
                         key = FASETT_NYHETER,
                         name = FASETT_NYHETER_NAME,
                         docCount = aggregations[FASETT_NYHETER_NAME] ?: 0,
                         checked = FASETT_NYHETER == params.f,
-                        underaggregeringer = UnderAggregations(
-                            filteredBuckets(
-                                FacetBucket(
-                                    key = UNDERFASETT_PRIVATPERSON,
-                                    name = UNDERFASETT_PRIVATPERSON_NAME,
-                                    docCount = aggregations[UNDERFASETT_PRIVATPERSON_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_PRIVATPERSON),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_ARBEIDSGIVER,
-                                    name = UNDERFASETT_ARBEIDSGIVER_NAME,
-                                    docCount = aggregations[UNDERFASETT_ARBEIDSGIVER_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_ARBEIDSGIVER),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_STATISTIKK,
-                                    name = UNDERFASETT_STATISTIKK_NAME,
-                                    docCount = aggregations[UNDERFASETT_STATISTIKK_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_STATISTIKK),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_PRESSE,
-                                    name = UNDERFASETT_PRESSE_NAME,
-                                    docCount = aggregations[UNDERFASETT_PRESSE_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_PRESSE),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_PRESSEMELDINGER,
-                                    name = UNDERFASETT_PRESSEMELDINGER_NAME,
-                                    docCount = aggregations[UNDERFASETT_PRESSEMELDINGER_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_PRESSEMELDINGER),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_NAV_OG_SAMFUNN,
-                                    name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-                                    docCount = aggregations[UNDERFASETT_NAV_OG_SAMFUNN_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_ENGLISH_NEWS,
-                                    name = UNDERFASETT_ENGLISH_NEWS_NAME,
-                                    docCount = aggregations[UNDERFASETT_ENGLISH_NEWS_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_ENGLISH_NEWS),
-                                ),
-                            )
-                        ),
                     ),
                     FacetBucket(
                         key = FASETT_ANALYSER_OG_FORSKNING,
