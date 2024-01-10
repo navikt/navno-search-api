@@ -75,7 +75,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
             FASETT_INNHOLD -> {
-                if (uf.isNullOrEmpty()) {
+                if (uf.isEmpty()) {
                     fasettFilters[FASETT_INNHOLD]?.filterQuery!!
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { innholdFilters[it]!!.filterQuery })
@@ -86,7 +86,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
             FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
             FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
-                if (uf.isNullOrEmpty()) {
+                if (uf.isEmpty()) {
                     fasettFilters[FASETT_INNHOLD_FRA_FYLKER]!!.filterQuery
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { fylkeFilters[it]!!.filterQuery })
@@ -103,7 +103,9 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     }
 
     private fun activeAudienceFilterQuery(audience: String): BoolQueryBuilder {
-        return BoolQueryBuilder().must(TermQueryBuilder(AUDIENCE, audience))
+        return BoolQueryBuilder()
+            .should(TermQueryBuilder(AUDIENCE, audience))
+            .should(TermQueryBuilder(AUDIENCE, AUDIENCE_ANDRE))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
