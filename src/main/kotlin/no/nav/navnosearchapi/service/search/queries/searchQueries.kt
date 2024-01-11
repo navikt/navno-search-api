@@ -4,10 +4,12 @@ import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.INGRESS_WITH_SYNONYMS
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.TITLE_WITH_SYNONYMS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
@@ -43,8 +45,8 @@ private val fieldsToWeightMap = languageSubfields.flatMap {
     listOf(
         "$TITLE.$it" to 0f, // Kun med pga highlight query
         "$INGRESS.$it" to 0f, // Kun med pga highlight query
-        "${TITLE}WithSynonyms.$it" to TITLE_WEIGHT,
-        "${INGRESS}WithSynonyms.$it" to INGRESS_WEIGHT,
+        "$TITLE_WITH_SYNONYMS.$it" to TITLE_WEIGHT,
+        "$INGRESS_WITH_SYNONYMS.$it" to INGRESS_WEIGHT,
         "$TEXT.$it" to TEXT_WEIGHT,
     )
 }.toMap()
