@@ -10,11 +10,9 @@ import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
 import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
-import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
 import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
@@ -57,7 +55,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
+        return (fasettFilters.values + innholdFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.name, it.filterQuery)
         } + tidsperiodeFilters.values.map {
             AggregationBuilders.filter(
@@ -77,26 +75,18 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
             FASETT_INNHOLD -> {
-                if (uf.isNullOrEmpty()) {
+                if (uf.isEmpty()) {
                     fasettFilters[FASETT_INNHOLD]?.filterQuery!!
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { innholdFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_ENGLISH -> fasettFilters[ENGLISH]!!.filterQuery
-            FASETT_NYHETER -> {
-                if (uf.isNullOrEmpty()) {
-                    fasettFilters[FASETT_NYHETER]!!.filterQuery
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
-                }
-            }
-
+            FASETT_NYHETER -> fasettFilters[FASETT_NYHETER]!!.filterQuery
             FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
             FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
-                if (uf.isNullOrEmpty()) {
+                if (uf.isEmpty()) {
                     fasettFilters[FASETT_INNHOLD_FRA_FYLKER]!!.filterQuery
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { fylkeFilters[it]!!.filterQuery })
@@ -113,7 +103,9 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     }
 
     private fun activeAudienceFilterQuery(audience: String): BoolQueryBuilder {
-        return BoolQueryBuilder().must(TermQueryBuilder(AUDIENCE, audience))
+        return BoolQueryBuilder()
+            .should(TermQueryBuilder(AUDIENCE, audience))
+            .should(TermQueryBuilder(AUDIENCE, AUDIENCE_ANDRE))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
@@ -171,6 +163,7 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
     companion object {
         private const val SKJEMANUMMER_DIGITS_LENGTH = 6
         private const val SKJEMANUMMER_FORMAT = "^((NAV|nav).?)?([0-9]{2}).?([0-9]{2}).?([0-9]{2})$"
+        private const val AUDIENCE_ANDRE = "andre"
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }

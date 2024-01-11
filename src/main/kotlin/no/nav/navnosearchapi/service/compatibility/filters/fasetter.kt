@@ -1,16 +1,12 @@
 package no.nav.navnosearchapi.service.compatibility.filters
 
-import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
@@ -42,12 +38,6 @@ val fasettFilters = mapOf(
             .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
             .mustNot(isFileFilter())
             .mustNot(existsQuery(FYLKE))
-    ),
-    FASETT_ENGLISH to FilterEntry(
-        name = FASETT_ENGLISH_NAME,
-        filterQuery = BoolQueryBuilder()
-            .must(termQuery(LANGUAGE, ENGLISH))
-            .mustNot(isFileFilter())
     ),
     FASETT_NYHETER to FilterEntry(
         name = FASETT_NYHETER_NAME,

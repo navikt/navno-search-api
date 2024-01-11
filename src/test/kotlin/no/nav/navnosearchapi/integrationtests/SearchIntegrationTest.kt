@@ -8,7 +8,6 @@ import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ENGLISH
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
@@ -40,7 +39,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val aggregations = result.aggregations
 
         assertThat(fasettCount(aggregations, FASETT_INNHOLD)).isEqualTo(7)
-        assertThat(fasettCount(aggregations, FASETT_ENGLISH)).isEqualTo(3)
         assertThat(fasettCount(aggregations, FASETT_NYHETER)).isEqualTo(0)
         assertThat(fasettCount(aggregations, FASETT_ANALYSER_OG_FORSKNING)).isEqualTo(0)
         assertThat(fasettCount(aggregations, FASETT_STATISTIKK)).isEqualTo(2)
