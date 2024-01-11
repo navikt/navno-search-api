@@ -12,16 +12,12 @@ import no.nav.navnosearchapi.service.search.queries.EXACT_INNER_FIELD_PATH
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
 
 @Component
 class ContentSearchPageMapper {
-    val logger: Logger = LoggerFactory.getLogger(ContentSearchPageMapper::class.java)
-
     fun toContentSearchPage(
         searchPage: SearchPage<ContentDao>,
         mapCustomAggregations: Boolean,
@@ -42,12 +38,9 @@ class ContentSearchPageMapper {
         val content = searchHit.content
         return ContentSearchHit(
             href = content.href,
-            title = languageSubfieldValue(content.title, content.language)
-                ?: handleMissingValue(content.id, TITLE),
-            ingress = languageSubfieldValue(content.ingress, content.language)
-                ?: handleMissingValue(content.id, INGRESS),
-            text = languageSubfieldValue(content.text, content.language)
-                ?: handleMissingValue(content.id, TEXT),
+            title = languageSubfieldValue(content.title, content.language),
+            ingress = languageSubfieldValue(content.ingress, content.language),
+            text = languageSubfieldValue(content.text, content.language),
             audience = content.audience,
             language = content.language,
             lastUpdated = content.lastUpdated,
@@ -80,21 +73,15 @@ class ContentSearchPageMapper {
         return parentKey + suffix
     }
 
-    private fun languageSubfieldValue(field: MultiLangField, language: String): String? {
+    private fun languageSubfieldValue(field: MultiLangField, language: String): String {
         return when (language) {
-            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no
-            ENGLISH -> field.en
-            else -> field.other
+            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no.firstOrNull() ?: ""
+            ENGLISH -> field.en.firstOrNull() ?: ""
+            else -> field.other.firstOrNull() ?: ""
         }
     }
 
-    private fun handleMissingValue(id: String, field: String): String {
-        logger.warn("Mapping av felt $field feilet for dokument med id $id. Returnerer tom string.")
-        return ""
-    }
-
     companion object {
-        private const val TITLE = "title"
         private const val INGRESS = "ingress"
         private const val TEXT = "text"
 

@@ -6,7 +6,7 @@ import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.service.search.queries.applyFilters
-import no.nav.navnosearchapi.service.search.queries.applyWeighting
+import no.nav.navnosearchapi.service.search.queries.applyTypeWeighting
 import no.nav.navnosearchapi.service.search.queries.highlightBuilder
 import no.nav.navnosearchapi.service.search.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.queries.searchAllTextQuery
@@ -46,7 +46,7 @@ class SearchService(
         val baseQuery = baseQuery(term, isMatchPhraseQuery)
 
         val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(baseQuery.applyFilters(preAggregationFilters).applyWeighting())
+            .withQuery(baseQuery.applyFilters(preAggregationFilters).applyTypeWeighting())
             .withFilter(postAggregationFilters)
             .withPageable(pageRequest)
             .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
@@ -68,7 +68,7 @@ class SearchService(
     }
 
     fun searchUrl(term: String): SearchUrlResponse {
-        val searchQuery = NativeSearchQueryBuilder().withQuery(searchUrlQuery(term).applyWeighting())
+        val searchQuery = NativeSearchQueryBuilder().withQuery(searchUrlQuery(term).applyTypeWeighting())
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
     }

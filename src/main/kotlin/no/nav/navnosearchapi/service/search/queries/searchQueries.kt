@@ -1,20 +1,15 @@
 package no.nav.navnosearchapi.service.search.queries
 
 import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
-import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE
-import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
-import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
-import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
@@ -31,19 +26,13 @@ private const val TITLE_WEIGHT = 12.0f
 private const val INGRESS_WEIGHT = 3.0f
 private const val TEXT_WEIGHT = 1.0f
 
-private const val PRIVATPERSON_WEIGHT = 1.5f
-private const val ARBEIDSGIVER_WEIGHT = 1.25f
-private const val SAMARBEIDSPARTNER_WEIGHT = 1.0f
-
-private const val NORWEGIAN_BOKMAAL_WEIGHT = 1.40f
-private const val NORWEGIAN_NYNORSK_WEIGHT = 1.35f
-
+private const val OVERSIKT_WEIGHT = 2.0f
 private const val PRODUKTSIDE_WEIGHT = 2.0f
 private const val TEMASIDE_WEIGHT = 1.75f
 private const val SITUASJONSSIDE_WEIGHT = 1.50f
 private const val GUIDE_WEIGHT = 1.25f
 
-private const val FUZZY_LOW_DISTANCE = 5
+private const val FUZZY_LOW_DISTANCE = 6
 private const val FUZZY_HIGH_DISTANCE = 8
 
 private val WHITESPACE = "\\s+".toRegex()
@@ -52,9 +41,11 @@ const val EXACT_INNER_FIELD_PATH = ".exact"
 
 private val fieldsToWeightMap = languageSubfields.flatMap {
     listOf(
-        "$TITLE.$it" to TITLE_WEIGHT,
-        "$INGRESS.$it" to INGRESS_WEIGHT,
-        "$TEXT.$it" to TEXT_WEIGHT
+        "$TITLE.$it" to 0f, // Kun med pga highlight query
+        "$INGRESS.$it" to 0f, // Kun med pga highlight query
+        "${TITLE}WithSynonyms.$it" to TITLE_WEIGHT,
+        "${INGRESS}WithSynonyms.$it" to INGRESS_WEIGHT,
+        "$TEXT.$it" to TEXT_WEIGHT,
     )
 }.toMap()
 
@@ -66,22 +57,12 @@ private val exactInnerFieldsToWeightMap = mapOf(
     TEXT_WILDCARD + EXACT_INNER_FIELD_PATH to TEXT_WEIGHT,
 )
 
-private val audienceToWeightMap = mapOf(
-    ValidAudiences.PRIVATPERSON.descriptor to PRIVATPERSON_WEIGHT,
-    ValidAudiences.ARBEIDSGIVER.descriptor to ARBEIDSGIVER_WEIGHT,
-    ValidAudiences.SAMARBEIDSPARTNER.descriptor to SAMARBEIDSPARTNER_WEIGHT,
-)
-
 private val typeToWeightMap = mapOf(
+    ValidTypes.OVERSIKT.descriptor to OVERSIKT_WEIGHT,
     ValidTypes.PRODUKTSIDE.descriptor to PRODUKTSIDE_WEIGHT,
     ValidTypes.TEMASIDE.descriptor to TEMASIDE_WEIGHT,
     ValidTypes.SITUASJONSSIDE.descriptor to SITUASJONSSIDE_WEIGHT,
     ValidTypes.GUIDE.descriptor to GUIDE_WEIGHT,
-)
-
-private val languageToWeightMap = mapOf(
-    NORWEGIAN_BOKMAAL to NORWEGIAN_BOKMAAL_WEIGHT,
-    NORWEGIAN_NYNORSK to NORWEGIAN_NYNORSK_WEIGHT,
 )
 
 fun searchAllTextQuery(term: String): QueryBuilder {
@@ -118,20 +99,8 @@ fun QueryBuilder.applyFilters(filterQuery: BoolQueryBuilder?): QueryBuilder {
     return filterQuery?.let { BoolQueryBuilder().must(this).filter(filterQuery) } ?: this
 }
 
-fun QueryBuilder.applyWeighting(): FunctionScoreQueryBuilder {
-    return this.applyAudienceWeighting().applyTypeWeighting().applyLanguageWeighting()
-}
-
-private fun QueryBuilder.applyAudienceWeighting(): FunctionScoreQueryBuilder {
-    return multiplyScoreByFieldValue(this, AUDIENCE, audienceToWeightMap)
-}
-
-private fun QueryBuilder.applyTypeWeighting(): FunctionScoreQueryBuilder {
+fun QueryBuilder.applyTypeWeighting(): FunctionScoreQueryBuilder {
     return multiplyScoreByFieldValue(this, TYPE, typeToWeightMap)
-}
-
-private fun QueryBuilder.applyLanguageWeighting(): FunctionScoreQueryBuilder {
-    return multiplyScoreByFieldValue(this, LANGUAGE, languageToWeightMap)
 }
 
 private fun MultiMatchQueryBuilder.searchAllText(): MultiMatchQueryBuilder {
