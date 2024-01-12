@@ -113,20 +113,21 @@ fun dummyContentDao(
     fylke: String? = null,
     metatags: List<String> = emptyList()
 ): ContentDao {
-    val title = MultiLangField(value = "$textPrefix title", language = language)
-    val ingress = MultiLangField(value = "$textPrefix ingress", language = language)
-    val text = MultiLangField(value = "$textPrefix text", language = language)
-    val allText = MultiLangField(value = "$title $ingress $text", language = language)
+    val title = "$textPrefix title"
+    val ingress = "$textPrefix ingress"
+    val text = "$textPrefix text"
 
     return ContentDao(
         id = "$teamName-$externalId",
         autocomplete = Completion(listOf("$textPrefix title")),
         teamOwnedBy = teamName,
         href = "https://$textPrefix.com",
-        title = title,
-        ingress = ingress,
-        text = text,
-        allText = allText,
+        title = MultiLangField(values = listOf(title), language = language),
+        ingress = MultiLangField(values = listOf(ingress), language = language),
+        text = MultiLangField(values = listOf(text), language = language),
+        titleWithSynonyms = MultiLangField(values = listOf(title), language = language),
+        ingressWithSynonyms = MultiLangField(values = listOf(ingress), language = language),
+        allText = MultiLangField(values = listOf(title, ingress, text), language = language),
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,
