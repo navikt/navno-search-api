@@ -31,8 +31,8 @@ private const val TEXT_WEIGHT = 1.0f
 private const val OVERSIKT_WEIGHT = 2.0f
 private const val PRODUKTSIDE_WEIGHT = 2.0f
 private const val TEMASIDE_WEIGHT = 1.75f
+private const val GUIDE_WEIGHT = 1.75f
 private const val SITUASJONSSIDE_WEIGHT = 1.50f
-private const val GUIDE_WEIGHT = 1.25f
 
 private const val FUZZY_LOW_DISTANCE = 6
 private const val FUZZY_HIGH_DISTANCE = 8
