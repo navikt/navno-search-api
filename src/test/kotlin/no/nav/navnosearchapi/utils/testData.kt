@@ -117,16 +117,17 @@ fun dummyContentDao(
     val title = "$textPrefix title"
     val ingress = "$textPrefix ingress"
     val text = "$textPrefix text"
+    val allText = listOf(title, ingress, text).joinToString()
 
     return ContentDao(
         id = "$teamName-$externalId",
         autocomplete = Completion(listOf("$textPrefix title")),
         teamOwnedBy = teamName,
         href = "https://$textPrefix.com",
-        title = MultiLangFieldShort(values = listOf(title), language = language),
-        ingress = MultiLangFieldShort(values = listOf(ingress), language = language),
-        text = MultiLangFieldLong(values = listOf(text), language = language),
-        allText = MultiLangFieldLong(values = listOf(title, ingress, text), language = language),
+        title = MultiLangFieldShort(value = title, language = language),
+        ingress = MultiLangFieldShort(value = ingress, language = language),
+        text = MultiLangFieldLong(value = text, language = language),
+        allText = MultiLangFieldLong(value = allText, language = language),
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,

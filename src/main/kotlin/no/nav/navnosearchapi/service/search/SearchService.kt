@@ -79,8 +79,13 @@ class SearchService(
         } else if (isMatchPhraseQuery) {
             searchAllTextForPhraseQuery(term)
         } else {
-            searchAllTextQuery(term)
+            searchAllTextQuery(resolveTerm(term))
         }
+    }
+
+    private fun resolveTerm(term: String): String {
+        val strippedTerm = term.replace(whitespace, "")
+        return termsMap[strippedTerm] ?: term
     }
 
     private fun isInQuotes(term: String): Boolean {
@@ -90,5 +95,8 @@ class SearchService(
 
     companion object {
         private const val QUOTE = '"'
+        val whitespace = "\\s+".toRegex()
+
+        private val termsMap = mapOf("kontakt" to "kontakt oss")
     }
 }

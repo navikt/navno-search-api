@@ -75,9 +75,9 @@ class ContentSearchPageMapper {
 
     private fun languageSubfieldValue(field: MultiLangField, language: String): String {
         return when (language) {
-            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no.firstOrNull() ?: ""
-            ENGLISH -> field.en.firstOrNull() ?: ""
-            else -> field.other.firstOrNull() ?: ""
+            NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> field.no ?: ""
+            ENGLISH -> field.en ?: ""
+            else -> field.other ?: ""
         }
     }
 

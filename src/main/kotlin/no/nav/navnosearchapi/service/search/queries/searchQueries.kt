@@ -12,6 +12,7 @@ import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
+import no.nav.navnosearchapi.service.search.SearchService.Companion.whitespace
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
@@ -94,8 +95,15 @@ fun searchAllTextQuery(term: String): QueryBuilder {
                         .fields(ngramsInnerFieldsToWeightMap)
                         .operator(Operator.AND)
                 )
-                .add(searchAllTextForPhraseQuery(term))
+                .addIfMultipleWordsInTerm(term, searchAllTextForPhraseQuery(term).boost(1.5f))
         )
+}
+
+fun DisMaxQueryBuilder.addIfMultipleWordsInTerm(term: String, query: QueryBuilder): DisMaxQueryBuilder {
+    if (term.split(whitespace).size > 1) {
+        this.add(query)
+    }
+    return this
 }
 
 fun searchAllTextForPhraseQuery(term: String): QueryBuilder {
