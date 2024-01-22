@@ -4,7 +4,8 @@ import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
-import no.nav.navnosearchadminapi.common.model.MultiLangField
+import no.nav.navnosearchadminapi.common.model.MultiLangFieldLong
+import no.nav.navnosearchadminapi.common.model.MultiLangFieldShort
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
@@ -122,12 +123,10 @@ fun dummyContentDao(
         autocomplete = Completion(listOf("$textPrefix title")),
         teamOwnedBy = teamName,
         href = "https://$textPrefix.com",
-        title = MultiLangField(values = listOf(title), language = language),
-        ingress = MultiLangField(values = listOf(ingress), language = language),
-        text = MultiLangField(values = listOf(text), language = language),
-        titleWithSynonyms = MultiLangField(values = listOf(title), language = language),
-        ingressWithSynonyms = MultiLangField(values = listOf(ingress), language = language),
-        allText = MultiLangField(values = listOf(title, ingress, text), language = language),
+        title = MultiLangFieldShort(values = listOf(title), language = language),
+        ingress = MultiLangFieldShort(values = listOf(ingress), language = language),
+        text = MultiLangFieldLong(values = listOf(text), language = language),
+        allText = MultiLangFieldLong(values = listOf(title, ingress, text), language = language),
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,

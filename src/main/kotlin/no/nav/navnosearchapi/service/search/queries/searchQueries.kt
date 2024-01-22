@@ -1,21 +1,21 @@
 package no.nav.navnosearchapi.service.search.queries
 
 import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
+import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.INGRESS_WITH_SYNONYMS
-import no.nav.navnosearchadminapi.common.constants.TEXT
+import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
-import no.nav.navnosearchadminapi.common.constants.TITLE_WITH_SYNONYMS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.DisMaxQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
@@ -37,26 +37,32 @@ private const val SITUASJONSSIDE_WEIGHT = 1.50f
 private const val FUZZY_LOW_DISTANCE = 6
 private const val FUZZY_HIGH_DISTANCE = 8
 
-private val WHITESPACE = "\\s+".toRegex()
-
-const val EXACT_INNER_FIELD_PATH = ".exact"
-
-private val fieldsToWeightMap = languageSubfields.flatMap {
+private val allTextFields = languageSubfields.flatMap {
     listOf(
-        "$TITLE.$it" to 0f, // Kun med pga highlight query
-        "$INGRESS.$it" to 0f, // Kun med pga highlight query
-        "$TITLE_WITH_SYNONYMS.$it" to TITLE_WEIGHT,
-        "$INGRESS_WITH_SYNONYMS.$it" to INGRESS_WEIGHT,
-        "$TEXT.$it" to TEXT_WEIGHT,
+        "$ALL_TEXT.$it",
+        "$TITLE.$it.$NGRAMS_INNER_FIELD",
+        "$INGRESS.$it.$NGRAMS_INNER_FIELD",
+    )
+}.toList()
+
+private val prioritizedFieldsToWeightMap = languageSubfields.flatMap {
+    listOf(
+        "$TITLE.$it" to TITLE_WEIGHT,
+        "$INGRESS.$it" to INGRESS_WEIGHT,
     )
 }.toMap()
 
-private val allTextFields = languageSubfields.map { "$ALL_TEXT.$it" }
+private val ngramsInnerFieldsToWeightMap = languageSubfields.flatMap {
+    listOf(
+        "$TITLE.$it.$NGRAMS_INNER_FIELD" to TITLE_WEIGHT,
+        "$INGRESS.$it.$NGRAMS_INNER_FIELD" to INGRESS_WEIGHT,
+    )
+}.toMap()
 
 private val exactInnerFieldsToWeightMap = mapOf(
-    TITLE_WILDCARD + EXACT_INNER_FIELD_PATH to TITLE_WEIGHT,
-    INGRESS_WILDCARD + EXACT_INNER_FIELD_PATH to INGRESS_WEIGHT,
-    TEXT_WILDCARD + EXACT_INNER_FIELD_PATH to TEXT_WEIGHT,
+    TITLE_WILDCARD + EXACT_INNER_FIELD to TITLE_WEIGHT,
+    INGRESS_WILDCARD + EXACT_INNER_FIELD to INGRESS_WEIGHT,
+    TEXT_WILDCARD + EXACT_INNER_FIELD to TEXT_WEIGHT,
 )
 
 private val typeToWeightMap = mapOf(
@@ -69,22 +75,27 @@ private val typeToWeightMap = mapOf(
 
 fun searchAllTextQuery(term: String): QueryBuilder {
     return BoolQueryBuilder()
-        .should(
+        .must(
             MultiMatchQueryBuilder(term)
-                .fields(fieldsToWeightMap)
                 .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
-                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-        ).apply {
-            // Alle treff må inneholde alle søkeord
-            if (term.split(WHITESPACE).size > 1) {
-                this.filter(
+                .operator(Operator.AND)
+                .boost(0.01f)
+                .searchAllText()
+        )
+        .should(
+            DisMaxQueryBuilder()
+                .add(
                     MultiMatchQueryBuilder(term)
+                        .fields(prioritizedFieldsToWeightMap)
                         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
-                        .operator(Operator.AND)
-                        .searchAllText()
                 )
-            }
-        }
+                .add(
+                    MultiMatchQueryBuilder(term)
+                        .fields(ngramsInnerFieldsToWeightMap)
+                        .operator(Operator.AND)
+                )
+                .add(searchAllTextForPhraseQuery(term))
+        )
 }
 
 fun searchAllTextForPhraseQuery(term: String): QueryBuilder {

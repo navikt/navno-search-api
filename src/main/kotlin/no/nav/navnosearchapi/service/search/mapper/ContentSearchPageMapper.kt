@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.service.search.mapper
 
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
+import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.model.ContentDao
@@ -8,7 +9,6 @@ import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.service.search.dto.ContentHighlight
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
-import no.nav.navnosearchapi.service.search.queries.EXACT_INNER_FIELD_PATH
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
@@ -68,7 +68,7 @@ class ContentSearchPageMapper {
             else -> OTHER_SUFFIX
         }
 
-        if (isMatchPhraseQuery) suffix += EXACT_INNER_FIELD_PATH
+        if (isMatchPhraseQuery) suffix += ".$EXACT_INNER_FIELD"
 
         return parentKey + suffix
     }

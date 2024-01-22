@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.search.queries
 
+import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
@@ -43,7 +44,7 @@ private fun highlightFieldName(baseField: String, languageSubfield: String, isMa
     val fieldName = "$baseField.$languageSubfield"
 
     return if (isMatchPhraseQuery) {
-        fieldName + EXACT_INNER_FIELD_PATH
+        "$fieldName.$EXACT_INNER_FIELD"
     } else {
         fieldName
     }
