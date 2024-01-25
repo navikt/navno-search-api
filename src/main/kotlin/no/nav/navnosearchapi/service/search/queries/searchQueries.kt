@@ -35,6 +35,9 @@ private const val TEMASIDE_WEIGHT = 1.75f
 private const val GUIDE_WEIGHT = 1.75f
 private const val SITUASJONSSIDE_WEIGHT = 1.50f
 
+private const val ALL_TEXT_MATCH_BOOST = 0.01f
+private const val EXACT_PHRASE_MATCH_BOOST = 1.5f
+
 private const val FUZZY_LOW_DISTANCE = 6
 private const val FUZZY_HIGH_DISTANCE = 8
 
@@ -80,7 +83,7 @@ fun searchAllTextQuery(term: String): QueryBuilder {
             MultiMatchQueryBuilder(term)
                 .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
                 .operator(Operator.AND)
-                .boost(0.01f)
+                .boost(ALL_TEXT_MATCH_BOOST)
                 .searchAllText()
         )
         .should(
@@ -95,7 +98,11 @@ fun searchAllTextQuery(term: String): QueryBuilder {
                         .fields(ngramsInnerFieldsToWeightMap)
                         .operator(Operator.AND)
                 )
-                .addIfMultipleWordsInTerm(term, searchAllTextForPhraseQuery(term).boost(1.5f))
+                .addIfMultipleWordsInTerm(
+                    term,
+                    searchAllTextForPhraseQuery(term)
+                        .boost(EXACT_PHRASE_MATCH_BOOST)
+                )
         )
 }
 
