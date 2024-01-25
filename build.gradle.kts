@@ -37,7 +37,7 @@ dependencies {
         val opensearch = "1.3.0"
         val opensearchTestcontainers = "2.0.1"
         val testcontainers = "1.19.3"
-        val navnoSearchCommon = "20240122135715-9092c41"
+        val navnoSearchCommon = "20240125132134-c00b621"
     }
 
     implementation("no.nav.navnosearchadminapi:common:${versions.navnoSearchCommon}")
