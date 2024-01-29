@@ -4,7 +4,8 @@ import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
-import no.nav.navnosearchadminapi.common.model.MultiLangField
+import no.nav.navnosearchadminapi.common.model.MultiLangFieldLong
+import no.nav.navnosearchadminapi.common.model.MultiLangFieldShort
 import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
@@ -113,20 +114,20 @@ fun dummyContentDao(
     fylke: String? = null,
     metatags: List<String> = emptyList()
 ): ContentDao {
-    val title = MultiLangField(value = "$textPrefix title", language = language)
-    val ingress = MultiLangField(value = "$textPrefix ingress", language = language)
-    val text = MultiLangField(value = "$textPrefix text", language = language)
-    val allText = MultiLangField(value = "$title $ingress $text", language = language)
+    val title = "$textPrefix title"
+    val ingress = "$textPrefix ingress"
+    val text = "$textPrefix text"
+    val allText = listOf(title, ingress, text).joinToString()
 
     return ContentDao(
         id = "$teamName-$externalId",
         autocomplete = Completion(listOf("$textPrefix title")),
         teamOwnedBy = teamName,
         href = "https://$textPrefix.com",
-        title = title,
-        ingress = ingress,
-        text = text,
-        allText = allText,
+        title = MultiLangFieldShort(value = title, language = language),
+        ingress = MultiLangFieldShort(value = ingress, language = language),
+        text = MultiLangFieldLong(value = text, language = language),
+        allText = MultiLangFieldLong(value = allText, language = language),
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,
