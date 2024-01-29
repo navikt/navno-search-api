@@ -18,7 +18,6 @@ import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.suggest.SuggestBuilder
 import org.opensearch.search.suggest.completion.CompletionSuggestionBuilder
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -27,17 +26,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class SearchService(
-    @Value("\${opensearch.page-size}") val pageSize: Int,
     val operations: ElasticsearchOperations,
     val mapper: ContentSearchPageMapper,
 ) {
     fun search(
         term: String,
+        pageSize: Int,
         page: Int,
-        preAggregationFilters: BoolQueryBuilder?,
-        postAggregationFilters: BoolQueryBuilder,
-        aggregations: List<AbstractAggregationBuilder<*>>,
-        mapCustomAggregations: Boolean = false,
+        filters: BoolQueryBuilder,
+        preAggregationFilters: BoolQueryBuilder? = null,
+        aggregations: List<AbstractAggregationBuilder<*>>? = null,
         sort: Sort? = null
     ): ContentSearchPage {
         val pageRequest = PageRequest.of(page, pageSize)
@@ -47,10 +45,9 @@ class SearchService(
 
         val searchQuery = NativeSearchQueryBuilder()
             .withQuery(baseQuery.applyFilters(preAggregationFilters).applyTypeWeighting())
-            .withFilter(postAggregationFilters)
+            .withFilter(filters)
             .withPageable(pageRequest)
             .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
-            .withAggregations(aggregations)
             .withSuggestBuilder(
                 SuggestBuilder().addSuggestion(
                     AUTOCOMPLETE,
@@ -58,13 +55,14 @@ class SearchService(
                 )
             )
             .withTrackTotalHits(true)
+            .apply { if (aggregations != null) this.withAggregations(aggregations) }
 
         sort?.let { searchQuery.withSort(it) }
 
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         val searchPage = SearchHitSupport.searchPageFor(searchHits, pageRequest)
 
-        return mapper.toContentSearchPage(searchPage, mapCustomAggregations, isMatchPhraseQuery)
+        return mapper.toContentSearchPage(searchPage, isMatchPhraseQuery)
     }
 
     fun searchUrl(term: String): SearchUrlResponse {

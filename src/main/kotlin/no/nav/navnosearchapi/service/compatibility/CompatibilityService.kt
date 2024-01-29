@@ -6,11 +6,13 @@ import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
 import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
 import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
+import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
@@ -29,12 +31,19 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class CompatibilityService(val searchResultMapper: SearchResultMapper) {
+class CompatibilityService(
+    val searchResultMapper: SearchResultMapper,
+    val decoratorSearchResultMapper: DecoratorSearchResultMapper
+) {
 
     val logger: Logger = LoggerFactory.getLogger(CompatibilityService::class.java)
 
     fun toSearchResult(params: Params, result: ContentSearchPage): SearchResult {
         return searchResultMapper.toSearchResult(params, result)
+    }
+
+    fun toDecoratorSearchResult(params: Params, result: ContentSearchPage): DecoratorSearchResult {
+        return decoratorSearchResultMapper.toSearchResult(params, result)
     }
 
     fun preAggregationFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
@@ -52,6 +61,17 @@ class CompatibilityService(val searchResultMapper: SearchResultMapper) {
         return BoolQueryBuilder()
             .must(activeFasettFilterQuery(f, uf))
             .must(activeTidsperiodeFilterQuery(daterange))
+    }
+
+    fun decoratorSearchFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
+        return BoolQueryBuilder().must(activeFasettFilterQuery(FASETT_INNHOLD, emptyList())).apply {
+            if (audience != null) {
+                this.must(activeAudienceFilterQuery(audience))
+            }
+            if (preferredLanguage != null) {
+                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
+            }
+        }
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
