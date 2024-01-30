@@ -25,15 +25,15 @@ import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 
 private const val TITLE_WEIGHT = 12.0f
 private const val INGRESS_WEIGHT = 3.0f
-private const val TEXT_WEIGHT = 1.0f
+private const val TEXT_WEIGHT = 0.01f
+private const val EXACT_TEXT_WEIGHT = 1.0f
 
 private const val OVERSIKT_WEIGHT = 2.0f
 private const val PRODUKTSIDE_WEIGHT = 2.0f
 private const val TEMASIDE_WEIGHT = 1.75f
 private const val GUIDE_WEIGHT = 1.75f
-private const val SITUASJONSSIDE_WEIGHT = 1.50f
 
-private const val ALL_TEXT_MATCH_BOOST = 0.01f
+private const val SITUASJONSSIDE_WEIGHT = 1.50f
 private const val EXACT_PHRASE_MATCH_BOOST = 1.5f
 
 private const val FUZZY_LOW_DISTANCE = 6
@@ -47,10 +47,11 @@ private val allTextFields = languageSubfields.flatMap {
     )
 }.toList()
 
-private val prioritizedFieldsToWeightMap = languageSubfields.flatMap {
+private val fieldsToWeightMap = languageSubfields.flatMap {
     listOf(
         "$TITLE.$it" to TITLE_WEIGHT,
         "$INGRESS.$it" to INGRESS_WEIGHT,
+        "$TEXT.$it" to TEXT_WEIGHT,
     )
 }.toMap()
 
@@ -65,7 +66,7 @@ private val exactInnerFieldsToWeightMap = languageSubfields.flatMap {
     listOf(
         "$TITLE.$it.$EXACT_INNER_FIELD" to TITLE_WEIGHT,
         "$INGRESS.$it.$EXACT_INNER_FIELD" to INGRESS_WEIGHT,
-        "$TEXT.$it.$EXACT_INNER_FIELD" to TEXT_WEIGHT,
+        "$TEXT.$it.$EXACT_INNER_FIELD" to EXACT_TEXT_WEIGHT,
     )
 }.toMap()
 
@@ -79,18 +80,17 @@ private val typeToWeightMap = mapOf(
 
 fun searchAllTextQuery(term: String): QueryBuilder {
     return BoolQueryBuilder()
-        .must(
+        .filter(
             MultiMatchQueryBuilder(term)
                 .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
                 .operator(Operator.AND)
-                .boost(ALL_TEXT_MATCH_BOOST)
                 .searchAllText()
         )
         .should(
             DisMaxQueryBuilder()
                 .add(
                     MultiMatchQueryBuilder(term)
-                        .fields(prioritizedFieldsToWeightMap)
+                        .fields(fieldsToWeightMap)
                         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
                 )
                 .add(
