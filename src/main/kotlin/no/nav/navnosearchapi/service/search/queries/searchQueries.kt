@@ -4,11 +4,9 @@ import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.HREF
 import no.nav.navnosearchadminapi.common.constants.INGRESS
-import no.nav.navnosearchadminapi.common.constants.INGRESS_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
-import no.nav.navnosearchadminapi.common.constants.TEXT_WILDCARD
+import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
-import no.nav.navnosearchadminapi.common.constants.TITLE_WILDCARD
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
@@ -63,11 +61,13 @@ private val ngramsInnerFieldsToWeightMap = languageSubfields.flatMap {
     )
 }.toMap()
 
-private val exactInnerFieldsToWeightMap = mapOf(
-    TITLE_WILDCARD + EXACT_INNER_FIELD to TITLE_WEIGHT,
-    INGRESS_WILDCARD + EXACT_INNER_FIELD to INGRESS_WEIGHT,
-    TEXT_WILDCARD + EXACT_INNER_FIELD to TEXT_WEIGHT,
-)
+private val exactInnerFieldsToWeightMap = languageSubfields.flatMap {
+    listOf(
+        "$TITLE.$it.$EXACT_INNER_FIELD" to TITLE_WEIGHT,
+        "$INGRESS.$it.$EXACT_INNER_FIELD" to INGRESS_WEIGHT,
+        "$TEXT.$it.$EXACT_INNER_FIELD" to TEXT_WEIGHT,
+    )
+}.toMap()
 
 private val typeToWeightMap = mapOf(
     ValidTypes.OVERSIKT.descriptor to OVERSIKT_WEIGHT,
