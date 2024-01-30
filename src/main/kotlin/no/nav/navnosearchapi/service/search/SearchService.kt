@@ -47,7 +47,7 @@ class SearchService(
             .withQuery(baseQuery.applyFilters(preAggregationFilters).applyTypeWeighting())
             .withFilter(filters)
             .withPageable(pageRequest)
-            .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
+            .withHighlightBuilder(highlightBuilder(isMatchPhraseQuery))
             .withSuggestBuilder(
                 SuggestBuilder().addSuggestion(
                     AUTOCOMPLETE,

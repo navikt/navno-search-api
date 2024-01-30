@@ -4,7 +4,6 @@ import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
-import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_FRAGMENT_CHAR_SIZE
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_NUMBER_OF_FRAGMENTS
@@ -15,14 +14,16 @@ private const val BOLD_POSTTAG = "</b>"
 private const val UNFRAGMENTED = 0
 private const val MAX_FRAGMENT_SIZE = 200
 
-fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): HighlightBuilder {
+private const val HIGHLIGHTER_PLAIN = "plain"
+
+fun highlightBuilder(isMatchPhraseQuery: Boolean): HighlightBuilder {
     return HighlightBuilder()
-        .highlightQuery(query) // Må bruke query uten function score for å få riktige highlights
         .preTags(BOLD_PRETAG)
         .postTags(BOLD_POSTTAG)
         .requireFieldMatch(false) // For å highlighte text-felt selv om dette ikke er med i søkequery
         .ingressHighlightFields(isMatchPhraseQuery)
         .textHighlightFields(isMatchPhraseQuery)
+        .highlighterType(HIGHLIGHTER_PLAIN)
 }
 
 private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
