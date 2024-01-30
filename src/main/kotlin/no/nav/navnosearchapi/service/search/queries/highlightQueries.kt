@@ -20,6 +20,7 @@ fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): Highligh
         .highlightQuery(query) // Må bruke query uten function score for å få riktige highlights
         .preTags(BOLD_PRETAG)
         .postTags(BOLD_POSTTAG)
+        .requireFieldMatch(false) // For å highlighte text-felt selv om dette ikke er med i søkequery
         .ingressHighlightFields(isMatchPhraseQuery)
         .textHighlightFields(isMatchPhraseQuery)
 }
