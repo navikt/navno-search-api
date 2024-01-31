@@ -131,7 +131,11 @@ class CompatibilityService(
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
         return BoolQueryBuilder().apply {
             // Ikke vis treff som har en versjon på foretrukket språk
-            this.mustNot(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
+            this.mustNot(
+                BoolQueryBuilder()
+                    .must(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
+                    .mustNot(TermQueryBuilder(LANGUAGE, preferredLanguage))
+            )
 
             when (preferredLanguage) {
                 NORWEGIAN_BOKMAAL ->
