@@ -7,13 +7,15 @@ import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_FRAGMENT_CHAR_SIZE
-import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_NUMBER_OF_FRAGMENTS
 
 private const val BOLD_PRETAG = "<b>"
 private const val BOLD_POSTTAG = "</b>"
 
 private const val UNFRAGMENTED = 0
+private const val SINGLE_FRAGMENT = 1
 private const val MAX_FRAGMENT_SIZE = 200
+
+private const val HIGHLIGHTER_PLAIN = "plain"
 
 fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): HighlightBuilder {
     return HighlightBuilder()
@@ -22,6 +24,7 @@ fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): Highligh
         .postTags(BOLD_POSTTAG)
         .ingressHighlightFields(isMatchPhraseQuery)
         .textHighlightFields(isMatchPhraseQuery)
+        .highlighterType(HIGHLIGHTER_PLAIN)
 }
 
 private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
@@ -35,7 +38,7 @@ private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean)
 private fun HighlightBuilder.textHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
     languageSubfields.forEach {
         val fieldName = highlightFieldName(TEXT, it, isMatchPhraseQuery)
-        this.field(fieldName, MAX_FRAGMENT_SIZE, DEFAULT_NUMBER_OF_FRAGMENTS)
+        this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
     }
     return this
 }

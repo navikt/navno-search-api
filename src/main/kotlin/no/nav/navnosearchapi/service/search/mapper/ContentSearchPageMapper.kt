@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component
 class ContentSearchPageMapper {
     fun toContentSearchPage(
         searchPage: SearchPage<ContentDao>,
-        mapCustomAggregations: Boolean,
         isMatchPhraseQuery: Boolean
     ): ContentSearchPage {
+        val aggregations = searchPage.searchHits.aggregations
         return ContentSearchPage(
             suggestions = searchPage.searchHits.suggest?.suggestions?.first()?.entries?.flatMap { entry -> entry.options.map { it.text } },
             hits = searchPage.searchHits.searchHits.map { toContentSearchHit(it, isMatchPhraseQuery) },
@@ -30,7 +30,7 @@ class ContentSearchPageMapper {
             totalElements = searchPage.totalElements,
             pageSize = searchPage.size,
             pageNumber = searchPage.number,
-            aggregations = mapAggregations((searchPage.searchHits.aggregations as OpenSearchAggregations).aggregations())
+            aggregations = if (aggregations != null) mapAggregations((aggregations as OpenSearchAggregations).aggregations()) else null
         )
     }
 
