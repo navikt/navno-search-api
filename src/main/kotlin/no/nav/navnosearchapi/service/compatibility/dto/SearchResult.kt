@@ -1,7 +1,7 @@
 package no.nav.navnosearchapi.service.compatibility.dto
 
 data class SearchResult(
-    val c: Int,
+    val page: Int,
     val s: Int,
     val daterange: Int,
     val audience: String?,

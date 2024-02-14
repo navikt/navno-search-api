@@ -26,7 +26,13 @@ import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 private const val TITLE_WEIGHT = 12.0f
 private const val INGRESS_WEIGHT = 3.0f
 private const val TEXT_WEIGHT = 0.01f
+
+private const val EXACT_TITLE_WEIGHT = 12.0f
+private const val EXACT_INGRESS_WEIGHT = 3.0f
 private const val EXACT_TEXT_WEIGHT = 1.0f
+
+private const val NGRAM_TITLE_WEIGHT = 11.5f
+private const val NGRAM_INGRESS_WEIGHT = 3.0f
 
 private const val OVERSIKT_WEIGHT = 2.0f
 private const val PRODUKTSIDE_WEIGHT = 2.0f
@@ -57,15 +63,15 @@ private val fieldsToWeightMap = languageSubfields.flatMap {
 
 private val ngramsInnerFieldsToWeightMap = languageSubfields.flatMap {
     listOf(
-        "$TITLE.$it.$NGRAMS_INNER_FIELD" to TITLE_WEIGHT,
-        "$INGRESS.$it.$NGRAMS_INNER_FIELD" to INGRESS_WEIGHT,
+        "$TITLE.$it.$NGRAMS_INNER_FIELD" to NGRAM_TITLE_WEIGHT,
+        "$INGRESS.$it.$NGRAMS_INNER_FIELD" to NGRAM_INGRESS_WEIGHT,
     )
 }.toMap()
 
 private val exactInnerFieldsToWeightMap = languageSubfields.flatMap {
     listOf(
-        "$TITLE.$it.$EXACT_INNER_FIELD" to TITLE_WEIGHT,
-        "$INGRESS.$it.$EXACT_INNER_FIELD" to INGRESS_WEIGHT,
+        "$TITLE.$it.$EXACT_INNER_FIELD" to EXACT_TITLE_WEIGHT,
+        "$INGRESS.$it.$EXACT_INNER_FIELD" to EXACT_INGRESS_WEIGHT,
         "$TEXT.$it.$EXACT_INNER_FIELD" to EXACT_TEXT_WEIGHT,
     )
 }.toMap()

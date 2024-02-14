@@ -2,8 +2,7 @@ package no.nav.navnosearchapi.service.compatibility
 
 data class Params(
     val ord: String, // Term
-    val c: Int = 1, // Number of results to retrieve (20 * c)
-    val start: Int = 0, // Skips first (20 * start) results
+    val page: Int = 0,
     val f: String = "0", // Facet key
     val uf: List<String> = emptyList(), // Under-facet keys
     val s: Int = 0, // Sort

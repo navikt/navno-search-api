@@ -7,8 +7,6 @@ import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER_NAME
@@ -36,7 +34,6 @@ val fasettFilters = mapOf(
             .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
             .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
             .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-            .mustNot(isFileFilter())
             .mustNot(existsQuery(FYLKE))
     ),
     FASETT_NYHETER to FilterEntry(
@@ -47,14 +44,12 @@ val fasettFilters = mapOf(
                     .should(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
                     .should(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
             )
-            .mustNot(isFileFilter())
             .mustNot(existsQuery(FYLKE))
     ),
     FASETT_ANALYSER_OG_FORSKNING to FilterEntry(
         name = FASETT_ANALYSER_OG_FORSKNING_NAME,
         filterQuery = BoolQueryBuilder()
             .must(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
-            .mustNot(isFileFilter())
     ),
     FASETT_STATISTIKK to FilterEntry(
         name = FASETT_STATISTIKK_NAME,
@@ -62,21 +57,10 @@ val fasettFilters = mapOf(
             .must(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
             .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
             .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
-            .mustNot(isFileFilter())
     ),
     FASETT_INNHOLD_FRA_FYLKER to FilterEntry(
         name = FASETT_INNHOLD_FRA_FYLKER_NAME,
         filterQuery = BoolQueryBuilder()
             .must(existsQuery(FYLKE))
-            .mustNot(isFileFilter())
-    ),
-    FASETT_FILER to FilterEntry(
-        name = FASETT_FILER_NAME,
-        filterQuery = isFileFilter()
-    ),
+    )
 )
-
-fun isFileFilter(): BoolQueryBuilder = BoolQueryBuilder()
-    .should(termQuery(TYPE, ValidTypes.FIL_DOCUMENT.descriptor))
-    .should(termQuery(TYPE, ValidTypes.FIL_SPREADSHEET.descriptor))
-    .should(termQuery(TYPE, ValidTypes.FIL_ANDRE.descriptor))

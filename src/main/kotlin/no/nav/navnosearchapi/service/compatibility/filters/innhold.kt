@@ -40,6 +40,5 @@ private fun innholdBaseFilter(): BoolQueryBuilder {
         .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
         .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-        .mustNot(isFileFilter())
         .mustNot(existsQuery(FYLKE))
 }
