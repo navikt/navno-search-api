@@ -35,7 +35,7 @@ abstract class AbstractIntegrationTest {
     fun searchUri(
         ord: String?,
         c: String? = "1",
-        start: Int? = 0,
+        page: Int? = 0,
         f: Int? = 0,
         uf: List<String>? = emptyList(),
         s: Int? = 0,
@@ -44,8 +44,7 @@ abstract class AbstractIntegrationTest {
         return UriComponentsBuilder.fromHttpUrl(host())
             .path("/content/search")
             .queryParam("ord", ord)
-            .queryParam("c", c)
-            .queryParam("start", start)
+            .queryParam("page", page)
             .queryParam("f", f)
             .queryParam("uf", uf)
             .queryParam("s", s)

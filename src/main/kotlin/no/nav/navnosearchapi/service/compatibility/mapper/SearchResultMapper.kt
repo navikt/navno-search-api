@@ -67,7 +67,7 @@ import org.springframework.stereotype.Component
 class SearchResultMapper {
     fun toSearchResult(params: Params, result: ContentSearchPage): SearchResult {
         return SearchResult(
-            c = params.c,
+            page = params.page,
             s = params.s,
             daterange = params.daterange,
             audience = params.audience,
