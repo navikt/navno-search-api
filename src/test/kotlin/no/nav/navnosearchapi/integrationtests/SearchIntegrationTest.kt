@@ -8,7 +8,6 @@ import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
@@ -42,8 +41,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(fasettCount(aggregations, FASETT_NYHETER)).isEqualTo(0)
         assertThat(fasettCount(aggregations, FASETT_ANALYSER_OG_FORSKNING)).isEqualTo(0)
         assertThat(fasettCount(aggregations, FASETT_STATISTIKK)).isEqualTo(2)
-        assertThat(fasettCount(aggregations, FASETT_INNHOLD_FRA_FYLKER)).isEqualTo(2)
-        assertThat(fasettCount(aggregations, FASETT_FILER)).isEqualTo(1)
+        assertThat(fasettCount(aggregations, FASETT_INNHOLD_FRA_FYLKER)).isEqualTo(3)
 
         assertThat(tidsperiodeCount(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS)).isEqualTo(1)
         assertThat(tidsperiodeCount(aggregations, DATE_RANGE_LAST_12_MONTHS)).isEqualTo(6)
@@ -71,11 +69,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
             restTemplate.getForEntity<SearchResult>(
                 searchUri(
                     ord = TEXT_TERM,
-                    f = FASETT_FILER.toInt()
+                    f = FASETT_INNHOLD_FRA_FYLKER.toInt()
                 )
             ).body!!
 
-        assertThat(result.total).isEqualTo(1L)
+        assertThat(result.total).isEqualTo(3L)
     }
 
     @Test

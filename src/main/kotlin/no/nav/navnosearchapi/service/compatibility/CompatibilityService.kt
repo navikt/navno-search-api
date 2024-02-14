@@ -15,7 +15,6 @@ import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
@@ -113,7 +112,6 @@ class CompatibilityService(
                 }
             }
 
-            FASETT_FILER -> fasettFilters[FASETT_FILER]!!.filterQuery
             else -> BoolQueryBuilder()
         }
     }

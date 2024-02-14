@@ -16,8 +16,6 @@ import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.UnderAggregations
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_FILER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER_NAME
@@ -256,12 +254,6 @@ class SearchResultMapper {
                                 ),
                             )
                         ),
-                    ),
-                    FacetBucket(
-                        key = FASETT_FILER,
-                        name = FASETT_FILER_NAME,
-                        docCount = aggregations[FASETT_FILER_NAME] ?: 0,
-                        checked = FASETT_FILER == params.f,
                     ),
                 )
             ),

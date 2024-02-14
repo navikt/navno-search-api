@@ -28,7 +28,7 @@ val initialTestData = listOf(
         externalId = "1",
         textPrefix = "First",
         audience = listOf(PRIVATPERSON, ARBEIDSGIVER, SAMARBEIDSPARTNER),
-        type = ValidTypes.FIL_DOCUMENT.descriptor,
+        type = ValidTypes.TABELL.descriptor,
         fylke = AGDER,
     ),
     dummyContentDao(

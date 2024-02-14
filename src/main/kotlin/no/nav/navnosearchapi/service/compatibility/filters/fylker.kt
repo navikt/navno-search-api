@@ -83,5 +83,4 @@ val fylkeFilters = mapOf(
 private fun fylkeFilter(requiredFylke: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .must(termQuery(FYLKE, requiredFylke))
-        .mustNot(isFileFilter())
 }
