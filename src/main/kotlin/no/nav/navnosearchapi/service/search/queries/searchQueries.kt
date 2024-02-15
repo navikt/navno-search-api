@@ -28,7 +28,7 @@ private const val INGRESS_WEIGHT = 3.0f
 private const val TEXT_WEIGHT = 0.01f
 
 private const val EXACT_TITLE_WEIGHT = 12.0f
-private const val EXACT_INGRESS_WEIGHT = 3.0f
+private const val EXACT_INGRESS_WEIGHT = 6.0f
 private const val EXACT_TEXT_WEIGHT = 1.0f
 
 private const val NGRAM_TITLE_WEIGHT = 11.5f
