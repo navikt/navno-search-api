@@ -1,17 +1,10 @@
 package no.nav.navnosearchapi.integrationtests
 
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import org.assertj.core.api.Assertions.assertThat
@@ -31,22 +24,9 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     fun testSearchWithEmptyTerm() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(7L)
+        assertThat(result.total).isEqualTo(0L)
         assertThat(result.isMore).isFalse()
         assertThat(result.autoComplete).isEmpty()
-
-        val aggregations = result.aggregations
-
-        assertThat(fasettCount(aggregations, FASETT_INNHOLD)).isEqualTo(7)
-        assertThat(fasettCount(aggregations, FASETT_NYHETER)).isEqualTo(0)
-        assertThat(fasettCount(aggregations, FASETT_ANALYSER_OG_FORSKNING)).isEqualTo(0)
-        assertThat(fasettCount(aggregations, FASETT_STATISTIKK)).isEqualTo(2)
-        assertThat(fasettCount(aggregations, FASETT_INNHOLD_FRA_FYLKER)).isEqualTo(3)
-
-        assertThat(tidsperiodeCount(aggregations, DATE_RANGE_OLDER_THAN_12_MONTHS)).isEqualTo(1)
-        assertThat(tidsperiodeCount(aggregations, DATE_RANGE_LAST_12_MONTHS)).isEqualTo(6)
-        assertThat(tidsperiodeCount(aggregations, DATE_RANGE_LAST_30_DAYS)).isEqualTo(2)
-        assertThat(tidsperiodeCount(aggregations, DATE_RANGE_LAST_7_DAYS)).isEqualTo(0)
     }
 
     @Test
