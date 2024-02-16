@@ -45,6 +45,8 @@ private const val EXACT_PHRASE_MATCH_BOOST = 1.5f
 private const val FUZZY_LOW_DISTANCE = 6
 private const val FUZZY_HIGH_DISTANCE = 8
 
+private const val NGRAM_MIN_LENGTH = 4
+
 private val allTextFields = languageSubfields.flatMap {
     listOf(
         "$ALL_TEXT.$it",
@@ -86,6 +88,7 @@ private val typeToWeightMap = mapOf(
 
 fun searchAllTextQuery(term: String): QueryBuilder {
     return BoolQueryBuilder()
+        // Filter (bidrar ikke til score) - alle treff må inneholde alle søkeord (på tvers av feltene)
         .filter(
             MultiMatchQueryBuilder(term)
                 .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
@@ -93,17 +96,23 @@ fun searchAllTextQuery(term: String): QueryBuilder {
                 .searchAllText()
         )
         .should(
+            // Bruk subquery med høyest score
             DisMaxQueryBuilder()
+                // Standard søk i title, ingress og text
                 .add(
                     MultiMatchQueryBuilder(term)
                         .fields(fieldsToWeightMap)
                         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
                 )
-                .add(
+                // Ngram-søk i title og ingress (kun dersom søketerm er minst 4 tegn)
+                .addIfTermHasMinLength(
+                    term,
+                    NGRAM_MIN_LENGTH,
                     MultiMatchQueryBuilder(term)
                         .fields(ngramsInnerFieldsToWeightMap)
                         .operator(Operator.AND)
                 )
+                // Eksakt frase-søk (kun ved flere søkeord)
                 .addIfMultipleWordsInTerm(
                     term,
                     searchAllTextForPhraseQuery(term)
@@ -114,6 +123,17 @@ fun searchAllTextQuery(term: String): QueryBuilder {
 
 fun DisMaxQueryBuilder.addIfMultipleWordsInTerm(term: String, query: QueryBuilder): DisMaxQueryBuilder {
     if (term.split(whitespace).size > 1) {
+        this.add(query)
+    }
+    return this
+}
+
+fun DisMaxQueryBuilder.addIfTermHasMinLength(
+    term: String,
+    minLength: Int,
+    query: QueryBuilder
+): DisMaxQueryBuilder {
+    if (term.trim().length >= minLength) {
         this.add(query)
     }
     return this
