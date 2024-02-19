@@ -5,11 +5,11 @@ on:
 jobs:
   deploy:
     permissions:
-      contents: "read"
-      id-token: "write"
+      contents: read
+      id-token: write
+      packages: read
     uses: ./.github/workflows/build-and-deploy.yml
     with:
       environment: dev
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-      NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}

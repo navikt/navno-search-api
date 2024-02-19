@@ -8,16 +8,14 @@ on:
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER:
         required: true
-      NAIS_DEPLOY_APIKEY:
-        required: true
-
 jobs:
   deploy:
     name: Build image and deploy to nais
     runs-on: ubuntu-latest
     permissions:
-      contents: "read"
-      id-token: "write"
+      contents: read
+      id-token: write
+      packages: read
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -46,4 +44,4 @@ jobs:
           RESOURCE: ./nais/nais.yaml
           VAR: image=${{steps.docker-build-push.outputs.image}}
           VARS: ./nais/${{ inputs.environment }}-gcp/personbruker.json
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
