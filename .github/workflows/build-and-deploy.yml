@@ -8,6 +8,8 @@ on:
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER:
         required: true
+      GITHUB_TOKEN:
+        required: true
 jobs:
   deploy:
     name: Build image and deploy to nais
