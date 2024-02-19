@@ -30,6 +30,8 @@ jobs:
       - name: Build application
         run: |
           ./gradlew clean build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push docker image
         uses: nais/docker-build-push@v0
         id: docker-build-push
@@ -44,4 +46,3 @@ jobs:
           RESOURCE: ./nais/nais.yaml
           VAR: image=${{steps.docker-build-push.outputs.image}}
           VARS: ./nais/${{ inputs.environment }}-gcp/personbruker.json
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
