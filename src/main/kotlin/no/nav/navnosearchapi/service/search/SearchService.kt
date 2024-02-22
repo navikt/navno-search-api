@@ -13,6 +13,7 @@ import no.nav.navnosearchapi.service.search.queries.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.queries.searchUrlQuery
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.suggest.SuggestBuilder
@@ -71,7 +72,9 @@ class SearchService(
     }
 
     private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
-        return if (isMatchPhraseQuery) {
+        return if (term.isBlank()) {
+            MatchAllQueryBuilder()
+        } else if (isMatchPhraseQuery) {
             searchAllTextForPhraseQuery(term)
         } else {
             searchAllTextQuery(resolveTerm(term))
