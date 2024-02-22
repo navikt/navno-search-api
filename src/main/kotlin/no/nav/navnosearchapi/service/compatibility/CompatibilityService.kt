@@ -11,6 +11,7 @@ import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
 import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
+import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
 import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
@@ -20,6 +21,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.service.search.queries.existsQuery
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
@@ -74,7 +76,7 @@ class CompatibilityService(
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + innholdFilters.values + fylkeFilters.values).map {
+        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.name, it.filterQuery)
         } + tidsperiodeFilters.values.map {
             AggregationBuilders.filter(
@@ -101,7 +103,13 @@ class CompatibilityService(
                 }
             }
 
-            FASETT_NYHETER -> fasettFilters[FASETT_NYHETER]!!.filterQuery
+            FASETT_NYHETER -> {
+                if (uf.isEmpty()) {
+                    fasettFilters[FASETT_NYHETER]!!.filterQuery
+                } else {
+                    joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
+                }
+            }
             FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
             FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
@@ -124,6 +132,7 @@ class CompatibilityService(
         return BoolQueryBuilder()
             .should(TermQueryBuilder(AUDIENCE, audience))
             .should(TermQueryBuilder(AUDIENCE, AUDIENCE_ANDRE))
+            .should(BoolQueryBuilder().mustNot(existsQuery(AUDIENCE)))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {

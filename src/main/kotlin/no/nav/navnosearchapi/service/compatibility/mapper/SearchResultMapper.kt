@@ -39,16 +39,24 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG
@@ -160,6 +168,34 @@ class SearchResultMapper {
                         name = FASETT_NYHETER_NAME,
                         docCount = aggregations[FASETT_NYHETER_NAME] ?: 0,
                         checked = FASETT_NYHETER == params.f,
+                        underaggregeringer = UnderAggregations(
+                            filteredBuckets(
+                                FacetBucket(
+                                    key = UNDERFASETT_STATISTIKK,
+                                    name = UNDERFASETT_STATISTIKK_NAME,
+                                    docCount = aggregations[UNDERFASETT_STATISTIKK_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_STATISTIKK),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_PRESSE,
+                                    name = UNDERFASETT_PRESSE_NAME,
+                                    docCount = aggregations[UNDERFASETT_PRESSE_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_PRESSE),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_PRESSEMELDINGER,
+                                    name = UNDERFASETT_PRESSEMELDINGER_NAME,
+                                    docCount = aggregations[UNDERFASETT_PRESSEMELDINGER_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_PRESSEMELDINGER),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_NAV_OG_SAMFUNN,
+                                    name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
+                                    docCount = aggregations[UNDERFASETT_NAV_OG_SAMFUNN_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
+                                ),
+                            )
+                        ),
                     ),
                     FacetBucket(
                         key = FASETT_ANALYSER_OG_FORSKNING,
