@@ -56,6 +56,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_AGGREGATION_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
@@ -173,7 +174,7 @@ class SearchResultMapper {
                                 FacetBucket(
                                     key = UNDERFASETT_STATISTIKK,
                                     name = UNDERFASETT_STATISTIKK_NAME,
-                                    docCount = aggregations[UNDERFASETT_STATISTIKK_NAME] ?: 0,
+                                    docCount = aggregations[UNDERFASETT_STATISTIKK_AGGREGATION_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_STATISTIKK),
                                 ),
                                 FacetBucket(
@@ -291,7 +292,7 @@ class SearchResultMapper {
                             )
                         ),
                     ),
-                )
+                ).filter { it.docCount > 0 }
             ),
             tidsperiode = DateRange(
                 docCount = aggregations[TIDSPERIODE_ALL_DATES] ?: 0,

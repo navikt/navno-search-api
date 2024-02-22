@@ -10,6 +10,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDI
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_AGGREGATION_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.search.queries.existsQuery
 import no.nav.navnosearchapi.service.search.queries.termQuery
@@ -18,6 +19,7 @@ import org.opensearch.index.query.BoolQueryBuilder
 val nyheterFilters = mapOf(
     UNDERFASETT_STATISTIKK to FilterEntry(
         name = UNDERFASETT_STATISTIKK_NAME,
+        aggregationName = UNDERFASETT_STATISTIKK_AGGREGATION_NAME,
         filterQuery = nyhetFilter(listOf(ValidMetatags.NYHET.descriptor, ValidMetatags.STATISTIKK.descriptor)),
     ),
     UNDERFASETT_PRESSE to FilterEntry(

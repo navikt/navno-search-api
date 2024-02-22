@@ -84,10 +84,10 @@ class CompatibilityService(
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
         return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
-            AggregationBuilders.filter(it.name, it.filterQuery)
+            AggregationBuilders.filter(it.aggregationName, it.filterQuery)
         } + tidsperiodeFilters.values.map {
             AggregationBuilders.filter(
-                it.name,
+                it.aggregationName,
                 joinClausesToSingleQuery(mustClauses = listOf(activeFasettFilterQuery(f, uf), it.filterQuery))
             )
         }
