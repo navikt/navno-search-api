@@ -6,6 +6,7 @@ import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
@@ -51,6 +52,12 @@ class CompatibilityService(
         return BoolQueryBuilder().apply {
             if (audience != null) {
                 this.must(activeAudienceFilterQuery(audience))
+
+                if (audience != ValidAudiences.SAMARBEIDSPARTNER.descriptor) {
+                    this.mustNot(joinClausesToSingleQuery(shouldClauses = nyheterFilters.map { it.value.filterQuery }))
+                    this.mustNot(fasettFilters[FASETT_STATISTIKK]!!.filterQuery)
+                    this.mustNot(fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery)
+                }
             }
             if (preferredLanguage != null) {
                 this.must(activePreferredLanguageFilterQuery(preferredLanguage))
@@ -110,6 +117,7 @@ class CompatibilityService(
                     joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
                 }
             }
+
             FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
             FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
