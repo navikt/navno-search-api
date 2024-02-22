@@ -6,11 +6,13 @@ import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
 import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
+import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
 import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
@@ -20,6 +22,7 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.service.search.queries.existsQuery
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
@@ -49,6 +52,12 @@ class CompatibilityService(
         return BoolQueryBuilder().apply {
             if (audience != null) {
                 this.must(activeAudienceFilterQuery(audience))
+
+                if (audience != ValidAudiences.SAMARBEIDSPARTNER.descriptor) {
+                    this.mustNot(joinClausesToSingleQuery(shouldClauses = nyheterFilters.map { it.value.filterQuery }))
+                    this.mustNot(fasettFilters[FASETT_STATISTIKK]!!.filterQuery)
+                    this.mustNot(fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery)
+                }
             }
             if (preferredLanguage != null) {
                 this.must(activePreferredLanguageFilterQuery(preferredLanguage))
@@ -74,11 +83,11 @@ class CompatibilityService(
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + innholdFilters.values + fylkeFilters.values).map {
-            AggregationBuilders.filter(it.name, it.filterQuery)
+        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
+            AggregationBuilders.filter(it.aggregationName, it.filterQuery)
         } + tidsperiodeFilters.values.map {
             AggregationBuilders.filter(
-                it.name,
+                it.aggregationName,
                 joinClausesToSingleQuery(mustClauses = listOf(activeFasettFilterQuery(f, uf), it.filterQuery))
             )
         }
@@ -101,7 +110,14 @@ class CompatibilityService(
                 }
             }
 
-            FASETT_NYHETER -> fasettFilters[FASETT_NYHETER]!!.filterQuery
+            FASETT_NYHETER -> {
+                if (uf.isEmpty()) {
+                    fasettFilters[FASETT_NYHETER]!!.filterQuery
+                } else {
+                    joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
+                }
+            }
+
             FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
             FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
             FASETT_INNHOLD_FRA_FYLKER -> {
@@ -124,6 +140,7 @@ class CompatibilityService(
         return BoolQueryBuilder()
             .should(TermQueryBuilder(AUDIENCE, audience))
             .should(TermQueryBuilder(AUDIENCE, AUDIENCE_ANDRE))
+            .should(BoolQueryBuilder().mustNot(existsQuery(AUDIENCE)))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
