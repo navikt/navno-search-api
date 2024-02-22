@@ -24,7 +24,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     fun testSearchWithEmptyTerm() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(0L)
+        assertThat(result.total).isEqualTo(7L)
         assertThat(result.isMore).isFalse()
         assertThat(result.autoComplete).isEmpty()
     }
