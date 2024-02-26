@@ -2,19 +2,12 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val versions = object {
-        val kotlin = "1.9.22"
-        val springBoot = "3.2.2"
-        val springDepMgmt = "1.1.4"
-        val versions = "0.51.0"
-    }
+    kotlin("jvm") version ("1.9.22")
+    kotlin("plugin.spring") version ("1.9.22")
 
-    kotlin("jvm") version (versions.kotlin)
-    kotlin("plugin.spring") version (versions.kotlin)
-
-    id("org.springframework.boot") version (versions.springBoot)
-    id("io.spring.dependency-management") version (versions.springDepMgmt)
-    id("com.github.ben-manes.versions") version (versions.versions) // ./gradlew dependencyUpdates to check for new versions
+    id("org.springframework.boot") version ("3.2.2")
+    id("io.spring.dependency-management") version ("1.1.4")
+    id("com.github.ben-manes.versions") version ("0.51.0") // ./gradlew dependencyUpdates to check for new versions
 }
 
 java {
@@ -24,37 +17,29 @@ java {
 repositories {
     maven("https://maven.pkg.github.com/navikt/navno-search-admin-api") {
         credentials {
-            username = System.getenv("GITHUB_ACTOR")?: "x-access-token"
-            password = System.getenv("GITHUB_TOKEN")?: project.findProperty("githubPassword") as String
+            username = System.getenv("GITHUB_ACTOR") ?: "x-access-token"
+            password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("githubPassword") as String
         }
     }
     mavenCentral()
 }
 
 dependencies {
-    val versions = object {
-        val logstash = "7.4"
-        val opensearch = "1.3.0"
-        val opensearchTestcontainers = "2.0.1"
-        val testcontainers = "1.19.5"
-        val navnoSearchCommon = "20240221092424-e37515a"
-    }
-
-    implementation("no.nav.navnosearchadminapi:common:${versions.navnoSearchCommon}")
-    implementation("org.opensearch.client:spring-data-opensearch-starter:${versions.opensearch}") {
+    implementation("no.nav.navnosearchadminapi:common:20240221092424-e37515a")
+    implementation("org.opensearch.client:spring-data-opensearch-starter:1.3.0") {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("net.logstash.logback:logstash-logback-encoder:${versions.logstash}")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:${versions.opensearch}") {
+    testImplementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:1.3.0") {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.testcontainers:junit-jupiter:${versions.testcontainers}")
-    testImplementation("org.opensearch:opensearch-testcontainers:${versions.opensearchTestcontainers}")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.5")
+    testImplementation("org.opensearch:opensearch-testcontainers:2.0.1")
 }
 
 tasks.withType<KotlinCompile> {
