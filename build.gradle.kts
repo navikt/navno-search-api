@@ -38,7 +38,7 @@ dependencies {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.testcontainers:junit-jupiter:1.19.5")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.6")
     testImplementation("org.opensearch:opensearch-testcontainers:2.0.1")
 }
 
