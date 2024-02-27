@@ -54,8 +54,6 @@ class CompatibilityService(
 
                 if (audience != ValidAudiences.SAMARBEIDSPARTNER.descriptor) {
                     this.mustNot(joinClausesToSingleQuery(shouldClauses = nyheterFilters.map { it.value.filterQuery }))
-                    this.mustNot(fasettFilters[FASETT_STATISTIKK]!!.filterQuery)
-                    this.mustNot(fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery)
                 }
             }
             if (preferredLanguage != null) {
