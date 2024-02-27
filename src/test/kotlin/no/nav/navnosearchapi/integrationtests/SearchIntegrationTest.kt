@@ -1,11 +1,9 @@
 package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchapi.handler.ErrorResponse
-import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -66,28 +64,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun testSearchWithTidsperiodeFilter() {
-        val result = restTemplate.getForEntity<SearchResult>(
-            searchUri(ord = TEXT_TERM, daterange = TIDSPERIODE_LAST_30_DAYS.toInt())
-        ).body!!
-
-        assertThat(result.total).isEqualTo(2L)
-    }
-
-    @Test
     fun testSearchWithMissingParameter() {
-        val response = restTemplate.getForEntity<ErrorResponse>(searchUri(ord = TEXT_TERM, daterange = null))
+        val response = restTemplate.getForEntity<ErrorResponse>(searchUri(ord = TEXT_TERM, s = null))
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Påkrevd request parameter mangler: daterange")
-    }
-
-    private fun fasettCount(aggregations: Aggregations, key: String): Long? {
-        return aggregations.fasetter.buckets?.find { it.key == key }?.docCount
-    }
-
-    private fun tidsperiodeCount(aggregations: Aggregations, key: String): Long? {
-        return aggregations.tidsperiode.buckets.find { it.key == key }?.docCount
+        assertThat(response.body?.message).isEqualTo("Påkrevd request parameter mangler: s")
     }
 
     companion object {

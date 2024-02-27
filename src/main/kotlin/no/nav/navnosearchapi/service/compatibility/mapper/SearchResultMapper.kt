@@ -1,15 +1,9 @@
 package no.nav.navnosearchapi.service.compatibility.mapper
 
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_12_MONTHS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_30_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_LAST_7_DAYS
-import no.nav.navnosearchadminapi.common.constants.DATE_RANGE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.Aggregations
 import no.nav.navnosearchapi.service.compatibility.dto.Bucket
-import no.nav.navnosearchapi.service.compatibility.dto.DateRange
-import no.nav.navnosearchapi.service.compatibility.dto.DateRangeBucket
 import no.nav.navnosearchapi.service.compatibility.dto.FacetBucket
 import no.nav.navnosearchapi.service.compatibility.dto.SearchHit
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
@@ -24,11 +18,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_ALL_DATES
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_12_MONTHS
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_30_DAYS
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_LAST_7_DAYS
-import no.nav.navnosearchapi.service.compatibility.utils.TIDSPERIODE_OLDER_THAN_12_MONTHS
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
@@ -78,7 +67,6 @@ class SearchResultMapper {
         return SearchResult(
             page = params.page,
             s = params.s,
-            daterange = params.daterange,
             audience = params.audience,
             preferredLanguage = params.preferredLanguage,
             isMore = result.totalPages > (result.pageNumber + 1),
@@ -119,7 +107,7 @@ class SearchResultMapper {
     }
 
     private fun toTextHighlight(highlight: String): String {
-        return TEXT_HIGHLIGHT_PREFIX + highlight + TEXT_HIGHLIGHT_POSTFIX
+        return highlight + CUTOFF_POSTFIX
     }
 
     private fun toIngressHighlight(highlight: String): String {
@@ -293,32 +281,6 @@ class SearchResultMapper {
                         ),
                     ),
                 ).filter { it.docCount > 0 }
-            ),
-            tidsperiode = DateRange(
-                docCount = aggregations[TIDSPERIODE_ALL_DATES] ?: 0,
-                checked = params.daterange == TIDSPERIODE_ALL_DATES.toInt(),
-                buckets = listOf(
-                    toDateRangeBucket(
-                        DATE_RANGE_OLDER_THAN_12_MONTHS,
-                        aggregations,
-                        params.daterange == TIDSPERIODE_OLDER_THAN_12_MONTHS.toInt()
-                    ),
-                    toDateRangeBucket(
-                        DATE_RANGE_LAST_12_MONTHS,
-                        aggregations,
-                        params.daterange == TIDSPERIODE_LAST_12_MONTHS.toInt()
-                    ),
-                    toDateRangeBucket(
-                        DATE_RANGE_LAST_30_DAYS,
-                        aggregations,
-                        params.daterange == TIDSPERIODE_LAST_30_DAYS.toInt()
-                    ),
-                    toDateRangeBucket(
-                        DATE_RANGE_LAST_7_DAYS,
-                        aggregations,
-                        params.daterange == TIDSPERIODE_LAST_7_DAYS.toInt()
-                    ),
-                ),
             )
         )
     }
@@ -327,19 +289,9 @@ class SearchResultMapper {
         return buckets.filter { b -> b.docCount > 0 }
     }
 
-    private fun toDateRangeBucket(key: String, aggregations: Map<String, Long>, checked: Boolean): DateRangeBucket {
-        return DateRangeBucket(
-            key = key,
-            docCount = aggregations[key] ?: 0,
-            checked = checked,
-        )
-    }
-
     companion object {
         private const val HIGHLIGHT_MAX_LENGTH = 220
         private const val CUTOFF_POSTFIX = " (...)"
-        private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
-        private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
 
         private const val TABELL = "Tabell"
     }

@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.service.compatibility.dto
 data class SearchResult(
     val page: Int,
     val s: Int,
-    val daterange: Int,
     val audience: String?,
     val preferredLanguage: String?,
     val isMore: Boolean,
