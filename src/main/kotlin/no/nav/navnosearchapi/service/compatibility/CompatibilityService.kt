@@ -13,7 +13,6 @@ import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
 import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
 import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
-import no.nav.navnosearchapi.service.compatibility.filters.tidsperiodeFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
@@ -65,10 +64,8 @@ class CompatibilityService(
         }
     }
 
-    fun postAggregationFilters(f: String, uf: List<String>, daterange: Int): BoolQueryBuilder {
-        return BoolQueryBuilder()
-            .must(activeFasettFilterQuery(f, uf))
-            .must(activeTidsperiodeFilterQuery(daterange))
+    fun postAggregationFilters(f: String, uf: List<String>): BoolQueryBuilder {
+        return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
     }
 
     fun decoratorSearchFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
@@ -85,11 +82,6 @@ class CompatibilityService(
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
         return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.aggregationName, it.filterQuery)
-        } + tidsperiodeFilters.values.map {
-            AggregationBuilders.filter(
-                it.aggregationName,
-                joinClausesToSingleQuery(mustClauses = listOf(activeFasettFilterQuery(f, uf), it.filterQuery))
-            )
         }
     }
 
@@ -130,10 +122,6 @@ class CompatibilityService(
 
             else -> BoolQueryBuilder()
         }
-    }
-
-    private fun activeTidsperiodeFilterQuery(daterange: Int): BoolQueryBuilder {
-        return tidsperiodeFilters[daterange.toString()]!!.filterQuery
     }
 
     private fun activeAudienceFilterQuery(audience: String): BoolQueryBuilder {

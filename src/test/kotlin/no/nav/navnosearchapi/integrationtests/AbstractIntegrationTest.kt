@@ -39,7 +39,6 @@ abstract class AbstractIntegrationTest {
         f: Int? = 0,
         uf: List<String>? = emptyList(),
         s: Int? = 0,
-        daterange: Int? = -1,
     ): String {
         return UriComponentsBuilder.fromHttpUrl(host())
             .path("/content/search")
@@ -48,7 +47,6 @@ abstract class AbstractIntegrationTest {
             .queryParam("f", f)
             .queryParam("uf", uf)
             .queryParam("s", s)
-            .queryParam("daterange", daterange)
             .build().toUriString()
     }
 

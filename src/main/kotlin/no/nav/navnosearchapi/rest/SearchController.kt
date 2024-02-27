@@ -28,7 +28,7 @@ class SearchController(
             term = compatibilityService.term(params.ord),
             pageSize = pageSize,
             page = params.page,
-            filters = compatibilityService.postAggregationFilters(params.f, params.uf, params.daterange),
+            filters = compatibilityService.postAggregationFilters(params.f, params.uf),
             preAggregationFilters = compatibilityService.preAggregationFilters(
                 params.audience,
                 params.preferredLanguage
