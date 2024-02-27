@@ -107,7 +107,7 @@ class SearchResultMapper {
     }
 
     private fun toTextHighlight(highlight: String): String {
-        return TEXT_HIGHLIGHT_PREFIX + highlight + TEXT_HIGHLIGHT_POSTFIX
+        return highlight + CUTOFF_POSTFIX
     }
 
     private fun toIngressHighlight(highlight: String): String {
@@ -292,8 +292,6 @@ class SearchResultMapper {
     companion object {
         private const val HIGHLIGHT_MAX_LENGTH = 220
         private const val CUTOFF_POSTFIX = " (...)"
-        private const val TEXT_HIGHLIGHT_PREFIX = "<i>\""
-        private const val TEXT_HIGHLIGHT_POSTFIX = "\"</i>"
 
         private const val TABELL = "Tabell"
     }
