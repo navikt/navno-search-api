@@ -363,7 +363,7 @@ class SearchResultMapper {
                             )
                         ),
                     ),
-                ).filter { it.docCount > 0 }
+                )
             )
         )
     }
