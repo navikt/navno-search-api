@@ -29,10 +29,7 @@ class SearchController(
             pageSize = pageSize,
             page = params.page,
             filters = compatibilityService.postAggregationFilters(params.f, params.uf),
-            preAggregationFilters = compatibilityService.preAggregationFilters(
-                params.audience,
-                params.preferredLanguage
-            ),
+            preAggregationFilters = compatibilityService.preAggregationFilters(params.preferredLanguage),
             aggregations = compatibilityService.aggregations(params.f, params.uf),
             sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null
         )
@@ -48,7 +45,7 @@ class SearchController(
             term = compatibilityService.term(params.ord),
             pageSize = DECORATOR_SEARCH_PAGE_SIZE,
             page = FIRST_PAGE,
-            filters = compatibilityService.decoratorSearchFilters(params.audience, params.preferredLanguage),
+            filters = compatibilityService.decoratorSearchFilters(params.preferredLanguage),
         )
 
         return compatibilityService.toDecoratorSearchResult(params, result)

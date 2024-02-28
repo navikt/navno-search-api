@@ -6,6 +6,5 @@ data class Params(
     val f: String = "0", // Facet key
     val uf: List<String> = emptyList(), // Under-facet keys
     val s: Int = 0, // Sort
-    val audience: String? = null,
     val preferredLanguage: String? = null,
 )

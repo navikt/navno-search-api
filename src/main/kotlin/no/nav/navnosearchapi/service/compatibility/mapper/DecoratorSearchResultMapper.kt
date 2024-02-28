@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 class DecoratorSearchResultMapper {
     fun toSearchResult(params: Params, result: ContentSearchPage): DecoratorSearchResult {
         return DecoratorSearchResult(
-            audience = params.audience,
             preferredLanguage = params.preferredLanguage,
             word = params.ord,
             total = result.totalElements,

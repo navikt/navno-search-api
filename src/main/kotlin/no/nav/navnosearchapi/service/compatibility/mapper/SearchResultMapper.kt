@@ -67,7 +67,6 @@ class SearchResultMapper {
         return SearchResult(
             page = params.page,
             s = params.s,
-            audience = params.audience,
             preferredLanguage = params.preferredLanguage,
             isMore = result.totalPages > (result.pageNumber + 1),
             word = params.ord,

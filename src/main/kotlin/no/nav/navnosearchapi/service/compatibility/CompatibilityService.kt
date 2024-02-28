@@ -1,12 +1,10 @@
 package no.nav.navnosearchapi.service.compatibility
 
-import no.nav.navnosearchadminapi.common.constants.AUDIENCE
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
-import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
@@ -21,7 +19,6 @@ import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
-import no.nav.navnosearchapi.service.search.queries.existsQuery
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
@@ -47,15 +44,8 @@ class CompatibilityService(
         return decoratorSearchResultMapper.toSearchResult(params, result)
     }
 
-    fun preAggregationFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
+    fun preAggregationFilters(preferredLanguage: String?): BoolQueryBuilder {
         return BoolQueryBuilder().apply {
-            if (audience != null) {
-                this.must(activeAudienceFilterQuery(audience))
-
-                if (audience != ValidAudiences.SAMARBEIDSPARTNER.descriptor) {
-                    this.mustNot(joinClausesToSingleQuery(shouldClauses = nyheterFilters.map { it.value.filterQuery }))
-                }
-            }
             if (preferredLanguage != null) {
                 this.must(activePreferredLanguageFilterQuery(preferredLanguage))
             }
@@ -66,11 +56,8 @@ class CompatibilityService(
         return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
     }
 
-    fun decoratorSearchFilters(audience: String?, preferredLanguage: String?): BoolQueryBuilder {
+    fun decoratorSearchFilters(preferredLanguage: String?): BoolQueryBuilder {
         return BoolQueryBuilder().must(activeFasettFilterQuery(FASETT_INNHOLD, emptyList())).apply {
-            if (audience != null) {
-                this.must(activeAudienceFilterQuery(audience))
-            }
             if (preferredLanguage != null) {
                 this.must(activePreferredLanguageFilterQuery(preferredLanguage))
             }
@@ -120,13 +107,6 @@ class CompatibilityService(
 
             else -> BoolQueryBuilder()
         }
-    }
-
-    private fun activeAudienceFilterQuery(audience: String): BoolQueryBuilder {
-        return BoolQueryBuilder()
-            .should(TermQueryBuilder(AUDIENCE, audience))
-            .should(TermQueryBuilder(AUDIENCE, AUDIENCE_ANDRE))
-            .should(BoolQueryBuilder().mustNot(existsQuery(AUDIENCE)))
     }
 
     private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
