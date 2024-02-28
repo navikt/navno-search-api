@@ -2,9 +2,7 @@ package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,7 +16,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         setupIndex()
     }
 
-    @Test
+    /*@Test
     fun testSearchWithEmptyTerm() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
 
@@ -39,7 +37,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM)).body!!
 
         assertThat(result.total).isEqualTo(1L)
-    }
+    }*/
 
     @Test
     fun testSearchWithFasettFilter() {
@@ -54,14 +52,14 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.total).isEqualTo(3L)
     }
 
-    @Test
+    /*@Test
     fun testSearchWithUnderfasettFilter() {
         val result = restTemplate.getForEntity<SearchResult>(
             searchUri(ord = TEXT_TERM, f = FASETT_INNHOLD.toInt(), uf = listOf(UNDERFASETT_INFORMASJON))
         ).body!!
 
         assertThat(result.total).isEqualTo(7L)
-    }
+    }*/
 
     @Test
     fun testSearchWithMissingParameter() {

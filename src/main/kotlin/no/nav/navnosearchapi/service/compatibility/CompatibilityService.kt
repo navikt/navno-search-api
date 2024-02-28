@@ -7,16 +7,20 @@ import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
+import no.nav.navnosearchapi.service.compatibility.filters.arbeidsgiverFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
-import no.nav.navnosearchapi.service.compatibility.filters.innholdFilters
 import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
+import no.nav.navnosearchapi.service.compatibility.filters.privatpersonFilters
+import no.nav.navnosearchapi.service.compatibility.filters.samarbeidspartnerFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
@@ -56,8 +60,8 @@ class CompatibilityService(
         return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
     }
 
-    fun decoratorSearchFilters(preferredLanguage: String?): BoolQueryBuilder {
-        return BoolQueryBuilder().must(activeFasettFilterQuery(FASETT_INNHOLD, emptyList())).apply {
+    fun decoratorSearchFilters(facet: String, preferredLanguage: String?): BoolQueryBuilder {
+        return BoolQueryBuilder().must(activeFasettFilterQuery(facet, emptyList())).apply {
             if (preferredLanguage != null) {
                 this.must(activePreferredLanguageFilterQuery(preferredLanguage))
             }
@@ -65,7 +69,7 @@ class CompatibilityService(
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + innholdFilters.values + nyheterFilters.values + fylkeFilters.values).map {
+        return (fasettFilters.values + privatpersonFilters.values + arbeidsgiverFilters.values + samarbeidspartnerFilters.values + nyheterFilters.values + fylkeFilters.values).map {
             AggregationBuilders.filter(it.aggregationName, it.filterQuery)
         }
     }
@@ -79,11 +83,27 @@ class CompatibilityService(
 
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
-            FASETT_INNHOLD -> {
+            FASETT_PRIVATPERSON -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_INNHOLD]?.filterQuery!!
+                    fasettFilters[FASETT_PRIVATPERSON]?.filterQuery!!
                 } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { innholdFilters[it]!!.filterQuery })
+                    joinClausesToSingleQuery(shouldClauses = uf.map { privatpersonFilters[it]!!.filterQuery })
+                }
+            }
+
+            FASETT_ARBEIDSGIVER -> {
+                if (uf.isEmpty()) {
+                    fasettFilters[FASETT_ARBEIDSGIVER]?.filterQuery!!
+                } else {
+                    joinClausesToSingleQuery(shouldClauses = uf.map { arbeidsgiverFilters[it]!!.filterQuery })
+                }
+            }
+
+            FASETT_SAMARBEIDSPARTNER -> {
+                if (uf.isEmpty()) {
+                    fasettFilters[FASETT_SAMARBEIDSPARTNER]?.filterQuery!!
+                } else {
+                    joinClausesToSingleQuery(shouldClauses = uf.map { samarbeidspartnerFilters[it]!!.filterQuery })
                 }
             }
 
@@ -164,7 +184,6 @@ class CompatibilityService(
     companion object {
         private const val SKJEMANUMMER_DIGITS_LENGTH = 6
         private const val SKJEMANUMMER_FORMAT = "^((NAV|nav).?)?([0-9]{2}).?([0-9]{2}).?([0-9]{2})$"
-        private const val AUDIENCE_ANDRE = "andre"
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }

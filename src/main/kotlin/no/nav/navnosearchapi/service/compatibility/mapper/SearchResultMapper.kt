@@ -8,18 +8,37 @@ import no.nav.navnosearchapi.service.compatibility.dto.FacetBucket
 import no.nav.navnosearchapi.service.compatibility.dto.SearchHit
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.UnderAggregations
+import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_AKTUELT_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_INFORMASJON_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_KONTOR_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_SOKNAD_OG_SKJEMA_AGG_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER
+import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
 import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.NYHETER_STATISTIKK_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_AKTUELT_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_INFORMASJON_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_KONTOR_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_SOKNAD_OG_SKJEMA_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_AKTUELT_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_INFORMASJON_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_KONTOR_AGG_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA_AGG_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AKTUELT
+import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AKTUELT_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
@@ -37,15 +56,12 @@ import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSEMELDINGER_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_AGGREGATION_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
 import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
@@ -94,7 +110,7 @@ class SearchResultMapper {
     private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
         return if (isKontor(searchHit)) {
             toIngressHighlight(searchHit.ingress)
-        } else if (facet == FASETT_INNHOLD) {
+        } else if (facet in innholdFacets) {
             toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
         } else if (facet == FASETT_STATISTIKK && searchHit.ingress.isBlank()) {
             TABELL
@@ -124,29 +140,103 @@ class SearchResultMapper {
             fasetter = UnderAggregations(
                 buckets = listOf(
                     FacetBucket(
-                        key = FASETT_INNHOLD,
-                        name = FASETT_INNHOLD_NAME,
-                        docCount = aggregations[FASETT_INNHOLD_NAME] ?: 0,
-                        checked = FASETT_INNHOLD == params.f,
+                        key = FASETT_PRIVATPERSON,
+                        name = FASETT_PRIVATPERSON_NAME,
+                        docCount = aggregations[FASETT_PRIVATPERSON_NAME] ?: 0,
+                        checked = FASETT_PRIVATPERSON == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
                                     key = UNDERFASETT_INFORMASJON,
                                     name = UNDERFASETT_INFORMASJON_NAME,
-                                    docCount = aggregations[UNDERFASETT_INFORMASJON_NAME] ?: 0,
+                                    docCount = aggregations[PRIVATPERSON_INFORMASJON_AGG_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_INFORMASJON),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_KONTOR,
                                     name = UNDERFASETT_KONTOR_NAME,
-                                    docCount = aggregations[UNDERFASETT_KONTOR_NAME] ?: 0,
+                                    docCount = aggregations[PRIVATPERSON_KONTOR_AGG_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_KONTOR),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_SOKNAD_OG_SKJEMA,
                                     name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-                                    docCount = aggregations[UNDERFASETT_SOKNAD_OG_SKJEMA_NAME] ?: 0,
+                                    docCount = aggregations[PRIVATPERSON_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_AKTUELT,
+                                    name = UNDERFASETT_AKTUELT_NAME,
+                                    docCount = aggregations[PRIVATPERSON_AKTUELT_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
+                                ),
+                            )
+                        ),
+                    ),
+                    FacetBucket(
+                        key = FASETT_ARBEIDSGIVER,
+                        name = FASETT_ARBEIDSGIVER_NAME,
+                        docCount = aggregations[FASETT_ARBEIDSGIVER_NAME] ?: 0,
+                        checked = FASETT_ARBEIDSGIVER == params.f,
+                        underaggregeringer = UnderAggregations(
+                            filteredBuckets(
+                                FacetBucket(
+                                    key = UNDERFASETT_INFORMASJON,
+                                    name = UNDERFASETT_INFORMASJON_NAME,
+                                    docCount = aggregations[ARBEIDSGIVER_INFORMASJON_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_INFORMASJON),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_KONTOR,
+                                    name = UNDERFASETT_KONTOR_NAME,
+                                    docCount = aggregations[ARBEIDSGIVER_KONTOR_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_KONTOR),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_SOKNAD_OG_SKJEMA,
+                                    name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
+                                    docCount = aggregations[ARBEIDSGIVER_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_AKTUELT,
+                                    name = UNDERFASETT_AKTUELT_NAME,
+                                    docCount = aggregations[ARBEIDSGIVER_AKTUELT_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
+                                ),
+                            )
+                        ),
+                    ),
+                    FacetBucket(
+                        key = FASETT_SAMARBEIDSPARTNER,
+                        name = FASETT_SAMARBEIDSPARTNER_NAME,
+                        docCount = aggregations[FASETT_SAMARBEIDSPARTNER_NAME] ?: 0,
+                        checked = FASETT_SAMARBEIDSPARTNER == params.f,
+                        underaggregeringer = UnderAggregations(
+                            filteredBuckets(
+                                FacetBucket(
+                                    key = UNDERFASETT_INFORMASJON,
+                                    name = UNDERFASETT_INFORMASJON_NAME,
+                                    docCount = aggregations[SAMARBEIDSPARTNER_INFORMASJON_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_INFORMASJON),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_KONTOR,
+                                    name = UNDERFASETT_KONTOR_NAME,
+                                    docCount = aggregations[SAMARBEIDSPARTNER_KONTOR_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_KONTOR),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_SOKNAD_OG_SKJEMA,
+                                    name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
+                                    docCount = aggregations[SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                ),
+                                FacetBucket(
+                                    key = UNDERFASETT_AKTUELT,
+                                    name = UNDERFASETT_AKTUELT_NAME,
+                                    docCount = aggregations[SAMARBEIDSPARTNER_AKTUELT_AGG_NAME] ?: 0,
+                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
                                 ),
                             )
                         ),
@@ -161,7 +251,7 @@ class SearchResultMapper {
                                 FacetBucket(
                                     key = UNDERFASETT_STATISTIKK,
                                     name = UNDERFASETT_STATISTIKK_NAME,
-                                    docCount = aggregations[UNDERFASETT_STATISTIKK_AGGREGATION_NAME] ?: 0,
+                                    docCount = aggregations[NYHETER_STATISTIKK_AGG_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_STATISTIKK),
                                 ),
                                 FacetBucket(
@@ -169,12 +259,6 @@ class SearchResultMapper {
                                     name = UNDERFASETT_PRESSE_NAME,
                                     docCount = aggregations[UNDERFASETT_PRESSE_NAME] ?: 0,
                                     checked = params.uf.contains(UNDERFASETT_PRESSE),
-                                ),
-                                FacetBucket(
-                                    key = UNDERFASETT_PRESSEMELDINGER,
-                                    name = UNDERFASETT_PRESSEMELDINGER_NAME,
-                                    docCount = aggregations[UNDERFASETT_PRESSEMELDINGER_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_PRESSEMELDINGER),
                                 ),
                                 FacetBucket(
                                     key = UNDERFASETT_NAV_OG_SAMFUNN,
@@ -293,5 +377,7 @@ class SearchResultMapper {
         private const val CUTOFF_POSTFIX = " (...)"
 
         private const val TABELL = "Tabell"
+
+        private val innholdFacets = listOf(FASETT_PRIVATPERSON, FASETT_ARBEIDSGIVER, FASETT_SAMARBEIDSPARTNER)
     }
 }

@@ -45,7 +45,7 @@ class SearchController(
             term = compatibilityService.term(params.ord),
             pageSize = DECORATOR_SEARCH_PAGE_SIZE,
             page = FIRST_PAGE,
-            filters = compatibilityService.decoratorSearchFilters(params.preferredLanguage),
+            filters = compatibilityService.decoratorSearchFilters(params.f, params.preferredLanguage),
         )
 
         return compatibilityService.toDecoratorSearchResult(params, result)
