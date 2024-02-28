@@ -4,6 +4,12 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+registries:
+  navnoSearchAdminApi:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/navno-search-admin-api
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
 updates:
   - package-ecosystem: github-actions
     directory: "/"
@@ -14,4 +20,6 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: daily
+    registries:
+      - navnoSearchAdminApi
     open-pull-requests-limit: 10
