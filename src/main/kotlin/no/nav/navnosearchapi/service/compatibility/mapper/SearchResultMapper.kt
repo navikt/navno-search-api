@@ -48,14 +48,15 @@ class SearchResultMapper {
     }
 
     private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
-        return if (isKontor(searchHit)) {
-            toIngressHighlight(searchHit.ingress)
-        } else if (facet in innholdFacets) {
-            toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
-        } else if (facet == FacetKeys.STATISTIKK && searchHit.ingress.isBlank()) {
-            TABELL
-        } else {
-            searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
+        fun isInnhold() = facet in innholdFacets
+        fun isTabell() = facet == FacetKeys.STATISTIKK && searchHit.ingress.isBlank()
+        fun isKontor() = searchHit.type in arrayOf(ValidTypes.KONTOR.descriptor, ValidTypes.KONTOR_LEGACY.descriptor)
+
+        return when {
+            isKontor() -> toIngressHighlight(searchHit.ingress)
+            isInnhold() -> toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
+            isTabell() -> TABELL
+            else -> searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
                 ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
                 ?: toIngressHighlight(searchHit.ingress)
         }
@@ -69,10 +70,6 @@ class SearchResultMapper {
         return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
             highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else highlight
-    }
-
-    private fun isKontor(searchHit: ContentSearchHit): Boolean {
-        return searchHit.type in arrayOf(ValidTypes.KONTOR.descriptor, ValidTypes.KONTOR_LEGACY.descriptor)
     }
 
     private fun toAggregations(aggregations: Map<String, Long>, params: Params): Aggregations {
@@ -253,44 +250,44 @@ class SearchResultMapper {
                                     checked = params.uf.contains(UnderFacetKeys.NORDLAND),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.OSLO,
-                                    name =  UnderFacetNames.OSLO,
+                                    key = UnderFacetKeys.OSLO,
+                                    name = UnderFacetNames.OSLO,
                                     docCount = aggregations[UnderFacetNames.OSLO] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.OSLO),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.ROGALAND,
-                                    name =  UnderFacetNames.ROGALAND,
+                                    key = UnderFacetKeys.ROGALAND,
+                                    name = UnderFacetNames.ROGALAND,
                                     docCount = aggregations[UnderFacetNames.ROGALAND] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.ROGALAND),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.TROMS_OG_FINNMARK,
-                                    name =  UnderFacetNames.TROMS_OG_FINNMARK,
+                                    key = UnderFacetKeys.TROMS_OG_FINNMARK,
+                                    name = UnderFacetNames.TROMS_OG_FINNMARK,
                                     docCount = aggregations[UnderFacetNames.TROMS_OG_FINNMARK] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.TROMS_OG_FINNMARK),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.TRONDELAG,
-                                    name =  UnderFacetNames.TRONDELAG,
+                                    key = UnderFacetKeys.TRONDELAG,
+                                    name = UnderFacetNames.TRONDELAG,
                                     docCount = aggregations[UnderFacetNames.TRONDELAG] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.TRONDELAG),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.VESTFOLD_OG_TELEMARK,
-                                    name =  UnderFacetNames.VESTFOLD_OG_TELEMARK,
+                                    key = UnderFacetKeys.VESTFOLD_OG_TELEMARK,
+                                    name = UnderFacetNames.VESTFOLD_OG_TELEMARK,
                                     docCount = aggregations[UnderFacetNames.VESTFOLD_OG_TELEMARK] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.VESTFOLD_OG_TELEMARK),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.VESTLAND,
-                                    name =  UnderFacetNames.VESTLAND,
+                                    key = UnderFacetKeys.VESTLAND,
+                                    name = UnderFacetNames.VESTLAND,
                                     docCount = aggregations[UnderFacetNames.VESTLAND] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.VESTLAND),
                                 ),
                                 FacetBucket(
-                                    key =  UnderFacetKeys.VEST_VIKEN,
-                                    name =  UnderFacetNames.VEST_VIKEN,
+                                    key = UnderFacetKeys.VEST_VIKEN,
+                                    name = UnderFacetNames.VEST_VIKEN,
                                     docCount = aggregations[UnderFacetNames.VEST_VIKEN] ?: 0,
                                     checked = params.uf.contains(UnderFacetKeys.VEST_VIKEN),
                                 ),
