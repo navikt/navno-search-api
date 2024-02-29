@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
+import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,7 +45,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
             restTemplate.getForEntity<SearchResult>(
                 searchUri(
                     ord = TEXT_TERM,
-                    f = FASETT_INNHOLD_FRA_FYLKER.toInt()
+                    f = FacetKeys.INNHOLD_FRA_FYLKER.toInt()
                 )
             ).body!!
 

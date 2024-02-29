@@ -2,80 +2,58 @@ package no.nav.navnosearchapi.service.compatibility.filters
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.enums.ValidFylker
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTFOLD_OG_TELEMARK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
 import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
 
 val fylkeFilters = mapOf(
-    UNDERFASETT_AGDER to FilterEntry(
-        name = UNDERFASETT_AGDER_NAME,
+    UnderFacetKeys.AGDER to FilterEntry(
+        name = UnderFacetNames.AGDER,
         filterQuery = fylkeFilter(ValidFylker.AGDER.descriptor)
     ),
-    UNDERFASETT_INNLANDET to FilterEntry(
-        name = UNDERFASETT_INNLANDET_NAME,
+    UnderFacetKeys.INNLANDET to FilterEntry(
+        name = UnderFacetNames.INNLANDET,
         filterQuery = fylkeFilter(ValidFylker.INNLANDET.descriptor)
     ),
-    UNDERFASETT_MORE_OG_ROMSDAL to FilterEntry(
-        name = UNDERFASETT_MORE_OG_ROMSDAL_NAME,
+    UnderFacetKeys.MORE_OG_ROMSDAL to FilterEntry(
+        name = UnderFacetNames.MORE_OG_ROMSDAL,
         filterQuery = fylkeFilter(ValidFylker.MORE_OG_ROMSDAL.descriptor)
     ),
-    UNDERFASETT_NORDLAND to FilterEntry(
-        name = UNDERFASETT_NORDLAND_NAME,
+    UnderFacetKeys.NORDLAND to FilterEntry(
+        name = UnderFacetNames.NORDLAND,
         filterQuery = fylkeFilter(ValidFylker.NORDLAND.descriptor)
     ),
-    UNDERFASETT_OSLO to FilterEntry(
-        name = UNDERFASETT_OSLO_NAME,
+    UnderFacetKeys.OSLO to FilterEntry(
+        name = UnderFacetNames.OSLO,
         filterQuery = fylkeFilter(ValidFylker.OSLO.descriptor)
     ),
-    UNDERFASETT_ROGALAND to FilterEntry(
-        name = UNDERFASETT_ROGALAND_NAME,
+    UnderFacetKeys.ROGALAND to FilterEntry(
+        name = UnderFacetNames.ROGALAND,
         filterQuery = fylkeFilter(ValidFylker.ROGALAND.descriptor)
     ),
-    UNDERFASETT_TROMS_OG_FINNMARK to FilterEntry(
-        name = UNDERFASETT_TROMS_OG_FINNMARK_NAME,
+    UnderFacetKeys.TROMS_OG_FINNMARK to FilterEntry(
+        name = UnderFacetNames.TROMS_OG_FINNMARK,
         filterQuery = fylkeFilter(ValidFylker.TROMS_OG_FINNMARK.descriptor)
     ),
-    UNDERFASETT_TRONDELAG to FilterEntry(
-        name = UNDERFASETT_TRONDELAG_NAME,
+    UnderFacetKeys.TRONDELAG to FilterEntry(
+        name = UnderFacetNames.TRONDELAG,
         filterQuery = fylkeFilter(ValidFylker.TRONDELAG.descriptor)
     ),
-    UNDERFASETT_VESTFOLD_OG_TELEMARK to FilterEntry(
-        name = UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME,
+    UnderFacetKeys.VESTFOLD_OG_TELEMARK to FilterEntry(
+        name = UnderFacetNames.VESTFOLD_OG_TELEMARK,
         filterQuery = fylkeFilter(ValidFylker.VESTFOLD_OG_TELEMARK.descriptor)
     ),
-    UNDERFASETT_VESTLAND to FilterEntry(
-        name = UNDERFASETT_VESTLAND_NAME,
+    UnderFacetKeys.VESTLAND to FilterEntry(
+        name = UnderFacetNames.VESTLAND,
         filterQuery = fylkeFilter(ValidFylker.VESTLAND.descriptor)
     ),
-    UNDERFASETT_VEST_VIKEN to FilterEntry(
-        name = UNDERFASETT_VEST_VIKEN_NAME,
+    UnderFacetKeys.VEST_VIKEN to FilterEntry(
+        name = UnderFacetNames.VEST_VIKEN,
         filterQuery = fylkeFilter(ValidFylker.VEST_VIKEN.descriptor)
     ),
-    UNDERFASETT_OST_VIKEN to FilterEntry(
-        name = UNDERFASETT_OST_VIKEN_NAME,
+    UnderFacetKeys.OST_VIKEN to FilterEntry(
+        name = UnderFacetNames.OST_VIKEN,
         filterQuery = fylkeFilter(ValidFylker.OST_VIKEN.descriptor)
     ),
 )

@@ -8,71 +8,11 @@ import no.nav.navnosearchapi.service.compatibility.dto.FacetBucket
 import no.nav.navnosearchapi.service.compatibility.dto.SearchHit
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.UnderAggregations
-import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_AKTUELT_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_INFORMASJON_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_KONTOR_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.ARBEIDSGIVER_SOKNAD_OG_SKJEMA_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.NYHETER_STATISTIKK_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_AKTUELT_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_INFORMASJON_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_KONTOR_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.PRIVATPERSON_SOKNAD_OG_SKJEMA_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_AKTUELT_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_INFORMASJON_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_KONTOR_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AGDER_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AKTUELT
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_AKTUELT_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INFORMASJON_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_INNLANDET_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_KONTOR_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_MORE_OG_ROMSDAL_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NORDLAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OSLO_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_OST_VIKEN_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_ROGALAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TROMS_OG_FINNMARK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_TRONDELAG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTFOLD_OG_TELEMARK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VESTLAND_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_VEST_VIKEN_NAME
+import no.nav.navnosearchapi.service.compatibility.utils.AggregationNames
+import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
+import no.nav.navnosearchapi.service.compatibility.utils.FacetNames
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import org.springframework.stereotype.Component
@@ -112,7 +52,7 @@ class SearchResultMapper {
             toIngressHighlight(searchHit.ingress)
         } else if (facet in innholdFacets) {
             toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
-        } else if (facet == FASETT_STATISTIKK && searchHit.ingress.isBlank()) {
+        } else if (facet == FacetKeys.STATISTIKK && searchHit.ingress.isBlank()) {
             TABELL
         } else {
             searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
@@ -140,225 +80,225 @@ class SearchResultMapper {
             fasetter = UnderAggregations(
                 buckets = listOf(
                     FacetBucket(
-                        key = FASETT_PRIVATPERSON,
-                        name = FASETT_PRIVATPERSON_NAME,
-                        docCount = aggregations[FASETT_PRIVATPERSON_NAME] ?: 0,
-                        checked = FASETT_PRIVATPERSON == params.f,
+                        key = FacetKeys.PRIVATPERSON,
+                        name = FacetNames.PRIVATPERSON,
+                        docCount = aggregations[FacetNames.PRIVATPERSON] ?: 0,
+                        checked = FacetKeys.PRIVATPERSON == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
-                                    key = UNDERFASETT_INFORMASJON,
-                                    name = UNDERFASETT_INFORMASJON_NAME,
-                                    docCount = aggregations[PRIVATPERSON_INFORMASJON_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_INFORMASJON),
+                                    key = UnderFacetKeys.INFORMASJON,
+                                    name = UnderFacetNames.INFORMASJON,
+                                    docCount = aggregations[AggregationNames.PRIVATPERSON_INFORMASJON] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.INFORMASJON),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_KONTOR,
-                                    name = UNDERFASETT_KONTOR_NAME,
-                                    docCount = aggregations[PRIVATPERSON_KONTOR_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_KONTOR),
+                                    key = UnderFacetKeys.KONTOR,
+                                    name = UnderFacetNames.KONTOR,
+                                    docCount = aggregations[AggregationNames.PRIVATPERSON_KONTOR] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.KONTOR),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_SOKNAD_OG_SKJEMA,
-                                    name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-                                    docCount = aggregations[PRIVATPERSON_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                    key = UnderFacetKeys.SOKNAD_OG_SKJEMA,
+                                    name = UnderFacetNames.SOKNAD_OG_SKJEMA,
+                                    docCount = aggregations[AggregationNames.PRIVATPERSON_SOKNAD_OG_SKJEMA] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.SOKNAD_OG_SKJEMA),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_AKTUELT,
-                                    name = UNDERFASETT_AKTUELT_NAME,
-                                    docCount = aggregations[PRIVATPERSON_AKTUELT_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
+                                    key = UnderFacetKeys.AKTUELT,
+                                    name = UnderFacetNames.AKTUELT,
+                                    docCount = aggregations[AggregationNames.PRIVATPERSON_AKTUELT] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.AKTUELT),
                                 ),
                             )
                         ),
                     ),
                     FacetBucket(
-                        key = FASETT_ARBEIDSGIVER,
-                        name = FASETT_ARBEIDSGIVER_NAME,
-                        docCount = aggregations[FASETT_ARBEIDSGIVER_NAME] ?: 0,
-                        checked = FASETT_ARBEIDSGIVER == params.f,
+                        key = FacetKeys.ARBEIDSGIVER,
+                        name = FacetNames.ARBEIDSGIVER,
+                        docCount = aggregations[FacetNames.ARBEIDSGIVER] ?: 0,
+                        checked = FacetKeys.ARBEIDSGIVER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
-                                    key = UNDERFASETT_INFORMASJON,
-                                    name = UNDERFASETT_INFORMASJON_NAME,
-                                    docCount = aggregations[ARBEIDSGIVER_INFORMASJON_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_INFORMASJON),
+                                    key = UnderFacetKeys.INFORMASJON,
+                                    name = UnderFacetNames.INFORMASJON,
+                                    docCount = aggregations[AggregationNames.ARBEIDSGIVER_INFORMASJON] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.INFORMASJON),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_KONTOR,
-                                    name = UNDERFASETT_KONTOR_NAME,
-                                    docCount = aggregations[ARBEIDSGIVER_KONTOR_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_KONTOR),
+                                    key = UnderFacetKeys.KONTOR,
+                                    name = UnderFacetNames.KONTOR,
+                                    docCount = aggregations[AggregationNames.ARBEIDSGIVER_KONTOR] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.KONTOR),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_SOKNAD_OG_SKJEMA,
-                                    name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-                                    docCount = aggregations[ARBEIDSGIVER_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                    key = UnderFacetKeys.SOKNAD_OG_SKJEMA,
+                                    name = UnderFacetNames.SOKNAD_OG_SKJEMA,
+                                    docCount = aggregations[AggregationNames.ARBEIDSGIVER_SOKNAD_OG_SKJEMA] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.SOKNAD_OG_SKJEMA),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_AKTUELT,
-                                    name = UNDERFASETT_AKTUELT_NAME,
-                                    docCount = aggregations[ARBEIDSGIVER_AKTUELT_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
+                                    key = UnderFacetKeys.AKTUELT,
+                                    name = UnderFacetNames.AKTUELT,
+                                    docCount = aggregations[AggregationNames.ARBEIDSGIVER_AKTUELT] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.AKTUELT),
                                 ),
                             )
                         ),
                     ),
                     FacetBucket(
-                        key = FASETT_SAMARBEIDSPARTNER,
-                        name = FASETT_SAMARBEIDSPARTNER_NAME,
-                        docCount = aggregations[FASETT_SAMARBEIDSPARTNER_NAME] ?: 0,
-                        checked = FASETT_SAMARBEIDSPARTNER == params.f,
+                        key = FacetKeys.SAMARBEIDSPARTNER,
+                        name = FacetNames.SAMARBEIDSPARTNER,
+                        docCount = aggregations[FacetNames.SAMARBEIDSPARTNER] ?: 0,
+                        checked = FacetKeys.SAMARBEIDSPARTNER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
-                                    key = UNDERFASETT_INFORMASJON,
-                                    name = UNDERFASETT_INFORMASJON_NAME,
-                                    docCount = aggregations[SAMARBEIDSPARTNER_INFORMASJON_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_INFORMASJON),
+                                    key = UnderFacetKeys.INFORMASJON,
+                                    name = UnderFacetNames.INFORMASJON,
+                                    docCount = aggregations[AggregationNames.SAMARBEIDSPARTNER_INFORMASJON] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.INFORMASJON),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_KONTOR,
-                                    name = UNDERFASETT_KONTOR_NAME,
-                                    docCount = aggregations[SAMARBEIDSPARTNER_KONTOR_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_KONTOR),
+                                    key = UnderFacetKeys.KONTOR,
+                                    name = UnderFacetNames.KONTOR,
+                                    docCount = aggregations[AggregationNames.SAMARBEIDSPARTNER_KONTOR] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.KONTOR),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_SOKNAD_OG_SKJEMA,
-                                    name = UNDERFASETT_SOKNAD_OG_SKJEMA_NAME,
-                                    docCount = aggregations[SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_SOKNAD_OG_SKJEMA),
+                                    key = UnderFacetKeys.SOKNAD_OG_SKJEMA,
+                                    name = UnderFacetNames.SOKNAD_OG_SKJEMA,
+                                    docCount = aggregations[AggregationNames.SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.SOKNAD_OG_SKJEMA),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_AKTUELT,
-                                    name = UNDERFASETT_AKTUELT_NAME,
-                                    docCount = aggregations[SAMARBEIDSPARTNER_AKTUELT_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_AKTUELT),
+                                    key = UnderFacetKeys.AKTUELT,
+                                    name = UnderFacetNames.AKTUELT,
+                                    docCount = aggregations[AggregationNames.SAMARBEIDSPARTNER_AKTUELT] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.AKTUELT),
                                 ),
                             )
                         ),
                     ),
                     FacetBucket(
-                        key = FASETT_NYHETER,
-                        name = FASETT_NYHETER_NAME,
-                        docCount = aggregations[FASETT_NYHETER_NAME] ?: 0,
-                        checked = FASETT_NYHETER == params.f,
+                        key = FacetKeys.NYHETER,
+                        name = FacetNames.NYHETER,
+                        docCount = aggregations[FacetNames.NYHETER] ?: 0,
+                        checked = FacetKeys.NYHETER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
-                                    key = UNDERFASETT_STATISTIKK,
-                                    name = UNDERFASETT_STATISTIKK_NAME,
-                                    docCount = aggregations[NYHETER_STATISTIKK_AGG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_STATISTIKK),
+                                    key = UnderFacetKeys.STATISTIKK,
+                                    name = UnderFacetNames.STATISTIKK,
+                                    docCount = aggregations[AggregationNames.NYHETER_STATISTIKK] ?: 0,
+                                    checked = params.uf.contains(UnderFacetNames.STATISTIKK),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_PRESSE,
-                                    name = UNDERFASETT_PRESSE_NAME,
-                                    docCount = aggregations[UNDERFASETT_PRESSE_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_PRESSE),
+                                    key = UnderFacetKeys.PRESSE,
+                                    name = UnderFacetNames.PRESSE,
+                                    docCount = aggregations[UnderFacetNames.PRESSE] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.PRESSE),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_NAV_OG_SAMFUNN,
-                                    name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
-                                    docCount = aggregations[UNDERFASETT_NAV_OG_SAMFUNN_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_NAV_OG_SAMFUNN),
+                                    key = UnderFacetKeys.NAV_OG_SAMFUNN,
+                                    name = UnderFacetNames.NAV_OG_SAMFUNN,
+                                    docCount = aggregations[UnderFacetNames.NAV_OG_SAMFUNN] ?: 0,
+                                    checked = params.uf.contains(UnderFacetNames.NAV_OG_SAMFUNN),
                                 ),
                             )
                         ),
                     ),
                     FacetBucket(
-                        key = FASETT_ANALYSER_OG_FORSKNING,
-                        name = FASETT_ANALYSER_OG_FORSKNING_NAME,
-                        docCount = aggregations[FASETT_ANALYSER_OG_FORSKNING_NAME] ?: 0,
-                        checked = FASETT_ANALYSER_OG_FORSKNING == params.f,
+                        key = FacetKeys.ANALYSER_OG_FORSKNING,
+                        name = FacetNames.ANALYSER_OG_FORSKNING,
+                        docCount = aggregations[FacetNames.ANALYSER_OG_FORSKNING] ?: 0,
+                        checked = FacetKeys.ANALYSER_OG_FORSKNING == params.f,
                     ),
                     FacetBucket(
-                        key = FASETT_STATISTIKK,
-                        name = FASETT_STATISTIKK_NAME,
-                        docCount = aggregations[FASETT_STATISTIKK_NAME] ?: 0,
-                        checked = FASETT_STATISTIKK == params.f,
+                        key = FacetKeys.STATISTIKK,
+                        name = FacetNames.STATISTIKK,
+                        docCount = aggregations[FacetNames.STATISTIKK] ?: 0,
+                        checked = FacetKeys.STATISTIKK == params.f,
                     ),
                     FacetBucket(
-                        key = FASETT_INNHOLD_FRA_FYLKER,
-                        name = FASETT_INNHOLD_FRA_FYLKER_NAME,
-                        docCount = aggregations[FASETT_INNHOLD_FRA_FYLKER_NAME] ?: 0,
-                        checked = FASETT_INNHOLD_FRA_FYLKER == params.f,
+                        key = FacetKeys.INNHOLD_FRA_FYLKER,
+                        name = FacetNames.INNHOLD_FRA_FYLKER,
+                        docCount = aggregations[FacetNames.INNHOLD_FRA_FYLKER] ?: 0,
+                        checked = FacetKeys.INNHOLD_FRA_FYLKER == params.f,
                         underaggregeringer = UnderAggregations(
                             filteredBuckets(
                                 FacetBucket(
-                                    key = UNDERFASETT_AGDER,
-                                    name = UNDERFASETT_AGDER_NAME,
-                                    docCount = aggregations[UNDERFASETT_AGDER_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_AGDER),
+                                    key = UnderFacetKeys.AGDER,
+                                    name = UnderFacetNames.AGDER,
+                                    docCount = aggregations[UnderFacetNames.AGDER] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.AGDER),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_INNLANDET,
-                                    name = UNDERFASETT_INNLANDET_NAME,
-                                    docCount = aggregations[UNDERFASETT_INNLANDET_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_INNLANDET),
+                                    key = UnderFacetKeys.INNLANDET,
+                                    name = UnderFacetNames.INNLANDET,
+                                    docCount = aggregations[UnderFacetNames.INNLANDET] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.INNLANDET),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_MORE_OG_ROMSDAL,
-                                    name = UNDERFASETT_MORE_OG_ROMSDAL_NAME,
-                                    docCount = aggregations[UNDERFASETT_MORE_OG_ROMSDAL_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_MORE_OG_ROMSDAL),
+                                    key = UnderFacetKeys.MORE_OG_ROMSDAL,
+                                    name = UnderFacetNames.MORE_OG_ROMSDAL,
+                                    docCount = aggregations[UnderFacetNames.MORE_OG_ROMSDAL] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.MORE_OG_ROMSDAL),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_NORDLAND,
-                                    name = UNDERFASETT_NORDLAND_NAME,
-                                    docCount = aggregations[UNDERFASETT_NORDLAND_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_NORDLAND),
+                                    key = UnderFacetKeys.NORDLAND,
+                                    name = UnderFacetNames.NORDLAND,
+                                    docCount = aggregations[UnderFacetNames.NORDLAND] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.NORDLAND),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_OSLO,
-                                    name = UNDERFASETT_OSLO_NAME,
-                                    docCount = aggregations[UNDERFASETT_OSLO_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_OSLO),
+                                    key =  UnderFacetKeys.OSLO,
+                                    name =  UnderFacetNames.OSLO,
+                                    docCount = aggregations[UnderFacetNames.OSLO] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.OSLO),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_ROGALAND,
-                                    name = UNDERFASETT_ROGALAND_NAME,
-                                    docCount = aggregations[UNDERFASETT_ROGALAND_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_ROGALAND),
+                                    key =  UnderFacetKeys.ROGALAND,
+                                    name =  UnderFacetNames.ROGALAND,
+                                    docCount = aggregations[UnderFacetNames.ROGALAND] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.ROGALAND),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_TROMS_OG_FINNMARK,
-                                    name = UNDERFASETT_TROMS_OG_FINNMARK_NAME,
-                                    docCount = aggregations[UNDERFASETT_TROMS_OG_FINNMARK_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_TROMS_OG_FINNMARK),
+                                    key =  UnderFacetKeys.TROMS_OG_FINNMARK,
+                                    name =  UnderFacetNames.TROMS_OG_FINNMARK,
+                                    docCount = aggregations[UnderFacetNames.TROMS_OG_FINNMARK] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.TROMS_OG_FINNMARK),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_TRONDELAG,
-                                    name = UNDERFASETT_TRONDELAG_NAME,
-                                    docCount = aggregations[UNDERFASETT_TRONDELAG_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_TRONDELAG),
+                                    key =  UnderFacetKeys.TRONDELAG,
+                                    name =  UnderFacetNames.TRONDELAG,
+                                    docCount = aggregations[UnderFacetNames.TRONDELAG] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.TRONDELAG),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_VESTFOLD_OG_TELEMARK,
-                                    name = UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME,
-                                    docCount = aggregations[UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_VESTFOLD_OG_TELEMARK),
+                                    key =  UnderFacetKeys.VESTFOLD_OG_TELEMARK,
+                                    name =  UnderFacetNames.VESTFOLD_OG_TELEMARK,
+                                    docCount = aggregations[UnderFacetNames.VESTFOLD_OG_TELEMARK] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.VESTFOLD_OG_TELEMARK),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_VESTLAND,
-                                    name = UNDERFASETT_VESTLAND_NAME,
-                                    docCount = aggregations[UNDERFASETT_VESTLAND_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_VESTLAND),
+                                    key =  UnderFacetKeys.VESTLAND,
+                                    name =  UnderFacetNames.VESTLAND,
+                                    docCount = aggregations[UnderFacetNames.VESTLAND] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.VESTLAND),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_VEST_VIKEN,
-                                    name = UNDERFASETT_VEST_VIKEN_NAME,
-                                    docCount = aggregations[UNDERFASETT_VEST_VIKEN_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_VEST_VIKEN),
+                                    key =  UnderFacetKeys.VEST_VIKEN,
+                                    name =  UnderFacetNames.VEST_VIKEN,
+                                    docCount = aggregations[UnderFacetNames.VEST_VIKEN] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.VEST_VIKEN),
                                 ),
                                 FacetBucket(
-                                    key = UNDERFASETT_OST_VIKEN,
-                                    name = UNDERFASETT_OST_VIKEN_NAME,
-                                    docCount = aggregations[UNDERFASETT_OST_VIKEN_NAME] ?: 0,
-                                    checked = params.uf.contains(UNDERFASETT_OST_VIKEN),
+                                    key = UnderFacetKeys.OST_VIKEN,
+                                    name = UnderFacetNames.OST_VIKEN,
+                                    docCount = aggregations[UnderFacetNames.OST_VIKEN] ?: 0,
+                                    checked = params.uf.contains(UnderFacetKeys.OST_VIKEN),
                                 ),
                             )
                         ),
@@ -378,6 +318,6 @@ class SearchResultMapper {
 
         private const val TABELL = "Tabell"
 
-        private val innholdFacets = listOf(FASETT_PRIVATPERSON, FASETT_ARBEIDSGIVER, FASETT_SAMARBEIDSPARTNER)
+        private val innholdFacets = listOf(FacetKeys.PRIVATPERSON, FacetKeys.ARBEIDSGIVER, FacetKeys.SAMARBEIDSPARTNER)
     }
 }
