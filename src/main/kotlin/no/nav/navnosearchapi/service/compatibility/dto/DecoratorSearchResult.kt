@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.service.compatibility.dto
 
 data class DecoratorSearchResult(
-    val audience: String?,
     val preferredLanguage: String?,
     val word: String,
     val total: Long,
