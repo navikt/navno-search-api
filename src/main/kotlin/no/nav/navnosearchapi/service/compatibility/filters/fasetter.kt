@@ -72,6 +72,7 @@ private fun audienceFilter(audience: String): BoolQueryBuilder {
         .must(
             BoolQueryBuilder()
                 .should(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
+                .should(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
                 .should(termQuery(TYPE, ValidTypes.KONTOR.descriptor))
                 .should(termQuery(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
                 .should(termQuery(TYPE, ValidTypes.SKJEMA.descriptor))
