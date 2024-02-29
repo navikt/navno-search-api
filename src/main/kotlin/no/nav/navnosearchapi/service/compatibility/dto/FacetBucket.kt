@@ -5,5 +5,5 @@ data class FacetBucket(
     override val docCount: Long,
     override val checked: Boolean,
     val name: String,
-    val underaggregeringer: UnderAggregations? = UnderAggregations()
+    val underaggregeringer: UnderAggregations = UnderAggregations()
 ): Bucket
