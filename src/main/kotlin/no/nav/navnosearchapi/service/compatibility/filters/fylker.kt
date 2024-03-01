@@ -4,8 +4,8 @@ import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
-import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 
 val fylkeFilters = mapOf(
     UnderFacetKeys.AGDER to FilterEntry(
@@ -60,5 +60,5 @@ val fylkeFilters = mapOf(
 
 private fun fylkeFilter(requiredFylke: String): BoolQueryBuilder {
     return BoolQueryBuilder()
-        .must(termQuery(FYLKE, requiredFylke))
+        .must(TermQueryBuilder(FYLKE, requiredFylke))
 }

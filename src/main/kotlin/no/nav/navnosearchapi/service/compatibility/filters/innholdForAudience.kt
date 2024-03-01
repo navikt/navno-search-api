@@ -10,9 +10,8 @@ import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.AggregationNames
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
-import no.nav.navnosearchapi.service.search.queries.existsQuery
-import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 
 val privatpersonFilters = filtersForAudience(
@@ -48,27 +47,27 @@ private fun filtersForAudience(
         UnderFacetKeys.INFORMASJON to FilterEntry(
             name = UnderFacetNames.INFORMASJON,
             aggregationName = informasjonAggName,
-            filterQuery = innholdBaseFilter(audience).must(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
+            filterQuery = innholdBaseFilter(audience).must(TermQueryBuilder(METATAGS, ValidMetatags.INFORMASJON.descriptor))
         ),
         UnderFacetKeys.KONTOR to FilterEntry(
             name = UnderFacetNames.KONTOR,
             aggregationName = kontorAggName,
             filterQuery = innholdBaseFilter(audience = audience).must(
                 BoolQueryBuilder()
-                    .should(termQuery(TYPE, ValidTypes.KONTOR.descriptor))
-                    .should(termQuery(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
+                    .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR.descriptor))
+                    .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
             )
         ),
         UnderFacetKeys.SOKNAD_OG_SKJEMA to FilterEntry(
             name = UnderFacetNames.SOKNAD_OG_SKJEMA,
             aggregationName = soknadAggName,
-            filterQuery = innholdBaseFilter(audience).must(termQuery(TYPE, ValidTypes.SKJEMA.descriptor))
+            filterQuery = innholdBaseFilter(audience).must(TermQueryBuilder(TYPE, ValidTypes.SKJEMA.descriptor))
         ),
         UnderFacetKeys.AKTUELT to FilterEntry(
             name = UnderFacetNames.AKTUELT,
             aggregationName = aktueltAggName,
             filterQuery = innholdBaseFilter(audience = audience).must(
-                termQuery(
+                TermQueryBuilder(
                     METATAGS,
                     ValidMetatags.NYHET.descriptor
                 )
@@ -79,10 +78,10 @@ private fun filtersForAudience(
 
 private fun innholdBaseFilter(audience: String): BoolQueryBuilder {
     return BoolQueryBuilder()
-        .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
-        .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
-        .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-        .mustNot(existsQuery(FYLKE))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+        .mustNot(ExistsQueryBuilder(FYLKE))
         .must(lenientAudienceFilter(audience))
 }
 
@@ -90,5 +89,5 @@ fun lenientAudienceFilter(audience: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .should(TermQueryBuilder(AUDIENCE, audience))
         .should(TermQueryBuilder(AUDIENCE, ValidAudiences.ANDRE.descriptor))
-        .should(BoolQueryBuilder().mustNot(existsQuery(AUDIENCE)))
+        .should(BoolQueryBuilder().mustNot(ExistsQueryBuilder(AUDIENCE)))
 }

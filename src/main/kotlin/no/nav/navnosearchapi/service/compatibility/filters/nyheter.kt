@@ -6,9 +6,9 @@ import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.compatibility.utils.AggregationNames
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
 import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
-import no.nav.navnosearchapi.service.search.queries.existsQuery
-import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.ExistsQueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 
 val nyheterFilters = mapOf(
     UnderFacetKeys.STATISTIKK to FilterEntry(
@@ -45,10 +45,10 @@ private fun nyhetFilter(
     shouldHaveMetatags: List<String> = emptyList(),
     mustHaveMetatags: List<String> = emptyList(),
 ): BoolQueryBuilder {
-    val query = BoolQueryBuilder().mustNot(existsQuery(FYLKE))
+    val query = BoolQueryBuilder().mustNot(ExistsQueryBuilder(FYLKE))
 
-    shouldHaveMetatags.forEach { query.should(termQuery(METATAGS, it)) }
-    mustHaveMetatags.forEach { query.must(termQuery(METATAGS, it)) }
+    shouldHaveMetatags.forEach { query.should(TermQueryBuilder(METATAGS, it)) }
+    mustHaveMetatags.forEach { query.must(TermQueryBuilder(METATAGS, it)) }
 
     return query
 }

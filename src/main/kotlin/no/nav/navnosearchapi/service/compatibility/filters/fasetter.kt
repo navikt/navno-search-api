@@ -8,9 +8,9 @@ import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import no.nav.navnosearchapi.service.compatibility.utils.FacetNames
-import no.nav.navnosearchapi.service.search.queries.existsQuery
-import no.nav.navnosearchapi.service.search.queries.termQuery
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.ExistsQueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 
 val fasettFilters = mapOf(
     FacetKeys.PRIVATPERSON to FilterEntry(
@@ -30,27 +30,27 @@ val fasettFilters = mapOf(
         filterQuery = BoolQueryBuilder()
             .must(
                 BoolQueryBuilder()
-                    .should(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
-                    .should(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+                    .should(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
+                    .should(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
             )
-            .mustNot(existsQuery(FYLKE))
+            .mustNot(ExistsQueryBuilder(FYLKE))
     ),
     FacetKeys.STATISTIKK to FilterEntry(
         name = FacetNames.STATISTIKK,
         filterQuery = BoolQueryBuilder()
-            .must(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-            .mustNot(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
-            .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+            .must(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+            .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
+            .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
     ),
     FacetKeys.ANALYSER_OG_FORSKNING to FilterEntry(
         name = FacetNames.ANALYSER_OG_FORSKNING,
         filterQuery = BoolQueryBuilder()
-            .must(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
+            .must(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
     ),
     FacetKeys.INNHOLD_FRA_FYLKER to FilterEntry(
         name = FacetNames.INNHOLD_FRA_FYLKER,
         filterQuery = BoolQueryBuilder()
-            .must(existsQuery(FYLKE))
+            .must(ExistsQueryBuilder(FYLKE))
     )
 )
 
@@ -59,14 +59,14 @@ private fun audienceFilter(audience: String): BoolQueryBuilder {
         .must(lenientAudienceFilter(audience))
         .must(
             BoolQueryBuilder()
-                .should(termQuery(METATAGS, ValidMetatags.INFORMASJON.descriptor))
-                .should(termQuery(METATAGS, ValidMetatags.NYHET.descriptor))
-                .should(termQuery(TYPE, ValidTypes.KONTOR.descriptor))
-                .should(termQuery(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
-                .should(termQuery(TYPE, ValidTypes.SKJEMA.descriptor))
+                .should(TermQueryBuilder(METATAGS, ValidMetatags.INFORMASJON.descriptor))
+                .should(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
+                .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR.descriptor))
+                .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
+                .should(TermQueryBuilder(TYPE, ValidTypes.SKJEMA.descriptor))
         )
-        .mustNot(termQuery(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
-        .mustNot(termQuery(METATAGS, ValidMetatags.ANALYSE.descriptor))
-        .mustNot(termQuery(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-        .mustNot(existsQuery(FYLKE))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
+        .mustNot(ExistsQueryBuilder(FYLKE))
 }
