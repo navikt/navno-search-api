@@ -69,10 +69,7 @@ class CompatibilityService(
     }
 
     fun term(term: String): String {
-        if (isSkjemanummer(term)) {
-            return toExactSkjemanummerTerm(term)
-        }
-        return term
+        return convertToSkjemanummerIfPresent(term)
     }
 
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
@@ -156,28 +153,15 @@ class CompatibilityService(
         }
     }
 
-    private fun toExactSkjemanummerTerm(term: String): String {
-        val digits = term.filter { it.isDigit() }
-
-        if (digits.length != SKJEMANUMMER_DIGITS_LENGTH) {
-            logger.warn("Skjemanummer kunne ikke formateres: $term. Bruker uformatert søkeord.")
-            return term
-        }
-
-        val firstPart = digits.substring(0, 2)
-        val secondPart = digits.substring(2, 4)
-        val thirdPart = digits.substring(4, 6)
-
-        return "\"NAV $firstPart-$secondPart.$thirdPart\""
-    }
-
-    private fun isSkjemanummer(term: String): Boolean {
-        return term.matches(skjemanummerRegex)
+    private fun convertToSkjemanummerIfPresent(term: String): String {
+        return skjemanummerRegex.find(term)?.let {
+            val (firstPart, secondPart, thirdPart) = it.destructured
+            "\"NAV $firstPart-$secondPart.$thirdPart\""
+        } ?: term
     }
 
     companion object {
-        private const val SKJEMANUMMER_DIGITS_LENGTH = 6
-        private const val SKJEMANUMMER_FORMAT = "^((NAV|nav).?)?([0-9]{2}).?([0-9]{2}).?([0-9]{2})$"
+        private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }
