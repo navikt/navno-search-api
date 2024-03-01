@@ -3,21 +3,17 @@ package no.nav.navnosearchapi.service.compatibility.filters
 import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
-import no.nav.navnosearchapi.service.compatibility.utils.NYHETER_STATISTIKK_AGG_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_NAV_OG_SAMFUNN_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_PRESSE_NAME
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK
-import no.nav.navnosearchapi.service.compatibility.utils.UNDERFASETT_STATISTIKK_NAME
-import no.nav.navnosearchapi.service.search.queries.existsQuery
-import no.nav.navnosearchapi.service.search.queries.termQuery
+import no.nav.navnosearchapi.service.compatibility.utils.AggregationNames
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetNames
 import org.opensearch.index.query.BoolQueryBuilder
+import org.opensearch.index.query.ExistsQueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
 
 val nyheterFilters = mapOf(
-    UNDERFASETT_STATISTIKK to FilterEntry(
-        name = UNDERFASETT_STATISTIKK_NAME,
-        aggregationName = NYHETER_STATISTIKK_AGG_NAME,
+    UnderFacetKeys.STATISTIKK to FilterEntry(
+        name = UnderFacetNames.STATISTIKK,
+        aggregationName = AggregationNames.NYHETER_STATISTIKK,
         filterQuery = nyhetFilter(
             mustHaveMetatags = listOf(
                 ValidMetatags.NYHET.descriptor,
@@ -25,8 +21,8 @@ val nyheterFilters = mapOf(
             )
         ),
     ),
-    UNDERFASETT_PRESSE to FilterEntry(
-        name = UNDERFASETT_PRESSE_NAME,
+    UnderFacetKeys.PRESSE to FilterEntry(
+        name = UnderFacetNames.PRESSE,
         filterQuery = nyhetFilter(
             shouldHaveMetatags = listOf(
                 ValidMetatags.PRESSE.descriptor,
@@ -34,8 +30,8 @@ val nyheterFilters = mapOf(
             )
         ),
     ),
-    UNDERFASETT_NAV_OG_SAMFUNN to FilterEntry(
-        name = UNDERFASETT_NAV_OG_SAMFUNN_NAME,
+    UnderFacetKeys.NAV_OG_SAMFUNN to FilterEntry(
+        name = UnderFacetNames.NAV_OG_SAMFUNN,
         filterQuery = nyhetFilter(
             mustHaveMetatags = listOf(
                 ValidMetatags.NYHET.descriptor,
@@ -49,10 +45,10 @@ private fun nyhetFilter(
     shouldHaveMetatags: List<String> = emptyList(),
     mustHaveMetatags: List<String> = emptyList(),
 ): BoolQueryBuilder {
-    val query = BoolQueryBuilder().mustNot(existsQuery(FYLKE))
+    val query = BoolQueryBuilder().mustNot(ExistsQueryBuilder(FYLKE))
 
-    shouldHaveMetatags.forEach { query.should(termQuery(METATAGS, it)) }
-    mustHaveMetatags.forEach { query.must(termQuery(METATAGS, it)) }
+    shouldHaveMetatags.forEach { query.should(TermQueryBuilder(METATAGS, it)) }
+    mustHaveMetatags.forEach { query.must(TermQueryBuilder(METATAGS, it)) }
 
     return query
 }

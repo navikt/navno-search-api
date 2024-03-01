@@ -1,16 +1,19 @@
 package no.nav.navnosearchapi.service.search
 
 import no.nav.navnosearchadminapi.common.constants.AUTOCOMPLETE
+import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchapi.service.search.config.termsToOverride
+import no.nav.navnosearchapi.service.search.config.typeToWeight
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.search.mapper.ContentSearchPageMapper
-import no.nav.navnosearchapi.service.search.queries.applyFilters
-import no.nav.navnosearchapi.service.search.queries.applyTypeWeighting
 import no.nav.navnosearchapi.service.search.queries.highlightBuilder
 import no.nav.navnosearchapi.service.search.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.service.search.queries.searchAllTextQuery
 import no.nav.navnosearchapi.service.search.queries.searchUrlQuery
+import no.nav.navnosearchapi.service.search.utils.applyFilters
+import no.nav.navnosearchapi.service.search.utils.applyWeighting
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
@@ -44,7 +47,7 @@ class SearchService(
         val baseQuery = baseQuery(term, isMatchPhraseQuery)
 
         val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(baseQuery.applyFilters(preAggregationFilters).applyTypeWeighting())
+            .withQuery(baseQuery.applyFilters(preAggregationFilters).applyWeighting(TYPE, typeToWeight))
             .withFilter(filters)
             .withPageable(pageRequest)
             .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
@@ -66,7 +69,8 @@ class SearchService(
     }
 
     fun searchUrl(term: String): SearchUrlResponse {
-        val searchQuery = NativeSearchQueryBuilder().withQuery(searchUrlQuery(term).applyTypeWeighting())
+        val searchQuery =
+            NativeSearchQueryBuilder().withQuery(searchUrlQuery(term).applyWeighting(TYPE, typeToWeight))
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
     }
@@ -83,7 +87,7 @@ class SearchService(
 
     private fun resolveTerm(term: String): String {
         val strippedTerm = term.replace(whitespace, "")
-        return termsMap[strippedTerm] ?: term
+        return termsToOverride[strippedTerm] ?: term
     }
 
     private fun isInQuotes(term: String): Boolean {
@@ -94,7 +98,5 @@ class SearchService(
     companion object {
         private const val QUOTE = '"'
         val whitespace = "\\s+".toRegex()
-
-        private val termsMap = mapOf("kontakt" to "kontakt oss")
     }
 }

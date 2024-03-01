@@ -1,70 +1,81 @@
 package no.nav.navnosearchapi.service.compatibility.utils
 
-const val FASETT_PRIVATPERSON = "0"
-const val FASETT_ARBEIDSGIVER = "1"
-const val FASETT_SAMARBEIDSPARTNER = "2"
-const val FASETT_NYHETER = "3"
-const val FASETT_STATISTIKK = "4"
-const val FASETT_ANALYSER_OG_FORSKNING = "5"
-const val FASETT_INNHOLD_FRA_FYLKER = "6"
-const val UNDERFASETT_INFORMASJON = "0"
-const val UNDERFASETT_KONTOR = "1"
-const val UNDERFASETT_SOKNAD_OG_SKJEMA = "2"
-const val UNDERFASETT_AKTUELT = "3"
-const val UNDERFASETT_PRESSE = "0"
-const val UNDERFASETT_NAV_OG_SAMFUNN = "1"
-const val UNDERFASETT_STATISTIKK = "2"
-const val UNDERFASETT_AGDER = "0"
-const val UNDERFASETT_INNLANDET = "1"
-const val UNDERFASETT_MORE_OG_ROMSDAL = "2"
-const val UNDERFASETT_NORDLAND = "3"
-const val UNDERFASETT_OSLO = "4"
-const val UNDERFASETT_ROGALAND = "5"
-const val UNDERFASETT_TROMS_OG_FINNMARK = "6"
-const val UNDERFASETT_TRONDELAG = "7"
-const val UNDERFASETT_VESTFOLD_OG_TELEMARK = "8"
-const val UNDERFASETT_VESTLAND = "9"
-const val UNDERFASETT_VEST_VIKEN = "10"
-const val UNDERFASETT_OST_VIKEN = "11"
+object FacetKeys {
+    const val PRIVATPERSON = "0"
+    const val ARBEIDSGIVER = "1"
+    const val SAMARBEIDSPARTNER = "2"
+    const val NYHETER = "3"
+    const val STATISTIKK = "4"
+    const val ANALYSER_OG_FORSKNING = "5"
+    const val INNHOLD_FRA_FYLKER = "6"
+}
 
-const val FASETT_PRIVATPERSON_NAME = "Privatperson"
-const val FASETT_ARBEIDSGIVER_NAME = "Arbeidsgiver"
-const val FASETT_SAMARBEIDSPARTNER_NAME = "Samarbeidspartner"
-const val FASETT_NYHETER_NAME = "Nyheter"
-const val FASETT_STATISTIKK_NAME = "Statistikk"
-const val FASETT_ANALYSER_OG_FORSKNING_NAME = "Analyser og forskning"
-const val FASETT_INNHOLD_FRA_FYLKER_NAME = "Innhold fra fylker"
-const val UNDERFASETT_INFORMASJON_NAME = "Informasjon"
-const val UNDERFASETT_KONTOR_NAME = "Kontor"
-const val UNDERFASETT_SOKNAD_OG_SKJEMA_NAME = "Søknad og skjema"
-const val UNDERFASETT_AKTUELT_NAME = "Aktuelt"
-const val UNDERFASETT_PRESSE_NAME = "Presse"
-const val UNDERFASETT_NAV_OG_SAMFUNN_NAME = "NAV og samfunn"
-const val UNDERFASETT_STATISTIKK_NAME = "Statistikk"
-const val UNDERFASETT_AGDER_NAME = "Agder"
-const val UNDERFASETT_INNLANDET_NAME = "Innlandet"
-const val UNDERFASETT_MORE_OG_ROMSDAL_NAME = "Møre og Romsdal"
-const val UNDERFASETT_NORDLAND_NAME = "Nordland"
-const val UNDERFASETT_OSLO_NAME = "Oslo"
-const val UNDERFASETT_ROGALAND_NAME = "Rogaland"
-const val UNDERFASETT_TROMS_OG_FINNMARK_NAME = "Troms og Finnmark"
-const val UNDERFASETT_TRONDELAG_NAME = "Trøndelag"
-const val UNDERFASETT_VESTFOLD_OG_TELEMARK_NAME = "Vestfold og Telemark"
-const val UNDERFASETT_VESTLAND_NAME = "Vestland"
-const val UNDERFASETT_VEST_VIKEN_NAME = "Vest-Viken"
-const val UNDERFASETT_OST_VIKEN_NAME = "Øst-Viken"
+object FacetNames {
+    const val PRIVATPERSON = "Privatperson"
+    const val ARBEIDSGIVER = "Arbeidsgiver"
+    const val SAMARBEIDSPARTNER = "Samarbeidspartner"
+    const val NYHETER = "Nyheter"
+    const val STATISTIKK = "Statistikk"
+    const val ANALYSER_OG_FORSKNING = "Analyser og forskning"
+    const val INNHOLD_FRA_FYLKER = "Innhold fra fylker"
+}
 
-const val NYHETER_STATISTIKK_AGG_NAME = FASETT_NYHETER_NAME + UNDERFASETT_STATISTIKK_NAME
-const val PRIVATPERSON_INFORMASJON_AGG_NAME = FASETT_PRIVATPERSON_NAME + UNDERFASETT_INFORMASJON_NAME
-const val PRIVATPERSON_KONTOR_AGG_NAME = FASETT_PRIVATPERSON_NAME + UNDERFASETT_KONTOR_NAME
-const val PRIVATPERSON_SOKNAD_OG_SKJEMA_AGG_NAME = FASETT_PRIVATPERSON_NAME + UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-const val PRIVATPERSON_AKTUELT_AGG_NAME = FASETT_PRIVATPERSON_NAME + UNDERFASETT_AKTUELT_NAME
-const val ARBEIDSGIVER_INFORMASJON_AGG_NAME = FASETT_ARBEIDSGIVER_NAME + UNDERFASETT_INFORMASJON_NAME
-const val ARBEIDSGIVER_KONTOR_AGG_NAME = FASETT_ARBEIDSGIVER_NAME + UNDERFASETT_KONTOR_NAME
-const val ARBEIDSGIVER_SOKNAD_OG_SKJEMA_AGG_NAME = FASETT_ARBEIDSGIVER_NAME + UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-const val ARBEIDSGIVER_AKTUELT_AGG_NAME = FASETT_ARBEIDSGIVER_NAME + UNDERFASETT_AKTUELT_NAME
-const val SAMARBEIDSPARTNER_INFORMASJON_AGG_NAME = FASETT_SAMARBEIDSPARTNER_NAME + UNDERFASETT_INFORMASJON_NAME
-const val SAMARBEIDSPARTNER_KONTOR_AGG_NAME = FASETT_SAMARBEIDSPARTNER_NAME + UNDERFASETT_KONTOR_NAME
-const val SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA_AGG_NAME =
-    FASETT_SAMARBEIDSPARTNER_NAME + UNDERFASETT_SOKNAD_OG_SKJEMA_NAME
-const val SAMARBEIDSPARTNER_AKTUELT_AGG_NAME = FASETT_SAMARBEIDSPARTNER_NAME + UNDERFASETT_AKTUELT_NAME
+object UnderFacetKeys {
+    const val INFORMASJON = "0"
+    const val KONTOR = "1"
+    const val SOKNAD_OG_SKJEMA = "2"
+    const val AKTUELT = "3"
+    const val PRESSE = "0"
+    const val NAV_OG_SAMFUNN = "1"
+    const val STATISTIKK = "2"
+    const val AGDER = "0"
+    const val INNLANDET = "1"
+    const val MORE_OG_ROMSDAL = "2"
+    const val NORDLAND = "3"
+    const val OSLO = "4"
+    const val ROGALAND = "5"
+    const val TROMS_OG_FINNMARK = "6"
+    const val TRONDELAG = "7"
+    const val VESTFOLD_OG_TELEMARK = "8"
+    const val VESTLAND = "9"
+    const val VEST_VIKEN = "10"
+    const val OST_VIKEN = "11"
+}
+
+object UnderFacetNames {
+    const val INFORMASJON = "Informasjon"
+    const val KONTOR = "Kontor"
+    const val SOKNAD_OG_SKJEMA = "Søknad og skjema"
+    const val AKTUELT = "Aktuelt"
+    const val PRESSE = "Presse"
+    const val NAV_OG_SAMFUNN = "NAV og samfunn"
+    const val STATISTIKK = "Statistikk"
+    const val AGDER = "Agder"
+    const val INNLANDET = "Innlandet"
+    const val MORE_OG_ROMSDAL = "Møre og Romsdal"
+    const val NORDLAND = "Nordland"
+    const val OSLO = "Oslo"
+    const val ROGALAND = "Rogaland"
+    const val TROMS_OG_FINNMARK = "Troms og Finnmark"
+    const val TRONDELAG = "Trøndelag"
+    const val VESTFOLD_OG_TELEMARK = "Vestfold og Telemark"
+    const val VESTLAND = "Vestland"
+    const val VEST_VIKEN = "Vest-Viken"
+    const val OST_VIKEN = "Øst-Viken"
+}
+
+object AggregationNames {
+    const val NYHETER_STATISTIKK = FacetNames.NYHETER + UnderFacetNames.STATISTIKK
+    const val PRIVATPERSON_INFORMASJON = FacetNames.PRIVATPERSON + UnderFacetNames.INFORMASJON
+    const val PRIVATPERSON_KONTOR = FacetNames.PRIVATPERSON + UnderFacetNames.KONTOR
+    const val PRIVATPERSON_SOKNAD_OG_SKJEMA = FacetNames.PRIVATPERSON + UnderFacetNames.SOKNAD_OG_SKJEMA
+    const val PRIVATPERSON_AKTUELT = FacetNames.PRIVATPERSON + UnderFacetNames.AKTUELT
+    const val ARBEIDSGIVER_INFORMASJON = FacetNames.ARBEIDSGIVER + UnderFacetNames.INFORMASJON
+    const val ARBEIDSGIVER_KONTOR = FacetNames.ARBEIDSGIVER + UnderFacetNames.KONTOR
+    const val ARBEIDSGIVER_SOKNAD_OG_SKJEMA = FacetNames.ARBEIDSGIVER + UnderFacetNames.SOKNAD_OG_SKJEMA
+    const val ARBEIDSGIVER_AKTUELT = FacetNames.ARBEIDSGIVER + UnderFacetNames.AKTUELT
+    const val SAMARBEIDSPARTNER_INFORMASJON = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.INFORMASJON
+    const val SAMARBEIDSPARTNER_KONTOR = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.KONTOR
+    const val SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.SOKNAD_OG_SKJEMA
+    const val SAMARBEIDSPARTNER_AKTUELT = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.AKTUELT
+}

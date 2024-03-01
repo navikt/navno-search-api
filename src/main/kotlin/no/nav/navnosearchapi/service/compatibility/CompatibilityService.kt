@@ -15,13 +15,7 @@ import no.nav.navnosearchapi.service.compatibility.filters.privatpersonFilters
 import no.nav.navnosearchapi.service.compatibility.filters.samarbeidspartnerFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ANALYSER_OG_FORSKNING
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_ARBEIDSGIVER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_INNHOLD_FRA_FYLKER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_NYHETER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_PRIVATPERSON
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_SAMARBEIDSPARTNER
-import no.nav.navnosearchapi.service.compatibility.utils.FASETT_STATISTIKK
+import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
@@ -75,51 +69,48 @@ class CompatibilityService(
     }
 
     fun term(term: String): String {
-        if (isSkjemanummer(term)) {
-            return toExactSkjemanummerTerm(term)
-        }
-        return term
+        return convertToSkjemanummerIfPresent(term)
     }
 
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
-            FASETT_PRIVATPERSON -> {
+            FacetKeys.PRIVATPERSON -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_PRIVATPERSON]?.filterQuery!!
+                    fasettFilters[FacetKeys.PRIVATPERSON]?.filterQuery!!
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { privatpersonFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_ARBEIDSGIVER -> {
+            FacetKeys.ARBEIDSGIVER -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_ARBEIDSGIVER]?.filterQuery!!
+                    fasettFilters[FacetKeys.ARBEIDSGIVER]?.filterQuery!!
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { arbeidsgiverFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_SAMARBEIDSPARTNER -> {
+            FacetKeys.SAMARBEIDSPARTNER -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_SAMARBEIDSPARTNER]?.filterQuery!!
+                    fasettFilters[FacetKeys.SAMARBEIDSPARTNER]?.filterQuery!!
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { samarbeidspartnerFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_NYHETER -> {
+            FacetKeys.NYHETER -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_NYHETER]!!.filterQuery
+                    fasettFilters[FacetKeys.NYHETER]!!.filterQuery
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
                 }
             }
 
-            FASETT_ANALYSER_OG_FORSKNING -> fasettFilters[FASETT_ANALYSER_OG_FORSKNING]!!.filterQuery
-            FASETT_STATISTIKK -> fasettFilters[FASETT_STATISTIKK]!!.filterQuery
-            FASETT_INNHOLD_FRA_FYLKER -> {
+            FacetKeys.ANALYSER_OG_FORSKNING -> fasettFilters[FacetKeys.ANALYSER_OG_FORSKNING]!!.filterQuery
+            FacetKeys.STATISTIKK -> fasettFilters[FacetKeys.STATISTIKK]!!.filterQuery
+            FacetKeys.INNHOLD_FRA_FYLKER -> {
                 if (uf.isEmpty()) {
-                    fasettFilters[FASETT_INNHOLD_FRA_FYLKER]!!.filterQuery
+                    fasettFilters[FacetKeys.INNHOLD_FRA_FYLKER]!!.filterQuery
                 } else {
                     joinClausesToSingleQuery(shouldClauses = uf.map { fylkeFilters[it]!!.filterQuery })
                 }
@@ -162,28 +153,15 @@ class CompatibilityService(
         }
     }
 
-    private fun toExactSkjemanummerTerm(term: String): String {
-        val digits = term.filter { it.isDigit() }
-
-        if (digits.length != SKJEMANUMMER_DIGITS_LENGTH) {
-            logger.warn("Skjemanummer kunne ikke formateres: $term. Bruker uformatert søkeord.")
-            return term
-        }
-
-        val firstPart = digits.substring(0, 2)
-        val secondPart = digits.substring(2, 4)
-        val thirdPart = digits.substring(4, 6)
-
-        return "\"NAV $firstPart-$secondPart.$thirdPart\""
-    }
-
-    private fun isSkjemanummer(term: String): Boolean {
-        return term.matches(skjemanummerRegex)
+    private fun convertToSkjemanummerIfPresent(term: String): String {
+        return skjemanummerRegex.find(term)?.let {
+            val (firstPart, secondPart, thirdPart) = it.destructured
+            "\"NAV $firstPart-$secondPart.$thirdPart\""
+        } ?: term
     }
 
     companion object {
-        private const val SKJEMANUMMER_DIGITS_LENGTH = 6
-        private const val SKJEMANUMMER_FORMAT = "^((NAV|nav).?)?([0-9]{2}).?([0-9]{2}).?([0-9]{2})$"
+        private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }
