@@ -81,22 +81,31 @@ class SearchService(
         } else if (isMatchPhraseQuery) {
             searchAllTextForPhraseQuery(term)
         } else {
-            searchAllTextQuery(resolveTerm(term))
+            val (resolvedTerm, skjemanummer) = resolveTerm(term)
+            searchAllTextQuery(resolvedTerm, skjemanummer)
         }
     }
 
-    private fun resolveTerm(term: String): String {
-        val strippedTerm = term.replace(whitespace, "")
-        return termsToOverride[strippedTerm] ?: term
+    private fun resolveTerm(term: String): Pair<String, String?> {
+        return term.replace(whitespace, "")
+            .let { termsToOverride[it] ?: term }
+            .let { extractSkjemanummerIfPresent(it) }
+    }
+
+    private fun extractSkjemanummerIfPresent(term: String): Pair<String, String?> {
+        return skjemanummerRegex.find(term)?.let {
+            term.replace(it.value, "") to "NAV ${it.groupValues[1]}-${it.groupValues[2]}.${it.groupValues[3]}"
+        } ?: (term to null)
     }
 
     private fun isInQuotes(term: String): Boolean {
         return term.startsWith(QUOTE) && term.endsWith(QUOTE)
     }
 
-
     companion object {
         private const val QUOTE = '"'
+        private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
+        private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
         val whitespace = "\\s+".toRegex()
     }
 }

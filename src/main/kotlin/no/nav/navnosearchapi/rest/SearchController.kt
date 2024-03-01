@@ -25,7 +25,7 @@ class SearchController(
         @ModelAttribute params: Params
     ): SearchResult {
         val result = searchService.search(
-            term = compatibilityService.term(params.ord),
+            term = params.ord,
             pageSize = pageSize,
             page = params.page,
             filters = compatibilityService.postAggregationFilters(params.f, params.uf),
@@ -42,7 +42,7 @@ class SearchController(
         @ModelAttribute params: Params
     ): DecoratorSearchResult {
         val result = searchService.search(
-            term = compatibilityService.term(params.ord),
+            term = params.ord,
             pageSize = DECORATOR_SEARCH_PAGE_SIZE,
             page = FIRST_PAGE,
             filters = compatibilityService.decoratorSearchFilters(params.f, params.preferredLanguage),

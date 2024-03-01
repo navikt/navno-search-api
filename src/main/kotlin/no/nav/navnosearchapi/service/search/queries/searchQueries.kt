@@ -19,7 +19,7 @@ import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
 import org.opensearch.index.query.QueryBuilder
 
-fun searchAllTextQuery(term: String): QueryBuilder {
+fun searchAllTextQuery(term: String, skjemanummer: String? = null): QueryBuilder {
     return BoolQueryBuilder()
         // Filter (bidrar ikke til score) - alle treff må inneholde alle søkeord (på tvers av feltene)
         .filter(
@@ -51,7 +51,7 @@ fun searchAllTextQuery(term: String): QueryBuilder {
                     searchAllTextForPhraseQuery(term)
                         .boost(EXACT_PHRASE_MATCH_BOOST)
                 )
-        )
+        ).apply { skjemanummer?.let { this.must(searchAllTextForPhraseQuery(it)) } }
 }
 
 fun searchAllTextForPhraseQuery(term: String): QueryBuilder {

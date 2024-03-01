@@ -68,10 +68,6 @@ class CompatibilityService(
         }
     }
 
-    fun term(term: String): String {
-        return convertToSkjemanummerIfPresent(term)
-    }
-
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         return when (f) {
             FacetKeys.PRIVATPERSON -> {
@@ -151,17 +147,5 @@ class CompatibilityService(
                     )
             }
         }
-    }
-
-    private fun convertToSkjemanummerIfPresent(term: String): String {
-        return skjemanummerRegex.find(term)?.let {
-            val (firstPart, secondPart, thirdPart) = it.destructured
-            "\"NAV $firstPart-$secondPart.$thirdPart\""
-        } ?: term
-    }
-
-    companion object {
-        private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
-        private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
     }
 }
