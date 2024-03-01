@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.integrationtests
 
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.integrationtests.config.OpensearchConfiguration
 import no.nav.navnosearchapi.utils.initialTestData
@@ -34,11 +35,11 @@ abstract class AbstractIntegrationTest {
 
     fun searchUri(
         ord: String?,
-        c: String? = "1",
         page: Int? = 0,
         f: Int? = 0,
         uf: List<String>? = emptyList(),
         s: Int? = 0,
+        preferredLanguage: String = NORWEGIAN_BOKMAAL
     ): String {
         return UriComponentsBuilder.fromHttpUrl(host())
             .path("/content/search")

@@ -3,6 +3,7 @@ package no.nav.navnosearchapi.integrationtests
 import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
 import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
+import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,11 +17,11 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         setupIndex()
     }
 
-    /*@Test
+    @Test
     fun testSearchWithEmptyTerm() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(7L)
+        assertThat(result.total).isEqualTo(1L)
         assertThat(result.isMore).isFalse()
         assertThat(result.autoComplete).isEmpty()
     }
@@ -29,15 +30,15 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     fun testSearchForText() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(TEXT_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(7L)
+        assertThat(result.total).isEqualTo(1L)
     }
 
     @Test
     fun testSearchForPhrase() {
-        val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM)).body!!
+        val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM, f = 1)).body!!
 
         assertThat(result.total).isEqualTo(1L)
-    }*/
+    }
 
     @Test
     fun testSearchWithFasettFilter() {
@@ -52,14 +53,14 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertThat(result.total).isEqualTo(3L)
     }
 
-    /*@Test
+    @Test
     fun testSearchWithUnderfasettFilter() {
         val result = restTemplate.getForEntity<SearchResult>(
-            searchUri(ord = TEXT_TERM, f = FASETT_INNHOLD.toInt(), uf = listOf(UNDERFASETT_INFORMASJON))
+            searchUri(ord = TEXT_TERM, f = FacetKeys.PRIVATPERSON.toInt(), uf = listOf(UnderFacetKeys.INFORMASJON))
         ).body!!
 
-        assertThat(result.total).isEqualTo(7L)
-    }*/
+        assertThat(result.total).isEqualTo(1L)
+    }
 
     @Test
     fun testSearchWithMissingParameter() {

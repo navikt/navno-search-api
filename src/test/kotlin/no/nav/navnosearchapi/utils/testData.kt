@@ -50,8 +50,7 @@ val initialTestData = listOf(
         timestamp = nowMinusTwoYears,
         language = ENGLISH,
         metatags = listOf(INFORMASJON),
-
-        ),
+    ),
     dummyContentDao(
         externalId = "5",
         textPrefix = "Fifth",
@@ -92,7 +91,7 @@ val initialTestData = listOf(
         language = HINDI,
         metatags = listOf(INFORMASJON),
 
-        ),
+    ),
     dummyContentDao(
         externalId = "10",
         textPrefix = "Tenth",
