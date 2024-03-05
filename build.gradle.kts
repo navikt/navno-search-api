@@ -7,7 +7,7 @@ plugins {
     val springDepMgmtVersion = "1.1.4"
     val versionsVersion = "0.51.0"
 
-    kotlin("jvm")
+    kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 
     id("org.springframework.boot") version springBootVersion
