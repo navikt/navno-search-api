@@ -76,13 +76,12 @@ class SearchService(
     }
 
     private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
-        return if (term.isBlank()) {
-            MatchAllQueryBuilder()
-        } else if (isMatchPhraseQuery) {
-            searchAllTextForPhraseQuery(term)
-        } else {
-            val (resolvedTerm, skjemanummer) = resolveTerm(term)
-            searchAllTextQuery(resolvedTerm, skjemanummer)
+        val (resolvedTerm, skjemanummer) = resolveTerm(term)
+        return when {
+            term.isBlank() -> MatchAllQueryBuilder()
+            resolvedTerm.isBlank() && skjemanummer != null -> searchAllTextForPhraseQuery(skjemanummer)
+            isMatchPhraseQuery -> searchAllTextForPhraseQuery(term)
+            else -> searchAllTextQuery(resolvedTerm, skjemanummer)
         }
     }
 
