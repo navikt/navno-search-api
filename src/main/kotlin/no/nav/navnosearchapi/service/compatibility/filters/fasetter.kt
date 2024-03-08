@@ -25,32 +25,27 @@ val fasettFilters = mapOf(
         name = FacetNames.SAMARBEIDSPARTNER,
         filterQuery = audienceFilter(ValidAudiences.SAMARBEIDSPARTNER.descriptor)
     ),
-    FacetKeys.NYHETER to FilterEntry(
-        name = FacetNames.NYHETER,
+    FacetKeys.PRESSE to FilterEntry(
+        name = FacetNames.PRESSE,
         filterQuery = BoolQueryBuilder()
             .must(
                 BoolQueryBuilder()
-                    .should(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
+                    .should(TermQueryBuilder(METATAGS, ValidMetatags.PRESSE.descriptor))
                     .should(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
             )
             .mustNot(ExistsQueryBuilder(FYLKE))
     ),
     FacetKeys.STATISTIKK to FilterEntry(
         name = FacetNames.STATISTIKK,
-        filterQuery = BoolQueryBuilder()
-            .must(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-            .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
-            .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
+        filterQuery = BoolQueryBuilder().must(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
     ),
     FacetKeys.ANALYSER_OG_FORSKNING to FilterEntry(
         name = FacetNames.ANALYSER_OG_FORSKNING,
-        filterQuery = BoolQueryBuilder()
-            .must(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
+        filterQuery = BoolQueryBuilder().must(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
     ),
     FacetKeys.INNHOLD_FRA_FYLKER to FilterEntry(
         name = FacetNames.INNHOLD_FRA_FYLKER,
-        filterQuery = BoolQueryBuilder()
-            .must(ExistsQueryBuilder(FYLKE))
+        filterQuery = BoolQueryBuilder().must(ExistsQueryBuilder(FYLKE))
     )
 )
 

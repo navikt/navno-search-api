@@ -4,7 +4,7 @@ object FacetKeys {
     const val PRIVATPERSON = "0"
     const val ARBEIDSGIVER = "1"
     const val SAMARBEIDSPARTNER = "2"
-    const val NYHETER = "3"
+    const val PRESSE = "3"
     const val STATISTIKK = "4"
     const val ANALYSER_OG_FORSKNING = "5"
     const val INNHOLD_FRA_FYLKER = "6"
@@ -14,7 +14,7 @@ object FacetNames {
     const val PRIVATPERSON = "Privatperson"
     const val ARBEIDSGIVER = "Arbeidsgiver"
     const val SAMARBEIDSPARTNER = "Samarbeidspartner"
-    const val NYHETER = "Nyheter"
+    const val PRESSE = "Presse"
     const val STATISTIKK = "Statistikk"
     const val ANALYSER_OG_FORSKNING = "Analyser og forskning"
     const val INNHOLD_FRA_FYLKER = "Innhold fra fylker"
@@ -25,9 +25,9 @@ object UnderFacetKeys {
     const val KONTOR = "1"
     const val SOKNAD_OG_SKJEMA = "2"
     const val AKTUELT = "3"
-    const val PRESSE = "0"
-    const val NAV_OG_SAMFUNN = "1"
-    const val STATISTIKK = "2"
+    const val ARTIKLER = "0"
+    const val NYHETER = "1"
+    const val TABELLER = "2"
     const val AGDER = "0"
     const val INNLANDET = "1"
     const val MORE_OG_ROMSDAL = "2"
@@ -47,9 +47,9 @@ object UnderFacetNames {
     const val KONTOR = "Kontor"
     const val SOKNAD_OG_SKJEMA = "Søknad og skjema"
     const val AKTUELT = "Aktuelt"
-    const val PRESSE = "Presse"
-    const val NAV_OG_SAMFUNN = "NAV og samfunn"
-    const val STATISTIKK = "Statistikk"
+    const val ARTIKLER = "Artikler"
+    const val NYHETER = "Nyheter"
+    const val TABELLER = "Tabeller"
     const val AGDER = "Agder"
     const val INNLANDET = "Innlandet"
     const val MORE_OG_ROMSDAL = "Møre og Romsdal"
@@ -65,7 +65,6 @@ object UnderFacetNames {
 }
 
 object AggregationNames {
-    const val NYHETER_STATISTIKK = FacetNames.NYHETER + UnderFacetNames.STATISTIKK
     const val PRIVATPERSON_INFORMASJON = FacetNames.PRIVATPERSON + UnderFacetNames.INFORMASJON
     const val PRIVATPERSON_KONTOR = FacetNames.PRIVATPERSON + UnderFacetNames.KONTOR
     const val PRIVATPERSON_SOKNAD_OG_SKJEMA = FacetNames.PRIVATPERSON + UnderFacetNames.SOKNAD_OG_SKJEMA
@@ -78,4 +77,9 @@ object AggregationNames {
     const val SAMARBEIDSPARTNER_KONTOR = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.KONTOR
     const val SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.SOKNAD_OG_SKJEMA
     const val SAMARBEIDSPARTNER_AKTUELT = FacetNames.SAMARBEIDSPARTNER + UnderFacetNames.AKTUELT
+    const val STATISTIKK_ARTIKLER = FacetNames.STATISTIKK + UnderFacetNames.ARTIKLER
+    const val STATISTIKK_NYHETER = FacetNames.STATISTIKK + UnderFacetNames.NYHETER
+    const val STATISTIKK_TABELLER = FacetNames.STATISTIKK + UnderFacetNames.TABELLER
+    const val ANALYSER_OG_FORSKNING_ARTIKLER = FacetNames.ANALYSER_OG_FORSKNING + UnderFacetNames.ARTIKLER
+    const val ANALYSER_OG_FORSKNING_NYHETER = FacetNames.ANALYSER_OG_FORSKNING + UnderFacetNames.NYHETER
 }

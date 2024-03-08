@@ -7,12 +7,14 @@ import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
+import no.nav.navnosearchapi.service.compatibility.filters.FilterEntry
+import no.nav.navnosearchapi.service.compatibility.filters.analyseFilters
 import no.nav.navnosearchapi.service.compatibility.filters.arbeidsgiverFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fasettFilters
 import no.nav.navnosearchapi.service.compatibility.filters.fylkeFilters
-import no.nav.navnosearchapi.service.compatibility.filters.nyheterFilters
 import no.nav.navnosearchapi.service.compatibility.filters.privatpersonFilters
 import no.nav.navnosearchapi.service.compatibility.filters.samarbeidspartnerFilters
+import no.nav.navnosearchapi.service.compatibility.filters.statistikkFilters
 import no.nav.navnosearchapi.service.compatibility.mapper.DecoratorSearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
@@ -22,8 +24,6 @@ import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,9 +31,6 @@ class CompatibilityService(
     val searchResultMapper: SearchResultMapper,
     val decoratorSearchResultMapper: DecoratorSearchResultMapper
 ) {
-
-    val logger: Logger = LoggerFactory.getLogger(CompatibilityService::class.java)
-
     fun toSearchResult(params: Params, result: ContentSearchPage): SearchResult {
         return searchResultMapper.toSearchResult(params, result)
     }
@@ -63,55 +60,32 @@ class CompatibilityService(
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values + privatpersonFilters.values + arbeidsgiverFilters.values + samarbeidspartnerFilters.values + nyheterFilters.values + fylkeFilters.values).map {
-            AggregationBuilders.filter(it.aggregationName, it.filterQuery)
-        }
+        return (fasettFilters.values +
+                privatpersonFilters.values +
+                arbeidsgiverFilters.values +
+                samarbeidspartnerFilters.values +
+                statistikkFilters.values +
+                analyseFilters.values +
+                fylkeFilters.values).map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
     }
 
     private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
+        fun filterWithUnderfacets(facetKey: String, ufFilters: Map<String, FilterEntry>) = if (uf.isEmpty()) {
+            fasettFilters[facetKey]!!.filterQuery
+        } else {
+            joinClausesToSingleQuery(shouldClauses = uf.map { ufFilters[it]!!.filterQuery })
+        }
+
+        fun filterWithoutUnderfacets(facetKey: String) = fasettFilters[facetKey]!!.filterQuery
+
         return when (f) {
-            FacetKeys.PRIVATPERSON -> {
-                if (uf.isEmpty()) {
-                    fasettFilters[FacetKeys.PRIVATPERSON]?.filterQuery!!
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { privatpersonFilters[it]!!.filterQuery })
-                }
-            }
-
-            FacetKeys.ARBEIDSGIVER -> {
-                if (uf.isEmpty()) {
-                    fasettFilters[FacetKeys.ARBEIDSGIVER]?.filterQuery!!
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { arbeidsgiverFilters[it]!!.filterQuery })
-                }
-            }
-
-            FacetKeys.SAMARBEIDSPARTNER -> {
-                if (uf.isEmpty()) {
-                    fasettFilters[FacetKeys.SAMARBEIDSPARTNER]?.filterQuery!!
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { samarbeidspartnerFilters[it]!!.filterQuery })
-                }
-            }
-
-            FacetKeys.NYHETER -> {
-                if (uf.isEmpty()) {
-                    fasettFilters[FacetKeys.NYHETER]!!.filterQuery
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { nyheterFilters[it]!!.filterQuery })
-                }
-            }
-
-            FacetKeys.ANALYSER_OG_FORSKNING -> fasettFilters[FacetKeys.ANALYSER_OG_FORSKNING]!!.filterQuery
-            FacetKeys.STATISTIKK -> fasettFilters[FacetKeys.STATISTIKK]!!.filterQuery
-            FacetKeys.INNHOLD_FRA_FYLKER -> {
-                if (uf.isEmpty()) {
-                    fasettFilters[FacetKeys.INNHOLD_FRA_FYLKER]!!.filterQuery
-                } else {
-                    joinClausesToSingleQuery(shouldClauses = uf.map { fylkeFilters[it]!!.filterQuery })
-                }
-            }
-
+            FacetKeys.PRIVATPERSON -> filterWithUnderfacets(FacetKeys.PRIVATPERSON, privatpersonFilters)
+            FacetKeys.ARBEIDSGIVER -> filterWithUnderfacets(FacetKeys.ARBEIDSGIVER, arbeidsgiverFilters)
+            FacetKeys.SAMARBEIDSPARTNER -> filterWithUnderfacets(FacetKeys.SAMARBEIDSPARTNER, samarbeidspartnerFilters)
+            FacetKeys.PRESSE -> filterWithoutUnderfacets(FacetKeys.PRESSE)
+            FacetKeys.ANALYSER_OG_FORSKNING -> filterWithUnderfacets(FacetKeys.ANALYSER_OG_FORSKNING, analyseFilters)
+            FacetKeys.STATISTIKK -> filterWithUnderfacets(FacetKeys.STATISTIKK, statistikkFilters)
+            FacetKeys.INNHOLD_FRA_FYLKER -> filterWithUnderfacets(FacetKeys.INNHOLD_FRA_FYLKER, fylkeFilters)
             else -> BoolQueryBuilder()
         }
     }

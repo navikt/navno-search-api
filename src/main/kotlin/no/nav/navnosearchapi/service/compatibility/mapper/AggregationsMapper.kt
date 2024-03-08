@@ -50,17 +50,18 @@ class AggregationsMapper {
                         underFacetAggregations = samarbeidspartnerUnderFacets(::underFacetAggregation)
                     ),
                     facetAggregation(
-                        key = FacetKeys.NYHETER,
-                        name = FacetNames.NYHETER,
+                        key = FacetKeys.PRESSE,
+                        name = FacetNames.PRESSE,
+                    ),
+                    facetAggregation(
+                        key = FacetKeys.STATISTIKK,
+                        name = FacetNames.STATISTIKK,
                         underFacetAggregations = statistikkUnderFacets(::underFacetAggregation),
                     ),
                     facetAggregation(
                         key = FacetKeys.ANALYSER_OG_FORSKNING,
                         name = FacetNames.ANALYSER_OG_FORSKNING,
-                    ),
-                    facetAggregation(
-                        key = FacetKeys.STATISTIKK,
-                        name = FacetNames.STATISTIKK,
+                        underFacetAggregations = analyseUnderFacets(::underFacetAggregation),
                     ),
                     facetAggregation(
                         key = FacetKeys.INNHOLD_FRA_FYLKER,
@@ -151,19 +152,34 @@ class AggregationsMapper {
     private fun statistikkUnderFacets(underFacetAggregation: (key: String, name: String, aggregationName: String) -> FacetBucket): List<FacetBucket> {
         return filteredBuckets(
             underFacetAggregation(
-                UnderFacetKeys.STATISTIKK,
-                UnderFacetNames.STATISTIKK,
-                AggregationNames.NYHETER_STATISTIKK
+                UnderFacetKeys.ARTIKLER,
+                UnderFacetNames.ARTIKLER,
+                AggregationNames.STATISTIKK_ARTIKLER
             ),
             underFacetAggregation(
-                UnderFacetKeys.PRESSE,
-                UnderFacetNames.PRESSE,
-                UnderFacetNames.PRESSE
+                UnderFacetKeys.NYHETER,
+                UnderFacetNames.NYHETER,
+                AggregationNames.STATISTIKK_NYHETER
             ),
             underFacetAggregation(
-                UnderFacetKeys.NAV_OG_SAMFUNN,
-                UnderFacetNames.NAV_OG_SAMFUNN,
-                UnderFacetNames.NAV_OG_SAMFUNN
+                UnderFacetKeys.TABELLER,
+                UnderFacetNames.TABELLER,
+                AggregationNames.STATISTIKK_TABELLER
+            ),
+        )
+    }
+
+    private fun analyseUnderFacets(underFacetAggregation: (key: String, name: String, aggregationName: String) -> FacetBucket): List<FacetBucket> {
+        return filteredBuckets(
+            underFacetAggregation(
+                UnderFacetKeys.ARTIKLER,
+                UnderFacetNames.ARTIKLER,
+                AggregationNames.ANALYSER_OG_FORSKNING_ARTIKLER
+            ),
+            underFacetAggregation(
+                UnderFacetKeys.NYHETER,
+                UnderFacetNames.NYHETER,
+                AggregationNames.ANALYSER_OG_FORSKNING_NYHETER
             ),
         )
     }

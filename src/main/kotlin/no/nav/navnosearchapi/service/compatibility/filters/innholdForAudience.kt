@@ -47,7 +47,12 @@ private fun filtersForAudience(
         UnderFacetKeys.INFORMASJON to FilterEntry(
             name = UnderFacetNames.INFORMASJON,
             aggregationName = informasjonAggName,
-            filterQuery = innholdBaseFilter(audience).must(TermQueryBuilder(METATAGS, ValidMetatags.INFORMASJON.descriptor))
+            filterQuery = innholdBaseFilter(audience).must(
+                TermQueryBuilder(
+                    METATAGS,
+                    ValidMetatags.INFORMASJON.descriptor
+                )
+            )
         ),
         UnderFacetKeys.KONTOR to FilterEntry(
             name = UnderFacetNames.KONTOR,
@@ -61,7 +66,11 @@ private fun filtersForAudience(
         UnderFacetKeys.SOKNAD_OG_SKJEMA to FilterEntry(
             name = UnderFacetNames.SOKNAD_OG_SKJEMA,
             aggregationName = soknadAggName,
-            filterQuery = innholdBaseFilter(audience).must(TermQueryBuilder(TYPE, ValidTypes.SKJEMA.descriptor))
+            filterQuery = innholdBaseFilter(audience).must(
+                BoolQueryBuilder()
+                    .should(TermQueryBuilder(TYPE, ValidTypes.SKJEMA.descriptor))
+                    .should(TermQueryBuilder(TYPE, ValidTypes.SKJEMAOVERSIKT.descriptor))
+            )
         ),
         UnderFacetKeys.AKTUELT to FilterEntry(
             name = UnderFacetNames.AKTUELT,
