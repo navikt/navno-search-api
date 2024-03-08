@@ -7,6 +7,7 @@ import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 
 const val EXACT_PHRASE_MATCH_BOOST = 1.5f
@@ -45,7 +46,10 @@ val typeToWeight = mapOf(
     ValidTypes.TEMASIDE.descriptor to 1.75f,
     ValidTypes.SITUASJONSSIDE.descriptor to 1.75f,
     ValidTypes.GUIDE.descriptor to 1.50f,
-    ValidTypes.LEGACY.descriptor to 0.25f,
+)
+
+val metatagToWeight = mapOf(
+    ValidMetatags.NYHET.descriptor to 0.25f,
 )
 
 val allTextFields = languageSubfields.flatMap {
