@@ -45,6 +45,7 @@ val typeToWeight = mapOf(
     ValidTypes.TEMASIDE.descriptor to 1.75f,
     ValidTypes.SITUASJONSSIDE.descriptor to 1.75f,
     ValidTypes.GUIDE.descriptor to 1.50f,
+    ValidTypes.LEGACY.descriptor to 0.25f,
 )
 
 val allTextFields = languageSubfields.flatMap {
