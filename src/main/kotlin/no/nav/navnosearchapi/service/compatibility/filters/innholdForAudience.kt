@@ -15,21 +15,21 @@ import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 
 val privatpersonFilters = filtersForAudience(
-    audience = ValidAudiences.PRIVATPERSON.descriptor,
+    audience = ValidAudiences.PERSON.descriptor,
     informasjonAggName = AggregationNames.PRIVATPERSON_INFORMASJON,
     kontorAggName = AggregationNames.PRIVATPERSON_KONTOR,
     soknadAggName = AggregationNames.PRIVATPERSON_SOKNAD_OG_SKJEMA,
     aktueltAggName = AggregationNames.PRIVATPERSON_AKTUELT,
 )
 val arbeidsgiverFilters = filtersForAudience(
-    audience = ValidAudiences.ARBEIDSGIVER.descriptor,
+    audience = ValidAudiences.EMPLOYER.descriptor,
     informasjonAggName = AggregationNames.ARBEIDSGIVER_INFORMASJON,
     kontorAggName = AggregationNames.ARBEIDSGIVER_KONTOR,
     soknadAggName = AggregationNames.ARBEIDSGIVER_SOKNAD_OG_SKJEMA,
     aktueltAggName = AggregationNames.ARBEIDSGIVER_AKTUELT,
 )
 val samarbeidspartnerFilters = filtersForAudience(
-    audience = ValidAudiences.SAMARBEIDSPARTNER.descriptor,
+    audience = ValidAudiences.PROVIDER.descriptor,
     informasjonAggName = AggregationNames.SAMARBEIDSPARTNER_INFORMASJON,
     kontorAggName = AggregationNames.SAMARBEIDSPARTNER_KONTOR,
     soknadAggName = AggregationNames.SAMARBEIDSPARTNER_SOKNAD_OG_SKJEMA,
@@ -97,12 +97,12 @@ private fun innholdBaseFilter(audience: String, isAudienceStrict: Boolean = fals
 private fun lenientAudienceFilter(audience: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .should(TermQueryBuilder(AUDIENCE, audience))
-        .should(TermQueryBuilder(AUDIENCE, ValidAudiences.ANDRE.descriptor))
+        .should(TermQueryBuilder(AUDIENCE, ValidAudiences.OTHER.descriptor))
         .should(BoolQueryBuilder().mustNot(ExistsQueryBuilder(AUDIENCE)))
 }
 
 private fun strictAudienceFilter(audience: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .should(TermQueryBuilder(AUDIENCE, audience))
-        .should(TermQueryBuilder(AUDIENCE, ValidAudiences.ANDRE.descriptor))
+        .should(TermQueryBuilder(AUDIENCE, ValidAudiences.OTHER.descriptor))
 }

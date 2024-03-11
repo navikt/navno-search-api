@@ -113,7 +113,7 @@ class CompatibilityService(
                     )
 
                 ENGLISH ->
-                    // Ikke vis nynorsk-versjon dersom det finnes en engelsk versjon
+                    // Ikke vis nynorsk-versjon dersom det finnes en bokmål-versjon
                     this.mustNot(
                         BoolQueryBuilder()
                             .must(TermQueryBuilder(LANGUAGE, NORWEGIAN_NYNORSK))
