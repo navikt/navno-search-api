@@ -2,6 +2,7 @@ package no.nav.navnosearchapi.utils
 
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangFieldLong
@@ -10,9 +11,9 @@ import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
-const val PRIVATPERSON = "privatperson"
-const val ARBEIDSGIVER = "arbeidsgiver"
-const val SAMARBEIDSPARTNER = "samarbeidspartner"
+val PRIVATPERSON = ValidAudiences.PERSON.descriptor
+val ARBEIDSGIVER = ValidAudiences.EMPLOYER.descriptor
+val SAMARBEIDSPARTNER = ValidAudiences.PROVIDER.descriptor
 const val AGDER = "agder"
 const val STATISTIKK = "statistikk"
 const val INFORMASJON = "informasjon"
