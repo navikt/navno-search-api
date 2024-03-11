@@ -75,7 +75,7 @@ private fun filtersForAudience(
         UnderFacetKeys.AKTUELT to FilterEntry(
             name = UnderFacetNames.AKTUELT,
             aggregationName = aktueltAggName,
-            filterQuery = innholdBaseFilter(audience = audience).must(
+            filterQuery = innholdBaseFilter(audience = audience, isAudienceStrict = true).must(
                 TermQueryBuilder(
                     METATAGS,
                     ValidMetatags.NYHET.descriptor
@@ -85,18 +85,24 @@ private fun filtersForAudience(
     )
 }
 
-private fun innholdBaseFilter(audience: String): BoolQueryBuilder {
+private fun innholdBaseFilter(audience: String, isAudienceStrict: Boolean = false): BoolQueryBuilder {
     return BoolQueryBuilder()
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
         .mustNot(ExistsQueryBuilder(FYLKE))
-        .must(lenientAudienceFilter(audience))
+        .must(if (isAudienceStrict) strictAudienceFilter(audience) else lenientAudienceFilter(audience))
 }
 
-fun lenientAudienceFilter(audience: String): BoolQueryBuilder {
+private fun lenientAudienceFilter(audience: String): BoolQueryBuilder {
     return BoolQueryBuilder()
         .should(TermQueryBuilder(AUDIENCE, audience))
         .should(TermQueryBuilder(AUDIENCE, ValidAudiences.ANDRE.descriptor))
         .should(BoolQueryBuilder().mustNot(ExistsQueryBuilder(AUDIENCE)))
+}
+
+private fun strictAudienceFilter(audience: String): BoolQueryBuilder {
+    return BoolQueryBuilder()
+        .should(TermQueryBuilder(AUDIENCE, audience))
+        .should(TermQueryBuilder(AUDIENCE, ValidAudiences.ANDRE.descriptor))
 }
