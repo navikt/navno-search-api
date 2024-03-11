@@ -2,12 +2,10 @@ package no.nav.navnosearchapi.service.compatibility.filters
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
-import no.nav.navnosearchadminapi.common.constants.TYPE
-import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
-import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import no.nav.navnosearchapi.service.compatibility.utils.FacetNames
+import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
@@ -15,15 +13,15 @@ import org.opensearch.index.query.TermQueryBuilder
 val fasettFilters = mapOf(
     FacetKeys.PRIVATPERSON to FilterEntry(
         name = FacetNames.PRIVATPERSON,
-        filterQuery = audienceFilter(ValidAudiences.PRIVATPERSON.descriptor)
+        filterQuery = joinClausesToSingleQuery(shouldClauses = privatpersonFilters.values.map { it.filterQuery })
     ),
     FacetKeys.ARBEIDSGIVER to FilterEntry(
         name = FacetNames.ARBEIDSGIVER,
-        filterQuery = audienceFilter(ValidAudiences.ARBEIDSGIVER.descriptor)
+        filterQuery = joinClausesToSingleQuery(shouldClauses = arbeidsgiverFilters.values.map { it.filterQuery })
     ),
     FacetKeys.SAMARBEIDSPARTNER to FilterEntry(
         name = FacetNames.SAMARBEIDSPARTNER,
-        filterQuery = audienceFilter(ValidAudiences.SAMARBEIDSPARTNER.descriptor)
+        filterQuery = joinClausesToSingleQuery(shouldClauses = samarbeidspartnerFilters.values.map { it.filterQuery })
     ),
     FacetKeys.PRESSE to FilterEntry(
         name = FacetNames.PRESSE,
@@ -48,20 +46,3 @@ val fasettFilters = mapOf(
         filterQuery = BoolQueryBuilder().must(ExistsQueryBuilder(FYLKE))
     )
 )
-
-private fun audienceFilter(audience: String): BoolQueryBuilder {
-    return BoolQueryBuilder()
-        .must(lenientAudienceFilter(audience))
-        .must(
-            BoolQueryBuilder()
-                .should(TermQueryBuilder(METATAGS, ValidMetatags.INFORMASJON.descriptor))
-                .should(TermQueryBuilder(METATAGS, ValidMetatags.NYHET.descriptor))
-                .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR.descriptor))
-                .should(TermQueryBuilder(TYPE, ValidTypes.KONTOR_LEGACY.descriptor))
-                .should(TermQueryBuilder(TYPE, ValidTypes.SKJEMA.descriptor))
-        )
-        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
-        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
-        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
-        .mustNot(ExistsQueryBuilder(FYLKE))
-}
