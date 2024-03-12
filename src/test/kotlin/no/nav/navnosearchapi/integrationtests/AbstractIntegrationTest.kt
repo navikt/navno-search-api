@@ -3,6 +3,7 @@ package no.nav.navnosearchapi.integrationtests
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.integrationtests.config.OpensearchConfiguration
+import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import no.nav.navnosearchapi.utils.initialTestData
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,7 +37,7 @@ abstract class AbstractIntegrationTest {
     fun searchUri(
         ord: String?,
         page: Int? = 0,
-        f: Int? = 0,
+        f: String? = FacetKeys.PRIVATPERSON,
         uf: List<String>? = emptyList(),
         s: Int? = 0,
         preferredLanguage: String = NORWEGIAN_BOKMAAL
