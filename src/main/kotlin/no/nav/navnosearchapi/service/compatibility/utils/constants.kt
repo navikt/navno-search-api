@@ -1,13 +1,13 @@
 package no.nav.navnosearchapi.service.compatibility.utils
 
 object FacetKeys {
-    const val PRIVATPERSON = "0"
-    const val ARBEIDSGIVER = "1"
-    const val SAMARBEIDSPARTNER = "2"
-    const val PRESSE = "3"
-    const val STATISTIKK = "4"
-    const val ANALYSER_OG_FORSKNING = "5"
-    const val INNHOLD_FRA_FYLKER = "6"
+    const val PRIVATPERSON = "privatperson"
+    const val ARBEIDSGIVER = "arbeidsgiver"
+    const val SAMARBEIDSPARTNER = "samarbeidspartner"
+    const val PRESSE = "presse"
+    const val STATISTIKK = "statistikk"
+    const val ANALYSER_OG_FORSKNING = "analyser-og-forskning"
+    const val INNHOLD_FRA_FYLKER = "innhold-fra-fylker"
 }
 
 object FacetNames {
@@ -21,25 +21,25 @@ object FacetNames {
 }
 
 object UnderFacetKeys {
-    const val INFORMASJON = "0"
-    const val KONTOR = "1"
-    const val SOKNAD_OG_SKJEMA = "2"
-    const val AKTUELT = "3"
-    const val ARTIKLER = "0"
-    const val NYHETER = "1"
-    const val TABELLER = "2"
-    const val AGDER = "0"
-    const val INNLANDET = "1"
-    const val MORE_OG_ROMSDAL = "2"
-    const val NORDLAND = "3"
-    const val OSLO = "4"
-    const val ROGALAND = "5"
-    const val TROMS_OG_FINNMARK = "6"
-    const val TRONDELAG = "7"
-    const val VESTFOLD_OG_TELEMARK = "8"
-    const val VESTLAND = "9"
-    const val VEST_VIKEN = "10"
-    const val OST_VIKEN = "11"
+    const val INFORMASJON = "informasjon"
+    const val KONTOR = "kontor"
+    const val SOKNAD_OG_SKJEMA = "soknad-og-skjema"
+    const val AKTUELT = "aktuelt"
+    const val ARTIKLER = "artikler"
+    const val NYHETER = "nyheter"
+    const val TABELLER = "tabeller"
+    const val AGDER = "agder"
+    const val INNLANDET = "innlandet"
+    const val MORE_OG_ROMSDAL = "more-og-romsdal"
+    const val NORDLAND = "nordland"
+    const val OSLO = "oslo"
+    const val ROGALAND = "rogaland"
+    const val TROMS_OG_FINNMARK = "troms-og-finnmark"
+    const val TRONDELAG = "trondelag"
+    const val VESTFOLD_OG_TELEMARK = "vestfold-og-telemark"
+    const val VESTLAND = "vestland"
+    const val VEST_VIKEN = "vest-viken"
+    const val OST_VIKEN = "ost-viken"
 }
 
 object UnderFacetNames {

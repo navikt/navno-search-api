@@ -35,7 +35,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun testSearchForPhrase() {
-        val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM, f = 1)).body!!
+        val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM, f = FacetKeys.ARBEIDSGIVER)).body!!
 
         assertThat(result.total).isEqualTo(1L)
     }
@@ -46,7 +46,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
             restTemplate.getForEntity<SearchResult>(
                 searchUri(
                     ord = TEXT_TERM,
-                    f = FacetKeys.INNHOLD_FRA_FYLKER.toInt()
+                    f = FacetKeys.INNHOLD_FRA_FYLKER
                 )
             ).body!!
 
@@ -56,7 +56,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     @Test
     fun testSearchWithUnderfasettFilter() {
         val result = restTemplate.getForEntity<SearchResult>(
-            searchUri(ord = TEXT_TERM, f = FacetKeys.PRIVATPERSON.toInt(), uf = listOf(UnderFacetKeys.INFORMASJON))
+            searchUri(ord = TEXT_TERM, f = FacetKeys.PRIVATPERSON, uf = listOf(UnderFacetKeys.INFORMASJON))
         ).body!!
 
         assertThat(result.total).isEqualTo(1L)

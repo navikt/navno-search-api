@@ -3,6 +3,8 @@ package no.nav.navnosearchapi.utils
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
+import no.nav.navnosearchadminapi.common.enums.ValidFylker
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangFieldLong
@@ -11,13 +13,14 @@ import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
+const val HINDI = "hi"
+
 val PRIVATPERSON = ValidAudiences.PERSON.descriptor
 val ARBEIDSGIVER = ValidAudiences.EMPLOYER.descriptor
 val SAMARBEIDSPARTNER = ValidAudiences.PROVIDER.descriptor
-const val AGDER = "agder"
-const val STATISTIKK = "statistikk"
-const val INFORMASJON = "informasjon"
-const val HINDI = "hi"
+val AGDER = ValidFylker.AGDER.descriptor
+val STATISTIKK = ValidMetatags.STATISTIKK.descriptor
+val INFORMASJON = ValidMetatags.INFORMASJON.descriptor
 
 val now: ZonedDateTime = ZonedDateTime.now()
 val nowMinusTwoYears: ZonedDateTime = ZonedDateTime.now().minusYears(2)
