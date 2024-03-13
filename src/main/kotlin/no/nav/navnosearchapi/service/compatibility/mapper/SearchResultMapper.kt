@@ -61,7 +61,9 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
     }
 
     private fun toTextHighlight(highlight: String): String {
-        return highlight + CUTOFF_POSTFIX
+        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
+            highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+        } else highlight + CUTOFF_POSTFIX
     }
 
     private fun toIngressHighlight(highlight: String): String {
