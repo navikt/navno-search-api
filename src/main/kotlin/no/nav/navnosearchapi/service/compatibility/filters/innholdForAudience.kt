@@ -84,7 +84,7 @@ private fun filtersForAudience(
 private fun innholdBaseFilter(audience: String, isAudienceStrict: Boolean = false): BoolQueryBuilder {
     return BoolQueryBuilder()
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSEMELDING.descriptor))
-        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSE))
+        .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.PRESSE.descriptor))
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.ANALYSE.descriptor))
         .mustNot(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor))
         .mustNot(ExistsQueryBuilder(FYLKE))
