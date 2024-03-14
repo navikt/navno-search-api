@@ -4,6 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.service.search.dto.ContentHighlight
@@ -15,6 +16,7 @@ import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
+import java.time.ZonedDateTime
 
 @Component
 class ContentSearchPageMapper {
@@ -36,6 +38,9 @@ class ContentSearchPageMapper {
 
     private fun toContentSearchHit(searchHit: SearchHit<ContentDao>, isMatchPhraseQuery: Boolean): ContentSearchHit {
         val content = searchHit.content
+
+        val (publishedTime, modifiedTime) = resolveTimestamps(content.createdAt, content.lastUpdated, content.metatags)
+
         return ContentSearchHit(
             href = content.href,
             title = languageSubfieldValue(content.title, content.language),
@@ -43,7 +48,8 @@ class ContentSearchPageMapper {
             text = languageSubfieldValue(content.text, content.language),
             audience = content.audience,
             language = content.language,
-            lastUpdated = content.lastUpdated,
+            modifiedTime = modifiedTime,
+            publishedTime = publishedTime,
             highlight = ContentHighlight(
                 ingress = searchHit.getHighlightField(
                     languageSubfieldKey(INGRESS, content.language, isMatchPhraseQuery)
@@ -55,6 +61,18 @@ class ContentSearchPageMapper {
             type = searchHit.content.type,
             score = searchHit.score
         )
+    }
+
+    private fun resolveTimestamps(
+        createdAt: ZonedDateTime,
+        lastUpdated: ZonedDateTime,
+        metatags: List<String>
+    ): Pair<ZonedDateTime?, ZonedDateTime?> {
+        return if (ValidMetatags.NYHET.descriptor in metatags) {
+            Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
+        } else {
+            Pair(null, lastUpdated)
+        }
     }
 
     private fun mapAggregations(aggregations: Aggregations): Map<String, Long> {

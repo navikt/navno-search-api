@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.rest
 
-import no.nav.navnosearchadminapi.common.constants.LAST_UPDATED
+import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchapi.service.compatibility.CompatibilityService
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
@@ -31,7 +31,7 @@ class SearchController(
             filters = compatibilityService.postAggregationFilters(params.f, params.uf),
             preAggregationFilters = compatibilityService.preAggregationFilters(params.preferredLanguage),
             aggregations = compatibilityService.aggregations(params.f, params.uf),
-            sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, LAST_UPDATED) else null
+            sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, SORT_BY_DATE) else null
         )
 
         return compatibilityService.toSearchResult(params, result)
