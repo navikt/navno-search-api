@@ -28,21 +28,26 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
     }
 
     private fun toHit(searchHit: ContentSearchHit, facet: String): SearchHit {
-        // Filtrer ut overordnet Provider-audience hvis den inneholder mer presist audience
-        fun toAudience(audience: List<String>) = if (audience.any { it in providerSubaudiences }) {
-            audience.filter { it != ValidAudiences.PROVIDER.descriptor }
-        } else audience
-
         return SearchHit(
             displayName = searchHit.title,
             href = searchHit.href,
             highlight = toHighlight(searchHit, facet),
-            modifiedTime = searchHit.lastUpdated.toString(),
+            modifiedTime = searchHit.modifiedTime,
+            publishedTime = searchHit.publishedTime,
             audience = toAudience(searchHit.audience),
             language = searchHit.language,
             type = searchHit.type,
             score = searchHit.score,
         )
+    }
+
+    private fun toAudience(audience: List<String>): List<String> {
+        // Filtrer ut overordnet Provider-audience hvis den inneholder mer presist audience
+        return if (audience.any { it in providerSubaudiences }) {
+            audience.filter { it != ValidAudiences.PROVIDER.descriptor }
+        } else {
+            audience
+        }
     }
 
     private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
