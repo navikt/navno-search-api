@@ -134,6 +134,7 @@ fun dummyContentDao(
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,
+        sortByDate = timestamp,
         audience = audience,
         language = language,
         fylke = fylke,
