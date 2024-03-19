@@ -36,9 +36,8 @@ spec:
   secureLogs:
     enabled: true
   resources:
-    limits:
-      cpu: 500m
-      memory: 1024Mi
     requests:
-      cpu: 300m
-      memory: 768Mi
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1024Mi
