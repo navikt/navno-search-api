@@ -46,6 +46,8 @@ val typeToWeight = mapOf(
     ValidTypes.TEMASIDE.descriptor to 1.75f,
     ValidTypes.SITUASJONSSIDE.descriptor to 1.75f,
     ValidTypes.GUIDE.descriptor to 1.50f,
+    ValidTypes.KONTOR.descriptor to 0.50f,
+    ValidTypes.KONTOR_LEGACY.descriptor to 0.50f,
 )
 
 val metatagToWeight = mapOf(
