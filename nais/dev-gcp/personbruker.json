@@ -3,5 +3,5 @@
     "https://navno-search-api.intern.dev.nav.no"
   ],
   "min-replicas": 1,
-  "max-replicas": 2
+  "max-replicas": 1
 }
