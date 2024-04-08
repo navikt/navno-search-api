@@ -4,6 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.AUTOCOMPLETE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.service.search.config.metatagToWeight
 import no.nav.navnosearchapi.service.search.config.termsToOverride
 import no.nav.navnosearchapi.service.search.config.typeToWeight
@@ -76,12 +77,14 @@ class SearchService(
 
     fun searchUrl(term: String): SearchUrlResponse {
         val searchQuery =
-            NativeSearchQueryBuilder().withQuery(searchUrlQuery(term)
-                .applyWeighting(TYPE, typeToWeight)
-                .applyWeighting(METATAGS, metatagToWeight))
+            NativeSearchQueryBuilder().withQuery(
+                searchUrlQuery(term)
+                    .applyWeighting(TYPE, typeToWeight)
+                    .applyWeighting(METATAGS, metatagToWeight)
+            )
 
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
-        return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
+        return searchHits.searchHits.firstOrNull()?.content.let { SearchUrlResponse(it?.href, it?.title?.value()) }
     }
 
     private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
@@ -108,6 +111,10 @@ class SearchService(
 
     private fun isInQuotes(term: String): Boolean {
         return term.startsWith(QUOTE) && term.endsWith(QUOTE)
+    }
+
+    private fun MultiLangField.value(): String? {
+        return this.let { listOf(it.no, it.en, it.other) }.firstOrNull()
     }
 
     companion object {

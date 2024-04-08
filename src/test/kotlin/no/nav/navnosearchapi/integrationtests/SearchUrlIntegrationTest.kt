@@ -16,25 +16,29 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
     val EXACT_URL = "https://First.com"
     val FUZZY_URL = "https://Fristt.com"
     val NON_MATCHING_URL = "1337"
+    val TITLE = "First title"
 
     @Test
     fun testSearchWithExactMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(EXACT_URL)).body!!
 
-        assertThat(result.suggestion)!!.isEqualTo(EXACT_URL)
+        assertThat(result.url)!!.isEqualTo(EXACT_URL)
+        assertThat(result.title)!!.isEqualTo(TITLE)
     }
 
     @Test
     fun testSearchWithFuzzyMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(FUZZY_URL)).body!!
 
-        assertThat(result.suggestion)!!.isEqualTo(EXACT_URL)
+        assertThat(result.url)!!.isEqualTo(EXACT_URL)
+        assertThat(result.title)!!.isEqualTo(TITLE)
     }
 
     @Test
     fun testSearchWithNoMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL)).body!!
 
-        assertThat(result.suggestion).isNull()
+        assertThat(result.url).isNull()
+        assertThat(result.title).isNull()
     }
 }

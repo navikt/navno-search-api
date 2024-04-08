@@ -9,6 +9,7 @@ import no.nav.navnosearchapi.service.search.SearchService
 import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Sort
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestParam
@@ -52,6 +53,7 @@ class SearchController(
     }
 
     @GetMapping("/content/search-url")
+    @CrossOrigin
     fun searchUrl(
         @RequestParam term: String,
     ): SearchUrlResponse {
