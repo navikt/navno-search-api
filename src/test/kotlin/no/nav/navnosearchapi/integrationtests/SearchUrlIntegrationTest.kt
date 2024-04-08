@@ -16,7 +16,7 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
     val EXACT_URL = "https://First.com"
     val FUZZY_URL = "https://Fristt.com"
     val NON_MATCHING_URL = "1337"
-    val TITLE = "First"
+    val TITLE = "First title"
 
     @Test
     fun testSearchWithExactMatch() {
