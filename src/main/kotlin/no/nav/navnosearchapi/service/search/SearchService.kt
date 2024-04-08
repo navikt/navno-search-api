@@ -81,7 +81,7 @@ class SearchService(
                 .applyWeighting(METATAGS, metatagToWeight))
 
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
-        return SearchUrlResponse(suggestion = searchHits.searchHits.firstOrNull()?.content?.href)
+        return searchHits.searchHits.firstOrNull()?.content.let { SearchUrlResponse(it?.href, it?.title?.no) }
     }
 
     private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
