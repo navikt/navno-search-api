@@ -39,7 +39,12 @@ class ContentSearchPageMapper {
     private fun toContentSearchHit(searchHit: SearchHit<ContentDao>, isMatchPhraseQuery: Boolean): ContentSearchHit {
         val content = searchHit.content
 
-        val (publishedTime, modifiedTime) = resolveTimestamps(content.createdAt, content.lastUpdated, content.metatags)
+        val (publishedTime, modifiedTime) = resolveTimestamps(
+            content.createdAt,
+            content.lastUpdated,
+            content.metatags,
+            content.fylke,
+        )
 
         return ContentSearchHit(
             href = content.href,
@@ -66,12 +71,23 @@ class ContentSearchPageMapper {
     private fun resolveTimestamps(
         createdAt: ZonedDateTime,
         lastUpdated: ZonedDateTime,
-        metatags: List<String>
+        metatags: List<String>,
+        fylke: String?
     ): Pair<ZonedDateTime?, ZonedDateTime?> {
-        return if (ValidMetatags.NYHET.descriptor in metatags) {
-            Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
-        } else {
-            Pair(null, lastUpdated)
+        fun showBothTimestamps() = ValidMetatags.NYHET.descriptor in metatags
+        fun showNoTimestamps() = fylke.isNullOrBlank() && metatags.none {
+            it in setOf(
+                ValidMetatags.PRESSEMELDING.descriptor,
+                ValidMetatags.PRESSE.descriptor,
+                ValidMetatags.ANALYSE.descriptor,
+                ValidMetatags.STATISTIKK.descriptor,
+            )
+        }
+
+        return when {
+            showBothTimestamps() -> Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
+            showNoTimestamps() -> Pair(null, null)
+            else -> Pair(null, lastUpdated)
         }
     }
 
