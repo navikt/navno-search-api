@@ -75,14 +75,7 @@ class ContentSearchPageMapper {
         fylke: String?
     ): Pair<ZonedDateTime?, ZonedDateTime?> {
         fun showBothTimestamps() = ValidMetatags.NYHET.descriptor in metatags
-        fun showNoTimestamps() = fylke.isNullOrBlank() && metatags.none {
-            it in setOf(
-                ValidMetatags.PRESSEMELDING.descriptor,
-                ValidMetatags.PRESSE.descriptor,
-                ValidMetatags.ANALYSE.descriptor,
-                ValidMetatags.STATISTIKK.descriptor,
-            )
-        }
+        fun showNoTimestamps() = fylke.isNullOrBlank() && metatags.none { it in metatagsWithModifiedTime }
 
         return when {
             showBothTimestamps() -> Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
@@ -122,5 +115,12 @@ class ContentSearchPageMapper {
         private const val NORWEGIAN_SUFFIX = ".no"
         private const val ENGLISH_SUFFIX = ".en"
         private const val OTHER_SUFFIX = ".other"
+
+        private val metatagsWithModifiedTime = setOf(
+            ValidMetatags.PRESSEMELDING.descriptor,
+            ValidMetatags.PRESSE.descriptor,
+            ValidMetatags.ANALYSE.descriptor,
+            ValidMetatags.STATISTIKK.descriptor,
+        )
     }
 }
