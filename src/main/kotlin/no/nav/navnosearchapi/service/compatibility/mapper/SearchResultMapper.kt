@@ -5,7 +5,6 @@ import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchapi.service.compatibility.Params
 import no.nav.navnosearchapi.service.compatibility.dto.SearchHit
 import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
 import org.springframework.stereotype.Component
@@ -63,9 +62,10 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
     }
 
     private fun toTextHighlight(highlight: String): String {
-        return if (highlight.length > HIGHLIGHT_MAX_LENGTH) {
-            highlight.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
-        } else highlight + CUTOFF_POSTFIX
+        val highlightTruncated = highlight.takeIf { highlight.length <= HIGHLIGHT_MAX_LENGTH }
+            ?: highlight.substring(0, HIGHLIGHT_MAX_LENGTH)
+
+        return CUTOFF_PREFIX + highlightTruncated + CUTOFF_POSTFIX
     }
 
     private fun toIngressHighlight(highlight: String): String {
@@ -75,12 +75,12 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
     }
 
     companion object {
-        private const val HIGHLIGHT_MAX_LENGTH = 220
-        private const val CUTOFF_POSTFIX = " (...)"
+        private const val HIGHLIGHT_MAX_LENGTH = 250
+        private const val CUTOFF_PREFIX = "… "
+        private const val CUTOFF_POSTFIX = " …"
 
         private const val TABELL = "Tabell"
 
-        private val innholdFacets = listOf(FacetKeys.PRIVATPERSON, FacetKeys.ARBEIDSGIVER, FacetKeys.SAMARBEIDSPARTNER)
         private val providerSubaudiences = listOf(
             ValidAudiences.PROVIDER_DOCTOR.descriptor,
             ValidAudiences.PROVIDER_MUNICIPALITY_EMPLOYED.descriptor,

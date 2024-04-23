@@ -32,7 +32,7 @@ class DecoratorSearchResultMapper {
     }
 
     companion object {
-        private const val CUTOFF_POSTFIX = " (...)"
+        private const val CUTOFF_POSTFIX = " …"
         private const val HIGHLIGHT_MAX_LENGTH = 200
         private const val LINEBREAK = "<br/>"
         private const val SPACE = " "
