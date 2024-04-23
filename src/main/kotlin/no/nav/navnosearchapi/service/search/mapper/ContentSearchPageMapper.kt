@@ -4,6 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchadminapi.common.model.MultiLangField
@@ -56,6 +57,7 @@ class ContentSearchPageMapper {
             modifiedTime = modifiedTime,
             publishedTime = publishedTime,
             highlight = ContentHighlight(
+                title = searchHit.getHighlightField(languageSubfieldKey(TITLE, content.language)),
                 ingress = searchHit.getHighlightField(
                     languageSubfieldKey(INGRESS, content.language, isMatchPhraseQuery)
                 ),
@@ -88,7 +90,7 @@ class ContentSearchPageMapper {
         return aggregations.associate { it.name to (it as Filter).docCount }
     }
 
-    private fun languageSubfieldKey(parentKey: String, language: String, isMatchPhraseQuery: Boolean): String {
+    private fun languageSubfieldKey(parentKey: String, language: String, isMatchPhraseQuery: Boolean = false): String {
         var suffix = when (language) {
             NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> NORWEGIAN_SUFFIX
             ENGLISH -> ENGLISH_SUFFIX
