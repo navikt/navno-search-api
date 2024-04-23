@@ -22,16 +22,16 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
             total = result.totalElements,
             fasettKey = params.f,
             aggregations = aggregationsMapper.toAggregations(result.aggregations!!, params),
-            hits = result.hits.map { toHit(it, params.f) },
+            hits = result.hits.map { toHit(it) },
             autoComplete = result.suggestions,
         )
     }
 
-    private fun toHit(searchHit: ContentSearchHit, facet: String): SearchHit {
+    private fun toHit(searchHit: ContentSearchHit): SearchHit {
         return SearchHit(
             displayName = searchHit.title,
             href = searchHit.href,
-            highlight = toHighlight(searchHit, facet),
+            highlight = toHighlight(searchHit),
             modifiedTime = searchHit.modifiedTime,
             publishedTime = searchHit.publishedTime,
             audience = toAudience(searchHit.audience),
@@ -50,19 +50,16 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
         }
     }
 
-    private fun toHighlight(searchHit: ContentSearchHit, facet: String): String {
-        fun isInnhold() = facet in innholdFacets
-        fun isTabell() = facet == FacetKeys.STATISTIKK && searchHit.ingress.isBlank()
-        fun isKontor() = searchHit.type in arrayOf(ValidTypes.KONTOR.descriptor, ValidTypes.KONTOR_LEGACY.descriptor)
+    private fun toHighlight(searchHit: ContentSearchHit): String {
+        if (searchHit.type == ValidTypes.TABELL.descriptor) return TABELL
 
-        return when {
-            isKontor() -> toIngressHighlight(searchHit.ingress)
-            isInnhold() -> toIngressHighlight(searchHit.highlight.ingress.firstOrNull() ?: searchHit.ingress)
-            isTabell() -> TABELL
-            else -> searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
-                ?: searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
-                ?: toIngressHighlight(searchHit.ingress)
+        val highlight = if (searchHit.highlight.let { it.title.isNotEmpty() || it.ingress.isNotEmpty() }) {
+            searchHit.highlight.ingress.firstOrNull()?.let { toIngressHighlight(it) }
+        } else {
+            searchHit.highlight.text.firstOrNull()?.let { toTextHighlight(it) }
         }
+
+        return highlight ?: toIngressHighlight(searchHit.ingress)
     }
 
     private fun toTextHighlight(highlight: String): String {
