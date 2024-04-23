@@ -22,19 +22,7 @@ class DecoratorSearchResultMapper {
         return DecoratorSearchHit(
             displayName = searchHit.title,
             href = searchHit.href,
-            highlight = toHighlight(searchHit.ingress),
+            highlight = searchHit.toHighlight(),
         )
-    }
-
-    private fun toHighlight(ingress: String): String {
-        return ingress.replace(LINEBREAK, SPACE).takeUnless { it.length > HIGHLIGHT_MAX_LENGTH }
-            ?: (ingress.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX)
-    }
-
-    companion object {
-        private const val CUTOFF_POSTFIX = " …"
-        private const val HIGHLIGHT_MAX_LENGTH = 200
-        private const val LINEBREAK = "<br/>"
-        private const val SPACE = " "
     }
 }
