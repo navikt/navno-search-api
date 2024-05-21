@@ -2,9 +2,12 @@ package no.nav.navnosearchapi.service.search.queries
 
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.INGRESS
+import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
+import no.nav.navnosearchapi.service.search.enums.FieldType
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_FRAGMENT_CHAR_SIZE
@@ -21,45 +24,62 @@ fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): Highligh
         .highlightQuery(query) // Må bruke query uten function score for å få riktige highlights
         .preTags(BOLD_PRETAG)
         .postTags(BOLD_POSTTAG)
-        .titleHighlightFields()
+        .titleHighlightFields(isMatchPhraseQuery)
         .ingressHighlightFields(isMatchPhraseQuery)
         .textHighlightFields(isMatchPhraseQuery)
 }
 
-private fun HighlightBuilder.titleHighlightFields(): HighlightBuilder {
-    languageSubfields.forEach {
-        val fieldName = highlightFieldName(TITLE, it)
-        this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
+private fun HighlightBuilder.titleHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
+    if (isMatchPhraseQuery) {
+        this.languageSubfields(TITLE, FieldType.EXACT)
+    } else {
+        this.languageSubfields(TITLE, FieldType.STANDARD)
+        this.field(TITLE, NORWEGIAN, FieldType.NGRAM)
     }
+
     return this
 }
 
 private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
-    languageSubfields.forEach {
-        val fieldName = highlightFieldName(INGRESS, it, isMatchPhraseQuery)
-        this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
+    if (isMatchPhraseQuery) {
+        this.languageSubfields(INGRESS, FieldType.EXACT)
+    } else {
+        this.languageSubfields(INGRESS, FieldType.STANDARD)
+        this.field(INGRESS, NORWEGIAN, FieldType.NGRAM)
     }
+
     return this
 }
 
 private fun HighlightBuilder.textHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
-    languageSubfields.forEach {
-        val fieldName = highlightFieldName(TEXT, it, isMatchPhraseQuery)
-        this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
+    if (isMatchPhraseQuery) {
+        this.languageSubfields(TEXT, FieldType.EXACT)
+    } else {
+        this.languageSubfields(TEXT, FieldType.STANDARD)
     }
+
     return this
 }
 
-private fun highlightFieldName(
+private fun HighlightBuilder.languageSubfields(baseField: String, fieldType: FieldType) {
+    languageSubfields.forEach { this.field(baseField, it, fieldType) }
+}
+
+private fun HighlightBuilder.field(
     baseField: String,
     languageSubfield: String,
-    isMatchPhraseQuery: Boolean = false
-): String {
-    val fieldName = "$baseField.$languageSubfield"
+    fieldType: FieldType,
+) {
+    val fieldName = "$baseField.$languageSubfield".let {
+        when (fieldType) {
+            FieldType.EXACT -> "$it.$EXACT_INNER_FIELD"
+            FieldType.NGRAM -> "$it.$NGRAMS_INNER_FIELD"
+            else -> it
+        }
+    }
 
-    return if (isMatchPhraseQuery) {
-        "$fieldName.$EXACT_INNER_FIELD"
-    } else {
-        fieldName
+    when (baseField) {
+        TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
+        TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
     }
 }
