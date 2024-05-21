@@ -9,26 +9,22 @@ private const val CUTOFF_POSTFIX = " …"
 private const val TABELL = "Tabell"
 
 fun ContentSearchHit.toHighlight(): String {
-    if (this.type == ValidTypes.TABELL.descriptor) return TABELL
+    if (type == ValidTypes.TABELL.descriptor) return TABELL
 
-    val highlight = if (this.highlight.let { it.title.isNotEmpty() || it.ingress.isNotEmpty() }) {
-        this.highlight.ingress.firstOrNull()?.truncateIngress()
-    } else {
-        this.highlight.text.firstOrNull()?.truncateText()
-    }
+    val hasTitleHighlight = highlight.title.isNotEmpty()
 
-    return highlight ?: this.ingress.truncateIngress()
+    fun ingressHighlight() = highlight.ingress.firstOrNull()?.truncateIngress()
+    fun textHighlight() = highlight.text.firstOrNull()?.truncateText()
+
+    return ingressHighlight() ?: textHighlight().takeUnless { hasTitleHighlight } ?: ingress.truncateIngress()
 }
 
 private fun String.truncateText(): String {
-    val highlightTruncated = this.takeIf { this.length <= HIGHLIGHT_MAX_LENGTH }
-        ?: this.substring(0, HIGHLIGHT_MAX_LENGTH)
-
-    return CUTOFF_PREFIX + highlightTruncated + CUTOFF_POSTFIX
+    return CUTOFF_PREFIX + take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
 }
 
 private fun String.truncateIngress(): String {
-    return if (this.length > HIGHLIGHT_MAX_LENGTH) {
-        this.substring(0, HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+    return if (length > HIGHLIGHT_MAX_LENGTH) {
+        take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
     } else this
 }

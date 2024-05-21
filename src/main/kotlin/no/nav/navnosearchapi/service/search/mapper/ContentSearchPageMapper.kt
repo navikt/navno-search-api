@@ -2,6 +2,7 @@ package no.nav.navnosearchapi.service.search.mapper
 
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
+import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.TITLE
@@ -11,6 +12,7 @@ import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.service.search.dto.ContentHighlight
 import no.nav.navnosearchapi.service.search.dto.ContentSearchHit
 import no.nav.navnosearchapi.service.search.dto.ContentSearchPage
+import no.nav.navnosearchapi.service.search.enums.FieldType
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.Aggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
@@ -56,15 +58,7 @@ class ContentSearchPageMapper {
             language = content.language,
             modifiedTime = modifiedTime,
             publishedTime = publishedTime,
-            highlight = ContentHighlight(
-                title = searchHit.getHighlightField(languageSubfieldKey(TITLE, content.language)),
-                ingress = searchHit.getHighlightField(
-                    languageSubfieldKey(INGRESS, content.language, isMatchPhraseQuery)
-                ),
-                text = searchHit.getHighlightField(
-                    languageSubfieldKey(TEXT, content.language, isMatchPhraseQuery)
-                ),
-            ),
+            highlight = toHighlight(searchHit, content.language, isMatchPhraseQuery),
             type = searchHit.content.type,
             score = searchHit.score
         )
@@ -90,16 +84,47 @@ class ContentSearchPageMapper {
         return aggregations.associate { it.name to (it as Filter).docCount }
     }
 
-    private fun languageSubfieldKey(parentKey: String, language: String, isMatchPhraseQuery: Boolean = false): String {
-        var suffix = when (language) {
+    private fun toHighlight(
+        searchHit: SearchHit<ContentDao>,
+        language: String,
+        isMatchPhraseQuery: Boolean
+    ): ContentHighlight {
+        val defaultFieldType = if (isMatchPhraseQuery) FieldType.EXACT else FieldType.STANDARD
+
+        return ContentHighlight(
+            title = searchHit.getHighlightField(TITLE, language, defaultFieldType),
+            ingress = searchHit.getHighlightField(INGRESS, language, defaultFieldType),
+            text = searchHit.getHighlightField(TEXT, language, defaultFieldType)
+        )
+    }
+
+    private fun SearchHit<ContentDao>.getHighlightField(
+        baseField: String,
+        language: String,
+        defaultFieldType: FieldType,
+        prioritizedFieldType: FieldType = FieldType.NGRAM
+    ): List<String> {
+        fun getHighlights(fieldType: FieldType) = getHighlightField(languageSubfieldKey(baseField, language, fieldType))
+
+        return getHighlights(prioritizedFieldType).takeIf { it.isNotEmpty() } ?: getHighlights(defaultFieldType)
+    }
+
+    private fun languageSubfieldKey(
+        parentKey: String,
+        language: String,
+        fieldType: FieldType,
+    ): String {
+        val languageSubfield = parentKey + when (language) {
             NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> NORWEGIAN_SUFFIX
             ENGLISH -> ENGLISH_SUFFIX
             else -> OTHER_SUFFIX
         }
 
-        if (isMatchPhraseQuery) suffix += ".$EXACT_INNER_FIELD"
-
-        return parentKey + suffix
+        return when (fieldType) {
+            FieldType.EXACT -> "$languageSubfield.$EXACT_INNER_FIELD"
+            FieldType.NGRAM -> "$languageSubfield.$NGRAMS_INNER_FIELD"
+            else -> languageSubfield
+        }
     }
 
     private fun languageSubfieldValue(field: MultiLangField, language: String): String {
