@@ -20,49 +20,30 @@ private const val SINGLE_FRAGMENT = 1
 private const val MAX_FRAGMENT_SIZE = 200
 
 fun highlightBuilder(query: QueryBuilder, isMatchPhraseQuery: Boolean): HighlightBuilder {
+    val defaultFieldType = if (isMatchPhraseQuery) FieldType.EXACT else FieldType.STANDARD
+    val includeNgrams = !isMatchPhraseQuery
+
     return HighlightBuilder()
         .highlightQuery(query) // Må bruke query uten function score for å få riktige highlights
         .preTags(BOLD_PRETAG)
         .postTags(BOLD_POSTTAG)
-        .titleHighlightFields(isMatchPhraseQuery)
-        .ingressHighlightFields(isMatchPhraseQuery)
-        .textHighlightFields(isMatchPhraseQuery)
+        .highlightFields(TITLE, defaultFieldType)
+        .highlightFields(INGRESS, defaultFieldType, includeNgrams)
+        .highlightFields(TEXT, defaultFieldType, includeNgrams)
 }
 
-private fun HighlightBuilder.titleHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
-    if (isMatchPhraseQuery) {
-        this.languageSubfields(TITLE, FieldType.EXACT)
-    } else {
-        this.languageSubfields(TITLE, FieldType.STANDARD)
-        this.field(TITLE, NORWEGIAN, FieldType.NGRAM)
+private fun HighlightBuilder.highlightFields(
+    baseField: String,
+    defaultFieldType: FieldType,
+    includeNgrams: Boolean = false
+): HighlightBuilder {
+    languageSubfields.forEach { this.field(baseField, it, defaultFieldType) }
+
+    if (includeNgrams) {
+        this.field(baseField, NORWEGIAN, FieldType.NGRAM)
     }
 
     return this
-}
-
-private fun HighlightBuilder.ingressHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
-    if (isMatchPhraseQuery) {
-        this.languageSubfields(INGRESS, FieldType.EXACT)
-    } else {
-        this.languageSubfields(INGRESS, FieldType.STANDARD)
-        this.field(INGRESS, NORWEGIAN, FieldType.NGRAM)
-    }
-
-    return this
-}
-
-private fun HighlightBuilder.textHighlightFields(isMatchPhraseQuery: Boolean): HighlightBuilder {
-    if (isMatchPhraseQuery) {
-        this.languageSubfields(TEXT, FieldType.EXACT)
-    } else {
-        this.languageSubfields(TEXT, FieldType.STANDARD)
-    }
-
-    return this
-}
-
-private fun HighlightBuilder.languageSubfields(baseField: String, fieldType: FieldType) {
-    languageSubfields.forEach { this.field(baseField, it, fieldType) }
 }
 
 private fun HighlightBuilder.field(
