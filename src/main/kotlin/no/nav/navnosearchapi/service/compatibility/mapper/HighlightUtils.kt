@@ -11,9 +11,9 @@ private const val TABELL = "Tabell"
 fun ContentSearchHit.toHighlight(): String {
     if (type == ValidTypes.TABELL.descriptor) return TABELL
 
-    val hasTitleHighlight = highlight.title.isNotEmpty() || highlight.titleNgrams.isNotEmpty()
+    val hasTitleHighlight = highlight.title.isNotEmpty()
 
-    fun ingressHighlight() = (highlight.ingressNgrams.firstOrNull() ?: highlight.ingress.firstOrNull())?.truncateIngress()
+    fun ingressHighlight() = highlight.ingress.firstOrNull()?.truncateIngress()
     fun textHighlight() = highlight.text.firstOrNull()?.truncateText()
 
     return ingressHighlight() ?: textHighlight().takeUnless { hasTitleHighlight } ?: ingress.truncateIngress()

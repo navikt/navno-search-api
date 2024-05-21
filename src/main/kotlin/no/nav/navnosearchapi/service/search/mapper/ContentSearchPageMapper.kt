@@ -93,9 +93,7 @@ class ContentSearchPageMapper {
 
         return ContentHighlight(
             title = searchHit.getHighlightField(TITLE, language, defaultFieldType),
-            titleNgrams = searchHit.getHighlightField(TITLE, language, FieldType.NGRAM),
             ingress = searchHit.getHighlightField(INGRESS, language, defaultFieldType),
-            ingressNgrams = searchHit.getHighlightField(INGRESS, language, FieldType.NGRAM),
             text = searchHit.getHighlightField(TEXT, language, defaultFieldType)
         )
     }
@@ -103,9 +101,12 @@ class ContentSearchPageMapper {
     private fun SearchHit<ContentDao>.getHighlightField(
         baseField: String,
         language: String,
-        fieldType: FieldType
+        defaultFieldType: FieldType,
+        prioritizedFieldType: FieldType = FieldType.NGRAM
     ): List<String> {
-        return getHighlightField(languageSubfieldKey(baseField, language, fieldType))
+        fun getHighlights(fieldType: FieldType) = getHighlightField(languageSubfieldKey(baseField, language, fieldType))
+
+        return getHighlights(prioritizedFieldType).takeIf { it.isNotEmpty() } ?: getHighlights(defaultFieldType)
     }
 
     private fun languageSubfieldKey(
