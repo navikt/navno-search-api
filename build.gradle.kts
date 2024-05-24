@@ -2,8 +2,8 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.9.24"
-    val springBootVersion = "3.2.5"
+    val kotlinVersion = "2.0.0"
+    val springBootVersion = "3.2.6"
     val springDepMgmtVersion = "1.1.5"
     val versionsVersion = "0.51.0"
 
@@ -34,7 +34,7 @@ dependencies {
     val opensearchVersion = "1.3.0"
     val opensearchTestcontainersVersion = "2.0.1"
     val testcontainersVersion = "1.19.8"
-    val navnoSearchCommonVersion = "20240417124204-5ee1678"
+    val navnoSearchCommonVersion = "20240524095808-4f20df8"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
