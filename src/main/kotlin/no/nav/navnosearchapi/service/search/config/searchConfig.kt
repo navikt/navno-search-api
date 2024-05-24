@@ -43,9 +43,9 @@ val exactInnerFieldsToWeight = languageSubfields.flatMap {
 val typeToWeight = mapOf(
     ValidTypes.OVERSIKT.descriptor to 2.0f,
     ValidTypes.PRODUKTSIDE.descriptor to 2.0f,
+    ValidTypes.GUIDE.descriptor to 2.0f,
     ValidTypes.TEMASIDE.descriptor to 1.75f,
     ValidTypes.SITUASJONSSIDE.descriptor to 1.75f,
-    ValidTypes.GUIDE.descriptor to 1.50f,
     ValidTypes.KONTOR.descriptor to 0.50f,
     ValidTypes.KONTOR_LEGACY.descriptor to 0.50f,
 )
