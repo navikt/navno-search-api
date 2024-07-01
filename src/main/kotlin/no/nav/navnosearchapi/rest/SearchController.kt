@@ -32,7 +32,7 @@ class SearchController(
             filters = compatibilityService.postAggregationFilters(params.f, params.uf),
             preAggregationFilters = compatibilityService.preAggregationFilters(params.preferredLanguage),
             aggregations = compatibilityService.aggregations(params.f, params.uf),
-            sort = if (params.s == 1) Sort.by(Sort.Direction.DESC, SORT_BY_DATE) else null
+            sort = Sort.by(Sort.Direction.DESC, SORT_BY_DATE).takeIf { params.s == 1 }
         )
 
         return compatibilityService.toSearchResult(params, result)

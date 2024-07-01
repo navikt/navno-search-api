@@ -1,6 +1,5 @@
 package no.nav.navnosearchapi.service.search
 
-import no.nav.navnosearchadminapi.common.constants.AUTOCOMPLETE
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.ContentDao
@@ -22,8 +21,6 @@ import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
-import org.opensearch.search.suggest.SuggestBuilder
-import org.opensearch.search.suggest.completion.CompletionSuggestionBuilder
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -58,16 +55,12 @@ class SearchService(
             .withFilter(filters)
             .withPageable(pageRequest)
             .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
-            .withSuggestBuilder(
-                SuggestBuilder().addSuggestion(
-                    AUTOCOMPLETE,
-                    CompletionSuggestionBuilder(AUTOCOMPLETE).prefix(term).skipDuplicates(true).size(3)
-                )
-            )
             .withTrackTotalHits(true)
-            .apply { if (aggregations != null) this.withAggregations(aggregations) }
+            .apply {
+                aggregations?.let { withAggregations(it) }
+                sort?.let { withSort(it) }
+            }
 
-        sort?.let { searchQuery.withSort(it) }
 
         val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
         val searchPage = SearchHitSupport.searchPageFor(searchHits, pageRequest)
@@ -114,7 +107,7 @@ class SearchService(
     }
 
     private fun MultiLangField.value(): String? {
-        return this.let { listOf(it.no, it.en, it.other) }.firstOrNull()
+        return listOf(no, en, other).firstOrNull()
     }
 
     companion object {
