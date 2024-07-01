@@ -23,7 +23,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.total).isEqualTo(1L)
         assertThat(result.isMore).isFalse()
-        assertThat(result.autoComplete).isEmpty()
     }
 
     @Test

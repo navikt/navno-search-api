@@ -21,7 +21,6 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper) {
             fasettKey = params.f,
             aggregations = aggregationsMapper.toAggregations(result.aggregations!!, params),
             hits = result.hits.map { toHit(it) },
-            autoComplete = result.suggestions,
         )
     }
 
