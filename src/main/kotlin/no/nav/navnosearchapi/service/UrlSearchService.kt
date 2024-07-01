@@ -3,9 +3,9 @@ package no.nav.navnosearchapi.service
 import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.mapper.extensions.value
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class UrlSearchService(
     val searchClient: SearchClient,
 ) {

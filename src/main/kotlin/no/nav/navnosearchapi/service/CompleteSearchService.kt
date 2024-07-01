@@ -21,9 +21,9 @@ import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class CompleteSearchService(
     @Value("\${opensearch.page-size}") val pageSize: Int,
     val searchResultMapper: SearchResultMapper,

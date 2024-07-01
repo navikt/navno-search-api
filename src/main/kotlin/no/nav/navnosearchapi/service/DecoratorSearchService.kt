@@ -9,9 +9,9 @@ import no.nav.navnosearchapi.service.utils.activePreferredLanguageFilterQuery
 import no.nav.navnosearchapi.service.utils.isInQuotes
 import org.opensearch.index.query.BoolQueryBuilder
 import org.springframework.data.domain.PageRequest
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class DecoratorSearchService(
     val decoratorSearchResultMapper: DecoratorSearchResultMapper,
     val searchClient: SearchClient,
