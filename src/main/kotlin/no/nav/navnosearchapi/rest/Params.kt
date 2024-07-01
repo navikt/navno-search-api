@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.service
+package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchapi.service.utils.FacetKeys
 

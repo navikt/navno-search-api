@@ -5,7 +5,7 @@ import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.service.utils.FacetKeys
 import no.nav.navnosearchapi.service.utils.FacetNames
-import no.nav.navnosearchapi.utils.joinClausesToSingleQuery
+import no.nav.navnosearchapi.service.utils.joinClausesToSingleQuery
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.ExistsQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder

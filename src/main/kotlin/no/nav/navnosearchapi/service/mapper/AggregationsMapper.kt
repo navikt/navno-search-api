@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.service.mapper
 
-import no.nav.navnosearchapi.service.Params
+import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.Aggregations
 import no.nav.navnosearchapi.service.dto.Bucket
 import no.nav.navnosearchapi.service.dto.FacetBucket
@@ -201,7 +201,7 @@ class AggregationsMapper {
         )
     }
 
-    private fun <T> filteredBuckets(vararg buckets: T): List<T> where T : Bucket {
+    private fun <T : Bucket> filteredBuckets(vararg buckets: T): List<T> {
         return buckets.filter { b -> b.docCount > 0 }
     }
 }
