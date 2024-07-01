@@ -2,11 +2,11 @@ package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchapi.client.SearchClient
-import no.nav.navnosearchapi.client.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.Params
 import no.nav.navnosearchapi.service.SearchService
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -57,7 +57,7 @@ class SearchController(
     fun searchUrl(
         @RequestParam term: String,
     ): SearchUrlResponse {
-        return searchClient.searchUrl(term)
+        return searchService.searchUrl(term)
     }
 
     companion object {

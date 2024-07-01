@@ -3,12 +3,10 @@ package no.nav.navnosearchapi.client
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.ContentDao
-import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.client.config.metatagToWeight
 import no.nav.navnosearchapi.client.config.termsToOverride
 import no.nav.navnosearchapi.client.config.typeToWeight
 import no.nav.navnosearchapi.client.dto.ContentSearchPage
-import no.nav.navnosearchapi.client.dto.SearchUrlResponse
 import no.nav.navnosearchapi.client.mapper.ContentSearchPageMapper
 import no.nav.navnosearchapi.client.queries.highlightBuilder
 import no.nav.navnosearchapi.client.queries.searchAllTextForPhraseQuery
@@ -16,6 +14,7 @@ import no.nav.navnosearchapi.client.queries.searchAllTextQuery
 import no.nav.navnosearchapi.client.queries.searchUrlQuery
 import no.nav.navnosearchapi.client.utils.applyFilters
 import no.nav.navnosearchapi.client.utils.applyWeighting
+import org.opensearch.data.client.orhlc.NativeSearchQuery
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
@@ -25,6 +24,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHitSupport
+import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.stereotype.Component
 
 @Component
@@ -46,38 +46,39 @@ class SearchClient(
         val isMatchPhraseQuery = isInQuotes(term)
         val baseQuery = baseQuery(term, isMatchPhraseQuery)
 
-        val searchQuery = NativeSearchQueryBuilder()
-            .withQuery(
+        return buildNativeSearchQuery {
+            withQuery(
                 baseQuery.applyFilters(preAggregationFilters)
                     .applyWeighting(TYPE, typeToWeight)
                     .applyWeighting(METATAGS, metatagToWeight)
             )
-            .withFilter(filters)
-            .withPageable(pageRequest)
-            .withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
-            .withTrackTotalHits(true)
-            .apply {
+            withFilter(filters)
+            withPageable(pageRequest)
+            withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
+            withTrackTotalHits(true)
+            apply {
                 aggregations?.let { withAggregations(it) }
                 sort?.let { withSort(it) }
             }
+        }
+            .let { operations.search(it, ContentDao::class.java) }
+            .let { SearchHitSupport.searchPageFor(it, pageRequest) }
+            .let { mapper.toContentSearchPage(it, isMatchPhraseQuery) }
 
-
-        val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
-        val searchPage = SearchHitSupport.searchPageFor(searchHits, pageRequest)
-
-        return mapper.toContentSearchPage(searchPage, isMatchPhraseQuery)
     }
 
-    fun searchUrl(term: String): SearchUrlResponse {
-        val searchQuery =
-            NativeSearchQueryBuilder().withQuery(
+    fun searchUrl(term: String): SearchHits<ContentDao> {
+        return buildNativeSearchQuery {
+            withQuery(
                 searchUrlQuery(term)
                     .applyWeighting(TYPE, typeToWeight)
                     .applyWeighting(METATAGS, metatagToWeight)
             )
+        }.let { operations.search(it, ContentDao::class.java) }
+    }
 
-        val searchHits = operations.search(searchQuery.build(), ContentDao::class.java)
-        return searchHits.searchHits.firstOrNull()?.content.let { SearchUrlResponse(it?.href, it?.title?.value()) }
+    private fun buildNativeSearchQuery(builder: NativeSearchQueryBuilder.() -> NativeSearchQueryBuilder): NativeSearchQuery {
+        return NativeSearchQueryBuilder().builder().build()
     }
 
     private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
@@ -104,10 +105,6 @@ class SearchClient(
 
     private fun isInQuotes(term: String): Boolean {
         return term.startsWith(QUOTE) && term.endsWith(QUOTE)
-    }
-
-    private fun MultiLangField.value(): String? {
-        return listOf(no, en, other).firstOrNull()
     }
 
     companion object {

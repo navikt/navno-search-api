@@ -5,9 +5,12 @@ import no.nav.navnosearchadminapi.common.constants.LANGUAGE
 import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.model.MultiLangField
+import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.client.dto.ContentSearchPage
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import no.nav.navnosearchapi.service.filters.FilterEntry
 import no.nav.navnosearchapi.service.filters.analyseFilters
 import no.nav.navnosearchapi.service.filters.arbeidsgiverFilters
@@ -29,8 +32,17 @@ import org.springframework.stereotype.Component
 @Component
 class SearchService(
     val searchResultMapper: SearchResultMapper,
-    val decoratorSearchResultMapper: DecoratorSearchResultMapper
+    val decoratorSearchResultMapper: DecoratorSearchResultMapper,
+    val searchClient: SearchClient,
 ) {
+    fun searchUrl(term: String): SearchUrlResponse {
+        return searchClient.searchUrl(term).searchHits.firstOrNull()?.content.let { SearchUrlResponse(it?.href, it?.title?.value()) }
+    }
+
+    private fun MultiLangField.value(): String? {
+        return listOf(no, en, other).firstOrNull()
+    }
+
     fun toSearchResult(params: Params, result: ContentSearchPage): SearchResult {
         return searchResultMapper.toSearchResult(params, result)
     }
