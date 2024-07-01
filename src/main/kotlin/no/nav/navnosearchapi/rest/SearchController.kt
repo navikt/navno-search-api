@@ -1,12 +1,12 @@
 package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
-import no.nav.navnosearchapi.service.compatibility.CompatibilityService
-import no.nav.navnosearchapi.service.compatibility.Params
-import no.nav.navnosearchapi.service.compatibility.dto.DecoratorSearchResult
-import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.search.SearchService
-import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
+import no.nav.navnosearchapi.client.SearchClient
+import no.nav.navnosearchapi.client.dto.SearchUrlResponse
+import no.nav.navnosearchapi.service.Params
+import no.nav.navnosearchapi.service.SearchService
+import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
+import no.nav.navnosearchapi.service.dto.SearchResult
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -17,39 +17,39 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class SearchController(
+    val searchClient: SearchClient,
     val searchService: SearchService,
-    val compatibilityService: CompatibilityService,
     @Value("\${opensearch.page-size}") val pageSize: Int,
 ) {
     @GetMapping("/content/search")
     fun search(
         @ModelAttribute params: Params
     ): SearchResult {
-        val result = searchService.search(
+        val result = searchClient.search(
             term = params.ord,
             pageSize = pageSize,
             page = params.page,
-            filters = compatibilityService.postAggregationFilters(params.f, params.uf),
-            preAggregationFilters = compatibilityService.preAggregationFilters(params.preferredLanguage),
-            aggregations = compatibilityService.aggregations(params.f, params.uf),
+            filters = searchService.postAggregationFilters(params.f, params.uf),
+            preAggregationFilters = searchService.preAggregationFilters(params.preferredLanguage),
+            aggregations = searchService.aggregations(params.f, params.uf),
             sort = Sort.by(Sort.Direction.DESC, SORT_BY_DATE).takeIf { params.s == 1 }
         )
 
-        return compatibilityService.toSearchResult(params, result)
+        return searchService.toSearchResult(params, result)
     }
 
     @GetMapping("/content/decorator-search")
     fun decoratorSearch(
         @ModelAttribute params: Params
     ): DecoratorSearchResult {
-        val result = searchService.search(
+        val result = searchClient.search(
             term = params.ord,
             pageSize = DECORATOR_SEARCH_PAGE_SIZE,
             page = FIRST_PAGE,
-            filters = compatibilityService.decoratorSearchFilters(params.f, params.preferredLanguage),
+            filters = searchService.decoratorSearchFilters(params.f, params.preferredLanguage),
         )
 
-        return compatibilityService.toDecoratorSearchResult(params, result)
+        return searchService.toDecoratorSearchResult(params, result)
     }
 
     @GetMapping("/content/search-url")
@@ -57,7 +57,7 @@ class SearchController(
     fun searchUrl(
         @RequestParam term: String,
     ): SearchUrlResponse {
-        return searchService.searchUrl(term)
+        return searchClient.searchUrl(term)
     }
 
     companion object {
