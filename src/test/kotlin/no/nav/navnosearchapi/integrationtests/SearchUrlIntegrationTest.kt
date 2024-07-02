@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.integrationtests
 
-import no.nav.navnosearchapi.service.search.dto.SearchUrlResponse
+import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

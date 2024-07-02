@@ -1,9 +1,9 @@
 package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchapi.handler.ErrorResponse
-import no.nav.navnosearchapi.service.compatibility.dto.SearchResult
-import no.nav.navnosearchapi.service.compatibility.utils.FacetKeys
-import no.nav.navnosearchapi.service.compatibility.utils.UnderFacetKeys
+import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.service.utils.FacetKeys
+import no.nav.navnosearchapi.service.utils.UnderFacetKeys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,7 +23,6 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
         assertThat(result.total).isEqualTo(1L)
         assertThat(result.isMore).isFalse()
-        assertThat(result.autoComplete).isEmpty()
     }
 
     @Test
