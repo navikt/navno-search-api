@@ -6,7 +6,7 @@ import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.SearchHit
 import no.nav.navnosearchapi.service.dto.SearchResult
-import no.nav.navnosearchapi.service.mapper.extensions.languageSubfieldValue
+import no.nav.navnosearchapi.service.utils.languageSubfieldValue
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.springframework.data.elasticsearch.core.AggregationsContainer
@@ -42,7 +42,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
 
     private fun toHit(searchHit: OpensearchSearchHit<ContentDao>, isMatchPhraseQuery: Boolean): SearchHit {
         searchHit.content.run {
-            resolveTimestamps(createdAt, lastUpdated, metatags, fylke).let {(publishedTime, modifiedTime) ->
+            resolveTimestamps(createdAt, lastUpdated, metatags, fylke).let { (publishedTime, modifiedTime) ->
                 return SearchHit(
                     displayName = title.languageSubfieldValue(language),
                     href = href,

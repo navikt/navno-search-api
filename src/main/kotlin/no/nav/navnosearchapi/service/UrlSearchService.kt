@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.service
 
 import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
-import no.nav.navnosearchapi.service.mapper.extensions.value
+import no.nav.navnosearchapi.service.utils.value
 import org.springframework.stereotype.Service
 
 @Service

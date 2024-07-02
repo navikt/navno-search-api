@@ -4,7 +4,7 @@ import no.nav.navnosearchadminapi.common.model.ContentDao
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.DecoratorSearchHit
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
-import no.nav.navnosearchapi.service.mapper.extensions.languageSubfieldValue
+import no.nav.navnosearchapi.service.utils.languageSubfieldValue
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -13,7 +13,11 @@ import org.springframework.stereotype.Component
 class DecoratorSearchResultMapper(
     val highlightMapper: HighlightMapper,
 ) {
-    fun toSearchResult(params: Params, result: SearchPage<ContentDao>, isMatchPhraseQuery: Boolean): DecoratorSearchResult {
+    fun toSearchResult(
+        params: Params,
+        result: SearchPage<ContentDao>,
+        isMatchPhraseQuery: Boolean
+    ): DecoratorSearchResult {
         return DecoratorSearchResult(
             preferredLanguage = params.preferredLanguage,
             word = params.ord,
