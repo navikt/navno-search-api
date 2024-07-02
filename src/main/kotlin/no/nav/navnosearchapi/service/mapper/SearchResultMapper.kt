@@ -41,7 +41,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
     }
 
     private fun toHit(searchHit: OpensearchSearchHit<ContentDao>, isMatchPhraseQuery: Boolean): SearchHit {
-        searchHit.content.run {
+        with(searchHit.content) {
             resolveTimestamps(createdAt, lastUpdated, metatags, fylke).let { (publishedTime, modifiedTime) ->
                 return SearchHit(
                     displayName = title.languageSubfieldValue(language),
