@@ -11,6 +11,8 @@ import no.nav.navnosearchapi.client.enums.FieldType
 private const val NORWEGIAN_SUFFIX = ".no"
 private const val ENGLISH_SUFFIX = ".en"
 private const val OTHER_SUFFIX = ".other"
+private const val EXACT_INNER_FIELD_SUFFIX = ".$EXACT_INNER_FIELD"
+private const val NGRAMS_INNER_FIELD_SUFFIX = ".$NGRAMS_INNER_FIELD"
 
 fun languageSubfieldKey(
     parentKey: String,
@@ -26,8 +28,8 @@ fun languageSubfieldKey(
                 else -> OTHER_SUFFIX
             }
         )
-        if (fieldType == FieldType.EXACT) append(EXACT_INNER_FIELD)
-        else if (fieldType == FieldType.NGRAM) append(NGRAMS_INNER_FIELD)
+        if (fieldType == FieldType.EXACT) append(EXACT_INNER_FIELD_SUFFIX)
+        else if (fieldType == FieldType.NGRAM) append(NGRAMS_INNER_FIELD_SUFFIX)
     }
 }
 
