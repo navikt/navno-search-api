@@ -4,7 +4,7 @@ import no.nav.navnosearchadminapi.common.constants.INGRESS
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
-import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.enums.FieldType
 import no.nav.navnosearchapi.service.utils.languageSubfieldKey
 import no.nav.navnosearchapi.service.utils.languageSubfieldValue
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class HighlightMapper {
-    fun toHighlight(searchHit: SearchHit<ContentDao>, isMatchPhraseQuery: Boolean): String {
+    fun toHighlight(searchHit: SearchHit<Content>, isMatchPhraseQuery: Boolean): String {
         return if (searchHit.content.type == ValidTypes.TABELL.descriptor) {
             TABELL
         } else {
@@ -30,7 +30,7 @@ class HighlightMapper {
     }
 
     fun highlightValues(
-        searchHit: SearchHit<ContentDao>,
+        searchHit: SearchHit<Content>,
         isMatchPhraseQuery: Boolean
     ): Triple<String?, String?, String?> {
         val defaultFieldType = if (isMatchPhraseQuery) FieldType.EXACT else FieldType.STANDARD
@@ -44,7 +44,7 @@ class HighlightMapper {
         )
     }
 
-    private fun SearchHit<ContentDao>.getHighlightField(
+    private fun SearchHit<Content>.getHighlightField(
         baseField: String,
         language: String,
         defaultFieldType: FieldType,
