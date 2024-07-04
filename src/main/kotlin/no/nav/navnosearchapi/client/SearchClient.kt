@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.client
 
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
-import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.config.metatagToWeight
 import no.nav.navnosearchapi.client.config.termsToOverride
 import no.nav.navnosearchapi.client.config.typeToWeight
@@ -38,7 +38,7 @@ class SearchClient(
         aggregations: List<AbstractAggregationBuilder<*>>? = null,
         sort: Sort? = null,
         pageRequest: PageRequest,
-    ): SearchPage<ContentDao> {
+    ): SearchPage<Content> {
         return baseQuery(term, isMatchPhraseQuery).let { baseQuery ->
             buildNativeSearchQuery {
                 withQuery(
@@ -55,19 +55,19 @@ class SearchClient(
                     sort?.let { withSort(it) }
                 }
             }
-                .let { operations.search(it, ContentDao::class.java) }
+                .let { operations.search(it, Content::class.java) }
                 .let { SearchHitSupport.searchPageFor(it, pageRequest) }
         }
     }
 
-    fun searchUrl(term: String): SearchHits<ContentDao> {
+    fun searchUrl(term: String): SearchHits<Content> {
         return buildNativeSearchQuery {
             withQuery(
                 searchUrlQuery(term)
                     .applyWeighting(TYPE, typeToWeight)
                     .applyWeighting(METATAGS, metatagToWeight)
             )
-        }.let { operations.search(it, ContentDao::class.java) }
+        }.let { operations.search(it, Content::class.java) }
     }
 
     private fun buildNativeSearchQuery(builder: NativeSearchQueryBuilder.() -> NativeSearchQueryBuilder): NativeSearchQuery {

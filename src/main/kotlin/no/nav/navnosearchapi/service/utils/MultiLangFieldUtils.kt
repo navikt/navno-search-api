@@ -3,14 +3,16 @@ package no.nav.navnosearchapi.service.utils
 import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
+import no.nav.navnosearchadminapi.common.constants.OTHER
 import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.client.enums.FieldType
 
-private const val NORWEGIAN_SUFFIX = ".no"
-private const val ENGLISH_SUFFIX = ".en"
-private const val OTHER_SUFFIX = ".other"
+private const val NORWEGIAN_SUFFIX = ".$NORWEGIAN"
+private const val ENGLISH_SUFFIX = ".$ENGLISH"
+private const val OTHER_SUFFIX = ".$OTHER"
 private const val EXACT_INNER_FIELD_SUFFIX = ".$EXACT_INNER_FIELD"
 private const val NGRAMS_INNER_FIELD_SUFFIX = ".$NGRAMS_INNER_FIELD"
 

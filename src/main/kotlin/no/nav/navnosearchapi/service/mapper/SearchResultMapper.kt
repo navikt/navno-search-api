@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.service.mapper
 
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
-import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.SearchHit
 import no.nav.navnosearchapi.service.dto.SearchResult
@@ -17,7 +17,7 @@ import org.springframework.data.elasticsearch.core.SearchHit as OpensearchSearch
 
 @Component
 class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlightMapper: HighlightMapper) {
-    fun toSearchResult(params: Params, searchPage: SearchPage<ContentDao>, isMatchPhraseQuery: Boolean): SearchResult {
+    fun toSearchResult(params: Params, searchPage: SearchPage<Content>, isMatchPhraseQuery: Boolean): SearchResult {
         return SearchResult(
             page = params.page,
             s = params.s,
@@ -40,7 +40,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
         return (this as OpenSearchAggregations).aggregations().associate { it.name to (it as Filter).docCount }
     }
 
-    private fun toHit(searchHit: OpensearchSearchHit<ContentDao>, isMatchPhraseQuery: Boolean): SearchHit {
+    private fun toHit(searchHit: OpensearchSearchHit<Content>, isMatchPhraseQuery: Boolean): SearchHit {
         with(searchHit.content) {
             resolveTimestamps(createdAt, lastUpdated, metatags, fylke).let { (publishedTime, modifiedTime) ->
                 return SearchHit(

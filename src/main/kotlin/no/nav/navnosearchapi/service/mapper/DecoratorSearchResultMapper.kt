@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.service.mapper
 
-import no.nav.navnosearchadminapi.common.model.ContentDao
+import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.DecoratorSearchHit
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
@@ -15,7 +15,7 @@ class DecoratorSearchResultMapper(
 ) {
     fun toSearchResult(
         params: Params,
-        result: SearchPage<ContentDao>,
+        result: SearchPage<Content>,
         isMatchPhraseQuery: Boolean
     ): DecoratorSearchResult {
         return DecoratorSearchResult(
@@ -26,7 +26,7 @@ class DecoratorSearchResultMapper(
         )
     }
 
-    private fun toHit(searchHit: SearchHit<ContentDao>, isMatchPhraseQuery: Boolean): DecoratorSearchHit {
+    private fun toHit(searchHit: SearchHit<Content>, isMatchPhraseQuery: Boolean): DecoratorSearchHit {
         return DecoratorSearchHit(
             displayName = searchHit.content.title.languageSubfieldValue(searchHit.content.language),
             href = searchHit.content.href,
