@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.client
 
+import no.nav.navnosearchadminapi.common.constants.DID_YOU_MEAN
 import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.Content
@@ -18,6 +19,8 @@ import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
+import org.opensearch.search.suggest.SuggestBuilder
+import org.opensearch.search.suggest.phrase.PhraseSuggestionBuilder
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -45,6 +48,9 @@ class SearchClient(
                     baseQuery.applyFilters(preAggregationFilters)
                         .applyWeighting(TYPE, typeToWeight)
                         .applyWeighting(METATAGS, metatagToWeight)
+                )
+                withSuggestBuilder(
+                    SuggestBuilder().addSuggestion(DID_YOU_MEAN, PhraseSuggestionBuilder(DID_YOU_MEAN).text(term))
                 )
                 withFilter(filters)
                 withPageable(pageRequest)

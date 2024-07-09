@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.service.mapper
 
+import no.nav.navnosearchadminapi.common.constants.DID_YOU_MEAN
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.Content
@@ -26,14 +27,19 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
             word = params.ord,
             total = searchPage.totalElements,
             fasettKey = params.f,
+            didYouMean = searchPage.firstSuggestion(DID_YOU_MEAN),
             aggregations = searchPage.searchHits.aggregations?.let { aggregations ->
                 aggregationsMapper.toAggregations(
                     aggregations.asMap(),
                     params
                 )
             },
-            hits = searchPage.searchHits.searchHits.map { toHit(it, isMatchPhraseQuery) },
+            hits = searchPage.searchHits.searchHits.map { toHit(it, isMatchPhraseQuery) }
         )
+    }
+
+    private fun SearchPage<Content>.firstSuggestion(name: String): String? {
+        return searchHits.suggest?.getSuggestion(name)?.entries?.firstOrNull()?.options?.firstOrNull()?.text
     }
 
     private fun <T> AggregationsContainer<T>.asMap(): Map<String, Long> {

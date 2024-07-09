@@ -9,5 +9,6 @@ data class SearchResult(
     val total: Long,
     val fasettKey: String,
     val aggregations: Aggregations?,
-    val hits: List<SearchHit>
+    val hits: List<SearchHit>,
+    val didYouMean: String?,
 )

@@ -49,6 +49,7 @@ abstract class AbstractIntegrationTest {
             .queryParam("f", f)
             .queryParam("uf", uf)
             .queryParam("s", s)
+            .queryParam("preferredLanguage", preferredLanguage)
             .build().toUriString()
     }
 
