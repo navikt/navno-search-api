@@ -1,8 +1,10 @@
 package no.nav.navnosearchapi.rest
 
 import no.nav.navnosearchapi.service.CompleteSearchService
+import no.nav.navnosearchapi.service.CompletionService
 import no.nav.navnosearchapi.service.DecoratorSearchService
 import no.nav.navnosearchapi.service.UrlSearchService
+import no.nav.navnosearchapi.service.dto.CompletionResponse
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.dto.SearchResult
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
@@ -17,6 +19,7 @@ class SearchController(
     val completeSearchService: CompleteSearchService,
     val decoratorSearchService: DecoratorSearchService,
     val urlSearchService: UrlSearchService,
+    val completionService: CompletionService,
 ) {
     @GetMapping("/content/search")
     fun search(@ModelAttribute params: Params): SearchResult {
@@ -32,6 +35,12 @@ class SearchController(
     @CrossOrigin
     fun searchUrl(@RequestParam term: String): SearchUrlResponse {
         return urlSearchService.search(term)
+    }
+
+    @GetMapping("/content/completion")
+    @CrossOrigin
+    fun searchCompletion(@ModelAttribute params: Params): CompletionResponse {
+        return completionService.search(params)
     }
 }
 

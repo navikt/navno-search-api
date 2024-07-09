@@ -30,6 +30,7 @@ class CompleteSearchService(
     val searchClient: SearchClient,
 ) {
     fun search(params: Params): SearchResult {
+        // Todo: Bør vi kun søke etter term i selve tittelen?
         val isMatchPhraseQuery = isInQuotes(params.ord)
         return searchClient.search(
             term = params.ord,
@@ -44,12 +45,8 @@ class CompleteSearchService(
         }
     }
 
-    fun preAggregationFilters(preferredLanguage: String?): BoolQueryBuilder {
-        return BoolQueryBuilder().apply {
-            if (preferredLanguage != null) {
-                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
-            }
-        }
+    fun preAggregationFilters(preferredLanguage: String): BoolQueryBuilder {
+        return BoolQueryBuilder().must(activePreferredLanguageFilterQuery(preferredLanguage))
     }
 
     fun postAggregationFilters(f: String, uf: List<String>): BoolQueryBuilder {

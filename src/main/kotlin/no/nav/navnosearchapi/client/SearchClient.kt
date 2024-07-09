@@ -70,6 +70,32 @@ class SearchClient(
         }.let { operations.search(it, Content::class.java) }
     }
 
+    fun searchCompletion(
+        term: String,
+        isMatchPhraseQuery: Boolean,
+        filters: BoolQueryBuilder,
+        aggregations: List<AbstractAggregationBuilder<*>>? = null,
+        sort: Sort? = null,
+        pageRequest: PageRequest,
+    ): SearchPage<Content> {
+        return baseQuery(term, isMatchPhraseQuery).let { baseQuery ->
+            buildNativeSearchQuery {
+                withQuery(
+                    baseQuery.applyWeighting(TYPE, typeToWeight).applyWeighting(METATAGS, metatagToWeight)
+                )
+                withFilter(filters)
+                withPageable(pageRequest)
+                withTrackTotalHits(true)
+                apply {
+                    sort?.let { withSort(it) }
+                }
+            }
+                .let { operations.search(it, Content::class.java) }
+                .let { SearchHitSupport.searchPageFor(it, pageRequest) }
+        }
+    }
+
+
     private fun buildNativeSearchQuery(builder: NativeSearchQueryBuilder.() -> NativeSearchQueryBuilder): NativeSearchQuery {
         return NativeSearchQueryBuilder().builder().build()
     }

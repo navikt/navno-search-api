@@ -28,12 +28,10 @@ class DecoratorSearchService(
         }
     }
 
-    fun decoratorSearchFilters(facet: String, preferredLanguage: String?): BoolQueryBuilder {
-        return BoolQueryBuilder().must(activeFasettFilterQuery(facet, emptyList())).apply {
-            if (preferredLanguage != null) {
-                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
-            }
-        }
+    fun decoratorSearchFilters(facet: String, preferredLanguage: String): BoolQueryBuilder {
+        return BoolQueryBuilder()
+            .must(activeFasettFilterQuery(facet, emptyList()))
+            .must(activePreferredLanguageFilterQuery(preferredLanguage))
     }
 
     companion object {
