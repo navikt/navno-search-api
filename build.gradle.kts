@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    val logstashVersion = "7.4"
+    val logstashVersion = "8.0"
     val opensearchVersion = "1.5.1"
     val opensearchTestcontainersVersion = "2.1.0"
     val testcontainersVersion = "1.20.0"
