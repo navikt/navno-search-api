@@ -2,9 +2,7 @@ package no.nav.navnosearchapi.client
 
 import no.nav.navnosearchadminapi.common.constants.DID_YOU_MEAN
 import no.nav.navnosearchadminapi.common.constants.METATAGS
-import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TYPE
-import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.config.metatagToWeight
 import no.nav.navnosearchapi.client.config.termsToOverride
@@ -57,7 +55,11 @@ class SearchClient(
                         DID_YOU_MEAN,
                         PhraseSuggestionBuilder(DID_YOU_MEAN)
                             .text(term)
-                            .collateQuery(collateQuery)
+                            .collateQuery(
+                                baseQuery(SUGGESTION).applyFilters(filters)
+                                    .applyFilters(preAggregationFilters)
+                                    .toString()
+                            )
                             .addCandidateGenerator(
                                 DirectCandidateGeneratorBuilder(DID_YOU_MEAN).minWordLength(SPELLCHECK_MIN_CHARS)
                             )
@@ -117,7 +119,7 @@ class SearchClient(
         return NativeSearchQueryBuilder().builder().build()
     }
 
-    private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
+    private fun baseQuery(term: String, isMatchPhraseQuery: Boolean = false): QueryBuilder {
         return resolveTerm(term).let { (resolvedTerm, skjemanummer) ->
             when {
                 term.isBlank() -> MatchAllQueryBuilder()
@@ -141,16 +143,9 @@ class SearchClient(
     }
 
     companion object {
+        private const val SUGGESTION = "{{suggestion}}"
         private const val SPELLCHECK_MIN_CHARS = 3
         private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
-        private val collateQuery = """
-            { 
-                "multi_match": {
-                    "query": "{{suggestion}}",
-                    "fields": ${languageSubfields.map { "\"$TITLE.$it\"" }},
-                    "operator": "and"
-                }
-            }"""
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
         val whitespace = "\\s+".toRegex()
     }
