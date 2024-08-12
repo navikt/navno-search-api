@@ -2,7 +2,9 @@ package no.nav.navnosearchapi.client
 
 import no.nav.navnosearchadminapi.common.constants.DID_YOU_MEAN
 import no.nav.navnosearchadminapi.common.constants.METATAGS
+import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.TYPE
+import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.config.metatagToWeight
 import no.nav.navnosearchapi.client.config.termsToOverride
@@ -20,6 +22,7 @@ import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.opensearch.search.suggest.SuggestBuilder
+import org.opensearch.search.suggest.phrase.DirectCandidateGeneratorBuilder
 import org.opensearch.search.suggest.phrase.PhraseSuggestionBuilder
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -50,7 +53,15 @@ class SearchClient(
                         .applyWeighting(METATAGS, metatagToWeight)
                 )
                 withSuggestBuilder(
-                    SuggestBuilder().addSuggestion(DID_YOU_MEAN, PhraseSuggestionBuilder(DID_YOU_MEAN).text(term))
+                    SuggestBuilder().addSuggestion(
+                        DID_YOU_MEAN,
+                        PhraseSuggestionBuilder(DID_YOU_MEAN)
+                            .text(term)
+                            .collateQuery(collateQuery)
+                            .addCandidateGenerator(
+                                DirectCandidateGeneratorBuilder(DID_YOU_MEAN).minWordLength(SPELLCHECK_MIN_CHARS)
+                            )
+                    )
                 )
                 withFilter(filters)
                 withPageable(pageRequest)
@@ -130,7 +141,16 @@ class SearchClient(
     }
 
     companion object {
+        private const val SPELLCHECK_MIN_CHARS = 3
         private const val SKJEMANUMMER_FORMAT = """(?:NAV|nav)?.?([0-9]{2}).?([0-9]{2}).?([0-9]{2})"""
+        private val collateQuery = """
+            { 
+                "multi_match": {
+                    "query": "{{suggestion}}",
+                    "fields": ${languageSubfields.map { "\"$TITLE.$it\"" }},
+                    "operator": "and"
+                }
+            }"""
         private val skjemanummerRegex = Regex(SKJEMANUMMER_FORMAT)
         val whitespace = "\\s+".toRegex()
     }
