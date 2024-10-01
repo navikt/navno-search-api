@@ -33,7 +33,7 @@ dependencies {
     val logstashVersion = "8.0"
     val opensearchVersion = "1.5.2"
     val opensearchTestcontainersVersion = "2.1.0"
-    val testcontainersVersion = "1.20.1"
+    val testcontainersVersion = "1.20.2"
     val navnoSearchCommonVersion = "20240704111426-6732e61"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
