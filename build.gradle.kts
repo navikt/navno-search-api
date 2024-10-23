@@ -34,7 +34,7 @@ dependencies {
     val opensearchVersion = "1.5.2"
     val opensearchTestcontainersVersion = "2.1.0"
     val testcontainersVersion = "1.20.1"
-    val navnoSearchCommonVersion = "20240704111426-6732e61"
+    val navnoSearchCommonVersion = "20241022152749-24f9ce1"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
