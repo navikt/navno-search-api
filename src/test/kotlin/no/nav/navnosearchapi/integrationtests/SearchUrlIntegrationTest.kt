@@ -1,7 +1,8 @@
 package no.nav.navnosearchapi.integrationtests
 
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.getForEntity
@@ -22,23 +23,23 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
     fun testSearchWithExactMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(EXACT_URL)).body!!
 
-        assertThat(result.url)!!.isEqualTo(EXACT_URL)
-        assertThat(result.title)!!.isEqualTo(TITLE)
+        result.url!! shouldBe EXACT_URL
+        result.title!! shouldBe TITLE
     }
 
     @Test
     fun testSearchWithFuzzyMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(FUZZY_URL)).body!!
 
-        assertThat(result.url)!!.isEqualTo(EXACT_URL)
-        assertThat(result.title)!!.isEqualTo(TITLE)
+        result.url!! shouldBe EXACT_URL
+        result.title!! shouldBe TITLE
     }
 
     @Test
     fun testSearchWithNoMatch() {
         val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL)).body!!
 
-        assertThat(result.url).isNull()
-        assertThat(result.title).isNull()
+        result.url.shouldBeNull()
+        result.title.shouldBeNull()
     }
 }

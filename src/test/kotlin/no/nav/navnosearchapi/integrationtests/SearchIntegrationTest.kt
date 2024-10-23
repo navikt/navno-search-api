@@ -1,10 +1,11 @@
 package no.nav.navnosearchapi.integrationtests
 
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.shouldBe
 import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.dto.SearchResult
 import no.nav.navnosearchapi.service.utils.FacetKeys
 import no.nav.navnosearchapi.service.utils.UnderFacetKeys
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.getForEntity
@@ -21,22 +22,22 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     fun testSearchWithEmptyTerm() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(1L)
-        assertThat(result.isMore).isFalse()
+        result.total shouldBe 1L
+        result.isMore.shouldBeFalse()
     }
 
     @Test
     fun testSearchForText() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(TEXT_TERM)).body!!
 
-        assertThat(result.total).isEqualTo(1L)
+        result.total shouldBe 1L
     }
 
     @Test
     fun testSearchForPhrase() {
         val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM, f = FacetKeys.ARBEIDSGIVER)).body!!
 
-        assertThat(result.total).isEqualTo(1L)
+        result.total shouldBe 1L
     }
 
     @Test
@@ -49,7 +50,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
                 )
             ).body!!
 
-        assertThat(result.total).isEqualTo(3L)
+        result.total shouldBe 3L
     }
 
     @Test
@@ -58,15 +59,15 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
             searchUri(ord = TEXT_TERM, f = FacetKeys.PRIVATPERSON, uf = listOf(UnderFacetKeys.INFORMASJON))
         ).body!!
 
-        assertThat(result.total).isEqualTo(1L)
+        result.total shouldBe 1L
     }
 
     @Test
     fun testSearchWithMissingParameter() {
         val response = restTemplate.getForEntity<ErrorResponse>(searchUri(ord = TEXT_TERM, s = null))
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.body?.message).isEqualTo("Påkrevd request parameter mangler: s")
+        response.statusCode shouldBe HttpStatus.BAD_REQUEST
+        response.body?.message shouldBe "Påkrevd request parameter mangler: s"
     }
 
     companion object {
