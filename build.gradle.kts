@@ -34,7 +34,8 @@ dependencies {
     val opensearchVersion = "1.5.3"
     val opensearchTestcontainersVersion = "2.1.1"
     val testcontainersVersion = "1.20.2"
-    val navnoSearchCommonVersion = "20241022152749-24f9ce1"
+    val navnoSearchCommonVersion = "20241023130906-f69e4bd"
+    val kotestVersion = "5.9.1"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
@@ -51,6 +52,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation("org.opensearch:opensearch-testcontainers:$opensearchTestcontainersVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
 }
 
 tasks.withType<KotlinCompile> {
