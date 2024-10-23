@@ -10,10 +10,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import java.time.LocalDateTime
+import java.time.Clock
+import java.time.ZonedDateTime
 
 @ControllerAdvice
-class ErrorHandler {
+class ErrorHandler(val clock: Clock) {
 
     val logger: Logger = LoggerFactory.getLogger(ErrorHandler::class.java)
 
@@ -60,7 +61,7 @@ class ErrorHandler {
         ex: Throwable
     ): ResponseEntity<ErrorResponse> {
         val error = ErrorResponse(
-            timestamp = LocalDateTime.now(),
+            timestamp = ZonedDateTime.now(clock),
             status = status.value(),
             error = status.reasonPhrase,
             message = message ?: ex.message,

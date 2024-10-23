@@ -7,6 +7,8 @@ import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.Content
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
@@ -19,10 +21,13 @@ val AGDER = ValidFylker.AGDER.descriptor
 val STATISTIKK = ValidMetatags.STATISTIKK.descriptor
 val INFORMASJON = ValidMetatags.INFORMASJON.descriptor
 
-val now: ZonedDateTime = ZonedDateTime.now()
-val nowMinusTwoYears: ZonedDateTime = ZonedDateTime.now().minusYears(2)
-val nowMinus10Days: ZonedDateTime = ZonedDateTime.now().minusDays(10)
-val nowMinus50Days: ZonedDateTime = ZonedDateTime.now().minusDays(50)
+val fixedNow: ZonedDateTime = ZonedDateTime.of(
+    LocalDateTime.of(2020, 1, 1, 12, 0),
+    ZoneId.of("Europe/Oslo")
+)
+val fixedNowMinusTwoYears: ZonedDateTime = fixedNow.minusYears(2)
+val fixedNowMinus10Days: ZonedDateTime = fixedNow.minusDays(10)
+val fixedNowMinus50Days: ZonedDateTime = fixedNow.minusDays(50)
 
 val initialTestData = listOf(
     dummyContent(
@@ -41,21 +46,21 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "3",
         textPrefix = "Third",
-        timestamp = nowMinusTwoYears,
+        timestamp = fixedNowMinusTwoYears,
         fylke = AGDER,
         metatags = listOf(STATISTIKK),
     ),
     dummyContent(
         externalId = "4",
         textPrefix = "Fourth",
-        timestamp = nowMinusTwoYears,
+        timestamp = fixedNowMinusTwoYears,
         language = ENGLISH,
         metatags = listOf(INFORMASJON),
     ),
     dummyContent(
         externalId = "5",
         textPrefix = "Fifth",
-        timestamp = nowMinus10Days,
+        timestamp = fixedNowMinus10Days,
         audience = listOf(ARBEIDSGIVER),
         language = ENGLISH,
         metatags = listOf(INFORMASJON),
@@ -63,7 +68,7 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "6",
         textPrefix = "Sixth",
-        timestamp = nowMinus10Days,
+        timestamp = fixedNowMinus10Days,
         audience = listOf(ARBEIDSGIVER),
         language = ENGLISH,
         metatags = listOf(INFORMASJON),
@@ -71,7 +76,7 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "7",
         textPrefix = "Seventh",
-        timestamp = nowMinus50Days,
+        timestamp = fixedNowMinus50Days,
         audience = listOf(ARBEIDSGIVER),
         language = HINDI,
         metatags = listOf(INFORMASJON),
@@ -79,7 +84,7 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "8",
         textPrefix = "Eighth",
-        timestamp = nowMinus50Days,
+        timestamp = fixedNowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
         metatags = listOf(INFORMASJON),
@@ -87,7 +92,7 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "9",
         textPrefix = "Ninth",
-        timestamp = nowMinus50Days,
+        timestamp = fixedNowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
         metatags = listOf(INFORMASJON),
@@ -96,7 +101,7 @@ val initialTestData = listOf(
     dummyContent(
         externalId = "10",
         textPrefix = "Tenth",
-        timestamp = nowMinus50Days,
+        timestamp = fixedNowMinus50Days,
         audience = listOf(SAMARBEIDSPARTNER),
         language = HINDI,
         metatags = listOf(INFORMASJON),
@@ -108,7 +113,7 @@ fun dummyContent(
     externalId: String,
     textPrefix: String,
     type: String = ValidTypes.ANDRE.descriptor,
-    timestamp: ZonedDateTime = now,
+    timestamp: ZonedDateTime = fixedNow,
     audience: List<String> = listOf(PRIVATPERSON),
     language: String = NORWEGIAN_BOKMAAL,
     fylke: String? = null,
