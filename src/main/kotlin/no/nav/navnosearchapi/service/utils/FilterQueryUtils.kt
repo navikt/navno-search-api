@@ -16,7 +16,6 @@ import no.nav.navnosearchapi.service.filters.statistikkFilters
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 
-
 fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
     fun filterWithUnderfacets(facetKey: String, ufFilters: Map<String, FilterEntry>) = if (uf.isEmpty()) {
         fasettFilters[facetKey]!!.filterQuery

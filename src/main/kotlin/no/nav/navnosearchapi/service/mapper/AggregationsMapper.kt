@@ -148,7 +148,6 @@ class AggregationsMapper {
         )
     }
 
-
     private fun statistikkUnderFacets(underFacetAggregation: (key: String, name: String, aggregationName: String) -> FacetBucket): List<FacetBucket> {
         return filteredBuckets(
             underFacetAggregation(
