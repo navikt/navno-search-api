@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import java.time.Duration
 
 @TestConfiguration
-class OpensearchConfiguration {
+class OpensearchConfig {
     companion object {
         private val opensearch: OpensearchContainer<*> = OpensearchContainer("opensearchproject/opensearch:2.11.1")
             .withStartupAttempts(5)

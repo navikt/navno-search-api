@@ -2,7 +2,7 @@ package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.repository.ContentRepository
-import no.nav.navnosearchapi.integrationtests.config.OpensearchConfiguration
+import no.nav.navnosearchapi.integrationtests.config.OpensearchConfig
 import no.nav.navnosearchapi.service.utils.FacetKeys
 import no.nav.navnosearchapi.utils.initialTestData
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @Testcontainers(disabledWithoutDocker = true)
-@Import(OpensearchConfiguration::class)
+@Import(OpensearchConfig::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension::class)
@@ -49,6 +49,7 @@ abstract class AbstractIntegrationTest {
             .queryParam("f", f)
             .queryParam("uf", uf)
             .queryParam("s", s)
+            .queryParam("preferredLanguage", preferredLanguage)
             .build().toUriString()
     }
 

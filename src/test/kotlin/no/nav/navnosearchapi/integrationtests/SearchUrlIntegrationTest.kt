@@ -1,11 +1,13 @@
 package no.nav.navnosearchapi.integrationtests
 
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.getForEntity
+import org.springframework.http.HttpStatus
 
 class SearchUrlIntegrationTest : AbstractIntegrationTest() {
 
@@ -14,32 +16,43 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
         setupIndex()
     }
 
-    val EXACT_URL = "https://First.com"
-    val FUZZY_URL = "https://Fristt.com"
-    val NON_MATCHING_URL = "1337"
-    val TITLE = "First title"
-
     @Test
-    fun testSearchWithExactMatch() {
-        val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(EXACT_URL)).body!!
+    fun `søk med eksakt match skal returnere respons`() {
+        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(EXACT_URL))
 
-        result.url!! shouldBe EXACT_URL
-        result.title!! shouldBe TITLE
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            url!! shouldBe EXACT_URL
+            title!! shouldBe TITLE
+        }
     }
 
     @Test
-    fun testSearchWithFuzzyMatch() {
-        val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(FUZZY_URL)).body!!
+    fun `søk med fuzzy match skal returnere respons`() {
+        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(FUZZY_URL))
 
-        result.url!! shouldBe EXACT_URL
-        result.title!! shouldBe TITLE
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            url!! shouldBe EXACT_URL
+            title!! shouldBe TITLE
+        }
     }
 
     @Test
-    fun testSearchWithNoMatch() {
-        val result = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL)).body!!
+    fun `søk uten match skal returnere tom respons`() {
+        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL))
 
-        result.url.shouldBeNull()
-        result.title.shouldBeNull()
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            url.shouldBeNull()
+            title.shouldBeNull()
+        }
+    }
+
+    companion object {
+        private const val EXACT_URL = "https://First.com"
+        private const val FUZZY_URL = "https://Fristt.com"
+        private const val NON_MATCHING_URL = "1337"
+        private const val TITLE = "First title"
     }
 }

@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.integrationtests
 
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.shouldBe
 import no.nav.navnosearchapi.handler.ErrorResponse
@@ -19,51 +20,62 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun testSearchWithEmptyTerm() {
-        val result = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM)).body!!
+    fun `søk med tom term skal returnere riktig søkeresultat`() {
+        val response = restTemplate.getForEntity<SearchResult>(searchUri(EMPTY_TERM))
 
-        result.total shouldBe 1L
-        result.isMore.shouldBeFalse()
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            total shouldBe 1L
+            isMore.shouldBeFalse()
+        }
     }
 
     @Test
-    fun testSearchForText() {
-        val result = restTemplate.getForEntity<SearchResult>(searchUri(TEXT_TERM)).body!!
+    fun `søk med tekst-term skal returnere riktig søkeresultat`() {
+        val response = restTemplate.getForEntity<SearchResult>(searchUri(TEXT_TERM))
 
-        result.total shouldBe 1L
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            total shouldBe 1L
+        }
     }
 
     @Test
-    fun testSearchForPhrase() {
-        val result = restTemplate.getForEntity<SearchResult>(searchUri(PHRASE_TERM, f = FacetKeys.ARBEIDSGIVER)).body!!
+    fun `søk med frase-term skal returnere riktig søkeresultat`() {
+        val response = restTemplate.getForEntity<SearchResult>(searchUri(ord = PHRASE_TERM, f = FacetKeys.ARBEIDSGIVER))
 
-        result.total shouldBe 1L
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            total shouldBe 1L
+        }
     }
 
     @Test
-    fun testSearchWithFasettFilter() {
-        val result =
-            restTemplate.getForEntity<SearchResult>(
-                searchUri(
-                    ord = TEXT_TERM,
-                    f = FacetKeys.INNHOLD_FRA_FYLKER
-                )
-            ).body!!
+    fun `søk med fasett skal returnere riktig søkeresultat`() {
+        val response = restTemplate.getForEntity<SearchResult>(
+            searchUri(ord = TEXT_TERM, f = FacetKeys.INNHOLD_FRA_FYLKER)
+        )
 
-        result.total shouldBe 3L
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            total shouldBe 3L
+        }
     }
 
     @Test
-    fun testSearchWithUnderfasettFilter() {
-        val result = restTemplate.getForEntity<SearchResult>(
+    fun `søk med underfasett skal returnere riktig søkeresultat`() {
+        val response = restTemplate.getForEntity<SearchResult>(
             searchUri(ord = TEXT_TERM, f = FacetKeys.PRIVATPERSON, uf = listOf(UnderFacetKeys.INFORMASJON))
-        ).body!!
+        )
 
-        result.total shouldBe 1L
+        response.statusCode shouldBe HttpStatus.OK
+        assertSoftly(response.body!!) {
+            total shouldBe 1L
+        }
     }
 
     @Test
-    fun testSearchWithMissingParameter() {
+    fun `søk med manglende påkrevd parameter skal gi 400`() {
         val response = restTemplate.getForEntity<ErrorResponse>(searchUri(ord = TEXT_TERM, s = null))
 
         response.statusCode shouldBe HttpStatus.BAD_REQUEST
