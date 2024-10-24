@@ -22,7 +22,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
             page = params.page,
             s = params.s,
             preferredLanguage = params.preferredLanguage,
-            isMore = searchPage.totalPages > (searchPage.size + 1),
+            isMore = !searchPage.isLast,
             word = params.ord,
             total = searchPage.totalElements,
             fasettKey = params.f,
