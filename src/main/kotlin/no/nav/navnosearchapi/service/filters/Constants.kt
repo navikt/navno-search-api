@@ -1,4 +1,4 @@
-package no.nav.navnosearchapi.service.utils
+package no.nav.navnosearchapi.service.filters
 
 object FacetKeys {
     const val PRIVATPERSON = "privatperson"

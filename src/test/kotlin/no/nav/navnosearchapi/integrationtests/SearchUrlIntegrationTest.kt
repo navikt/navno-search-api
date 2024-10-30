@@ -4,6 +4,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import no.nav.navnosearchapi.service.dto.SearchUrlResponse
+import no.nav.navnosearchapi.utils.additionalTestData
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.getForEntity
@@ -14,6 +15,7 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
     @BeforeEach
     fun setup() {
         setupIndex()
+        repository.save(additionalTestData().copy(href = EXACT_URL))
     }
 
     @Test
@@ -53,6 +55,6 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
         private const val EXACT_URL = "https://First.com"
         private const val FUZZY_URL = "https://Fristt.com"
         private const val NON_MATCHING_URL = "1337"
-        private const val TITLE = "First title"
+        private const val TITLE = "title"
     }
 }

@@ -4,13 +4,13 @@ import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.SearchResult
-import no.nav.navnosearchapi.service.filters.analyseFilters
-import no.nav.navnosearchapi.service.filters.arbeidsgiverFilters
-import no.nav.navnosearchapi.service.filters.fasettFilters
-import no.nav.navnosearchapi.service.filters.fylkeFilters
-import no.nav.navnosearchapi.service.filters.privatpersonFilters
-import no.nav.navnosearchapi.service.filters.samarbeidspartnerFilters
-import no.nav.navnosearchapi.service.filters.statistikkFilters
+import no.nav.navnosearchapi.service.filters.facets.fasettFilters
+import no.nav.navnosearchapi.service.filters.underfacets.analyseFilters
+import no.nav.navnosearchapi.service.filters.underfacets.arbeidsgiverFilters
+import no.nav.navnosearchapi.service.filters.underfacets.fylkeFilters
+import no.nav.navnosearchapi.service.filters.underfacets.privatpersonFilters
+import no.nav.navnosearchapi.service.filters.underfacets.samarbeidspartnerFilters
+import no.nav.navnosearchapi.service.filters.underfacets.statistikkFilters
 import no.nav.navnosearchapi.service.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.utils.activeFasettFilterQuery
 import no.nav.navnosearchapi.service.utils.activePreferredLanguageFilterQuery
@@ -57,12 +57,12 @@ class CompleteSearchService(
     }
 
     fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters.values +
-                privatpersonFilters.values +
-                arbeidsgiverFilters.values +
-                samarbeidspartnerFilters.values +
-                statistikkFilters.values +
-                analyseFilters.values +
-                fylkeFilters.values).map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
+        return (fasettFilters +
+                privatpersonFilters +
+                arbeidsgiverFilters +
+                samarbeidspartnerFilters +
+                statistikkFilters +
+                analyseFilters +
+                fylkeFilters).map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
     }
 }

@@ -1,6 +1,6 @@
 package no.nav.navnosearchapi.rest
 
-import no.nav.navnosearchapi.service.utils.FacetKeys
+import no.nav.navnosearchapi.service.filters.FacetKeys
 
 data class Params(
     val ord: String, // Term
