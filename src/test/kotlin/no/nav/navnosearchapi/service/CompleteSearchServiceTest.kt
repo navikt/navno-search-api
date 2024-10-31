@@ -5,7 +5,6 @@ import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.rest.Params
@@ -26,12 +25,7 @@ class CompleteSearchServiceTest {
     fun `standard søk skal bruke forventet query`() {
         val querySlot = captureSearchQuery()
 
-        searchService.search(
-            Params(
-                ord = "søketerm",
-                preferredLanguage = NORWEGIAN_BOKMAAL
-            )
-        )
+        searchService.search(Params(ord = "søketerm"))
 
         with(querySlot.captured) {
             query.toString() shouldEqualJson readJsonFile("/json/standard-query.json")
@@ -45,12 +39,7 @@ class CompleteSearchServiceTest {
     fun `frasesøk skal bruke forventet query`() {
         val querySlot = captureSearchQuery()
 
-        searchService.search(
-            Params(
-                ord = "\"dette er en frase\"",
-                preferredLanguage = NORWEGIAN_BOKMAAL
-            )
-        )
+        searchService.search(Params(ord = "\"dette er en frase\""))
 
         with(querySlot.captured) {
             query.toString() shouldEqualJson readJsonFile("/json/phrase-query.json")
