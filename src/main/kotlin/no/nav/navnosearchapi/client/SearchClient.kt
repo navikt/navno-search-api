@@ -10,13 +10,15 @@ import no.nav.navnosearchapi.client.queries.highlightBuilder
 import no.nav.navnosearchapi.client.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.client.queries.searchAllTextQuery
 import no.nav.navnosearchapi.client.queries.searchUrlQuery
-import no.nav.navnosearchapi.client.utils.applyFilters
-import no.nav.navnosearchapi.client.utils.applyWeighting
+import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.data.client.orhlc.NativeSearchQuery
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
+import org.opensearch.index.query.TermQueryBuilder
+import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
+import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 import org.opensearch.search.aggregations.AbstractAggregationBuilder
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -95,6 +97,25 @@ class SearchClient(
         return skjemanummerRegex.find(term)?.let {
             term.replace(it.value, "") to "NAV ${it.groupValues[1]}-${it.groupValues[2]}.${it.groupValues[3]}"
         } ?: (term to null)
+    }
+
+    private fun QueryBuilder.applyFilters(filterQuery: BoolQueryBuilder?): QueryBuilder {
+        return filterQuery?.let { BoolQueryBuilder().must(this).filter(filterQuery) } ?: this
+    }
+
+    private fun QueryBuilder.applyWeighting(
+        field: String,
+        fieldToWeightMap: Map<String, Float>
+    ): FunctionScoreQueryBuilder {
+        return FunctionScoreQueryBuilder(
+            this,
+            fieldToWeightMap.map {
+                FunctionScoreQueryBuilder.FilterFunctionBuilder(
+                    TermQueryBuilder(field, it.key),
+                    ScoreFunctionBuilders.weightFactorFunction(it.value)
+                )
+            }.toTypedArray()
+        ).scoreMode(FunctionScoreQuery.ScoreMode.MAX)
     }
 
     companion object {

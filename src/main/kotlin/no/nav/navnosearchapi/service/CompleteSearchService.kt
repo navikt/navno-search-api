@@ -4,13 +4,8 @@ import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.service.filters.Filter
 import no.nav.navnosearchapi.service.filters.facets.fasettFilters
-import no.nav.navnosearchapi.service.filters.underfacets.analyseFilters
-import no.nav.navnosearchapi.service.filters.underfacets.arbeidsgiverFilters
-import no.nav.navnosearchapi.service.filters.underfacets.fylkeFilters
-import no.nav.navnosearchapi.service.filters.underfacets.privatpersonFilters
-import no.nav.navnosearchapi.service.filters.underfacets.samarbeidspartnerFilters
-import no.nav.navnosearchapi.service.filters.underfacets.statistikkFilters
 import no.nav.navnosearchapi.service.mapper.SearchResultMapper
 import no.nav.navnosearchapi.service.utils.activeFasettFilterQuery
 import no.nav.navnosearchapi.service.utils.activePreferredLanguageFilterQuery
@@ -31,38 +26,33 @@ class CompleteSearchService(
 ) {
     fun search(params: Params): SearchResult {
         val isMatchPhraseQuery = isInQuotes(params.ord)
-        return searchClient.search(
+        val searchPage = searchClient.search(
             term = params.ord,
             isMatchPhraseQuery = isMatchPhraseQuery,
             filters = postAggregationFilters(params.f, params.uf),
             preAggregationFilters = preAggregationFilters(params.preferredLanguage),
-            aggregations = aggregations(params.f, params.uf),
+            aggregations = aggregations(),
             sort = Sort.by(Sort.Direction.DESC, SORT_BY_DATE).takeIf { params.s == 1 },
             pageRequest = PageRequest.of(params.page, pageSize)
-        ).let { searchPage ->
-            searchResultMapper.toSearchResult(params, searchPage, isMatchPhraseQuery)
+        )
+        return searchResultMapper.toSearchResult(params, searchPage, isMatchPhraseQuery)
+
+    }
+
+    private fun preAggregationFilters(preferredLanguage: String?) = BoolQueryBuilder().apply {
+        if (preferredLanguage != null) {
+            this.must(activePreferredLanguageFilterQuery(preferredLanguage))
         }
     }
 
-    fun preAggregationFilters(preferredLanguage: String?): BoolQueryBuilder {
-        return BoolQueryBuilder().apply {
-            if (preferredLanguage != null) {
-                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
-            }
-        }
-    }
+    private fun postAggregationFilters(
+        f: String,
+        uf: List<String>
+    ) = BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
 
-    fun postAggregationFilters(f: String, uf: List<String>): BoolQueryBuilder {
-        return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
-    }
 
-    fun aggregations(f: String, uf: List<String>): List<FilterAggregationBuilder> {
-        return (fasettFilters +
-                privatpersonFilters +
-                arbeidsgiverFilters +
-                samarbeidspartnerFilters +
-                statistikkFilters +
-                analyseFilters +
-                fylkeFilters).map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
+    private fun aggregations(): List<FilterAggregationBuilder> {
+        val allFacetsAndUnderfacets = fasettFilters + fasettFilters.flatMap(Filter::underFacets)
+        return allFacetsAndUnderfacets.map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
     }
 }

@@ -18,23 +18,22 @@ class DecoratorSearchService(
 ) {
     fun search(params: Params): DecoratorSearchResult {
         val isMatchPhraseQuery = isInQuotes(params.ord)
-        return searchClient.search(
+        val searchPage = searchClient.search(
             term = params.ord,
             isMatchPhraseQuery = isMatchPhraseQuery,
             filters = decoratorSearchFilters(params.f, params.preferredLanguage),
             pageRequest = PageRequest.of(FIRST_PAGE, DECORATOR_SEARCH_PAGE_SIZE)
-        ).let { searchPage ->
-            decoratorSearchResultMapper.toSearchResult(params, searchPage, isMatchPhraseQuery)
+        )
+        return decoratorSearchResultMapper.toSearchResult(params, searchPage, isMatchPhraseQuery)
+    }
+
+    fun decoratorSearchFilters(facet: String, preferredLanguage: String?) = BoolQueryBuilder().apply {
+        this.must(activeFasettFilterQuery(facet, emptyList()))
+        if (preferredLanguage != null) {
+            this.must(activePreferredLanguageFilterQuery(preferredLanguage))
         }
     }
 
-    fun decoratorSearchFilters(facet: String, preferredLanguage: String?): BoolQueryBuilder {
-        return BoolQueryBuilder().must(activeFasettFilterQuery(facet, emptyList())).apply {
-            if (preferredLanguage != null) {
-                this.must(activePreferredLanguageFilterQuery(preferredLanguage))
-            }
-        }
-    }
 
     companion object {
         private const val DECORATOR_SEARCH_PAGE_SIZE = 5
