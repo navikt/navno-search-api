@@ -36,14 +36,12 @@ private fun HighlightBuilder.highlightFields(
     baseField: String,
     defaultFieldType: FieldType,
     includeNgrams: Boolean = false
-): HighlightBuilder {
+) = apply {
     languageSubfields.forEach { this.field(baseField, it, defaultFieldType) }
 
     if (includeNgrams) {
         this.field(baseField, NORWEGIAN, FieldType.NGRAM)
     }
-
-    return this
 }
 
 private fun HighlightBuilder.field(
@@ -51,11 +49,12 @@ private fun HighlightBuilder.field(
     languageSubfield: String,
     fieldType: FieldType,
 ) {
-    val fieldName = "$baseField.$languageSubfield".let {
+    val fieldName = buildString {
+        append("$baseField.$languageSubfield")
         when (fieldType) {
-            FieldType.EXACT -> "$it.$EXACT_INNER_FIELD"
-            FieldType.NGRAM -> "$it.$NGRAMS_INNER_FIELD"
-            else -> it
+            FieldType.EXACT -> append(EXACT_INNER_FIELD)
+            FieldType.NGRAM -> append(NGRAMS_INNER_FIELD)
+            else -> {} //noop
         }
     }
 
