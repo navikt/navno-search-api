@@ -49,17 +49,18 @@ private fun HighlightBuilder.field(
     languageSubfield: String,
     fieldType: FieldType,
 ) {
-    val fieldName = buildString {
+    buildString {
         append("$baseField.$languageSubfield")
         when (fieldType) {
             FieldType.EXACT -> append(EXACT_INNER_FIELD)
             FieldType.NGRAM -> append(NGRAMS_INNER_FIELD)
             else -> {} //noop
         }
-    }
-
-    when (baseField) {
-        TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
-        TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
+    }.let { fieldName ->
+        when (baseField) {
+            TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
+            TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
+            else -> {} //noop
+        }
     }
 }
