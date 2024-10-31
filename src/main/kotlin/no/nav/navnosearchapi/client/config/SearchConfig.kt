@@ -17,28 +17,28 @@ const val NGRAM_MIN_LENGTH = 4
 
 val termsToOverride = mapOf("kontakt" to "kontakt oss")
 
-val fieldsToWeight = languageSubfields.flatMap {
-    listOf(
-        "$TITLE.$it" to 12.0f,
-        "$INGRESS.$it" to 3.0f,
-        "$TEXT.$it" to 0.01f,
-    )
-}.toMap()
+val fieldsToWeight = buildMap {
+    languageSubfields.forEach {
+        put("$TITLE.$it", 12.0f)
+        put("$INGRESS.$it", 3.0f)
+        put("$TEXT.$it", 0.01f)
+    }
+}
 
-val ngramsInnerFieldsToWeight = languageSubfields.flatMap {
-    listOf(
-        "$TITLE.$it.$NGRAMS_INNER_FIELD" to 11.5f,
-        "$INGRESS.$it.$NGRAMS_INNER_FIELD" to 3.0f,
-    )
-}.toMap()
+val ngramsInnerFieldsToWeight = buildMap {
+    languageSubfields.forEach {
+        put("$TITLE.$it.$NGRAMS_INNER_FIELD", 11.5f)
+        put("$INGRESS.$it.$NGRAMS_INNER_FIELD", 3.0f)
+    }
+}
 
-val exactInnerFieldsToWeight = languageSubfields.flatMap {
-    listOf(
-        "$TITLE.$it.$EXACT_INNER_FIELD" to 12.0f,
-        "$INGRESS.$it.$EXACT_INNER_FIELD" to 6.0f,
-        "$TEXT.$it.$EXACT_INNER_FIELD" to 1.0f,
-    )
-}.toMap()
+val exactInnerFieldsToWeight = buildMap {
+    languageSubfields.forEach {
+        put("$TITLE.$it.$EXACT_INNER_FIELD", 12.0f)
+        put("$INGRESS.$it.$EXACT_INNER_FIELD", 6.0f)
+        put("$TEXT.$it.$EXACT_INNER_FIELD", 1.0f)
+    }
+}
 
 val typeToWeight = mapOf(
     ValidTypes.OVERSIKT.descriptor to 2.0f,
@@ -54,10 +54,10 @@ val metatagToWeight = mapOf(
     ValidMetatags.NYHET.descriptor to 0.25f,
 )
 
-val allTextFields = languageSubfields.flatMap {
-    listOf(
-        "$ALL_TEXT.$it",
-        "$TITLE.$it.$NGRAMS_INNER_FIELD",
-        "$INGRESS.$it.$NGRAMS_INNER_FIELD",
-    )
-}.toList()
+val allTextFields = buildList {
+    languageSubfields.forEach {
+        add("$ALL_TEXT.$it")
+        add("$TITLE.$it.$NGRAMS_INNER_FIELD")
+        add("$INGRESS.$it.$NGRAMS_INNER_FIELD")
+    }
+}
