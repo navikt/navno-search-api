@@ -1,0 +1,60 @@
+package no.nav.navnosearchapi.service
+
+import io.kotest.assertions.json.shouldEqualJson
+import io.mockk.mockk
+import no.nav.navnosearchapi.client.SearchClient
+import no.nav.navnosearchapi.rest.Params
+import no.nav.navnosearchapi.service.mapper.DecoratorSearchResultMapper
+import no.nav.navnosearchapi.service.mapper.HighlightMapper
+import no.nav.navnosearchapi.utils.captureSearchQuery
+import no.nav.navnosearchapi.utils.readJsonFile
+import org.junit.jupiter.api.Test
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+
+class DecoratorSearchServiceTest {
+    val mockedOperations = mockk<ElasticsearchOperations>()
+
+    val searchService = DecoratorSearchService(
+        decoratorSearchResultMapper = DecoratorSearchResultMapper(HighlightMapper()),
+        searchClient = SearchClient(mockedOperations)
+    )
+
+    @Test
+    fun `standard søk skal bruke forventet query`() {
+        val querySlot = captureSearchQuery(mockedOperations)
+
+        searchService.search(Params(ord = "søketerm"))
+
+        with(querySlot.captured) {
+            query.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-highlight-builder.json")
+        }
+    }
+
+    @Test
+    fun `frasesøk skal bruke forventet query`() {
+        val querySlot = captureSearchQuery(mockedOperations)
+
+        searchService.search(Params(ord = "\"dette er en frase\""))
+
+        with(querySlot.captured) {
+            query.toString() shouldEqualJson readJsonFile("/decorator-queries/phrase-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/phrase-highlight-builder.json")
+        }
+    }
+
+    @Test
+    fun `søk med skjemanummer skal bruke forventet query`() {
+        val querySlot = captureSearchQuery(mockedOperations)
+
+        searchService.search(Params(ord = "her er et skjemanummer: NAV 09-35.01"))
+
+        with(querySlot.captured) {
+            query.toString() shouldEqualJson readJsonFile("/decorator-queries/skjemanummer-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/skjemanummer-highlight-builder.json")
+        }
+    }
+}
