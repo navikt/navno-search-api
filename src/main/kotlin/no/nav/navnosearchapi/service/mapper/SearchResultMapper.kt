@@ -26,14 +26,14 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
             word = params.ord,
             total = searchPage.totalElements,
             fasettKey = params.f,
-            aggregations = searchPage.searchHits.aggregations.asMap().let { aggregations ->
+            aggregations = searchPage.searchHits.aggregations?.asMap()?.let { aggregations ->
                 aggregationsMapper.toAggregations(aggregations, params)
             },
             hits = searchPage.searchHits.searchHits.map { toHit(it, isMatchPhraseQuery) },
         )
     }
 
-    private fun <T> AggregationsContainer<T>?.asMap(): Map<String, Long> {
+    private fun <T> AggregationsContainer<T>.asMap(): Map<String, Long> {
         return (this as OpenSearchAggregations).aggregations().associate { it.name to (it as Filter).docCount }
     }
 
