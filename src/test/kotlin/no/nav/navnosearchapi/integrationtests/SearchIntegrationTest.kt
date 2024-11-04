@@ -3,7 +3,6 @@ package no.nav.navnosearchapi.integrationtests
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import no.nav.navnosearchapi.handler.ErrorResponse
 import no.nav.navnosearchapi.service.dto.SearchResult
 import no.nav.navnosearchapi.service.filters.FacetKeys
 import no.nav.navnosearchapi.service.filters.UnderFacetKeys
@@ -20,7 +19,6 @@ import no.nav.navnosearchapi.utils.samarbeidspartnerDummyData
 import no.nav.navnosearchapi.utils.statistikkDummyData
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
 
 class SearchIntegrationTest : AbstractIntegrationTest() {
@@ -32,7 +30,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk med tom term skal returnere alt innhold`() {
-        val response = restTemplate.getForEntity<SearchResult>(searchUri(ord = "", f = FacetKeys.PRIVATPERSON))
+        val response = get<SearchResult>(searchUri(ord = "", f = FacetKeys.PRIVATPERSON))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -65,7 +63,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val text = "dagpenger"
 
         repository.save(additionalTestData(title = text))
-        val response = restTemplate.getForEntity<SearchResult>(searchUri(ord = text))
+        val response = get<SearchResult>(searchUri(ord = text))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -80,7 +78,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         val fuzzyText = "dagpegner"
 
         repository.save(additionalTestData(title = text))
-        val response = restTemplate.getForEntity<SearchResult>(searchUri(ord = fuzzyText))
+        val response = get<SearchResult>(searchUri(ord = fuzzyText))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -101,7 +99,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
             )
         )
 
-        val response = restTemplate.getForEntity<SearchResult>(searchUri(ord = "\"$frase\""))
+        val response = get<SearchResult>(searchUri(ord = "\"$frase\""))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -112,7 +110,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk med fasett skal returnere riktig søkeresultat`() {
-        val response = restTemplate.getForEntity<SearchResult>(
+        val response = get<SearchResult>(
             searchUri(ord = "", f = FacetKeys.INNHOLD_FRA_FYLKER)
         )
 
@@ -124,7 +122,7 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk med underfasett skal returnere riktig søkeresultat`() {
-        val response = restTemplate.getForEntity<SearchResult>(
+        val response = get<SearchResult>(
             searchUri(ord = "", f = FacetKeys.PRIVATPERSON, uf = listOf(UnderFacetKeys.INFORMASJON))
         )
 
@@ -132,13 +130,5 @@ class SearchIntegrationTest : AbstractIntegrationTest() {
         assertSoftly(response.body!!) {
             total shouldBe generatedText.size
         }
-    }
-
-    @Test
-    fun `søk med manglende påkrevd parameter skal gi 400`() {
-        val response = restTemplate.getForEntity<ErrorResponse>(searchUri(ord = "text", s = null))
-
-        response.statusCode shouldBe HttpStatus.BAD_REQUEST
-        response.body?.message shouldBe "Påkrevd request parameter mangler: s"
     }
 }

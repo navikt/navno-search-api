@@ -7,7 +7,6 @@ import no.nav.navnosearchapi.service.dto.SearchUrlResponse
 import no.nav.navnosearchapi.utils.additionalTestData
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
 
 class SearchUrlIntegrationTest : AbstractIntegrationTest() {
@@ -20,7 +19,7 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk med eksakt match skal returnere respons`() {
-        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(EXACT_URL))
+        val response = get<SearchUrlResponse>(searchUrlUri(EXACT_URL))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -31,7 +30,7 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk med fuzzy match skal returnere respons`() {
-        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(FUZZY_URL))
+        val response = get<SearchUrlResponse>(searchUrlUri(FUZZY_URL))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
@@ -42,7 +41,7 @@ class SearchUrlIntegrationTest : AbstractIntegrationTest() {
 
     @Test
     fun `søk uten match skal returnere tom respons`() {
-        val response = restTemplate.getForEntity<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL))
+        val response = get<SearchUrlResponse>(searchUrlUri(NON_MATCHING_URL))
 
         response.statusCode shouldBe HttpStatus.OK
         assertSoftly(response.body!!) {
