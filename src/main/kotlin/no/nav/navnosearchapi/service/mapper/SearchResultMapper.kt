@@ -70,12 +70,12 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
         metatags: List<String>,
         fylke: String?
     ): Pair<ZonedDateTime?, ZonedDateTime?> {
-        fun showBothTimestamps() = ValidMetatags.NYHET.descriptor in metatags
-        fun showNoTimestamps() = fylke.isNullOrBlank() && metatags.none { it in metatagsWithModifiedTime }
+        val showBothTimestamps = ValidMetatags.NYHET.descriptor in metatags
+        val showNoTimestamps = fylke.isNullOrBlank() && metatags.none { it in metatagsWithModifiedTime }
 
         return when {
-            showBothTimestamps() -> Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
-            showNoTimestamps() -> Pair(null, null)
+            showBothTimestamps -> Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
+            showNoTimestamps -> Pair(null, null)
             else -> Pair(null, lastUpdated)
         }
     }

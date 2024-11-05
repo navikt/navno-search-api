@@ -26,9 +26,9 @@ class DecoratorSearchServiceTest {
         searchService.search(Params(ord = "søketerm"))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/standard-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/standard-highlight-builder.json")
         }
     }
 
@@ -39,9 +39,9 @@ class DecoratorSearchServiceTest {
         searchService.search(Params(ord = "\"dette er en frase\""))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/decorator-queries/phrase-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/phrase-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/phrase-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/phrase-highlight-builder.json")
         }
     }
 
@@ -52,9 +52,9 @@ class DecoratorSearchServiceTest {
         searchService.search(Params(ord = "her er et skjemanummer: NAV 09-35.01"))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/decorator-queries/skjemanummer-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/decorator-queries/standard-filter.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/decorator-queries/skjemanummer-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/skjemanummer-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/skjemanummer-highlight-builder.json")
         }
     }
 }

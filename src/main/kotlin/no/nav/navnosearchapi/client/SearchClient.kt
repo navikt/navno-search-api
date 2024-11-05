@@ -1,6 +1,7 @@
 package no.nav.navnosearchapi.client
 
 import no.nav.navnosearchadminapi.common.constants.METATAGS
+import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.client.config.metatagToWeight
@@ -10,6 +11,10 @@ import no.nav.navnosearchapi.client.queries.highlightBuilder
 import no.nav.navnosearchapi.client.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.client.queries.searchAllTextQuery
 import no.nav.navnosearchapi.client.queries.searchUrlQuery
+import no.nav.navnosearchapi.rest.Params
+import no.nav.navnosearchapi.service.utils.activeFasettFilterQuery
+import no.nav.navnosearchapi.service.utils.activePreferredLanguageFilterQuery
+import no.nav.navnosearchapi.service.utils.isInQuotes
 import org.opensearch.common.lucene.search.function.FunctionScoreQuery
 import org.opensearch.data.client.orhlc.NativeSearchQuery
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
@@ -33,33 +38,29 @@ class SearchClient(
     val operations: ElasticsearchOperations,
 ) {
     fun search(
-        term: String,
-        isMatchPhraseQuery: Boolean,
-        filters: BoolQueryBuilder,
-        preAggregationFilters: BoolQueryBuilder? = null,
+        params: Params,
         aggregations: List<AbstractAggregationBuilder<*>>? = null,
-        sort: Sort? = null,
         pageRequest: PageRequest,
     ): SearchPage<Content> {
-        return baseQuery(term, isMatchPhraseQuery).let { baseQuery ->
-            buildNativeSearchQuery {
-                withQuery(
-                    baseQuery.applyFilters(preAggregationFilters)
-                        .applyWeighting(TYPE, typeToWeight)
-                        .applyWeighting(METATAGS, metatagToWeight)
-                )
-                withFilter(filters)
-                withPageable(pageRequest)
-                withHighlightBuilder(highlightBuilder(baseQuery, isMatchPhraseQuery))
-                withTrackTotalHits(true)
-                apply {
-                    aggregations?.let { withAggregations(it) }
-                    sort?.let { withSort(it) }
-                }
+        val baseQuery = baseQuery(params.ord)
+        return buildNativeSearchQuery {
+            withQuery(
+                baseQuery.applyFilters(preAggregationFilters(params.preferredLanguage))
+                    .applyWeighting(TYPE, typeToWeight)
+                    .applyWeighting(METATAGS, metatagToWeight)
+            )
+            withFilter(postAggregationFilters(params.f, params.uf))
+            withPageable(pageRequest)
+            withHighlightBuilder(highlightBuilder(baseQuery, params.ord.isInQuotes()))
+            withTrackTotalHits(true)
+            apply {
+                aggregations?.let { withAggregations(it) }
+                sort?.let { withSort(it) }
+                if (params.s == 1) withSort(Sort.by(Sort.Direction.DESC, SORT_BY_DATE))
             }
-                .let { operations.search(it, Content::class.java) }
-                .let { SearchHitSupport.searchPageFor(it, pageRequest) }
         }
+            .let { operations.search(it, Content::class.java) }
+            .let { SearchHitSupport.searchPageFor(it, pageRequest) }
     }
 
     fun searchUrl(term: String): SearchHits<Content> {
@@ -76,16 +77,27 @@ class SearchClient(
         return NativeSearchQueryBuilder().builder().build()
     }
 
-    private fun baseQuery(term: String, isMatchPhraseQuery: Boolean): QueryBuilder {
+    private fun baseQuery(term: String): QueryBuilder {
         return resolveTerm(term).let { (resolvedTerm, skjemanummer) ->
             when {
                 term.isBlank() -> MatchAllQueryBuilder()
                 resolvedTerm.isBlank() && skjemanummer != null -> searchAllTextForPhraseQuery(skjemanummer)
-                isMatchPhraseQuery -> searchAllTextForPhraseQuery(term)
+                term.isInQuotes() -> searchAllTextForPhraseQuery(term)
                 else -> searchAllTextQuery(resolvedTerm, skjemanummer)
             }
         }
     }
+
+    private fun preAggregationFilters(preferredLanguage: String?) = BoolQueryBuilder().apply {
+        if (preferredLanguage != null) {
+            this.must(activePreferredLanguageFilterQuery(preferredLanguage))
+        }
+    }
+
+    private fun postAggregationFilters(
+        f: String,
+        uf: List<String>
+    ) = BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
 
     private fun resolveTerm(term: String): Pair<String, String?> {
         return term.replace(whitespace, "")
@@ -100,6 +112,7 @@ class SearchClient(
     }
 
     private fun QueryBuilder.applyFilters(filterQuery: BoolQueryBuilder?): QueryBuilder {
+        // todo: this.filter(filterQuery) gjør samme nytten?
         return filterQuery?.let { BoolQueryBuilder().must(this).filter(filterQuery) } ?: this
     }
 

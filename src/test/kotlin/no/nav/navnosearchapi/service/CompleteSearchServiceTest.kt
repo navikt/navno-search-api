@@ -28,10 +28,10 @@ class CompleteSearchServiceTest {
         searchService.search(Params(ord = "søketerm"))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/complete-queries/standard-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/complete-queries/standard-filter.json")
-            aggregations.toString() shouldEqualJson readJsonFile("/complete-queries/standard-aggregations.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/complete-queries/standard-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/standard-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            aggregations.toString() shouldEqualJson readJsonFile("/search-queries/standard-aggregations.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/standard-highlight-builder.json")
         }
     }
 
@@ -42,10 +42,10 @@ class CompleteSearchServiceTest {
         searchService.search(Params(ord = "\"dette er en frase\""))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/complete-queries/phrase-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/complete-queries/standard-filter.json")
-            aggregations.toString() shouldEqualJson readJsonFile("/complete-queries/standard-aggregations.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/complete-queries/phrase-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/phrase-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            aggregations.toString() shouldEqualJson readJsonFile("/search-queries/standard-aggregations.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/phrase-highlight-builder.json")
         }
     }
 
@@ -56,10 +56,10 @@ class CompleteSearchServiceTest {
         searchService.search(Params(ord = "her er et skjemanummer: NAV 09-35.01"))
 
         with(querySlot.captured) {
-            query.toString() shouldEqualJson readJsonFile("/complete-queries/skjemanummer-query.json")
-            filter.toString() shouldEqualJson readJsonFile("/complete-queries/standard-filter.json")
-            aggregations.toString() shouldEqualJson readJsonFile("/complete-queries/standard-aggregations.json")
-            highlightBuilder.toString() shouldEqualJson readJsonFile("/complete-queries/skjemanummer-highlight-builder.json")
+            query.toString() shouldEqualJson readJsonFile("/search-queries/skjemanummer-query.json")
+            filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
+            aggregations.toString() shouldEqualJson readJsonFile("/search-queries/standard-aggregations.json")
+            highlightBuilder.toString() shouldEqualJson readJsonFile("/search-queries/skjemanummer-highlight-builder.json")
         }
     }
 }

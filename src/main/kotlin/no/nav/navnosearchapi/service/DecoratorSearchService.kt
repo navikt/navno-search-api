@@ -4,10 +4,7 @@ import no.nav.navnosearchapi.client.SearchClient
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.service.mapper.DecoratorSearchResultMapper
-import no.nav.navnosearchapi.service.utils.activeFasettFilterQuery
-import no.nav.navnosearchapi.service.utils.activePreferredLanguageFilterQuery
 import no.nav.navnosearchapi.service.utils.isInQuotes
-import org.opensearch.index.query.BoolQueryBuilder
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -17,23 +14,16 @@ class DecoratorSearchService(
     val searchClient: SearchClient,
 ) {
     fun search(params: Params): DecoratorSearchResult {
-        val isMatchPhraseQuery = isInQuotes(params.ord)
         val searchPage = searchClient.search(
-            term = params.ord,
-            isMatchPhraseQuery = isMatchPhraseQuery,
-            filters = decoratorSearchFilters(params.f, params.preferredLanguage),
+            params = params,
             pageRequest = PageRequest.of(FIRST_PAGE, DECORATOR_SEARCH_PAGE_SIZE)
         )
-        return decoratorSearchResultMapper.toSearchResult(params, searchPage, isMatchPhraseQuery)
+        return decoratorSearchResultMapper.toSearchResult(
+            params = params,
+            result = searchPage,
+            isMatchPhraseQuery = params.ord.isInQuotes()
+        )
     }
-
-    fun decoratorSearchFilters(facet: String, preferredLanguage: String?) = BoolQueryBuilder().apply {
-        this.must(activeFasettFilterQuery(facet, emptyList()))
-        if (preferredLanguage != null) {
-            this.must(activePreferredLanguageFilterQuery(preferredLanguage))
-        }
-    }
-
 
     companion object {
         private const val DECORATOR_SEARCH_PAGE_SIZE = 5

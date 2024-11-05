@@ -19,6 +19,6 @@ class UrlSearchServiceTest {
 
         searchService.search("https://dummy.url")
 
-        querySlot.captured.query.toString() shouldEqualJson readJsonFile("/url-queries/standard-query.json")
+        querySlot.captured.query.toString() shouldEqualJson readJsonFile("/search-url-queries/standard-query.json")
     }
 }
