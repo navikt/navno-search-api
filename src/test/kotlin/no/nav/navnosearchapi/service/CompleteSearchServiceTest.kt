@@ -2,11 +2,13 @@ package no.nav.navnosearchapi.service
 
 import io.kotest.assertions.json.shouldEqualJson
 import io.mockk.mockk
-import no.nav.navnosearchapi.client.SearchClient
-import no.nav.navnosearchapi.rest.Params
-import no.nav.navnosearchapi.service.mapper.AggregationsMapper
-import no.nav.navnosearchapi.service.mapper.HighlightMapper
-import no.nav.navnosearchapi.service.mapper.SearchResultMapper
+import no.nav.navnosearchapi.common.client.SearchClient
+import no.nav.navnosearchapi.search.controller.Params
+import no.nav.navnosearchapi.search.factory.SearchQueryFactory
+import no.nav.navnosearchapi.search.mapper.AggregationsMapper
+import no.nav.navnosearchapi.search.mapper.HighlightMapper
+import no.nav.navnosearchapi.search.mapper.SearchResultMapper
+import no.nav.navnosearchapi.search.service.CompleteSearchService
 import no.nav.navnosearchapi.utils.captureSearchQuery
 import no.nav.navnosearchapi.utils.readJsonFile
 import org.junit.jupiter.api.Test
@@ -18,6 +20,7 @@ class CompleteSearchServiceTest {
     val searchService = CompleteSearchService(
         pageSize = 20,
         searchResultMapper = SearchResultMapper(AggregationsMapper(), HighlightMapper()),
+        searchQueryFactory = SearchQueryFactory(),
         searchClient = SearchClient(mockedOperations)
     )
 

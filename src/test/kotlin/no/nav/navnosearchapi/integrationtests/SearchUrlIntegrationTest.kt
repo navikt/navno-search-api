@@ -3,7 +3,7 @@ package no.nav.navnosearchapi.integrationtests
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import no.nav.navnosearchapi.service.dto.SearchUrlResponse
+import no.nav.navnosearchapi.searchurl.dto.SearchUrlResponse
 import no.nav.navnosearchapi.utils.additionalTestData
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

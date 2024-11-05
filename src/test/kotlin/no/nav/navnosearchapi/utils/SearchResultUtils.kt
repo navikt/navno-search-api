@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.utils
 
-import no.nav.navnosearchapi.service.dto.FacetBucket
-import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.search.dto.SearchResult
 
 fun SearchResult.aggregationCount(facet: String, underFacet: String? = null): Long? {
     return aggregations?.fasetter?.buckets?.find { it.key == facet }.let { facetBucket ->
@@ -13,5 +12,5 @@ fun SearchResult.aggregationCount(facet: String, underFacet: String? = null): Lo
 }
 
 fun SearchResult.allUnderaggregationCounts(facet: String): List<Long> {
-    return aggregations?.fasetter?.buckets?.find { it.key == facet }?.underaggregeringer?.buckets?.map(FacetBucket::docCount)!!
+    return aggregations?.fasetter?.buckets?.find { it.key == facet }?.underaggregeringer?.buckets?.map(no.nav.navnosearchapi.search.dto.FacetBucket::docCount)!!
 }

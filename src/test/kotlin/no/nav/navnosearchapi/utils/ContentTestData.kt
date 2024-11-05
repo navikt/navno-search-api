@@ -6,8 +6,8 @@ import no.nav.navnosearchadminapi.common.enums.ValidFylker
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.Content
-import no.nav.navnosearchapi.service.filters.FacetKeys
-import no.nav.navnosearchapi.service.filters.UnderFacetKeys
+import no.nav.navnosearchapi.search.filters.FacetKeys
+import no.nav.navnosearchapi.search.filters.UnderFacetKeys
 import java.time.ZonedDateTime
 import java.util.*
 

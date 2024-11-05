@@ -3,8 +3,8 @@ package no.nav.navnosearchapi.integrationtests
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import no.nav.navnosearchapi.service.dto.DecoratorSearchResult
-import no.nav.navnosearchapi.service.filters.FacetKeys
+import no.nav.navnosearchapi.search.dto.DecoratorSearchResult
+import no.nav.navnosearchapi.search.filters.FacetKeys
 import no.nav.navnosearchapi.utils.additionalTestData
 import no.nav.navnosearchapi.utils.privatpersonDummyData
 import no.nav.navnosearchapi.utils.samarbeidspartnerDummyData
