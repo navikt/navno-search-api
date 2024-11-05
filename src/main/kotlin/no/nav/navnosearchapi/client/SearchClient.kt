@@ -43,7 +43,7 @@ class SearchClient(
         pageRequest: PageRequest,
     ): SearchPage<Content> {
         val baseQuery = baseQuery(params.ord)
-        return buildNativeSearchQuery {
+        val searchQuery = NativeSearchQueryBuilder().apply {
             withQuery(
                 baseQuery.applyFilters(preAggregationFilters(params.preferredLanguage))
                     .applyWeighting(TYPE, typeToWeight)
@@ -58,24 +58,24 @@ class SearchClient(
                 sort?.let { withSort(it) }
                 if (params.s == 1) withSort(Sort.by(Sort.Direction.DESC, SORT_BY_DATE))
             }
-        }
-            .let { operations.search(it, Content::class.java) }
-            .let { SearchHitSupport.searchPageFor(it, pageRequest) }
+        }.build()
+
+        val result = search(searchQuery)
+        return SearchHitSupport.searchPageFor(result, pageRequest)
     }
 
     fun searchUrl(term: String): SearchHits<Content> {
-        return buildNativeSearchQuery {
+        val searchQuery = NativeSearchQueryBuilder().apply {
             withQuery(
                 searchUrlQuery(term)
                     .applyWeighting(TYPE, typeToWeight)
                     .applyWeighting(METATAGS, metatagToWeight)
             )
-        }.let { operations.search(it, Content::class.java) }
+        }.build()
+        return search(searchQuery)
     }
 
-    private fun buildNativeSearchQuery(builder: NativeSearchQueryBuilder.() -> NativeSearchQueryBuilder): NativeSearchQuery {
-        return NativeSearchQueryBuilder().builder().build()
-    }
+    private fun search(query: NativeSearchQuery) = operations.search(query, Content::class.java)
 
     private fun baseQuery(term: String): QueryBuilder {
         return resolveTerm(term).let { (resolvedTerm, skjemanummer) ->

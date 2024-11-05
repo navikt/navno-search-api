@@ -6,7 +6,6 @@ import no.nav.navnosearchapi.service.dto.SearchResult
 import no.nav.navnosearchapi.service.filters.Filter
 import no.nav.navnosearchapi.service.filters.facets.fasettFilters
 import no.nav.navnosearchapi.service.mapper.SearchResultMapper
-import no.nav.navnosearchapi.service.utils.isInQuotes
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.springframework.beans.factory.annotation.Value
@@ -29,8 +28,7 @@ class CompleteSearchService(
         )
         return searchResultMapper.toSearchResult(
             params = params,
-            searchPage = searchPage,
-            isMatchPhraseQuery = params.ord.isInQuotes()
+            searchPage = searchPage
         )
     }
 

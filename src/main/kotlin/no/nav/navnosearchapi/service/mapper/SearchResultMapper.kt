@@ -6,6 +6,7 @@ import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.rest.Params
 import no.nav.navnosearchapi.service.dto.SearchHit
 import no.nav.navnosearchapi.service.dto.SearchResult
+import no.nav.navnosearchapi.service.utils.isInQuotes
 import no.nav.navnosearchapi.service.utils.languageSubfieldValue
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
@@ -17,7 +18,7 @@ import org.springframework.data.elasticsearch.core.SearchHit as OpensearchSearch
 
 @Component
 class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlightMapper: HighlightMapper) {
-    fun toSearchResult(params: Params, searchPage: SearchPage<Content>, isMatchPhraseQuery: Boolean): SearchResult {
+    fun toSearchResult(params: Params, searchPage: SearchPage<Content>): SearchResult {
         return SearchResult(
             page = params.page,
             s = params.s,
@@ -29,7 +30,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
             aggregations = searchPage.searchHits.aggregations?.asMap()?.let { aggregations ->
                 aggregationsMapper.toAggregations(aggregations, params)
             },
-            hits = searchPage.searchHits.searchHits.map { toHit(it, isMatchPhraseQuery) },
+            hits = searchPage.searchHits.searchHits.map { toHit(it, params.ord.isInQuotes()) },
         )
     }
 
