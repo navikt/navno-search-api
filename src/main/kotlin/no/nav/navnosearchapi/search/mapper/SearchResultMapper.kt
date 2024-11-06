@@ -7,7 +7,6 @@ import no.nav.navnosearchapi.search.controller.Params
 import no.nav.navnosearchapi.search.dto.SearchHit
 import no.nav.navnosearchapi.search.dto.SearchResult
 import no.nav.navnosearchapi.search.utils.isInQuotes
-import no.nav.navnosearchapi.search.utils.languageSubfieldValue
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.springframework.data.elasticsearch.core.AggregationsContainer
@@ -42,7 +41,7 @@ class SearchResultMapper(val aggregationsMapper: AggregationsMapper, val highlig
         with(searchHit.content) {
             resolveTimestamps(createdAt, lastUpdated, metatags, fylke).let { (publishedTime, modifiedTime) ->
                 return SearchHit(
-                    displayName = title.languageSubfieldValue(language),
+                    displayName = title.value,
                     href = href,
                     highlight = highlightMapper.toHighlight(searchHit, isMatchPhraseQuery),
                     modifiedTime = modifiedTime,

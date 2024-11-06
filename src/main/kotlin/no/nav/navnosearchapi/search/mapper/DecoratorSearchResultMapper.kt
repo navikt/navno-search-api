@@ -5,7 +5,6 @@ import no.nav.navnosearchapi.search.controller.Params
 import no.nav.navnosearchapi.search.dto.DecoratorSearchHit
 import no.nav.navnosearchapi.search.dto.DecoratorSearchResult
 import no.nav.navnosearchapi.search.utils.isInQuotes
-import no.nav.navnosearchapi.search.utils.languageSubfieldValue
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.data.elasticsearch.core.SearchPage
 import org.springframework.stereotype.Component
@@ -28,7 +27,7 @@ class DecoratorSearchResultMapper(
 
     private fun toHit(searchHit: SearchHit<Content>, isMatchPhraseQuery: Boolean): DecoratorSearchHit {
         return DecoratorSearchHit(
-            displayName = searchHit.content.title.languageSubfieldValue(searchHit.content.language),
+            displayName = searchHit.content.title.value,
             href = searchHit.content.href,
             highlight = highlightMapper.toHighlight(searchHit, isMatchPhraseQuery),
         )

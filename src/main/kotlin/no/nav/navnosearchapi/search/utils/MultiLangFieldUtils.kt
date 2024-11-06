@@ -7,7 +7,6 @@ import no.nav.navnosearchadminapi.common.constants.NORWEGIAN
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.OTHER
-import no.nav.navnosearchadminapi.common.model.MultiLangField
 import no.nav.navnosearchapi.search.enums.FieldType
 
 private const val NORWEGIAN_SUFFIX = ".$NORWEGIAN"
@@ -17,28 +16,25 @@ private const val EXACT_INNER_FIELD_SUFFIX = ".$EXACT_INNER_FIELD"
 private const val NGRAMS_INNER_FIELD_SUFFIX = ".$NGRAMS_INNER_FIELD"
 
 fun languageSubfieldKey(
-    parentKey: String,
+    baseField: String,
     language: String,
     fieldType: FieldType,
 ): String {
     return buildString {
-        append(parentKey)
+        append(baseField)
         append(
             when (language) {
-                NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> NORWEGIAN_SUFFIX
+                NORWEGIAN, NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> NORWEGIAN_SUFFIX
                 ENGLISH -> ENGLISH_SUFFIX
                 else -> OTHER_SUFFIX
             }
         )
-        if (fieldType == FieldType.EXACT) append(EXACT_INNER_FIELD_SUFFIX)
-        else if (fieldType == FieldType.NGRAM) append(NGRAMS_INNER_FIELD_SUFFIX)
+        append(
+            when (fieldType) {
+                FieldType.EXACT -> EXACT_INNER_FIELD_SUFFIX
+                FieldType.NGRAM -> NGRAMS_INNER_FIELD_SUFFIX
+                else -> ""
+            }
+        )
     }
-}
-
-fun MultiLangField.languageSubfieldValue(language: String): String {
-    return when (language) {
-        NORWEGIAN_BOKMAAL, NORWEGIAN_NYNORSK -> no
-        ENGLISH -> en
-        else -> other
-    } ?: ""
 }

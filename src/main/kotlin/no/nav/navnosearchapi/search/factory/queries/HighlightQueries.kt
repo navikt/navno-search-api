@@ -1,13 +1,12 @@
 package no.nav.navnosearchapi.search.factory.queries
 
-import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.INGRESS
-import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
 import no.nav.navnosearchadminapi.common.constants.languageSubfields
 import no.nav.navnosearchapi.search.enums.FieldType
+import no.nav.navnosearchapi.search.utils.languageSubfieldKey
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.DEFAULT_FRAGMENT_CHAR_SIZE
@@ -46,21 +45,14 @@ private fun HighlightBuilder.highlightFields(
 
 private fun HighlightBuilder.field(
     baseField: String,
-    languageSubfield: String,
+    language: String,
     fieldType: FieldType,
 ) {
-    buildString {
-        append("$baseField.$languageSubfield")
-        when (fieldType) {
-            FieldType.EXACT -> append(EXACT_INNER_FIELD)
-            FieldType.NGRAM -> append(NGRAMS_INNER_FIELD)
-            else -> {} //noop
-        }
-    }.let { fieldName ->
-        when (baseField) {
-            TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
-            TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
-            else -> {} //noop
-        }
+    val fieldName = languageSubfieldKey(baseField, language, fieldType)
+
+    when (baseField) {
+        TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
+        TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
+        else -> {} //noop
     }
 }

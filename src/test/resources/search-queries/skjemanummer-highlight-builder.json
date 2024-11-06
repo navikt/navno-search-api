@@ -174,7 +174,7 @@
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "ingress.nongrams": {
+    "ingress.no.ngrams": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
@@ -190,7 +190,7 @@
       "fragment_size": 200,
       "number_of_fragments": 1
     },
-    "text.nongrams": {
+    "text.no.ngrams": {
       "fragment_size": 200,
       "number_of_fragments": 1
     }

@@ -31,39 +31,39 @@
     }
   },
   "fields": {
-    "title.noexact": {
+    "title.no.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "title.enexact": {
+    "title.en.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "title.otherexact": {
+    "title.other.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "ingress.noexact": {
+    "ingress.no.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "ingress.enexact": {
+    "ingress.en.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "ingress.otherexact": {
+    "ingress.other.exact": {
       "fragment_size": 100,
       "number_of_fragments": 0
     },
-    "text.noexact": {
+    "text.no.exact": {
       "fragment_size": 200,
       "number_of_fragments": 1
     },
-    "text.enexact": {
+    "text.en.exact": {
       "fragment_size": 200,
       "number_of_fragments": 1
     },
-    "text.otherexact": {
+    "text.other.exact": {
       "fragment_size": 200,
       "number_of_fragments": 1
     }

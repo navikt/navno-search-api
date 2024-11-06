@@ -7,7 +7,6 @@ import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.search.enums.FieldType
 import no.nav.navnosearchapi.search.utils.languageSubfieldKey
-import no.nav.navnosearchapi.search.utils.languageSubfieldValue
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.stereotype.Component
 
@@ -18,12 +17,10 @@ class HighlightMapper {
             TABELL
         } else {
             highlightValues(searchHit, isMatchPhraseQuery).let { (titleHighlight, ingressHighlight, textHighlight) ->
-                with(searchHit.content) {
-                    when {
-                        ingressHighlight != null -> ingressHighlight.truncateIngress()
-                        textHighlight != null && titleHighlight == null -> textHighlight.truncateText()
-                        else -> ingress.languageSubfieldValue(language).truncateIngress()
-                    }
+                when {
+                    ingressHighlight != null -> ingressHighlight.truncateIngress()
+                    textHighlight != null && titleHighlight == null -> textHighlight.truncateText()
+                    else -> searchHit.content.ingress.value.truncateIngress()
                 }
             }
         }
@@ -34,7 +31,6 @@ class HighlightMapper {
         isMatchPhraseQuery: Boolean
     ): Triple<String?, String?, String?> {
         val defaultFieldType = if (isMatchPhraseQuery) FieldType.EXACT else FieldType.STANDARD
-
         val language = searchHit.content.language
 
         return Triple(
@@ -58,12 +54,12 @@ class HighlightMapper {
     }
 
     private fun String.truncateText(): String {
-        return CUTOFF_PREFIX + take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+        return CUTOFF_PREFIX + this.take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
     }
 
     private fun String.truncateIngress(): String {
         return if (length > HIGHLIGHT_MAX_LENGTH) {
-            take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
+            this.take(HIGHLIGHT_MAX_LENGTH) + CUTOFF_POSTFIX
         } else this
     }
 

@@ -8,7 +8,6 @@ import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
 import org.opensearch.index.query.functionscore.ScoreFunctionBuilders
 
 fun QueryBuilder.applyFilters(filterQuery: BoolQueryBuilder?): QueryBuilder {
-    // todo: this.filter(filterQuery) gjør samme nytten?
     return filterQuery?.let { BoolQueryBuilder().must(this).filter(filterQuery) } ?: this
 }
 
