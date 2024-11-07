@@ -37,7 +37,7 @@ fun searchAllTextQuery(term: String, skjemanummer: String? = null): QueryBuilder
                         .fields(fieldsToWeight)
                         .fuzziness(Fuzziness.customAuto(FUZZY_LOW_DISTANCE, FUZZY_HIGH_DISTANCE))
                 )
-                // Ngram-søk i title og ingress (kun dersom søketerm er minst 4 tegn)
+                // Ngram-søk i title og ingress (kun dersom søketerm er minst 3 tegn)
                 .addIfTermHasMinLength(
                     term,
                     NGRAM_MIN_LENGTH,

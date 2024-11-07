@@ -13,7 +13,7 @@ import no.nav.navnosearchadminapi.common.enums.ValidTypes
 const val EXACT_PHRASE_MATCH_BOOST = 1.5f
 const val FUZZY_LOW_DISTANCE = 6
 const val FUZZY_HIGH_DISTANCE = 8
-const val NGRAM_MIN_LENGTH = 4
+const val NGRAM_MIN_LENGTH = 3
 
 val termsToOverride = mapOf("kontakt" to "kontakt oss")
 
