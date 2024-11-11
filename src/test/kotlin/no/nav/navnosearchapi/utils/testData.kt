@@ -9,7 +9,6 @@ import no.nav.navnosearchadminapi.common.enums.ValidTypes
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchadminapi.common.model.MultiLangFieldLong
 import no.nav.navnosearchadminapi.common.model.MultiLangFieldShort
-import org.springframework.data.elasticsearch.core.suggest.Completion
 import java.time.ZonedDateTime
 
 const val TEAM_NAME = "test-team"
@@ -95,7 +94,7 @@ val initialTestData = listOf(
         language = HINDI,
         metatags = listOf(INFORMASJON),
 
-    ),
+        ),
     dummyContent(
         externalId = "10",
         textPrefix = "Tenth",
@@ -124,13 +123,12 @@ fun dummyContent(
 
     return Content(
         id = "$teamName-$externalId",
-        autocomplete = Completion(listOf("$textPrefix title")),
         teamOwnedBy = teamName,
         href = "https://$textPrefix.com",
-        title = MultiLangFieldShort(value = title, language = language),
-        ingress = MultiLangFieldShort(value = ingress, language = language),
-        text = MultiLangFieldLong(value = text, language = language),
-        allText = MultiLangFieldLong(value = allText, language = language),
+        title = MultiLangFieldShort.from(value = title, language = language),
+        ingress = MultiLangFieldShort.from(value = ingress, language = language),
+        text = MultiLangFieldLong.from(value = text, language = language),
+        allText = MultiLangFieldLong.from(value = allText, language = language),
         type = type,
         createdAt = timestamp,
         lastUpdated = timestamp,
