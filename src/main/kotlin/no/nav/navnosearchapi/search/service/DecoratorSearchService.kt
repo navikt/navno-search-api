@@ -15,8 +15,10 @@ class DecoratorSearchService(
     val searchClient: SearchClient
 ) {
     fun search(params: Params): DecoratorSearchResult {
-        val query = SearchQueryFactory.createBuilder(params)
-        val result = searchClient.searchForPage(query, PageRequest.of(FIRST_PAGE, pageSize))
+        val result = searchClient.searchForPage(
+            query = SearchQueryFactory.createBuilder(params),
+            pageRequest = PageRequest.of(FIRST_PAGE, pageSize)
+        )
         return result.toDecoratorSearchResult(params)
     }
 
