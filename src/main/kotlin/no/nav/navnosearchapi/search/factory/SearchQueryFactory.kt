@@ -10,6 +10,8 @@ import no.nav.navnosearchapi.search.controller.Params
 import no.nav.navnosearchapi.search.factory.queries.highlightBuilder
 import no.nav.navnosearchapi.search.factory.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.search.factory.queries.searchAllTextQuery
+import no.nav.navnosearchapi.search.filters.Filter
+import no.nav.navnosearchapi.search.filters.facets.fasettFilters
 import no.nav.navnosearchapi.search.utils.activeFasettFilterQuery
 import no.nav.navnosearchapi.search.utils.activePreferredLanguageFilterQuery
 import no.nav.navnosearchapi.search.utils.isInQuotes
@@ -18,7 +20,8 @@ import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
 import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
-import org.opensearch.search.aggregations.AbstractAggregationBuilder
+import org.opensearch.search.aggregations.AggregationBuilders
+import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
@@ -26,7 +29,7 @@ import org.springframework.stereotype.Component
 class SearchQueryFactory {
     fun createBuilder(
         params: Params,
-        aggregations: List<AbstractAggregationBuilder<*>>? = null,
+        includeAggregations: Boolean = false,
     ): NativeSearchQueryBuilder {
         val baseQuery = baseQuery(params.ord)
         return NativeSearchQueryBuilder()
@@ -35,7 +38,7 @@ class SearchQueryFactory {
             .withHighlightBuilder(highlightBuilder(baseQuery, params.ord.isInQuotes()))
             .withTrackTotalHits(true)
             .apply {
-                aggregations?.let { withAggregations(it) }
+                if (includeAggregations) withAggregations(aggregations())
                 if (params.s == 1) withSort(Sort.by(Sort.Direction.DESC, SORT_BY_DATE))
             }
     }
@@ -49,6 +52,11 @@ class SearchQueryFactory {
                 else -> searchAllTextQuery(resolvedTerm, skjemanummer)
             }
         }
+    }
+
+    private fun aggregations(): List<FilterAggregationBuilder> {
+        val allFacetsAndUnderfacets = fasettFilters + fasettFilters.flatMap(Filter::underFacets)
+        return allFacetsAndUnderfacets.map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
     }
 
     private fun QueryBuilder.withFiltersAndWeights(params: Params): FunctionScoreQueryBuilder {
