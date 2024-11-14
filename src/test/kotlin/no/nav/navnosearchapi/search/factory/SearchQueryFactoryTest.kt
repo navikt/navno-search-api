@@ -7,11 +7,9 @@ import no.nav.navnosearchapi.utils.readJsonFile
 import org.junit.jupiter.api.Test
 
 class SearchQueryFactoryTest {
-    val searchQueryFactory = SearchQueryFactory()
-
     @Test
     fun `standard søk skal bruke forventet query`() {
-        val query = searchQueryFactory.createBuilder(Params(ord = "søketerm")).build()
+        val query = SearchQueryFactory.createBuilder(Params(ord = "søketerm")).build()
 
         query.query.toString() shouldEqualJson readJsonFile("/search-queries/standard-query.json")
         query.filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
@@ -21,7 +19,7 @@ class SearchQueryFactoryTest {
 
     @Test
     fun `frasesøk skal bruke forventet query`() {
-        val query = searchQueryFactory.createBuilder(Params(ord = "\"dette er en frase\"")).build()
+        val query = SearchQueryFactory.createBuilder(Params(ord = "\"dette er en frase\"")).build()
 
         query.query.toString() shouldEqualJson readJsonFile("/search-queries/phrase-query.json")
         query.filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
@@ -31,7 +29,7 @@ class SearchQueryFactoryTest {
 
     @Test
     fun `søk med skjemanummer skal bruke forventet query`() {
-        val query = searchQueryFactory.createBuilder(Params(ord = "her er et skjemanummer: NAV 09-35.01")).build()
+        val query = SearchQueryFactory.createBuilder(Params(ord = "her er et skjemanummer: NAV 09-35.01")).build()
 
         query.query.toString() shouldEqualJson readJsonFile("/search-queries/skjemanummer-query.json")
         query.filter.toString() shouldEqualJson readJsonFile("/search-queries/standard-filter.json")
@@ -41,7 +39,7 @@ class SearchQueryFactoryTest {
 
     @Test
     fun `standard søk uten aggregeringer skal bruke forventet query`() {
-        val query = searchQueryFactory.createBuilder(
+        val query = SearchQueryFactory.createBuilder(
             Params(ord = "søketerm"),
             includeAggregations = true
         ).build()

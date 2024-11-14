@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service
 @Service
 class CompleteSearchService(
     @Value("\${opensearch.page-size}") val pageSize: Int,
-    val searchQueryFactory: SearchQueryFactory,
     val searchClient: SearchClient,
 ) {
     fun search(params: Params): SearchResult {
-        val query = searchQueryFactory.createBuilder(params = params, includeAggregations = true)
+        val query = SearchQueryFactory.createBuilder(params = params, includeAggregations = true)
         val result = searchClient.searchForPage(query, PageRequest.of(params.page, pageSize))
         return toSearchResult(params, result)
     }

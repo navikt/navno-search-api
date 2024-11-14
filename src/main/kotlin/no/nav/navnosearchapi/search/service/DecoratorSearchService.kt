@@ -9,12 +9,9 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
-class DecoratorSearchService(
-    val searchQueryFactory: SearchQueryFactory,
-    val searchClient: SearchClient,
-) {
+class DecoratorSearchService(val searchClient: SearchClient) {
     fun search(params: Params): DecoratorSearchResult {
-        val query = searchQueryFactory.createBuilder(params)
+        val query = SearchQueryFactory.createBuilder(params)
         val result = searchClient.searchForPage(query, PageRequest.of(FIRST_PAGE, DECORATOR_SEARCH_PAGE_SIZE))
         return result.toDecoratorSearchResult(params)
     }

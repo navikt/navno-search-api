@@ -8,10 +8,8 @@ import no.nav.navnosearchapi.common.utils.applyWeighting
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.MatchQueryBuilder
-import org.springframework.stereotype.Component
 
-@Component
-class UrlSearchQueryFactory {
+object UrlSearchQueryFactory {
     fun createBuilder(term: String): NativeSearchQueryBuilder {
         return NativeSearchQueryBuilder().apply {
             withQuery(
