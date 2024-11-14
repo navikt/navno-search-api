@@ -12,14 +12,13 @@ import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 
 fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
-    return fasettFilters.find { it.key == f }!!.let { facet ->
-        when {
-            uf.isEmpty() -> facet.filterQuery
-            else -> facet.underFacets
-                .filter { it.key in uf }
-                .map(Filter::filterQuery)
-                .joinToSingleQuery(BoolQueryBuilder::should)
-        }
+    val facet: Filter = requireNotNull(fasettFilters.find { it.key == f }) { "Fant ikke fasett med key $f" }
+    return when {
+        uf.isEmpty() -> facet.filterQuery
+        else -> facet.underFacets
+            .filter { it.key in uf }
+            .map(Filter::filterQuery)
+            .joinToSingleQuery(BoolQueryBuilder::should)
     }
 }
 
