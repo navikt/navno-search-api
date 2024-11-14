@@ -17,6 +17,6 @@ class CompleteSearchService(
     fun search(params: Params): SearchResult {
         val query = SearchQueryFactory.createBuilder(params = params, includeAggregations = true)
         val result = searchClient.searchForPage(query, PageRequest.of(params.page, pageSize))
-        return toSearchResult(params, result)
+        return result.toSearchResult(params)
     }
 }

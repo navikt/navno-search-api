@@ -34,24 +34,22 @@ private val metatagsWithModifiedTime = setOf(
     ValidMetatags.STATISTIKK.descriptor,
 )
 
-fun toSearchResult(params: Params, searchPage: SearchPage<Content>): SearchResult {
-    return SearchResult(
-        page = params.page,
-        s = params.s,
-        preferredLanguage = params.preferredLanguage,
-        isMore = !searchPage.isLast,
-        word = params.ord,
-        total = searchPage.totalElements,
-        fasettKey = params.f,
-        aggregations = searchPage.searchHits.aggregations?.asMap()?.toAggregations(params),
-        hits = searchPage.searchHits.searchHits.map { searchHit ->
-            searchHit.content.toHit(
-                searchHit.toHighlight(params.ord.isInQuotes()),
-                searchHit.score
-            )
-        },
-    )
-}
+fun SearchPage<Content>.toSearchResult(params: Params) = SearchResult(
+    page = params.page,
+    s = params.s,
+    preferredLanguage = params.preferredLanguage,
+    isMore = !isLast,
+    word = params.ord,
+    total = totalElements,
+    fasettKey = params.f,
+    aggregations = searchHits.aggregations?.asMap()?.toAggregations(params),
+    hits = searchHits.searchHits.map { searchHit ->
+        searchHit.content.toHit(
+            searchHit.toHighlight(params.ord.isInQuotes()),
+            searchHit.score
+        )
+    },
+)
 
 private fun <T> AggregationsContainer<T>.asMap(): Map<String, Long> {
     return (this as OpenSearchAggregations).aggregations().associate { it.name to (it as Filter).docCount }
