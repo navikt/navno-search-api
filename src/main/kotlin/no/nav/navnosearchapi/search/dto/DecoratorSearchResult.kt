@@ -6,3 +6,9 @@ data class DecoratorSearchResult(
     val total: Long,
     val hits: List<DecoratorSearchHit>
 )
+
+data class DecoratorSearchHit(
+    val displayName: String,
+    val href: String,
+    val highlight: String,
+)
