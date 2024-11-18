@@ -53,6 +53,6 @@ private fun HighlightBuilder.field(
     when (baseField) {
         TITLE, INGRESS -> this.field(fieldName, DEFAULT_FRAGMENT_CHAR_SIZE, UNFRAGMENTED)
         TEXT -> this.field(fieldName, MAX_FRAGMENT_SIZE, SINGLE_FRAGMENT)
-        else -> {} //noop
+        else -> throw IllegalArgumentException("Ugyldig verdi for baseField: $baseField")
     }
 }
