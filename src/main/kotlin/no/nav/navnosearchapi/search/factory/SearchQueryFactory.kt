@@ -80,7 +80,7 @@ object SearchQueryFactory {
         return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
     }
 
-    fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
+    private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
         val facet: Filter = requireNotNull(fasettFilters.find { it.key == f }) { "Fant ikke fasett med key $f" }
         return when {
             uf.isEmpty() -> facet.filterQuery
@@ -91,7 +91,7 @@ object SearchQueryFactory {
         }
     }
 
-    fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
+    private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
         return BoolQueryBuilder().apply {
             // Ikke vis treff som har en versjon på foretrukket språk
             this.mustNot(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
