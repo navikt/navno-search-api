@@ -1,11 +1,6 @@
 package no.nav.navnosearchapi.search.factory
 
-import no.nav.navnosearchadminapi.common.constants.ENGLISH
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE
-import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.METATAGS
-import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
-import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.SORT_BY_DATE
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchapi.common.config.SearchConfig
@@ -18,12 +13,12 @@ import no.nav.navnosearchapi.search.factory.queries.searchAllTextQuery
 import no.nav.navnosearchapi.search.filters.Filter
 import no.nav.navnosearchapi.search.filters.facets.fasettFilters
 import no.nav.navnosearchapi.search.filters.joinToSingleQuery
+import no.nav.navnosearchapi.search.filters.preferredLanguageFilterQuery
 import no.nav.navnosearchapi.search.utils.isInQuotes
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.MatchAllQueryBuilder
 import org.opensearch.index.query.QueryBuilder
-import org.opensearch.index.query.TermQueryBuilder
 import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder
 import org.opensearch.search.aggregations.AggregationBuilders
 import org.opensearch.search.aggregations.bucket.filter.FilterAggregationBuilder
@@ -72,7 +67,7 @@ object SearchQueryFactory {
 
     private fun preAggregationFilters(preferredLanguage: String?) = BoolQueryBuilder().apply {
         if (preferredLanguage != null) {
-            this.must(activePreferredLanguageFilterQuery(preferredLanguage))
+            this.must(preferredLanguageFilterQuery(preferredLanguage))
         }
     }
 
@@ -88,39 +83,6 @@ object SearchQueryFactory {
                 .filter { it.key in uf }
                 .map(Filter::filterQuery)
                 .joinToSingleQuery(BoolQueryBuilder::should)
-        }
-    }
-
-    private fun activePreferredLanguageFilterQuery(preferredLanguage: String): BoolQueryBuilder {
-        return BoolQueryBuilder().apply {
-            // Ikke vis treff som har en versjon på foretrukket språk
-            this.mustNot(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
-
-            when (preferredLanguage) {
-                NORWEGIAN_BOKMAAL ->
-                    // Ikke vis engelsk versjon dersom det finnes en nynorsk-versjon
-                    this.mustNot(
-                        BoolQueryBuilder()
-                            .must(TermQueryBuilder(LANGUAGE, ENGLISH))
-                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_NYNORSK))
-                    )
-
-                NORWEGIAN_NYNORSK ->
-                    // Ikke vis engelsk versjon dersom det finnes en bokmål-versjon
-                    this.mustNot(
-                        BoolQueryBuilder()
-                            .must(TermQueryBuilder(LANGUAGE, ENGLISH))
-                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
-                    )
-
-                ENGLISH ->
-                    // Ikke vis nynorsk-versjon dersom det finnes en bokmål-versjon
-                    this.mustNot(
-                        BoolQueryBuilder()
-                            .must(TermQueryBuilder(LANGUAGE, NORWEGIAN_NYNORSK))
-                            .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
-                    )
-            }
         }
     }
 

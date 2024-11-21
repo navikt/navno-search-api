@@ -1,8 +1,13 @@
 package no.nav.navnosearchapi.search.filters
 
 import no.nav.navnosearchadminapi.common.constants.AUDIENCE
+import no.nav.navnosearchadminapi.common.constants.ENGLISH
 import no.nav.navnosearchadminapi.common.constants.FYLKE
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE
+import no.nav.navnosearchadminapi.common.constants.LANGUAGE_REFS
 import no.nav.navnosearchadminapi.common.constants.METATAGS
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
+import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_NYNORSK
 import no.nav.navnosearchadminapi.common.constants.TYPE
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidFylker
@@ -64,6 +69,38 @@ fun BoolQueryBuilder.mustHaveAudience(audience: ValidAudiences, isStrict: Boolea
         .apply {
             if (!isStrict) should(BoolQueryBuilder().mustNot(ExistsQueryBuilder(AUDIENCE)))
         })
+}
+
+
+fun preferredLanguageFilterQuery(preferredLanguage: String) = BoolQueryBuilder().apply {
+    // Ikke vis treff som har en versjon på foretrukket språk
+    this.mustNot(TermQueryBuilder(LANGUAGE_REFS, preferredLanguage))
+
+    when (preferredLanguage) {
+        NORWEGIAN_BOKMAAL ->
+            // Ikke vis engelsk versjon dersom det finnes en nynorsk-versjon
+            this.mustNot(
+                BoolQueryBuilder()
+                    .must(TermQueryBuilder(LANGUAGE, ENGLISH))
+                    .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_NYNORSK))
+            )
+
+        NORWEGIAN_NYNORSK ->
+            // Ikke vis engelsk versjon dersom det finnes en bokmål-versjon
+            this.mustNot(
+                BoolQueryBuilder()
+                    .must(TermQueryBuilder(LANGUAGE, ENGLISH))
+                    .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
+            )
+
+        ENGLISH ->
+            // Ikke vis nynorsk-versjon dersom det finnes en bokmål-versjon
+            this.mustNot(
+                BoolQueryBuilder()
+                    .must(TermQueryBuilder(LANGUAGE, NORWEGIAN_NYNORSK))
+                    .must(TermQueryBuilder(LANGUAGE_REFS, NORWEGIAN_BOKMAAL))
+            )
+    }
 }
 
 fun Collection<BoolQueryBuilder>.joinToSingleQuery(
