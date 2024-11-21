@@ -11,7 +11,7 @@ import no.nav.navnosearchapi.search.factory.queries.highlightBuilder
 import no.nav.navnosearchapi.search.factory.queries.searchAllTextForPhraseQuery
 import no.nav.navnosearchapi.search.factory.queries.searchAllTextQuery
 import no.nav.navnosearchapi.search.filters.Filter
-import no.nav.navnosearchapi.search.filters.facets.fasettFilters
+import no.nav.navnosearchapi.search.filters.facets.facetFilters
 import no.nav.navnosearchapi.search.filters.joinToSingleQuery
 import no.nav.navnosearchapi.search.filters.preferredLanguageFilterQuery
 import no.nav.navnosearchapi.search.utils.isInQuotes
@@ -55,7 +55,7 @@ object SearchQueryFactory {
     }
 
     private fun aggregations(): List<FilterAggregationBuilder> {
-        val allFacetsAndUnderfacets = fasettFilters + fasettFilters.flatMap(Filter::underFacets)
+        val allFacetsAndUnderfacets = facetFilters + facetFilters.flatMap(Filter::underFacets)
         return allFacetsAndUnderfacets.map { AggregationBuilders.filter(it.aggregationName, it.filterQuery) }
     }
 
@@ -72,11 +72,11 @@ object SearchQueryFactory {
     }
 
     private fun postAggregationFilters(f: String, uf: List<String>): BoolQueryBuilder? {
-        return BoolQueryBuilder().must(activeFasettFilterQuery(f, uf))
+        return BoolQueryBuilder().must(activeFacetFilterQuery(f, uf))
     }
 
-    private fun activeFasettFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
-        val facet: Filter = requireNotNull(fasettFilters.find { it.key == f }) { "Fant ikke fasett med key $f" }
+    private fun activeFacetFilterQuery(f: String, uf: List<String>): BoolQueryBuilder {
+        val facet: Filter = requireNotNull(facetFilters.find { it.key == f }) { "Fant ikke fasett med key $f" }
         return when {
             uf.isEmpty() -> facet.filterQuery
             else -> facet.underFacets

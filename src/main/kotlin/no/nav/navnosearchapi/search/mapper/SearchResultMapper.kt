@@ -9,7 +9,7 @@ import no.nav.navnosearchapi.search.dto.FacetBucket
 import no.nav.navnosearchapi.search.dto.SearchHit
 import no.nav.navnosearchapi.search.dto.SearchResult
 import no.nav.navnosearchapi.search.dto.UnderAggregations
-import no.nav.navnosearchapi.search.filters.facets.fasettFilters
+import no.nav.navnosearchapi.search.filters.facets.facetFilters
 import no.nav.navnosearchapi.search.utils.isInQuotes
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
@@ -97,7 +97,7 @@ private fun resolveTimestamps(
 
 private fun Map<String, Long>.toAggregations(params: Params) = Aggregations(
     fasetter = UnderAggregations(
-        buckets = fasettFilters.map { facet ->
+        buckets = facetFilters.map { facet ->
             FacetBucket(
                 key = facet.key,
                 name = facet.name,

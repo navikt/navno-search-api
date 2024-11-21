@@ -20,7 +20,7 @@ import no.nav.navnosearchapi.search.filters.underfacets.statistikkFilters
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.TermQueryBuilder
 
-val fasettFilters = listOf(
+val facetFilters = listOf(
     Filter(
         key = FacetKeys.PRIVATPERSON,
         name = FacetNames.PRIVATPERSON,
