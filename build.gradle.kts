@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "2.0.20"
+    val kotlinVersion = "2.1.0"
     val springBootVersion = "3.3.5"
     val springDepMgmtVersion = "1.1.6"
     val versionsVersion = "0.51.0"
