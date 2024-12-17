@@ -23,6 +23,8 @@ opensearch:
   password: <passord fra secret>
 ```
 
+Husk å starte applikasjonen med profile "local".
+
 ## Deploy til dev
 
 [Actions](https://github.com/navikt/navno-search-api/actions) -> Velg workflow -> Run workflow -> Velg branch -> Run workflow
