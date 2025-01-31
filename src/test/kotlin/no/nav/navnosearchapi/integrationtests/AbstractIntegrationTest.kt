@@ -44,7 +44,7 @@ abstract class AbstractIntegrationTest {
         s: Int? = 0,
         preferredLanguage: String = NORWEGIAN_BOKMAAL,
     ): String {
-        return UriComponentsBuilder.fromHttpUrl(host())
+        return UriComponentsBuilder.fromUriString(host())
             .path("/content/search")
             .queryParamIfPresent("ord", ord)
             .queryParamIfPresent("page", page)
@@ -55,13 +55,12 @@ abstract class AbstractIntegrationTest {
             .build().toUriString()
     }
 
-
     protected fun decoratorSearchUri(
         ord: String,
         f: String? = FacetKeys.PRIVATPERSON,
         preferredLanguage: String = NORWEGIAN_BOKMAAL,
     ): String {
-        return UriComponentsBuilder.fromHttpUrl(host())
+        return UriComponentsBuilder.fromUriString(host())
             .path("/content/decorator-search")
             .queryParamIfPresent("ord", ord)
             .queryParamIfPresent("f", f)
@@ -70,7 +69,7 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun searchUrlUri(term: String): String {
-        return UriComponentsBuilder.fromHttpUrl(host())
+        return UriComponentsBuilder.fromUriString(host())
             .path("/content/search-url")
             .queryParam("term", term)
             .build().toUriString()
