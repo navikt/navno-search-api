@@ -1,7 +1,6 @@
 package no.nav.navnosearchapi.search.filters.facets
 
 import no.nav.navnosearchadminapi.common.constants.FYLKE
-import no.nav.navnosearchadminapi.common.constants.METATAGS
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchapi.search.filters.FacetKeys
 import no.nav.navnosearchapi.search.filters.FacetNames
@@ -18,7 +17,6 @@ import no.nav.navnosearchapi.search.filters.underfacets.privatpersonFilters
 import no.nav.navnosearchapi.search.filters.underfacets.samarbeidspartnerFilters
 import no.nav.navnosearchapi.search.filters.underfacets.statistikkFilters
 import org.opensearch.index.query.BoolQueryBuilder
-import org.opensearch.index.query.TermQueryBuilder
 
 val facetFilters = listOf(
     Filter(
@@ -52,7 +50,7 @@ val facetFilters = listOf(
     Filter(
         key = FacetKeys.STATISTIKK,
         name = FacetNames.STATISTIKK,
-        filterQuery = BoolQueryBuilder().must(TermQueryBuilder(METATAGS, ValidMetatags.STATISTIKK.descriptor)),
+        filterQuery = BoolQueryBuilder().mustHaveMetatags(ValidMetatags.STATISTIKK),
         underFacets = statistikkFilters
     ),
     Filter(
