@@ -35,7 +35,7 @@ dependencies {
     val opensearchVersion = "1.6.0"
     val opensearchTestcontainersVersion = "2.1.2"
     val testcontainersVersion = "1.20.4"
-    val navnoSearchCommonVersion = "20241111113951-1ec3e68"
+    val navnoSearchCommonVersion = "20250203121408-e216259"
     val kotestVersion = "5.9.1"
     val mockkVersion = "1.13.16"
 
