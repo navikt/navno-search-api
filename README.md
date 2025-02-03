@@ -32,12 +32,42 @@ Husk å starte applikasjonen med profile "local".
 ## Prodsetting
 
 -   Lag en PR til main, og merge inn etter godkjenning
+-   Test at alt funker i dev ved å deploye til dev (Se punkt over)
 -   Lag en release på master med versjon-bump, beskrivende tittel og oppsummering av endringene dine
+-   Dersom det er ny versjon av [navno-search-admin-api](https://github.com/navikt/navno-search-admin-api/) må siste versjon av ```navnoSearchCommonVersion``` oppdateres
 -   Publiser release-en for å starte deploy til prod
 
 ## Logging
 
 [Kibana](https://logs.adeo.no/app/discover#/view/c7ebebe0-aa35-11ee-991c-09effcd7b5da)
+
+I Opensearch (uri ligger i application-local.yaml filen) kan man finne logger ved å f.eks. søke på
+
+```
+GET /_cat/indices
+
+DELETE /search-content-v7
+
+GET /search-content-v6
+
+GET /search-content-v6/_mapping
+
+POST /search-content-v6/_analyze
+{
+  "field": "title.no",
+  "text": "skule"
+}
+
+POST /search-content-v6/_search
+{
+  "query": {
+    "match": {
+      "title.no": "nav midt-buskerud"
+    }
+  }
+}
+```
+
 
 ## Henvendelser
 
