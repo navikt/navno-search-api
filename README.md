@@ -31,11 +31,8 @@ Husk å starte applikasjonen med profile "local".
 
 ## Prodsetting
 
--   Lag en PR til main, og merge inn etter godkjenning
--   Test at alt funker i dev ved å deploye til dev (Se punkt over)
--   Lag en release på master med versjon-bump, beskrivende tittel og oppsummering av endringene dine
--   Dersom det er ny versjon av [navno-search-admin-api](https://github.com/navikt/navno-search-admin-api/) må siste versjon av ```navnoSearchCommonVersion``` oppdateres
--   Publiser release-en for å starte deploy til prod
+- Lag en PR til main, og merge inn etter godkjenning (En automatisk release vil oppstå ved deploy til main)
+- Dersom det er ny versjon av [navno-search-admin-api](https://github.com/navikt/navno-search-admin-api/) må siste versjon av ```navnoSearchCommonVersion``` oppdateres
 
 ## Logging
 
