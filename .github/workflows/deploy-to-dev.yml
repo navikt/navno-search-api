@@ -4,7 +4,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to prod
+    name: Deploy to dev
     permissions:
       contents: read
       id-token: write
