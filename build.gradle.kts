@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "2.1.10"
-    val springBootVersion = "3.4.3"
+    val kotlinVersion = "2.1.20"
+    val springBootVersion = "3.4.4"
     val springDepMgmtVersion = "1.1.7"
     val versionsVersion = "0.52.0"
 
@@ -33,8 +33,8 @@ repositories {
 dependencies {
     val logstashVersion = "8.0"
     val opensearchVersion = "1.6.2"
-    val opensearchTestcontainersVersion = "2.1.2"
-    val testcontainersVersion = "1.20.5"
+    val opensearchTestcontainersVersion = "2.1.3"
+    val testcontainersVersion = "1.20.6"
     val navnoSearchCommonVersion = "20250203121408-e216259"
     val kotestVersion = "5.9.1"
     val mockkVersion = "1.13.17"
