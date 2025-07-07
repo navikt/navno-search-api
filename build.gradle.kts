@@ -33,7 +33,7 @@ repositories {
 dependencies {
     val logstashVersion = "8.1"
     val opensearchVersion = "1.7.0"
-    val opensearchTestcontainersVersion = "3.0.1"
+    val openSearchTestcontainersVersion = "3.0.1"
     val testcontainersVersion = "1.21.3"
     val navnoSearchCommonVersion = "20250402203805-bdf4d20"
     val kotestVersion = "5.9.1"
@@ -53,7 +53,7 @@ dependencies {
     }
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
-    testImplementation("org.opensearch:opensearch-testcontainers:$opensearchTestcontainersVersion")
+    testImplementation("org.opensearch:opensearch-testcontainers:$openSearchTestcontainersVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
