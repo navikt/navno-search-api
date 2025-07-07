@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CompleteSearchService(
-    @Value("\${opensearch.page-size}") val pageSize: Int,
+    @param:Value("\${opensearch.page-size}") val pageSize: Int,
     val searchClient: SearchClient,
 ) {
     fun search(params: Params): SearchResult {

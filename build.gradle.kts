@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "2.1.21"
+    val kotlinVersion = "2.2.0"
     val springBootVersion = "3.5.3"
     val springDepMgmtVersion = "1.1.7"
     val versionsVersion = "0.52.0"
@@ -32,7 +32,7 @@ repositories {
 
 dependencies {
     val logstashVersion = "8.1"
-    val opensearchVersion = "1.7.0"
+    val opensearchVersion = "1.8.1"
     val opensearchTestcontainersVersion = "2.1.3"
     val testcontainersVersion = "1.21.3"
     val navnoSearchCommonVersion = "20250402203805-bdf4d20"
