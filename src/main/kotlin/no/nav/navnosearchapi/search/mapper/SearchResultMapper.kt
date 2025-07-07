@@ -89,7 +89,7 @@ private fun resolveTimestamps(
     val showNoTimestamps = fylke.isNullOrBlank() && metatags.none { it in metatagsWithModifiedTime }
 
     return when {
-        showBothTimestamps -> Pair(createdAt, lastUpdated.takeIf { !createdAt.isEqual(lastUpdated) })
+        showBothTimestamps -> Pair(createdAt, lastUpdated.takeIf { createdAt != lastUpdated })
         showNoTimestamps -> Pair(null, null)
         else -> Pair(null, lastUpdated)
     }

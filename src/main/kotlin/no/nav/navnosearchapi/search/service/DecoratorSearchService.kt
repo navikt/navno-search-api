@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class DecoratorSearchService(
-    @param:Value("\${opensearch.decorator-page-size}") val pageSize: Int,
+    @Value("\${opensearch.decorator-page-size}") val pageSize: Int,
     val searchClient: SearchClient
 ) {
     fun search(params: Params): DecoratorSearchResult {
