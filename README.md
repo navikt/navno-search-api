@@ -1,7 +1,7 @@
 # navno-search-api
 Søkebackend for nav.no
 
-Secrets ligger i [Nais console](https://console.nav.cloud.nais.io/team/personbruker/secrets).
+Secrets ligger i [Nais console](https://console.nav.cloud.nais.io/team/navno/secrets).
 
 ## Henting av felles bibliotek
 
@@ -68,8 +68,8 @@ POST /search-content-v6/_search
 
 ## Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes mot https://github.com/orgs/navikt/teams/personbruker
+Spørsmål knyttet til koden eller prosjektet kan rettes mot https://github.com/orgs/navikt/teams/navno
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #team-personbruker.
+Interne henvendelser kan sendes via Slack i kanalen #team-navno.
