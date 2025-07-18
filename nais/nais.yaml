@@ -32,7 +32,7 @@ spec:
     max: {{ max-replicas }}
   openSearch:
     access: read
-    instance: navno-search
+    instance: search
   ingresses:
   {{#each ingresses}}
      - "{{this}}"
