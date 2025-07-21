@@ -41,6 +41,8 @@ spec:
     inbound:
       rules:
         - application: "*"
+          namespace: personbruker
+        - application: "*"
           namespace: navno
   secureLogs:
     enabled: true
