@@ -21,6 +21,10 @@ spec:
     periodSeconds: 2
     failureThreshold: 30
   observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
     autoInstrumentation:
       enabled: true
       runtime: java
