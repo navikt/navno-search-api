@@ -10,6 +10,14 @@ spring:
     serialization:
       indent-output: true
 
+logging:
+  level:
+    org.springframework.data.elasticsearch: DEBUG
+    org.opensearch: DEBUG
+    org.apache.http: DEBUG
+    org.springframework.beans.factory: DEBUG
+    no.nav.navnosearchadminapi.common.repository: DEBUG
+
 management:
   endpoints:
     web:
