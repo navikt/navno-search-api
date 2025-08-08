@@ -2,7 +2,6 @@ package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.model.Content
-import no.nav.navnosearchapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.integrationtests.config.OpensearchConfig
 import no.nav.navnosearchapi.search.filters.FacetKeys
 import no.nav.navnosearchapi.utils.initialTestData
@@ -33,7 +32,7 @@ abstract class AbstractIntegrationTest {
     protected lateinit var restTemplate: TestRestTemplate
 
     @Autowired
-    protected lateinit var repository: ContentRepository
+    protected lateinit var repository: CrudRepository<Content, String>
 
     @LocalServerPort
     private var serverPort: Int? = null
