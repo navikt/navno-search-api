@@ -2,6 +2,7 @@ package no.nav.navnosearchapi.integrationtests
 
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
 import no.nav.navnosearchadminapi.common.model.Content
+import no.nav.navnosearchapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.integrationtests.config.OpensearchConfig
 import no.nav.navnosearchapi.search.filters.FacetKeys
 import no.nav.navnosearchapi.utils.initialTestData
@@ -21,9 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.util.UriComponentsBuilder
 import org.testcontainers.junit.jupiter.Testcontainers
 
-interface DummyRepository : CrudRepository<Content, String> {
-}
-
 @Testcontainers(disabledWithoutDocker = true)
 @Import(OpensearchConfig::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,7 +33,7 @@ abstract class AbstractIntegrationTest {
     protected lateinit var restTemplate: TestRestTemplate
 
     @Autowired
-    protected lateinit var repository: DummyRepository
+    protected lateinit var repository: ContentRepository
 
     @LocalServerPort
     private var serverPort: Int? = null
