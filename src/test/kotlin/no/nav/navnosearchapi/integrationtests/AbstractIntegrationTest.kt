@@ -1,20 +1,20 @@
 package no.nav.navnosearchapi.integrationtests
 
+import io.mockk.mockk
 import no.nav.navnosearchadminapi.common.constants.NORWEGIAN_BOKMAAL
-import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.common.repository.ContentRepository
 import no.nav.navnosearchapi.integrationtests.config.OpensearchConfig
 import no.nav.navnosearchapi.search.filters.FacetKeys
 import no.nav.navnosearchapi.utils.initialTestData
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -26,13 +26,13 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension::class)
+@EnableAutoConfiguration(exclude = [ElasticsearchDataAutoConfiguration::class])
 abstract class AbstractIntegrationTest {
 
     @Autowired
     protected lateinit var restTemplate: TestRestTemplate
 
-    @Autowired
-    protected lateinit var repository: ContentRepository
+    protected val repository: ContentRepository = mockk()
 
     @LocalServerPort
     private var serverPort: Int? = null
