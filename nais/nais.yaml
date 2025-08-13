@@ -44,10 +44,16 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: "navno-search-frontend-dev1"
+          namespace: "navno"
+        - application: "navno-search-frontend"
+          namespace: "navno"
+        - application: "nav-dekoratoren"
+          namespace: "personbruker"
+    outbound:
+      rules:
         - application: "*"
-          namespace: personbruker
-        - application: "*"
-          namespace: navno
+          namespace: "*"
   secureLogs:
     enabled: true
   resources:
