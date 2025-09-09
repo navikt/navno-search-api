@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: navno-search-api
-  namespace: personbruker
+  namespace: navno
   labels:
-    team: personbruker
+    team: navno
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
@@ -21,6 +21,10 @@ spec:
     periodSeconds: 2
     failureThreshold: 30
   observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
     autoInstrumentation:
       enabled: true
       runtime: java
@@ -32,7 +36,7 @@ spec:
     max: {{ max-replicas }}
   openSearch:
     access: read
-    instance: navno-search
+    instance: navnosearch
   ingresses:
   {{#each ingresses}}
      - "{{this}}"
@@ -40,8 +44,20 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: "navno-search-frontend-dev1"
+          namespace: "navno"
+        - application: "navno-search-frontend"
+          namespace: "navno"
+        - application: "nav-dekoratoren"
+          namespace: "personbruker"
+        - application: "nav-dekoratoren-beta"
+          namespace: "personbruker"
+        - application: "nav-dekoratoren-beta-tms"
+          namespace: "personbruker"
+    outbound:
+      rules:
         - application: "*"
-          namespace: personbruker
+          namespace: "*"
   secureLogs:
     enabled: true
   resources:

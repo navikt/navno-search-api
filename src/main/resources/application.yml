@@ -10,6 +10,15 @@ spring:
     serialization:
       indent-output: true
 
+logging:
+  level:
+    org.springframework.data.elasticsearch: DEBUG
+    org.elasticsearch.client: DEBUG
+    org.apache.http: DEBUG         # If using HTTP transport
+    org.elasticsearch: INFO        # General ES logs
+    root: INFO
+    org.apache.http.wire: DEBUG
+
 management:
   endpoints:
     web:
