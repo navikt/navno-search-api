@@ -18,10 +18,10 @@ jobs:
           java-version: 21
       - name: Setup Gradle
         if: github.ref_name != 'main'
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Setup Gradle with dependency generation
         if: github.ref_name == 'main'
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           dependency-graph: generate-and-submit
       - name: Build application

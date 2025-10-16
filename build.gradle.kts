@@ -4,9 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     val kotlinVersion = "2.2.20"
-    val springBootVersion = "3.5.5"
+    val springBootVersion = "3.5.6"
     val springDepMgmtVersion = "1.1.7"
-    val versionsVersion = "0.52.0"
+    val versionsVersion = "0.53.0"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -37,7 +37,7 @@ dependencies {
     val testcontainersVersion = "1.21.3"
     val navnoSearchCommonVersion = "20250820200056-5ed9808"
     val kotestVersion = "6.0.3"
-    val mockkVersion = "1.14.5"
+    val mockkVersion = "1.14.6"
     val jacksonVersion = "2.20.0"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
