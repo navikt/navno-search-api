@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "2.2.20"
-    val springBootVersion = "3.5.6"
+    val kotlinVersion = "2.2.21"
+    val springBootVersion = "3.5.7"
     val springDepMgmtVersion = "1.1.7"
     val versionsVersion = "0.53.0"
 
@@ -31,14 +31,14 @@ repositories {
 }
 
 dependencies {
-    val logstashVersion = "8.1"
-    val opensearchVersion = "2.0.2"
-    val opensearchTestcontainersVersion = "3.0.2"
+    val logstashVersion = "9.0"
+    val opensearchVersion = "2.0.3"
+    val opensearchTestcontainersVersion = "4.0.0"
     val testcontainersVersion = "1.21.3"
     val navnoSearchCommonVersion = "20250820200056-5ed9808"
-    val kotestVersion = "6.0.3"
+    val kotestVersion = "6.0.4"
     val mockkVersion = "1.14.6"
-    val jacksonVersion = "2.20.0"
+    val jacksonVersion = "2.20.1"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
