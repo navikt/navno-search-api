@@ -51,7 +51,7 @@ fun SearchPage<Content>.toSearchResult(params: Params) = SearchResult(
     },
 )
 
-private fun <T> AggregationsContainer<T>.asMap(): Map<String, Long> {
+private fun <T : AggregationsContainer<*>> T.asMap(): Map<String, Long> {
     return (this as OpenSearchAggregations).aggregations().associate { it.name to (it as Filter).docCount }
 }
 
