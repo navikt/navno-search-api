@@ -33,12 +33,12 @@ repositories {
 dependencies {
     val logstashVersion = "9.0"
     val opensearchVersion = "2.0.3"
-    val opensearchTestcontainersVersion = "4.0.1"
+    val opensearchTestcontainersVersion = "4.1.0"
     val testcontainersVersion = "1.21.4"
     val navnoSearchCommonVersion = "20250820200056-5ed9808"
     val kotestVersion = "6.0.7"
     val mockkVersion = "1.14.7"
-    val jacksonVersion = "2.20.1"
+    val jacksonVersion = "2.21.0"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
