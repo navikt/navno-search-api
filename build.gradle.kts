@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     val kotlinVersion = "2.2.21"
-    val springBootVersion = "3.5.7"
+    val springBootVersion = "4.0.1"
     val springDepMgmtVersion = "1.1.7"
     val versionsVersion = "0.53.0"
 
@@ -32,7 +32,7 @@ repositories {
 
 dependencies {
     val logstashVersion = "9.0"
-    val opensearchVersion = "2.0.3"
+    val opensearchVersion = "3.0.0"
     val opensearchTestcontainersVersion = "4.1.0"
     val testcontainersVersion = "1.21.4"
     val navnoSearchCommonVersion = "20250820200056-5ed9808"
@@ -51,6 +51,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
+
     testImplementation("org.opensearch.client:spring-data-opensearch-test-autoconfigure:$opensearchVersion") {
         exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
     }
