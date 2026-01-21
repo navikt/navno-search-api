@@ -44,9 +44,6 @@ jobs:
           name: jar
           path: build/libs
 
-      - name: Rename JAR
-        run: mv build/libs/*.jar build/libs/navno-search-api.jar
-
       - uses: ./.github/actions/deploy
         with:
           environment: dev
