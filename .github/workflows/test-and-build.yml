@@ -13,4 +13,4 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./.github/actions/test-and-build/action.yaml
+      - uses: ./.github/actions/test-and-build
