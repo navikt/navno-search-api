@@ -42,7 +42,9 @@ dependencies {
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
-        exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
+        exclude(group = "org.springframework.boot", module = "spring-boot-data-elasticsearch")
+        exclude(group = "org.springframework.data", module = "spring-data-elasticsearch")
+        exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
     }
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

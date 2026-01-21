@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'nais/alerts.yaml'
+      - '../../.nais/alerts.yaml'
       - '.github/workflows/alert-deploy.yaml'
 
 jobs:
@@ -20,4 +20,4 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
-          RESOURCE: ./nais/alerts.yaml
+          RESOURCE: ./.nais/alerts.yaml
