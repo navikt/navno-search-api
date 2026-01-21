@@ -9,7 +9,7 @@ jobs:
       contents: read
       id-token: write
       packages: read
-    uses: ./.github/workflows/build-and-deploy.yml
+    uses: ./.github/actions/build-and-deploy/action.yaml
     with:
       environment: dev
     secrets:

@@ -1,0 +1,51 @@
+name: Build and deploy
+description: Build with Gradle, optionally build/push image, then deploy to NAIS
+
+inputs:
+  environment:
+    description: Environment name (e.g. dev, prod)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - name: Find changed files
+      id: changed-files
+      uses: nais/what-changed@main
+      with:
+        files: .nais/nais.yaml
+
+    - name: Setup java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: "21"
+
+    - name: Setup gradle
+      uses: gradle/actions/setup-gradle@v5
+
+    - name: Build application
+      shell: bash
+      run: ./gradlew clean build
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Build and push docker image and SBOM to OCI registry
+      if: steps.changed-files.outputs.changed != 'only-inputs'
+      uses: nais/docker-build-push@v0
+      id: docker-build-push
+      with:
+        team: navno
+
+    - name: Deploy to Nais
+      uses: nais/deploy/actions/deploy@v2
+      env:
+        CLUSTER: ${{ inputs.environment }}-gcp
+        RESOURCE: ./.nais/nais.yaml
+        VAR: image=${{ steps.docker-build-push.outputs.image }}
+        VARS: ./.nais/${{ inputs.environment }}-gcp/navno.json
