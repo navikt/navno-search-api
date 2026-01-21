@@ -5,17 +5,27 @@ on:
       - main
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: ./.github/actions/build/action.yaml
+
   deploy:
     name: Deploy to prod
+    needs: build
     permissions:
       contents: read
       id-token: write
       packages: read
-    uses: ./.github/actions/build-and-deploy/action.yaml
+    uses: ./.github/actions/deploy/action.yaml
     with:
       environment: prod
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+
   release:
     name: Create a new release
     needs: deploy

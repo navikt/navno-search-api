@@ -3,13 +3,22 @@ on:
   workflow_dispatch
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: ./.github/actions/build/action.yaml
+
   deploy:
     name: Deploy to dev
+    needs: build
     permissions:
       contents: read
       id-token: write
       packages: read
-    uses: ./.github/actions/build-and-deploy/action.yaml
+    uses: ./.github/actions/deploy/action.yaml
     with:
       environment: dev
     secrets:

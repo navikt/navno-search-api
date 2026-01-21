@@ -3,29 +3,10 @@ on:
   push
 
 jobs:
-  build-branch:
+  test-and-build-branch:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       packages: read
     steps:
-      - name: Sjekk ut koden
-        uses: actions/checkout@v6
-      - name: Setup java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: 21
-      - name: Setup Gradle
-        if: github.ref_name != 'main'
-        uses: gradle/actions/setup-gradle@v5
-      - name: Setup Gradle with dependency generation
-        if: github.ref_name == 'main'
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          dependency-graph: generate-and-submit
-      - name: Build application
-        run: |
-          ./gradlew clean build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/build/action.yaml
