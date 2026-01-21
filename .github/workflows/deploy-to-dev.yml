@@ -41,3 +41,4 @@ jobs:
           environment: dev
         env:
           NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+
