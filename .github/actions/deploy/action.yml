@@ -20,6 +20,25 @@ runs:
       with:
         files: .nais/nais.yaml
 
+    - name: Set up JDK
+#      if: steps.changed-files.outputs.changed != 'only-inputs'
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Build JAR
+#      if: steps.changed-files.outputs.changed != 'only-inputs'
+      shell: bash
+      run: ./gradlew bootJar --no-daemon
+
+    #ta bort denne, kun for debugging
+    - name: List build output
+      if: steps.changed-files.outputs.changed != 'only-inputs'
+      shell: bash
+      run: ls -la build/libs/
+
+
     - name: Build and push docker image and SBOM to OCI registry
       if: steps.changed-files.outputs.changed != 'only-inputs'
       uses: nais/docker-build-push@v0

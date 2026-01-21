@@ -10,11 +10,11 @@ jobs:
       packages: read
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/test-and-build
+
       - uses: actions/upload-artifact@v4
         with:
           name: jar
-          path: build/libs/navno-search-api.jar
+          path: build/libs/*.jar
           retention-days: 1
 
   deploy:
@@ -27,10 +27,15 @@ jobs:
       packages: read
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/download-artifact@v4
         with:
           name: jar
           path: build/libs
+
+      - name: Rename JAR
+        run: mv build/libs/*.jar build/libs/navno-search-api.jar
+
       - uses: ./.github/actions/deploy
         with:
           environment: dev
