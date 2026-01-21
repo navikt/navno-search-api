@@ -11,6 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build JAR
+        run: ./gradlew bootJar --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
           name: jar
@@ -28,9 +37,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/download-artifact@v4
+        with:
+          name: jar
+          path: build/libs
+
+      - name: Rename JAR
+        run: mv build/libs/*.jar build/libs/navno-search-api.jar
+
       - uses: ./.github/actions/deploy
         with:
           environment: dev
         env:
           NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-
