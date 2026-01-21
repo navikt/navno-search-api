@@ -11,7 +11,11 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - uses: ./.github/actions/test-and-build
 
   deploy:
@@ -23,7 +27,11 @@ jobs:
       id-token: write
       packages: read
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - uses: ./.github/actions/deploy
         with:
           environment: prod
