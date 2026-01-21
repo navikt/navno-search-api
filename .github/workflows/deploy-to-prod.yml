@@ -11,6 +11,7 @@ jobs:
       contents: read
       packages: read
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/test-and-build
 
   deploy:
@@ -22,6 +23,7 @@ jobs:
       id-token: write
       packages: read
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/deploy
         with:
           environment: prod
@@ -38,6 +40,7 @@ jobs:
     steps:
       - name: Generate unique tag name
         run: echo "TAG_NAME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
