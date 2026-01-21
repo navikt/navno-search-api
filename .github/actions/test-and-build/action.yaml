@@ -1,5 +1,5 @@
 name: Build
-description: Build with Gradle
+description: Test and build
 
 runs:
   using: composite

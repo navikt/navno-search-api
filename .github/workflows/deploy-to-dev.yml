@@ -9,7 +9,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: ./.github/actions/build/action.yaml
+      - uses: ./.github/actions/test-and-build/action.yaml
 
   deploy:
     name: Deploy to dev
