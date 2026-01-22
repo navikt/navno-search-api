@@ -1,5 +1,4 @@
 name: Deploy
-description: Optionally build/push image, then deploy to NAIS
 
 inputs:
   environment:
@@ -21,6 +20,8 @@ runs:
       id: docker-build-push
       with:
         team: navno
+        identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+        project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
     - name: Deploy to Nais
       uses: nais/deploy/actions/deploy@v2
