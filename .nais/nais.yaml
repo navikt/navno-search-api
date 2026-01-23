@@ -45,9 +45,9 @@ spec:
     instance: navnosearch
 
   ingresses:
-    #each ingresses
-    - "{{this}}"
-      {{ /each }}
+    {{#each ingresses as |url|}}
+       - {{url}}
+    {{/each}}
 
   accessPolicy:
     inbound:
