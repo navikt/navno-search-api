@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class UrlSearchService(
-    private val searchClient: SearchClient,
+    val searchClient: SearchClient,
 ) {
     fun search(term: String): SearchUrlResponse {
         val query = UrlSearchQueryFactory.createBuilder(term)
-        val hit = searchClient.search(query).searchHits.firstOrNull()
-
-        return SearchUrlResponse(
-            hit?.content?.href,
-            hit?.content?.title?.value
-        )
+        val result = searchClient.search(query)
+        return result.searchHits.firstOrNull()?.content.let {
+            SearchUrlResponse(
+                it?.href, it?.title?.value
+            )
+        }
     }
 }
