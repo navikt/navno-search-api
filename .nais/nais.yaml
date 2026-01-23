@@ -36,9 +36,18 @@ spec:
     enabled: true
     path: /internal/prometheus
 
+  replicas:
+    min: {{ min-replicas }}
+    max: {{ max-replicas }}
+
   openSearch:
     access: read
     instance: navnosearch
+
+  ingresses:
+    #each ingresses
+    - "{{this}}"
+      {{ /each }}
 
   accessPolicy:
     inbound:
