@@ -11,6 +11,7 @@ jobs:
       contents: read
       packages: read
     steps:
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/test-and-build
 
   deploy:
@@ -22,11 +23,16 @@ jobs:
       id-token: write
       packages: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - uses: ./.github/actions/deploy
         with:
           environment: prod
         env:
-          NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
 
   release:
     name: Create a new release
@@ -38,12 +44,13 @@ jobs:
     steps:
       - name: Generate unique tag name
         run: echo "TAG_NAME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           target_commitish: main
-          tag_name: release/prod@${{ env.TAG_NAME }} # Generates a unique tag using timestamp
-          name: Release ${{ github.ref_name }}
+          tag_name: release/prod@${{env.TAG_NAME}} # Generates a unique tag using timestamp
+          name: Release ${{github.ref_name}}
           generate_release_notes: true
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }} # This is a PAT with repo permissions
+          GITHUB_TOKEN: ${{secrets.RELEASE_TOKEN}} # This is a PAT with repo permissions

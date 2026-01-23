@@ -1,0 +1,8 @@
+
+app: navno-search-api
+team: navno
+ingresses:
+  - https://navno-search-api.ekstern.dev.nav.no
+  - https://navno-search-api.nav.no
+min-replicas: 2
+max-replicas: 4
