@@ -11,11 +11,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/test-and-build
 
   deploy:
