@@ -24,4 +24,4 @@ runs:
       shell: bash
       run: ./gradlew clean build
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{github.token}}

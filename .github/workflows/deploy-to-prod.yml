@@ -36,7 +36,7 @@ jobs:
         with:
           environment: prod
         env:
-          NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
 
   release:
     name: Create a new release
@@ -53,8 +53,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           target_commitish: main
-          tag_name: release/prod@${{ env.TAG_NAME }} # Generates a unique tag using timestamp
-          name: Release ${{ github.ref_name }}
+          tag_name: release/prod@${{env.TAG_NAME}} # Generates a unique tag using timestamp
+          name: Release ${{github.ref_name}}
           generate_release_notes: true
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }} # This is a PAT with repo permissions
+          GITHUB_TOKEN: ${{secrets.RELEASE_TOKEN}} # This is a PAT with repo permissions

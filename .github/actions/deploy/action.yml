@@ -20,13 +20,13 @@ runs:
       id: docker-build-push
       with:
         team: navno
-        identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-        project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+        identity_provider: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
+        project_id: ${{vars.NAIS_MANAGEMENT_PROJECT_ID}}
 
     - name: Deploy to Nais
       uses: nais/deploy/actions/deploy@v2
       env:
-        CLUSTER: ${{ inputs.environment }}-gcp
+        CLUSTER: ${{inputs.environment}}-gcp
         RESOURCE: ./.nais/nais.yaml
-        VARS: ./.nais/${{ inputs.environment }}-gcp/navno.json
-        WORKLOAD_IMAGE: ${{ steps.docker-build-push.outputs.image }}
+        VARS: ./.nais/${{inputs.environment}}-gcp/navno.json
+        WORKLOAD_IMAGE: ${{steps.docker-build-push.outputs.image}}

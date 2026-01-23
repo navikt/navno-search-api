@@ -36,16 +36,10 @@ spec:
     enabled: true
     path: /internal/prometheus
 
-  replicas:
-    min: {{ min-replicas }}
-    max: {{ max-replicas }}
   openSearch:
     access: read
     instance: navnosearch
-  ingresses:
-      {{#each ingresses}}
-    - "{{this}}"
-      {{/each}}
+
   accessPolicy:
     inbound:
       rules:
@@ -71,32 +65,3 @@ spec:
       memory: 512Mi
     limits:
       memory: 1024Mi
-
-accessPolicy:
-  inbound:
-    rules:
-      - application: navno-search-frontend-dev1
-        namespace: navno
-      - application: navno-search-frontend
-        namespace: navno
-      - application: nav-dekoratoren
-        namespace: personbruker
-      - application: nav-dekoratoren-beta
-        namespace: personbruker
-      - application: nav-dekoratoren-beta-tms
-        namespace: personbruker
-
-  outbound:
-    rules:
-      - application: "*"
-        namespace: "*"
-
-secureLogs:
-  enabled: true
-
-resources:
-  requests:
-    cpu: 100m
-    memory: 512Mi
-  limits:
-    memory: 1024Mi

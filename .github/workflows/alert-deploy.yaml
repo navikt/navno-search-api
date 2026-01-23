@@ -14,9 +14,10 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v6
-      - name: deploy to prod
+
+      - name: Deploy alerts to prod
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
