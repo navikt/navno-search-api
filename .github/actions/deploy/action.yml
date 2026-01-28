@@ -1,0 +1,32 @@
+name: Deploy
+
+inputs:
+  environment:
+    required: true
+    description: Environment name (e.g. dev, prod)
+
+runs:
+  using: composite
+  steps:
+    - name: Find changed files
+      id: changed-files
+      uses: nais/what-changed@main
+      with:
+        files: .nais/nais.yaml
+
+    - name: Build and push docker image and SBOM to OCI registry
+      if: steps.changed-files.outputs.changed != 'only-inputs'
+      uses: nais/docker-build-push@v0
+      id: docker-build-push
+      with:
+        team: navno
+        identity_provider: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
+        project_id: ${{vars.NAIS_MANAGEMENT_PROJECT_ID}}
+
+    - name: Deploy to Nais
+      uses: nais/deploy/actions/deploy@v2
+      env:
+        CLUSTER: ${{inputs.environment}}-gcp
+        RESOURCE: ./.nais/nais.yaml
+        VARS: ./.nais/${{inputs.environment}}-gcp/navno.json
+        WORKLOAD_IMAGE: ${{steps.docker-build-push.outputs.image}}

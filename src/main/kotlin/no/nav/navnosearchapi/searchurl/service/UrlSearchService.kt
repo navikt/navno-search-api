@@ -14,8 +14,7 @@ class UrlSearchService(
         val result = searchClient.search(query)
         return result.searchHits.firstOrNull()?.content.let {
             SearchUrlResponse(
-                it?.href,
-                it?.title?.value
+                it?.href, it?.title?.value
             )
         }
     }

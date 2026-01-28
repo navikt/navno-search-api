@@ -4,11 +4,7 @@ import no.nav.navnosearchadminapi.common.enums.ValidAudiences
 import no.nav.navnosearchadminapi.common.enums.ValidMetatags
 import no.nav.navnosearchadminapi.common.model.Content
 import no.nav.navnosearchapi.search.controller.Params
-import no.nav.navnosearchapi.search.dto.Aggregations
-import no.nav.navnosearchapi.search.dto.FacetBucket
-import no.nav.navnosearchapi.search.dto.SearchHit
-import no.nav.navnosearchapi.search.dto.SearchResult
-import no.nav.navnosearchapi.search.dto.UnderAggregations
+import no.nav.navnosearchapi.search.dto.*
 import no.nav.navnosearchapi.search.filters.facets.facetFilters
 import no.nav.navnosearchapi.search.utils.isInQuotes
 import org.opensearch.data.client.orhlc.OpenSearchAggregations
@@ -45,8 +41,7 @@ fun SearchPage<Content>.toSearchResult(params: Params) = SearchResult(
     aggregations = searchHits.aggregations?.asMap()?.toAggregations(params),
     hits = searchHits.searchHits.map { searchHit ->
         searchHit.content.toHit(
-            searchHit.toHighlight(params.ord.isInQuotes()),
-            searchHit.score
+            searchHit.toHighlight(params.ord.isInQuotes()), searchHit.score
         )
     },
 )
@@ -80,10 +75,7 @@ private fun toAudience(audience: List<String>): List<String> {
 }
 
 private fun resolveTimestamps(
-    createdAt: ZonedDateTime,
-    lastUpdated: ZonedDateTime,
-    metatags: List<String>,
-    fylke: String?
+    createdAt: ZonedDateTime, lastUpdated: ZonedDateTime, metatags: List<String>, fylke: String?
 ): Pair<ZonedDateTime?, ZonedDateTime?> {
     val showBothTimestamps = ValidMetatags.NYHET.descriptor in metatags
     val showNoTimestamps = fylke.isNullOrBlank() && metatags.none { it in metatagsWithModifiedTime }
@@ -97,24 +89,21 @@ private fun resolveTimestamps(
 
 private fun Map<String, Long>.toAggregations(params: Params) = Aggregations(
     fasetter = UnderAggregations(
-        buckets = facetFilters.map { facet ->
-            FacetBucket(
-                key = facet.key,
-                name = facet.name,
-                docCount = this[facet.name] ?: 0,
-                checked = facet.key == params.f,
-                underaggregeringer = facet.underFacets.map { underFacet ->
-                    FacetBucket(
-                        key = underFacet.key,
-                        name = underFacet.name,
-                        docCount = this[underFacet.aggregationName] ?: 0,
-                        checked = underFacet.key in params.uf,
-                    )
-                }.filterNotEmpty().let { UnderAggregations(it) }
-            )
-        }
-    )
-)
+    buckets = facetFilters.map { facet ->
+        FacetBucket(
+            key = facet.key,
+            name = facet.name,
+            docCount = this[facet.name] ?: 0,
+            checked = facet.key == params.f,
+            underaggregeringer = facet.underFacets.map { underFacet ->
+                FacetBucket(
+                    key = underFacet.key,
+                    name = underFacet.name,
+                    docCount = this[underFacet.aggregationName] ?: 0,
+                    checked = underFacet.key in params.uf,
+                )
+            }.filterNotEmpty().let { UnderAggregations(it) })
+    }))
 
 private fun List<FacetBucket>.filterNotEmpty(): List<FacetBucket> {
     return filter { b -> b.docCount > 0 }

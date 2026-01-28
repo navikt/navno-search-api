@@ -13,5 +13,3 @@ class NavnoSearchApiApplication
 fun main(args: Array<String>) {
     runApplication<NavnoSearchApiApplication>(*args)
 }
-
-

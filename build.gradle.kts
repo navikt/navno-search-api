@@ -32,17 +32,17 @@ repositories {
 
 dependencies {
     val logstashVersion = "9.0"
-    val opensearchVersion = "3.0.0"
+    val opensearchVersion = "2.0.3"
     val opensearchTestcontainersVersion = "4.1.0"
     val testcontainersVersion = "1.21.4"
     val navnoSearchCommonVersion = "20250820200056-5ed9808"
-    val kotestVersion = "6.1.1"
+    val kotestVersion = "6.1.0"
     val mockkVersion = "1.14.7"
     val jacksonVersion = "2.21.0"
 
     implementation("no.nav.navnosearchadminapi:common:$navnoSearchCommonVersion")
     implementation("org.opensearch.client:spring-data-opensearch-starter:$opensearchVersion") {
-        exclude("org.opensearch.client", "opensearch-rest-client-sniffer")
+        exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
     }
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
