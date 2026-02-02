@@ -1,3 +1,4 @@
+
 package no.nav.navnosearchapi.search.mapper
 
 import no.nav.navnosearchadminapi.common.enums.ValidAudiences
@@ -89,21 +90,21 @@ private fun resolveTimestamps(
 
 private fun Map<String, Long>.toAggregations(params: Params) = Aggregations(
     fasetter = UnderAggregations(
-    buckets = facetFilters.map { facet ->
-        FacetBucket(
-            key = facet.key,
-            name = facet.name,
-            docCount = this[facet.name] ?: 0,
-            checked = facet.key == params.f,
-            underaggregeringer = facet.underFacets.map { underFacet ->
-                FacetBucket(
-                    key = underFacet.key,
-                    name = underFacet.name,
-                    docCount = this[underFacet.aggregationName] ?: 0,
-                    checked = underFacet.key in params.uf,
-                )
-            }.filterNotEmpty().let { UnderAggregations(it) })
-    }))
+        buckets = facetFilters.map { facet ->
+            FacetBucket(
+                key = facet.key,
+                name = facet.name,
+                docCount = this[facet.name] ?: 0,
+                checked = facet.key == params.f,
+                underaggregeringer = facet.underFacets.map { underFacet ->
+                    FacetBucket(
+                        key = underFacet.key,
+                        name = underFacet.name,
+                        docCount = this[underFacet.aggregationName] ?: 0,
+                        checked = underFacet.key in params.uf,
+                    )
+                }.filterNotEmpty().let { UnderAggregations(it) })
+        }))
 
 private fun List<FacetBucket>.filterNotEmpty(): List<FacetBucket> {
     return filter { b -> b.docCount > 0 }
