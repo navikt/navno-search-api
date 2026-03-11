@@ -66,8 +66,6 @@ spec:
       rules:
         - application: "*"
           namespace: "*"
-  secureLogs:
-    enabled: true
   resources:
     requests:
       cpu: 100m
