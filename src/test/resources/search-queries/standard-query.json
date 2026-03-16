@@ -232,7 +232,7 @@
           }
         ],
         "score_mode": "max",
-        "max_boost": 3.4028235e38,
+        "max_boost": 3.4028235E38,
         "boost": 1.0
       }
     },
@@ -250,7 +250,7 @@
       }
     ],
     "score_mode": "max",
-    "max_boost": 3.4028235e38,
+    "max_boost": 3.4028235E38,
     "boost": 1.0
   }
 }
