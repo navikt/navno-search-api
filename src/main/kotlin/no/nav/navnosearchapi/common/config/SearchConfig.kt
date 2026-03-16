@@ -15,6 +15,7 @@ object SearchConfig {
     const val FUZZY_LOW_DISTANCE = 6
     const val FUZZY_HIGH_DISTANCE = 8
     const val NGRAM_MIN_LENGTH = 3
+    const val KEYWORD_WEIGHT = 1.0f
 
     val termsToOverride = mapOf("kontakt" to "kontakt oss")
 

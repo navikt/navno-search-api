@@ -47,7 +47,7 @@ class ErrorHandler {
     fun defaultExceptionHandler(ex: Throwable, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
         return handleException(
             status = HttpStatus.INTERNAL_SERVER_ERROR,
-            message = "Ukjent feil",
+            message = "Ukjent feil: [${ex.javaClass.simpleName}] ${ex.message}",
             path = request.requestURI,
             ex = ex
         )
@@ -67,7 +67,11 @@ class ErrorHandler {
             path = path
         )
 
-        logger.atLevel(if (status.is5xxServerError) Level.ERROR else Level.WARN).log(error.message, ex)
+        if (status.is5xxServerError) {
+            logger.error("{}: {} - {}", error.message, ex.javaClass.name, ex.message, ex)
+        } else {
+            logger.warn("{}", error.message, ex)
+        }
         return ResponseEntity(error, status)
     }
 }
