@@ -18,7 +18,6 @@
                           "ingress.en.ngrams^1.0",
                           "ingress.no.ngrams^1.0",
                           "ingress.other.ngrams^1.0",
-                          "keywords^1.0",
                           "title.en.ngrams^1.0",
                           "title.no.ngrams^1.0",
                           "title.other.ngrams^1.0"

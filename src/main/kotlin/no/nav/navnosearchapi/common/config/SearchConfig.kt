@@ -63,6 +63,5 @@ object SearchConfig {
             add("$TITLE.$it.$NGRAMS_INNER_FIELD")
             add("$INGRESS.$it.$NGRAMS_INNER_FIELD")
         }
-        add(KEYWORDS)
     }
 }
