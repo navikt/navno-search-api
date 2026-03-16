@@ -47,7 +47,6 @@
                                 "ingress.en^3.0",
                                 "ingress.no^3.0",
                                 "ingress.other^3.0",
-                                "keywords^5.0",
                                 "text.en^0.01",
                                 "text.no^0.01",
                                 "text.other^0.01",
@@ -233,7 +232,7 @@
           }
         ],
         "score_mode": "max",
-        "max_boost": 3.4028235E38,
+        "max_boost": 3.4028235e38,
         "boost": 1.0
       }
     },
@@ -251,7 +250,7 @@
       }
     ],
     "score_mode": "max",
-    "max_boost": 3.4028235E38,
+    "max_boost": 3.4028235e38,
     "boost": 1.0
   }
 }

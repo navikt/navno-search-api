@@ -1,10 +1,6 @@
 {
-  "pre_tags": [
-    "<b>"
-  ],
-  "post_tags": [
-    "</b>"
-  ],
+  "pre_tags": ["<b>"],
+  "post_tags": ["</b>"],
   "highlight_query": {
     "bool": {
       "must": [
@@ -74,7 +70,6 @@
                     "ingress.en^3.0",
                     "ingress.no^3.0",
                     "ingress.other^3.0",
-                    "keywords^5.0",
                     "text.en^0.01",
                     "text.no^0.01",
                     "text.other^0.01",
