@@ -3,6 +3,7 @@ package no.nav.navnosearchapi.common.config
 import no.nav.navnosearchadminapi.common.constants.ALL_TEXT
 import no.nav.navnosearchadminapi.common.constants.EXACT_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.INGRESS
+import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchadminapi.common.constants.NGRAMS_INNER_FIELD
 import no.nav.navnosearchadminapi.common.constants.TEXT
 import no.nav.navnosearchadminapi.common.constants.TITLE
@@ -24,6 +25,7 @@ object SearchConfig {
             put("$INGRESS.$it", 3.0f)
             put("$TEXT.$it", 0.01f)
         }
+        put(KEYWORDS, 5.0f)
     }
 
     val ngramsInnerFieldsToWeight = buildMap {
@@ -61,5 +63,6 @@ object SearchConfig {
             add("$TITLE.$it.$NGRAMS_INNER_FIELD")
             add("$INGRESS.$it.$NGRAMS_INNER_FIELD")
         }
+        add(KEYWORDS)
     }
 }
