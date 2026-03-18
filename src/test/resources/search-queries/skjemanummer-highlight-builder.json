@@ -1,6 +1,10 @@
 {
-  "pre_tags": ["<b>"],
-  "post_tags": ["</b>"],
+  "pre_tags": [
+    "<b>"
+  ],
+  "post_tags": [
+    "</b>"
+  ],
   "highlight_query": {
     "bool": {
       "must": [

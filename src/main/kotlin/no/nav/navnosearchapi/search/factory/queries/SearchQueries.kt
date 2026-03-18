@@ -9,18 +9,20 @@ import org.opensearch.index.query.Operator
 
 fun searchAllTextQuery(term: String, skjemanummer: String? = null): BoolQueryBuilder {
     return BoolQueryBuilder()
-        // Filter (bidrar ikke til score) - alle treff må inneholde alle søkeord (på tvers av feltene)
         .filter(containsAllWordsInTermQuery(term))
         .should(
-            // Bruker subquery med høyest score
             DisMaxQueryBuilder().apply {
                 add(standardSearchQuery(term))
                 if (term.trim().length >= SearchConfig.NGRAM_MIN_LENGTH) add(ngramSearchQuery(term))
                 if (term.split(" ").size > 1) add(exactPhraseSearchQuery(term))
             }
-        ).apply {
-            // Krever ekstakt match på skjemanummer dersom det er satt
-            skjemanummer?.let { this.must(searchAllTextForPhraseQuery(it)) }
+        )
+        .apply {
+            if (skjemanummer != null) {
+                this.must(searchAllTextForPhraseQuery(skjemanummer))
+            } else {
+                this.should(keywordSearchQuery(term))
+            }
         }
 }
 
