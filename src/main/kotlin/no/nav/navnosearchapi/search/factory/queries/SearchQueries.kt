@@ -1,9 +1,11 @@
 package no.nav.navnosearchapi.search.factory.queries
 
+import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchapi.common.config.SearchConfig
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.DisMaxQueryBuilder
+import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
 
@@ -53,4 +55,8 @@ private fun ngramSearchQuery(term: String): MultiMatchQueryBuilder {
 
 private fun exactPhraseSearchQuery(term: String): MultiMatchQueryBuilder {
     return searchAllTextForPhraseQuery(term).boost(SearchConfig.EXACT_PHRASE_MATCH_BOOST)
+}
+
+private fun keywordSearchQuery(term: String): MatchQueryBuilder {
+    return MatchQueryBuilder(KEYWORDS, term).boost(SearchConfig.KEYWORD_WEIGHT)
 }
