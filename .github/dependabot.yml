@@ -1,8 +1,17 @@
 version: 2
 
+registries:
+  navnoSearchAdminApi:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/navno-search-admin-api
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
+
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
+    registries:
+      - navnoSearchAdminApi
     schedule:
       interval: "weekly"
       day: "monday"
@@ -15,6 +24,9 @@ updates:
       semver-major-days: 14
       semver-minor-days: 7
       semver-patch-days: 7
+    ignore:
+      # Oppdateres manuelt - krever koordinerte endringer med navno-search-admin-api
+      - dependency-name: "no.nav.navnosearchadminapi:common"
     groups:
       minor-and-patch:
         update-types: ["minor", "patch"]
