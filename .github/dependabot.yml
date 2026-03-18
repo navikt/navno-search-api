@@ -25,7 +25,7 @@ updates:
       semver-minor-days: 7
       semver-patch-days: 7
     ignore:
-      # Oppdateres manuelt - krever koordinerte endringer med navno-search-admin-api
+      # Ønsker ikke PR for eventuelt nye versjoner. Det kan være versjoner som ikke er klare til prod ennå.
       - dependency-name: "no.nav.navnosearchadminapi:common"
     groups:
       minor-and-patch:
