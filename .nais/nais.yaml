@@ -47,7 +47,7 @@ spec:
   ingresses:
     {{#each ingresses as |url|}}
        - {{url}}
-      {{/each}}
+    {{/each}}
 
   accessPolicy:
     inbound:
