@@ -8,7 +8,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
-  image: { { image } }
+  image: {{ image }}
   port: 8080
 
   liveness:
@@ -37,8 +37,8 @@ spec:
     path: /internal/prometheus
 
   replicas:
-    min: { { min-replicas } }
-    max: { { max-replicas } }
+    min: {{ min-replicas }}
+    max: {{ max-replicas }}
 
   openSearch:
     access: read
