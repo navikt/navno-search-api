@@ -197,7 +197,9 @@ private fun TextData.toDummyContent(
     audience: List<String> = emptyList(),
     language: String = NORWEGIAN_BOKMAAL,
     fylke: String? = null,
-    metatags: List<String> = emptyList()
+    metatags: List<String> = emptyList(),
+    keywords: List<String> = emptyList()
+
 ) = Content.from(
     id = "$teamName-${UUID.randomUUID()}",
     teamOwnedBy = teamName,
@@ -213,4 +215,5 @@ private fun TextData.toDummyContent(
     language = language,
     fylke = fylke,
     metatags = metatags,
+    keywords = keywords
 )
