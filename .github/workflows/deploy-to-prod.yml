@@ -19,8 +19,7 @@ jobs:
       - name: Build and deploy prod
         uses: ./.github/actions/build-and-deploy
         with:
-          environment: prod
-        env:
+          ENVIRONMENT: prod
           NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
 
   release:

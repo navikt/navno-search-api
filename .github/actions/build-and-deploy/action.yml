@@ -1,9 +1,13 @@
 name: Build and deploy
 
 inputs:
-  environment:
+  ENVIRONMENT:
     required: true
     description: Environment name (e.g. dev, prod)
+
+  NAIS_WORKLOAD_IDENTITY_PROVIDER:
+    required: true
+    description: Workload identity provider for NAIS
 
 runs:
   using: composite
@@ -48,13 +52,12 @@ runs:
       id: docker-build-push
       with:
         team: navno
-        identity_provider: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
-        project_id: ${{vars.NAIS_MANAGEMENT_PROJECT_ID}}
+        identity_provider: ${{inputs.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
 
     - name: Deploy to Nais
       uses: nais/deploy/actions/deploy@v2
       env:
-        CLUSTER: ${{inputs.environment}}-gcp
+        CLUSTER: ${{inputs.ENVIRONMENT}}-gcp
         RESOURCE: ./.nais/nais.yaml
-        VARS: ./.nais/${{inputs.environment}}-gcp/navno.json
+        VARS: ./.nais/${{inputs.ENVIRONMENT}}-gcp/navno.json
         WORKLOAD_IMAGE: ${{steps.docker-build-push.outputs.image}}

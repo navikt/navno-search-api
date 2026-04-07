@@ -15,6 +15,5 @@ jobs:
       - name: Build and deploy dev
         uses: ./.github/actions/build-and-deploy
         with:
-          environment: dev
-        env:
+          ENVIRONMENT: dev
           NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
