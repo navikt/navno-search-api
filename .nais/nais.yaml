@@ -66,6 +66,8 @@ spec:
       rules:
         - application: "*"
           namespace: "*"
+        - application: logging
+          namespace: nais-system
   resources:
     requests:
       cpu: 100m

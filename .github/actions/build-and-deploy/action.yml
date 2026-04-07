@@ -1,0 +1,63 @@
+name: Build and deploy
+
+inputs:
+  ENVIRONMENT:
+    required: true
+    description: Environment name (e.g. dev, prod)
+
+  NAIS_WORKLOAD_IDENTITY_PROVIDER:
+    required: true
+    description: Workload identity provider for NAIS
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: "21"
+
+    - name: Setup Gradle
+      if: github.ref_name != 'main'
+      uses: gradle/actions/setup-gradle@v5
+
+    - name: Setup Gradle with dependency generation
+      if: github.ref_name == 'main'
+      uses: gradle/actions/setup-gradle@v5
+      with:
+        dependency-graph: generate-and-submit
+
+    - name: Build application
+      shell: bash
+      run: ./gradlew clean build --no-daemon
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Build JAR
+      shell: bash
+      run: ./gradlew bootJar --no-daemon -PgithubPassword="$GITHUB_TOKEN"
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Find changed files
+      id: changed-files
+      uses: nais/what-changed@main
+      with:
+        files: .nais/nais.yaml
+
+    - name: Build and push docker image and SBOM to OCI registry
+      if: steps.changed-files.outputs.changed != 'only-inputs'
+      uses: nais/docker-build-push@v0
+      id: docker-build-push
+      with:
+        team: navno
+        identity_provider: ${{inputs.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
+
+    - name: Deploy to Nais
+      uses: nais/deploy/actions/deploy@v2
+      env:
+        CLUSTER: ${{inputs.ENVIRONMENT}}-gcp
+        RESOURCE: ./.nais/nais.yaml
+        VARS: ./.nais/${{inputs.ENVIRONMENT}}-gcp/navno.json
+        WORKLOAD_IMAGE: ${{steps.docker-build-push.outputs.image}}

@@ -5,43 +5,26 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    steps:
-      - uses: actions/checkout@v6
-      - uses: ./.github/actions/test-and-build
-
-  deploy:
-    name: Deploy to prod
-    runs-on: ubuntu-latest
-    needs: build
     permissions:
       contents: read
       id-token: write
       packages: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Build JAR
-        run: ./gradlew bootJar --no-daemon -PgithubPassword=${{secrets.GITHUB_TOKEN}}
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - uses: ./.github/actions/deploy
+      - name: Build and deploy prod
+        uses: ./.github/actions/build-and-deploy
         with:
-          environment: prod
-        env:
+          ENVIRONMENT: prod
           NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER}}
 
   release:
     name: Create a new release
-    needs: deploy
+    needs: build-and-deploy
     runs-on: ubuntu-latest
     permissions:
       contents: write
