@@ -1,26 +1,30 @@
 package no.nav.navnosearchapi.search.factory.queries
 
+import no.nav.navnosearchadminapi.common.constants.KEYWORDS
 import no.nav.navnosearchapi.common.config.SearchConfig
 import org.opensearch.common.unit.Fuzziness
 import org.opensearch.index.query.BoolQueryBuilder
 import org.opensearch.index.query.DisMaxQueryBuilder
+import org.opensearch.index.query.MatchQueryBuilder
 import org.opensearch.index.query.MultiMatchQueryBuilder
 import org.opensearch.index.query.Operator
 
 fun searchAllTextQuery(term: String, skjemanummer: String? = null): BoolQueryBuilder {
     return BoolQueryBuilder()
-        // Filter (bidrar ikke til score) - alle treff må inneholde alle søkeord (på tvers av feltene)
         .filter(containsAllWordsInTermQuery(term))
         .should(
-            // Bruker subquery med høyest score
             DisMaxQueryBuilder().apply {
                 add(standardSearchQuery(term))
                 if (term.trim().length >= SearchConfig.NGRAM_MIN_LENGTH) add(ngramSearchQuery(term))
                 if (term.split(" ").size > 1) add(exactPhraseSearchQuery(term))
             }
-        ).apply {
-            // Krever ekstakt match på skjemanummer dersom det er satt
-            skjemanummer?.let { this.must(searchAllTextForPhraseQuery(it)) }
+        )
+        .apply {
+            if (skjemanummer != null) {
+                this.must(searchAllTextForPhraseQuery(skjemanummer))
+            } else {
+                this.should(keywordSearchQuery(term))
+            }
         }
 }
 
@@ -51,4 +55,8 @@ private fun ngramSearchQuery(term: String): MultiMatchQueryBuilder {
 
 private fun exactPhraseSearchQuery(term: String): MultiMatchQueryBuilder {
     return searchAllTextForPhraseQuery(term).boost(SearchConfig.EXACT_PHRASE_MATCH_BOOST)
+}
+
+private fun keywordSearchQuery(term: String): MatchQueryBuilder {
+    return MatchQueryBuilder(KEYWORDS, term).boost(SearchConfig.KEYWORD_WEIGHT)
 }

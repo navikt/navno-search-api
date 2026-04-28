@@ -1,22 +1,45 @@
 version: 2
+
 registries:
   navnoSearchAdminApi:
     type: maven-repository
     url: https://maven.pkg.github.com/navikt/navno-search-admin-api
     username: x-access-token
     password: ${{secrets.READER_TOKEN}}
+
 updates:
-  - package-ecosystem: github-actions
+  - package-ecosystem: "gradle"
     directory: "/"
-    schedule:
-      interval: daily
-    cooldown:
-      default-days: 7
-    open-pull-requests-limit: 10
-  - package-ecosystem: gradle
-    directory: "/"
-    schedule:
-      interval: daily
     registries:
       - navnoSearchAdminApi
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Oslo"
     open-pull-requests-limit: 10
+    pull-request-branch-name:
+      separator: "-"
+    cooldown:
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 7
+    ignore:
+      # Ønsker ikke PR for eventuelt nye versjoner. Det kan være versjoner som ikke er klare til prod ennå.
+      - dependency-name: "no.nav.navnosearchadminapi:common"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Oslo"
+    pull-request-branch-name:
+      separator: "-"
+    open-pull-requests-limit: 10
+    groups:
+      actions:
+        patterns: ["*"]
