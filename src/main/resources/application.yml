@@ -25,3 +25,6 @@ management:
       exposure:
         include: prometheus,health
       base-path: /internal
+  health:
+    elasticsearch:
+      enabled: false
