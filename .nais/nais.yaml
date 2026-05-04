@@ -18,16 +18,16 @@ spec:
     failureThreshold: 24
 
   liveness:
-    path: /internal/health
-    initialDelay: 5
-    periodSeconds: 5
-    failureThreshold: 6
+    path: /internal/health/liveness
+    initialDelay: 15
+    periodSeconds: 2
+    failureThreshold: 30
 
   readiness:
-    path: /internal/health
-    initialDelay: 5
-    periodSeconds: 5
-    failureThreshold: 6
+    path: /internal/health/readiness
+    initialDelay: 15
+    periodSeconds: 2
+    failureThreshold: 30
 
   observability:
     logging:
