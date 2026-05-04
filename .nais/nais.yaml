@@ -11,17 +11,23 @@ spec:
   image: {{ image }}
   port: 8080
 
-  liveness:
+  startup:
     path: /internal/health
     initialDelay: 15
-    periodSeconds: 2
-    failureThreshold: 30
+    periodSeconds: 5
+    failureThreshold: 24
+
+  liveness:
+    path: /internal/health
+    initialDelay: 5
+    periodSeconds: 5
+    failureThreshold: 6
 
   readiness:
     path: /internal/health
-    initialDelay: 15
-    periodSeconds: 2
-    failureThreshold: 30
+    initialDelay: 5
+    periodSeconds: 5
+    failureThreshold: 6
 
   observability:
     logging:
