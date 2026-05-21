@@ -67,7 +67,9 @@ class ErrorHandler {
             path = path
         )
 
-        logger.atLevel(if (status.is5xxServerError) Level.ERROR else Level.WARN).log(error.message, ex)
+        logger.atLevel(if (status.is5xxServerError) Level.ERROR else Level.WARN)
+            .setCause(ex)
+            .log("${error.message} [${ex::class.simpleName}: ${ex.message}]")
         return ResponseEntity(error, status)
     }
 }
