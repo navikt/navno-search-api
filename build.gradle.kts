@@ -78,7 +78,6 @@ tasks.withType<Test> {
     }
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.compilerOptions {
+tasks.getByName<KotlinCompile>("compileKotlin").compilerOptions {
     freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }
