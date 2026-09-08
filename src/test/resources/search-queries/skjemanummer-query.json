@@ -214,7 +214,7 @@
                 }
               }
             },
-            "weight": 2.0
+            "weight": 2.5
           },
           {
             "filter": {
@@ -225,7 +225,7 @@
                 }
               }
             },
-            "weight": 2.0
+            "weight": 2.5
           },
           {
             "filter": {
