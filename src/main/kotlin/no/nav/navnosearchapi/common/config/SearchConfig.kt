@@ -43,8 +43,8 @@ object SearchConfig {
     }
 
     val typeToWeight = mapOf(
-        ValidTypes.OVERSIKT.descriptor to 2.0f,
-        ValidTypes.PRODUKTSIDE.descriptor to 2.0f,
+        ValidTypes.OVERSIKT.descriptor to 2.5f,
+        ValidTypes.PRODUKTSIDE.descriptor to 2.5f,
         ValidTypes.GUIDE.descriptor to 2.0f,
         ValidTypes.TEMASIDE.descriptor to 1.75f,
         ValidTypes.SITUASJONSSIDE.descriptor to 1.75f,
