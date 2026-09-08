@@ -1,5 +1,6 @@
 package no.nav.navnosearchapi.search.dto
 
+import org.springframework.data.elasticsearch.core.document.Explanation
 import java.time.ZonedDateTime
 
 data class SearchResult(
@@ -24,6 +25,7 @@ data class SearchHit(
     val language: String,
     val type: String,
     val score: Float,
+    val explanation: Explanation? = null,
 )
 
 data class Aggregations(

@@ -12,6 +12,7 @@ import org.opensearch.data.client.orhlc.OpenSearchAggregations
 import org.opensearch.search.aggregations.bucket.filter.Filter
 import org.springframework.data.elasticsearch.core.AggregationsContainer
 import org.springframework.data.elasticsearch.core.SearchPage
+import org.springframework.data.elasticsearch.core.document.Explanation
 import java.time.ZonedDateTime
 
 private val providerSubaudiences = listOf(
@@ -42,7 +43,7 @@ fun SearchPage<Content>.toSearchResult(params: Params) = SearchResult(
     aggregations = searchHits.aggregations?.asMap()?.toAggregations(params),
     hits = searchHits.searchHits.map { searchHit ->
         searchHit.content.toHit(
-            searchHit.toHighlight(params.ord.isInQuotes()), searchHit.score
+            searchHit.toHighlight(params.ord.isInQuotes()), searchHit.score, searchHit.explanation
         )
     },
 )
@@ -51,7 +52,7 @@ private fun <T : Any> AggregationsContainer<T>.asMap(): Map<String, Long> {
     return (this as OpenSearchAggregations).aggregations().associate { it.name to (it as Filter).docCount }
 }
 
-private fun Content.toHit(highlight: String, score: Float): SearchHit {
+private fun Content.toHit(highlight: String, score: Float, explanation: Explanation?): SearchHit {
     val (publishedTime, modifiedTime) = resolveTimestamps(createdAt, lastUpdated, metatags, fylke)
     return SearchHit(
         displayName = title.value,
@@ -63,6 +64,7 @@ private fun Content.toHit(highlight: String, score: Float): SearchHit {
         language = language,
         type = type,
         score = score,
+        explanation = explanation,
     )
 }
 

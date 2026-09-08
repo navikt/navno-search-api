@@ -37,6 +37,7 @@ object SearchQueryFactory {
             .withFilter(postAggregationFilters(params.f, params.uf))
             .withHighlightBuilder(highlightBuilder(baseQuery, params.ord.isInQuotes()))
             .withTrackTotalHits(true)
+            .withExplain(true)
             .apply {
                 if (includeAggregations) withAggregations(aggregations())
                 if (params.s == 1) withSort(Sort.by(Sort.Direction.DESC, SORT_BY_DATE))
