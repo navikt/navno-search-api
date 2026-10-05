@@ -16,6 +16,8 @@ plugins {
     id("com.github.ben-manes.versions") version versionsVersion // ./gradlew dependencyUpdates to check for new versions
 }
 
+extra["tomcat.version"] = "11.0.25"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
