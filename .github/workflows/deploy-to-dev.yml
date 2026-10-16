@@ -3,17 +3,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v7
+  build:
+    uses: navikt/navno-ci/.github/workflows/jvm-build.yml@v1
+    permissions: { contents: read, id-token: write, packages: read }
+    secrets: inherit
 
-      - name: Build and deploy dev
-        uses: ./.github/actions/build-and-deploy
-        with:
-          ENVIRONMENT: dev
-          NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+  deploy:
+    needs: build
+    uses: navikt/navno-ci/.github/workflows/nais-deploy.yml@v1
+    permissions: { contents: read, id-token: write }
+    with:
+      cluster: dev-gcp
+      resource: .nais/nais.yaml
+      vars: .nais/dev-gcp/navno.json
+      workload-image: ${{ needs.build.outputs.image }}
