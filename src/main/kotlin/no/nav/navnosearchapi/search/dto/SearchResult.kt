@@ -1,11 +1,13 @@
 package no.nav.navnosearchapi.search.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.ZonedDateTime
 
 data class SearchResult(
     val page: Int,
     val s: Int,
     val preferredLanguage: String?,
+    @get:JsonProperty("isMore")
     val isMore: Boolean,
     val word: String,
     val total: Long,
