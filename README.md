@@ -34,6 +34,14 @@ Husk å starte applikasjonen med profile "local".
 - Lag en PR til main, og merge inn etter godkjenning (En automatisk release vil oppstå ved deploy til main)
 - Dersom det er ny versjon av [navno-search-admin-api](https://github.com/navikt/navno-search-admin-api/) må siste versjon av ```navnoSearchCommonVersion``` oppdateres
 
+## Rollback i prod
+
+[Actions](https://github.com/navikt/navno-search-api/actions) -> Rollback prod -> Run workflow. Tom tag gir releasen før den nyeste; ellers oppgi en `release/prod@...`-tag. Neste push til main deployer main igjen.
+
+## CI
+
+Workflowene bruker de felles workflowene i [navno-ci](https://github.com/navikt/navno-ci) og actions fra [navno-actions](https://github.com/navikt/navno-actions).
+
 ## Logging
 
 [Kibana](https://logs.adeo.no/app/discover#/view/c7ebebe0-aa35-11ee-991c-09effcd7b5da)
