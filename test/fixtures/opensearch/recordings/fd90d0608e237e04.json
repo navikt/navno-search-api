@@ -1,0 +1,1155 @@
+{
+  "request": {
+    "body": {
+      "explain": false,
+      "from": 0,
+      "highlight": {
+        "fields": {
+          "ingress.en": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "ingress.no": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "ingress.no.ngrams": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "ingress.other": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "text.en": {
+            "fragment_size": 200,
+            "number_of_fragments": 1
+          },
+          "text.no": {
+            "fragment_size": 200,
+            "number_of_fragments": 1
+          },
+          "text.no.ngrams": {
+            "fragment_size": 200,
+            "number_of_fragments": 1
+          },
+          "text.other": {
+            "fragment_size": 200,
+            "number_of_fragments": 1
+          },
+          "title.en": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "title.no": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          },
+          "title.other": {
+            "fragment_size": 100,
+            "number_of_fragments": 0
+          }
+        },
+        "highlight_query": {
+          "bool": {
+            "adjust_pure_negative": true,
+            "boost": 1,
+            "filter": [
+              {
+                "multi_match": {
+                  "auto_generate_synonyms_phrase_query": true,
+                  "boost": 1,
+                  "fields": [
+                    "allText.en^1.0",
+                    "allText.no^1.0",
+                    "allText.other^1.0",
+                    "ingress.en.ngrams^1.0",
+                    "ingress.no.ngrams^1.0",
+                    "ingress.other.ngrams^1.0",
+                    "title.en.ngrams^1.0",
+                    "title.no.ngrams^1.0",
+                    "title.other.ngrams^1.0"
+                  ],
+                  "fuzziness": "AUTO:6,8",
+                  "fuzzy_transpositions": true,
+                  "max_expansions": 50,
+                  "operator": "AND",
+                  "prefix_length": 0,
+                  "query": "dagpenger",
+                  "slop": 0,
+                  "type": "best_fields",
+                  "zero_terms_query": "NONE"
+                }
+              }
+            ],
+            "should": [
+              {
+                "dis_max": {
+                  "boost": 1,
+                  "queries": [
+                    {
+                      "multi_match": {
+                        "auto_generate_synonyms_phrase_query": true,
+                        "boost": 1,
+                        "fields": [
+                          "ingress.en^3.0",
+                          "ingress.no^3.0",
+                          "ingress.other^3.0",
+                          "text.en^0.01",
+                          "text.no^0.01",
+                          "text.other^0.01",
+                          "title.en^12.0",
+                          "title.no^12.0",
+                          "title.other^12.0"
+                        ],
+                        "fuzziness": "AUTO:6,8",
+                        "fuzzy_transpositions": true,
+                        "max_expansions": 50,
+                        "operator": "OR",
+                        "prefix_length": 0,
+                        "query": "dagpenger",
+                        "slop": 0,
+                        "type": "best_fields",
+                        "zero_terms_query": "NONE"
+                      }
+                    },
+                    {
+                      "multi_match": {
+                        "auto_generate_synonyms_phrase_query": true,
+                        "boost": 1,
+                        "fields": [
+                          "ingress.en.ngrams^3.0",
+                          "ingress.no.ngrams^3.0",
+                          "ingress.other.ngrams^3.0",
+                          "title.en.ngrams^11.5",
+                          "title.no.ngrams^11.5",
+                          "title.other.ngrams^11.5"
+                        ],
+                        "fuzzy_transpositions": true,
+                        "max_expansions": 50,
+                        "operator": "AND",
+                        "prefix_length": 0,
+                        "query": "dagpenger",
+                        "slop": 0,
+                        "type": "best_fields",
+                        "zero_terms_query": "NONE"
+                      }
+                    }
+                  ],
+                  "tie_breaker": 0
+                }
+              },
+              {
+                "match": {
+                  "keywords": {
+                    "auto_generate_synonyms_phrase_query": true,
+                    "boost": 1,
+                    "fuzzy_transpositions": true,
+                    "lenient": false,
+                    "max_expansions": 50,
+                    "operator": "OR",
+                    "prefix_length": 0,
+                    "query": "dagpenger",
+                    "zero_terms_query": "NONE"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "post_tags": [
+          "</b>"
+        ],
+        "pre_tags": [
+          "<b>"
+        ]
+      },
+      "post_filter": {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "must": [
+            {
+              "bool": {
+                "adjust_pure_negative": true,
+                "boost": 1,
+                "should": [
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "must": [
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "person"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "other"
+                                  }
+                                }
+                              },
+                              {
+                                "bool": {
+                                  "adjust_pure_negative": true,
+                                  "boost": 1,
+                                  "must_not": [
+                                    {
+                                      "exists": {
+                                        "boost": 1,
+                                        "field": "audience"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "informasjon"
+                            }
+                          }
+                        }
+                      ],
+                      "must_not": [
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "pressemelding"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "presse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "analyse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "statistikk"
+                            }
+                          }
+                        },
+                        {
+                          "exists": {
+                            "boost": 1,
+                            "field": "fylke"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "must": [
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "person"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "other"
+                                  }
+                                }
+                              },
+                              {
+                                "bool": {
+                                  "adjust_pure_negative": true,
+                                  "boost": 1,
+                                  "must_not": [
+                                    {
+                                      "exists": {
+                                        "boost": 1,
+                                        "field": "audience"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "type": {
+                                    "boost": 1,
+                                    "value": "kontor"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "type": {
+                                    "boost": 1,
+                                    "value": "kontor-legacy"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "must_not": [
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "pressemelding"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "presse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "analyse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "statistikk"
+                            }
+                          }
+                        },
+                        {
+                          "exists": {
+                            "boost": 1,
+                            "field": "fylke"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "must": [
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "person"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "other"
+                                  }
+                                }
+                              },
+                              {
+                                "bool": {
+                                  "adjust_pure_negative": true,
+                                  "boost": 1,
+                                  "must_not": [
+                                    {
+                                      "exists": {
+                                        "boost": 1,
+                                        "field": "audience"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "type": {
+                                    "boost": 1,
+                                    "value": "skjema"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "type": {
+                                    "boost": 1,
+                                    "value": "skjemaoversikt"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "must_not": [
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "pressemelding"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "presse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "analyse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "statistikk"
+                            }
+                          }
+                        },
+                        {
+                          "exists": {
+                            "boost": 1,
+                            "field": "fylke"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "must": [
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "should": [
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "person"
+                                  }
+                                }
+                              },
+                              {
+                                "term": {
+                                  "audience": {
+                                    "boost": 1,
+                                    "value": "other"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "nyhet"
+                            }
+                          }
+                        }
+                      ],
+                      "must_not": [
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "pressemelding"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "presse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "analyse"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "metatags": {
+                              "boost": 1,
+                              "value": "statistikk"
+                            }
+                          }
+                        },
+                        {
+                          "exists": {
+                            "boost": 1,
+                            "field": "fylke"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "query": {
+        "function_score": {
+          "boost": 1,
+          "functions": [
+            {
+              "filter": {
+                "term": {
+                  "metatags": {
+                    "boost": 1,
+                    "value": "nyhet"
+                  }
+                }
+              },
+              "weight": 0.25
+            }
+          ],
+          "max_boost": 3.4028235e+38,
+          "query": {
+            "function_score": {
+              "boost": 1,
+              "functions": [
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "oversikt"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "produktside"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "guide"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "temaside"
+                      }
+                    }
+                  },
+                  "weight": 1.75
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "situasjonsside"
+                      }
+                    }
+                  },
+                  "weight": 1.75
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "kontor"
+                      }
+                    }
+                  },
+                  "weight": 0.5
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "kontor-legacy"
+                      }
+                    }
+                  },
+                  "weight": 0.5
+                }
+              ],
+              "max_boost": 3.4028235e+38,
+              "query": {
+                "bool": {
+                  "adjust_pure_negative": true,
+                  "boost": 1,
+                  "filter": [
+                    {
+                      "bool": {
+                        "adjust_pure_negative": true,
+                        "boost": 1,
+                        "must": [
+                          {
+                            "bool": {
+                              "adjust_pure_negative": true,
+                              "boost": 1,
+                              "must_not": [
+                                {
+                                  "term": {
+                                    "languageRefs": {
+                                      "boost": 1,
+                                      "value": "nb"
+                                    }
+                                  }
+                                },
+                                {
+                                  "bool": {
+                                    "adjust_pure_negative": true,
+                                    "boost": 1,
+                                    "must": [
+                                      {
+                                        "term": {
+                                          "language": {
+                                            "boost": 1,
+                                            "value": "en"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "term": {
+                                          "languageRefs": {
+                                            "boost": 1,
+                                            "value": "nn"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "must": [
+                    {
+                      "bool": {
+                        "adjust_pure_negative": true,
+                        "boost": 1,
+                        "filter": [
+                          {
+                            "multi_match": {
+                              "auto_generate_synonyms_phrase_query": true,
+                              "boost": 1,
+                              "fields": [
+                                "allText.en^1.0",
+                                "allText.no^1.0",
+                                "allText.other^1.0",
+                                "ingress.en.ngrams^1.0",
+                                "ingress.no.ngrams^1.0",
+                                "ingress.other.ngrams^1.0",
+                                "title.en.ngrams^1.0",
+                                "title.no.ngrams^1.0",
+                                "title.other.ngrams^1.0"
+                              ],
+                              "fuzziness": "AUTO:6,8",
+                              "fuzzy_transpositions": true,
+                              "max_expansions": 50,
+                              "operator": "AND",
+                              "prefix_length": 0,
+                              "query": "dagpenger",
+                              "slop": 0,
+                              "type": "best_fields",
+                              "zero_terms_query": "NONE"
+                            }
+                          }
+                        ],
+                        "should": [
+                          {
+                            "dis_max": {
+                              "boost": 1,
+                              "queries": [
+                                {
+                                  "multi_match": {
+                                    "auto_generate_synonyms_phrase_query": true,
+                                    "boost": 1,
+                                    "fields": [
+                                      "ingress.en^3.0",
+                                      "ingress.no^3.0",
+                                      "ingress.other^3.0",
+                                      "text.en^0.01",
+                                      "text.no^0.01",
+                                      "text.other^0.01",
+                                      "title.en^12.0",
+                                      "title.no^12.0",
+                                      "title.other^12.0"
+                                    ],
+                                    "fuzziness": "AUTO:6,8",
+                                    "fuzzy_transpositions": true,
+                                    "max_expansions": 50,
+                                    "operator": "OR",
+                                    "prefix_length": 0,
+                                    "query": "dagpenger",
+                                    "slop": 0,
+                                    "type": "best_fields",
+                                    "zero_terms_query": "NONE"
+                                  }
+                                },
+                                {
+                                  "multi_match": {
+                                    "auto_generate_synonyms_phrase_query": true,
+                                    "boost": 1,
+                                    "fields": [
+                                      "ingress.en.ngrams^3.0",
+                                      "ingress.no.ngrams^3.0",
+                                      "ingress.other.ngrams^3.0",
+                                      "title.en.ngrams^11.5",
+                                      "title.no.ngrams^11.5",
+                                      "title.other.ngrams^11.5"
+                                    ],
+                                    "fuzzy_transpositions": true,
+                                    "max_expansions": 50,
+                                    "operator": "AND",
+                                    "prefix_length": 0,
+                                    "query": "dagpenger",
+                                    "slop": 0,
+                                    "type": "best_fields",
+                                    "zero_terms_query": "NONE"
+                                  }
+                                }
+                              ],
+                              "tie_breaker": 0
+                            }
+                          },
+                          {
+                            "match": {
+                              "keywords": {
+                                "auto_generate_synonyms_phrase_query": true,
+                                "boost": 1,
+                                "fuzzy_transpositions": true,
+                                "lenient": false,
+                                "max_expansions": 50,
+                                "operator": "OR",
+                                "prefix_length": 0,
+                                "query": "dagpenger",
+                                "zero_terms_query": "NONE"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              "score_mode": "max"
+            }
+          },
+          "score_mode": "max"
+        }
+      },
+      "size": 5,
+      "sort": [
+        {
+          "sortByDate": {
+            "mode": "min",
+            "order": "desc"
+          }
+        }
+      ],
+      "track_total_hits": 2147483647,
+      "version": true
+    },
+    "method": "POST",
+    "params": {
+      "allow_no_indices": "true",
+      "batched_reduce_size": "512",
+      "ccs_minimize_roundtrips": "true",
+      "expand_wildcards": "open",
+      "ignore_throttled": "true",
+      "ignore_unavailable": "false",
+      "max_concurrent_shard_requests": "5",
+      "search_type": "query_then_fetch",
+      "typed_keys": "true"
+    },
+    "path": "/search-content-v10/_search"
+  },
+  "response": {
+    "body": {
+      "_shards": {
+        "failed": 0,
+        "skipped": 0,
+        "successful": 1,
+        "total": 1
+      },
+      "hits": {
+        "hits": [
+          {
+            "_id": "golden-nyhet-satser",
+            "_index": "search-content-v10",
+            "_score": null,
+            "_source": {
+              "allText": {
+                "no": "Nye satser for dagpenger, Fra 1. januar øker satsene for dagpenger., Fra 1. januar øker satsene for dagpenger."
+              },
+              "audience": [
+                "person"
+              ],
+              "createdAt": "2024-12-02T09:00:00.000+01:00",
+              "href": "https://www.nav.no/nyheter/nye-satser",
+              "id": "golden-nyhet-satser",
+              "ingress": {
+                "no": "Fra 1. januar øker satsene for dagpenger."
+              },
+              "keywords": [],
+              "language": "nb",
+              "languageRefs": [],
+              "lastUpdated": "2024-12-05T14:30:00.500+01:00",
+              "metatags": [
+                "nyhet"
+              ],
+              "sortByDate": "2024-12-05T14:30:00.500+01:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Fra 1. januar øker satsene for dagpenger."
+              },
+              "title": {
+                "no": "Nye satser for dagpenger"
+              },
+              "type": "aktuelt"
+            },
+            "_version": 1,
+            "highlight": {
+              "ingress.no": [
+                "Fra 1. januar øker satsene for <b>dagpenger</b>."
+              ],
+              "ingress.no.ngrams": [
+                "Fra 1. januar øker satsene for <b>dagpenger</b>."
+              ],
+              "text.no": [
+                "Fra 1. januar øker satsene for <b>dagpenger</b>."
+              ],
+              "title.no": [
+                "Nye satser for <b>dagpenger</b>"
+              ]
+            },
+            "sort": [
+              1733405400500
+            ]
+          },
+          {
+            "_id": "golden-permittering",
+            "_index": "search-content-v10",
+            "_score": null,
+            "_source": {
+              "allText": {
+                "no": "Permittering, Informasjon om permittering for deg som er permittert og for arbeidsgivere., Når du er permittert, kan du ha rett til dagpenger. Arbeidsgiveren må betale lønn de første dagene."
+              },
+              "audience": [
+                "person",
+                "employer"
+              ],
+              "createdAt": "2020-03-15T20:00:00.000+01:00",
+              "href": "https://www.nav.no/permittering",
+              "id": "golden-permittering",
+              "ingress": {
+                "no": "Informasjon om permittering for deg som er permittert og for arbeidsgivere."
+              },
+              "keywords": [],
+              "language": "nb",
+              "languageRefs": [],
+              "lastUpdated": "2024-02-29T09:00:00.000+01:00",
+              "metatags": [
+                "informasjon"
+              ],
+              "sortByDate": "2024-02-29T09:00:00.000+01:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Når du er permittert, kan du ha rett til dagpenger. Arbeidsgiveren må betale lønn de første dagene."
+              },
+              "title": {
+                "no": "Permittering"
+              },
+              "type": "andre"
+            },
+            "_version": 1,
+            "highlight": {
+              "text.no": [
+                "Når du er permittert, kan du ha rett til <b>dagpenger</b>. Arbeidsgiveren må betale lønn de første dagene."
+              ]
+            },
+            "sort": [
+              1709193600000
+            ]
+          },
+          {
+            "_id": "golden-dagpenger",
+            "_index": "search-content-v10",
+            "_score": null,
+            "_source": {
+              "allText": {
+                "no": "Dagpenger, Dagpenger skal sikre deg inntekt når du er arbeidsledig eller permittert., Du kan få dagpenger hvis du har mistet jobben eller er permittert. Du må være registrert som arbeidssøker og sende meldekort hver fjortende dag., arbeidsledig, permittert"
+              },
+              "audience": [
+                "person"
+              ],
+              "createdAt": "2023-03-28T15:28:58.022+02:00",
+              "href": "https://www.nav.no/dagpenger",
+              "id": "golden-dagpenger",
+              "ingress": {
+                "no": "Dagpenger skal sikre deg inntekt når du er arbeidsledig eller permittert."
+              },
+              "keywords": [
+                "arbeidsledig",
+                "permittert"
+              ],
+              "language": "nb",
+              "languageRefs": [
+                "nn",
+                "en"
+              ],
+              "lastUpdated": "2024-01-02T10:46:08.120+01:00",
+              "metatags": [
+                "informasjon"
+              ],
+              "sortByDate": "2024-01-02T10:46:08.120+01:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Du kan få dagpenger hvis du har mistet jobben eller er permittert. Du må være registrert som arbeidssøker og sende meldekort hver fjortende dag."
+              },
+              "title": {
+                "no": "Dagpenger"
+              },
+              "type": "produktside"
+            },
+            "_version": 1,
+            "highlight": {
+              "ingress.no": [
+                "<b>Dagpenger</b> skal sikre deg inntekt når du er arbeidsledig eller permittert."
+              ],
+              "ingress.no.ngrams": [
+                "<b>Dagpenger</b> skal sikre deg inntekt når du er arbeidsledig eller permittert."
+              ],
+              "text.no": [
+                "Du kan få <b>dagpenger</b> hvis du har mistet jobben eller er permittert. Du må være registrert som arbeidssøker og sende meldekort hver fjortende dag."
+              ],
+              "title.no": [
+                "<b>Dagpenger</b>"
+              ]
+            },
+            "sort": [
+              1704188768120
+            ]
+          },
+          {
+            "_id": "golden-soknad-dagpenger",
+            "_index": "search-content-v10",
+            "_score": null,
+            "_source": {
+              "allText": {
+                "no": "Søknad om dagpenger (NAV 04-01.03), Søk om dagpenger når du er arbeidsledig eller permittert., Søk om dagpenger når du er arbeidsledig eller permittert."
+              },
+              "audience": [
+                "person"
+              ],
+              "createdAt": "2023-09-03T10:00:00.000+02:00",
+              "href": "https://www.nav.no/soknader/dagpenger",
+              "id": "golden-soknad-dagpenger",
+              "ingress": {
+                "no": "Søk om dagpenger når du er arbeidsledig eller permittert."
+              },
+              "keywords": [],
+              "language": "nb",
+              "languageRefs": [],
+              "lastUpdated": "2023-09-03T10:00:00.000+02:00",
+              "metatags": [],
+              "sortByDate": "2023-09-03T10:00:00.000+02:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Søk om dagpenger når du er arbeidsledig eller permittert."
+              },
+              "title": {
+                "no": "Søknad om dagpenger (NAV 04-01.03)"
+              },
+              "type": "skjema"
+            },
+            "_version": 1,
+            "highlight": {
+              "ingress.no": [
+                "Søk om <b>dagpenger</b> når du er arbeidsledig eller permittert."
+              ],
+              "ingress.no.ngrams": [
+                "Søk om <b>dagpenger</b> når du er arbeidsledig eller permittert."
+              ],
+              "text.no": [
+                "Søk om <b>dagpenger</b> når du er arbeidsledig eller permittert."
+              ],
+              "title.no": [
+                "Søknad om <b>dagpenger</b> (NAV 04-01.03)"
+              ]
+            },
+            "sort": [
+              1693728000000
+            ]
+          },
+          {
+            "_id": "golden-side-arbeidssoker",
+            "_index": "search-content-v10",
+            "_score": null,
+            "_source": {
+              "allText": {
+                "no": "Registrer deg som arbeidssøker, Du må registrere deg som arbeidssøker for å få dagpenger og hjelp til å finne arbeid., Du må registrere deg som arbeidssøker for å få dagpenger og hjelp til å finne arbeid. Les om hvem som kan få det, og hvordan du søker."
+              },
+              "audience": [],
+              "createdAt": "2023-06-18T12:00:00.000+01:00",
+              "href": "https://www.nav.no/arbeidssoker",
+              "id": "golden-side-arbeidssoker",
+              "ingress": {
+                "no": "Du må registrere deg som arbeidssøker for å få dagpenger og hjelp til å finne arbeid."
+              },
+              "keywords": [],
+              "language": "nb",
+              "languageRefs": [],
+              "lastUpdated": "2023-06-18T12:00:00.000+01:00",
+              "metatags": [
+                "informasjon"
+              ],
+              "sortByDate": "2023-06-18T12:00:00.000+01:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Du må registrere deg som arbeidssøker for å få dagpenger og hjelp til å finne arbeid. Les om hvem som kan få det, og hvordan du søker."
+              },
+              "title": {
+                "no": "Registrer deg som arbeidssøker"
+              },
+              "type": "andre"
+            },
+            "_version": 1,
+            "highlight": {
+              "ingress.no": [
+                "Du må registrere deg som arbeidssøker for å få <b>dagpenger</b> og hjelp til å finne arbeid."
+              ],
+              "ingress.no.ngrams": [
+                "Du må registrere deg som arbeidssøker for å få <b>dagpenger</b> og hjelp til å finne arbeid."
+              ],
+              "text.no": [
+                "Du må registrere deg som arbeidssøker for å få <b>dagpenger</b> og hjelp til å finne arbeid. Les om hvem som kan få det, og hvordan du søker."
+              ]
+            },
+            "sort": [
+              1687086000000
+            ]
+          }
+        ],
+        "max_score": null,
+        "total": {
+          "relation": "eq",
+          "value": 6
+        }
+      },
+      "timed_out": false,
+      "took": 36
+    },
+    "headers": {
+      "content-type": "application/json; charset=UTF-8"
+    },
+    "status": 200
+  }
+}

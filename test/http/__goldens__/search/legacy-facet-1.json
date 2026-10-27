@@ -1,0 +1,24 @@
+{
+  "logs": [
+    {
+      "level": "ERROR",
+      "message": "Ukjent feil"
+    }
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/content/search?ord=&page=0&f=1&uf=&s=1&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "error": "Internal Server Error",
+      "message": "Ukjent feil",
+      "path": "/content/search",
+      "status": 500,
+      "timestamp": "<local date-time>"
+    },
+    "status": 500,
+    "type": "application/json"
+  },
+  "upstream": []
+}

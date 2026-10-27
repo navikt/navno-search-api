@@ -1,0 +1,212 @@
+{
+  "request": {
+    "body": {
+      "explain": false,
+      "from": 0,
+      "query": {
+        "function_score": {
+          "boost": 1,
+          "functions": [
+            {
+              "filter": {
+                "term": {
+                  "metatags": {
+                    "boost": 1,
+                    "value": "nyhet"
+                  }
+                }
+              },
+              "weight": 0.25
+            }
+          ],
+          "max_boost": 3.4028235e+38,
+          "query": {
+            "function_score": {
+              "boost": 1,
+              "functions": [
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "oversikt"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "produktside"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "guide"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "temaside"
+                      }
+                    }
+                  },
+                  "weight": 1.75
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "situasjonsside"
+                      }
+                    }
+                  },
+                  "weight": 1.75
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "kontor"
+                      }
+                    }
+                  },
+                  "weight": 0.5
+                },
+                {
+                  "filter": {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "kontor-legacy"
+                      }
+                    }
+                  },
+                  "weight": 0.5
+                }
+              ],
+              "max_boost": 3.4028235e+38,
+              "query": {
+                "match": {
+                  "href": {
+                    "auto_generate_synonyms_phrase_query": true,
+                    "boost": 1,
+                    "fuzziness": "AUTO",
+                    "fuzzy_transpositions": true,
+                    "lenient": false,
+                    "max_expansions": 50,
+                    "operator": "OR",
+                    "prefix_length": 0,
+                    "query": "https://www.nav.no/dagpengr",
+                    "zero_terms_query": "NONE"
+                  }
+                }
+              },
+              "score_mode": "max"
+            }
+          },
+          "score_mode": "max"
+        }
+      },
+      "size": 10,
+      "version": true
+    },
+    "method": "POST",
+    "params": {
+      "allow_no_indices": "true",
+      "batched_reduce_size": "512",
+      "ccs_minimize_roundtrips": "true",
+      "expand_wildcards": "open",
+      "ignore_throttled": "true",
+      "ignore_unavailable": "false",
+      "max_concurrent_shard_requests": "5",
+      "search_type": "query_then_fetch",
+      "typed_keys": "true"
+    },
+    "path": "/search-content-v10/_search"
+  },
+  "response": {
+    "body": {
+      "_shards": {
+        "failed": 0,
+        "skipped": 0,
+        "successful": 1,
+        "total": 1
+      },
+      "hits": {
+        "hits": [
+          {
+            "_id": "golden-dagpenger",
+            "_index": "search-content-v10",
+            "_score": 7.7061186,
+            "_source": {
+              "allText": {
+                "no": "Dagpenger, Dagpenger skal sikre deg inntekt når du er arbeidsledig eller permittert., Du kan få dagpenger hvis du har mistet jobben eller er permittert. Du må være registrert som arbeidssøker og sende meldekort hver fjortende dag., arbeidsledig, permittert"
+              },
+              "audience": [
+                "person"
+              ],
+              "createdAt": "2023-03-28T15:28:58.022+02:00",
+              "href": "https://www.nav.no/dagpenger",
+              "id": "golden-dagpenger",
+              "ingress": {
+                "no": "Dagpenger skal sikre deg inntekt når du er arbeidsledig eller permittert."
+              },
+              "keywords": [
+                "arbeidsledig",
+                "permittert"
+              ],
+              "language": "nb",
+              "languageRefs": [
+                "nn",
+                "en"
+              ],
+              "lastUpdated": "2024-01-02T10:46:08.120+01:00",
+              "metatags": [
+                "informasjon"
+              ],
+              "sortByDate": "2024-01-02T10:46:08.120+01:00",
+              "teamOwnedBy": "golden",
+              "text": {
+                "no": "Du kan få dagpenger hvis du har mistet jobben eller er permittert. Du må være registrert som arbeidssøker og sende meldekort hver fjortende dag."
+              },
+              "title": {
+                "no": "Dagpenger"
+              },
+              "type": "produktside"
+            },
+            "_version": 1
+          }
+        ],
+        "max_score": 7.7061186,
+        "total": {
+          "relation": "eq",
+          "value": 1
+        }
+      },
+      "timed_out": false,
+      "took": 8
+    },
+    "headers": {
+      "content-type": "application/json; charset=UTF-8"
+    },
+    "status": 200
+  }
+}

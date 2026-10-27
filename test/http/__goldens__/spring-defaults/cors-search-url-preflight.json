@@ -1,0 +1,28 @@
+{
+  "logs": [],
+  "request": {
+    "headers": {
+      "access-control-request-headers": "x-custom",
+      "access-control-request-method": "GET",
+      "origin": "https://www.nav.no"
+    },
+    "method": "OPTIONS",
+    "path": "/content/search-url?term=dagpenger"
+  },
+  "response": {
+    "body": "",
+    "headers": {
+      "access-control-allow-credentials": null,
+      "access-control-allow-headers": "x-custom",
+      "access-control-allow-methods": "GET",
+      "access-control-allow-origin": "*",
+      "access-control-max-age": "1800",
+      "allow": "GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH",
+      "content-type": null,
+      "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+    },
+    "status": 200,
+    "type": null
+  },
+  "upstream": []
+}

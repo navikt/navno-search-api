@@ -1,0 +1,804 @@
+{
+  "logs": [],
+  "request": {
+    "method": "GET",
+    "path": "/content/search?ord=&page=0&f=samarbeidspartner&uf=informasjon&s=0&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "aggregations": {
+        "fasetter": {
+          "buckets": [
+            {
+              "checked": false,
+              "docCount": 49,
+              "key": "privatperson",
+              "name": "Privatperson",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": true,
+                    "docCount": 42,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 2,
+                    "key": "kontor",
+                    "name": "Kontor",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 3,
+                    "key": "soknad-og-skjema",
+                    "name": "Søknad og skjema",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 2,
+                    "key": "aktuelt",
+                    "name": "Aktuelt",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 25,
+              "key": "arbeidsgiver",
+              "name": "Arbeidsgiver",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": true,
+                    "docCount": 22,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "kontor",
+                    "name": "Kontor",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "soknad-og-skjema",
+                    "name": "Søknad og skjema",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "aktuelt",
+                    "name": "Aktuelt",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": true,
+              "docCount": 25,
+              "key": "samarbeidspartner",
+              "name": "Samarbeidspartner",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": true,
+                    "docCount": 22,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "kontor",
+                    "name": "Kontor",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "soknad-og-skjema",
+                    "name": "Søknad og skjema",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "aktuelt",
+                    "name": "Aktuelt",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 2,
+              "key": "presse",
+              "name": "Presse",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 3,
+              "key": "statistikk",
+              "name": "Statistikk",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "artikler",
+                    "name": "Artikler",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "nyheter",
+                    "name": "Nyheter",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "tabeller",
+                    "name": "Tabeller",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 2,
+              "key": "analyser-og-forskning",
+              "name": "Analyser og forskning",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "artikler",
+                    "name": "Artikler",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "nyheter",
+                    "name": "Nyheter",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 13,
+              "key": "innhold-fra-fylker",
+              "name": "Innhold fra fylker",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "agder",
+                    "name": "Agder",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "innlandet",
+                    "name": "Innlandet",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "more-og-romsdal",
+                    "name": "Møre og Romsdal",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "nordland",
+                    "name": "Nordland",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "oslo",
+                    "name": "Oslo",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "rogaland",
+                    "name": "Rogaland",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "troms-og-finnmark",
+                    "name": "Troms og Finnmark",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "trondelag",
+                    "name": "Trøndelag",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "vestfold-og-telemark",
+                    "name": "Vestfold og Telemark",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "vestland",
+                    "name": "Vestland",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "vest-viken",
+                    "name": "Vest-Viken",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "ost-viken",
+                    "name": "Øst-Viken",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "fasettKey": "samarbeidspartner",
+      "hits": [
+        {
+          "audience": [
+            "person",
+            "other"
+          ],
+          "displayName": "Barnetrygd",
+          "highlight": "Barnetrygd er et bidrag til forsørgelse av barn under 18 år.",
+          "href": "https://www.nav.no/barnetrygd",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 2,
+          "type": "produktside"
+        },
+        {
+          "audience": [],
+          "displayName": "Informasjon uten målgruppe",
+          "highlight": "Denne siden har ingen målgruppe, og vises derfor for alle.",
+          "href": "https://www.nav.no/informasjon-uten-malgruppe",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Informasjon for andre",
+          "highlight": "Denne siden er merket med målgruppen andre.",
+          "href": "https://www.nav.no/informasjon-for-andre",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "provider_doctor"
+          ],
+          "displayName": "Informasjon til leger",
+          "highlight": "Det du som lege trenger å vite om sykmelding og legeerklæringer.",
+          "href": "https://www.nav.no/samarbeidspartner/leger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "provider_municipality_employed",
+            "provider_other"
+          ],
+          "displayName": "Informasjon til ansatte i kommunen",
+          "highlight": "Om samarbeidet mellom Nav og kommunen om oppfølging av brukere.",
+          "href": "https://www.nav.no/samarbeidspartner/kommune",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Engangsstønad",
+          "highlight": "Engangsstønad er en skattefri sum du kan få for hvert barn hvis du ikke har rett til foreldrepenger.",
+          "href": "https://www.nav.no/engangsstonad",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Uføretrygd",
+          "highlight": "Uføretrygd skal sikre inntekt for deg som har varig nedsatt arbeidsevne på grunn av sykdom eller skade.",
+          "href": "https://www.nav.no/uforetrygd",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Hjelpestønad",
+          "highlight": "Hjelpestønad kan du få hvis du har et særskilt behov for tilsyn og pleie.",
+          "href": "https://www.nav.no/hjelpestonad",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Barnebidrag",
+          "highlight": "Barnebidrag skal sikre at begge foreldrene bidrar til å forsørge barnet.",
+          "href": "https://www.nav.no/barnebidrag",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Omsorgspenger",
+          "highlight": "Omsorgspenger kan du få når du må være borte fra jobb fordi barnet ditt er sykt.",
+          "href": "https://www.nav.no/omsorgspenger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Opplæringspenger",
+          "highlight": "Opplæringspenger kan du få når du deltar på opplæring for å ta vare på et barn med langvarig sykdom.",
+          "href": "https://www.nav.no/opplaeringspenger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Lønnsgaranti ved konkurs",
+          "highlight": "Lønnsgarantiordningen sikrer lønn til deg som jobber i en bedrift som går konkurs.",
+          "href": "https://www.nav.no/lonnsgaranti",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Svangerskapspenger",
+          "highlight": "Svangerskapspenger kan du få når du er gravid og ikke kan fortsette i jobben din.",
+          "href": "https://www.nav.no/svangerskapspenger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Kvalifiseringsprogrammet",
+          "highlight": "Kvalifiseringsprogrammet skal hjelpe deg som står langt fra arbeidslivet ut i arbeid.",
+          "href": "https://www.nav.no/kvalifiseringsprogrammet",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Økonomisk sosialhjelp",
+          "highlight": "Økonomisk sosialhjelp er en midlertidig ytelse for deg som ikke kan forsørge deg selv.",
+          "href": "https://www.nav.no/sosialhjelp",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Tips til jobbsøkere",
+          "highlight": "Her får du tips om hvordan du søker jobb og skriver en god CV.",
+          "href": "https://www.nav.no/jobbsoker",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Registrer deg som arbeidssøker",
+          "highlight": "Du må registrere deg som arbeidssøker for å få dagpenger og hjelp til å finne arbeid.",
+          "href": "https://www.nav.no/arbeidssoker",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Stønad til bil",
+          "highlight": "Du kan få stønad til bil hvis du har varig nedsatt funksjonsevne.",
+          "href": "https://www.nav.no/bilstonad",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [],
+          "displayName": "Tannbehandling",
+          "highlight": "Nav kan dekke utgifter til tannbehandling i enkelte tilfeller.",
+          "href": "https://www.nav.no/tannbehandling",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "other"
+          ],
+          "displayName": "Ventelønn",
+          "highlight": "Ventelønn var en ordning for statsansatte som ble sagt opp.",
+          "href": "https://www.nav.no/ventelonn",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 1,
+          "type": "andre"
+        }
+      ],
+      "isMore": true,
+      "page": 0,
+      "preferredLanguage": "nb",
+      "s": 0,
+      "total": 22,
+      "word": ""
+    },
+    "status": 200,
+    "type": "application/json"
+  },
+  "upstream": [
+    {
+      "body": {
+        "aggregations": {
+          "$golden": "shared/aggregations.146663cd041e.json"
+        },
+        "explain": false,
+        "from": 0,
+        "highlight": {
+          "fields": {
+            "ingress.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no.ngrams": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "text.en": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no.ngrams": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.other": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "title.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            }
+          },
+          "highlight_query": {
+            "match_all": {
+              "boost": 1
+            }
+          },
+          "post_tags": [
+            "</b>"
+          ],
+          "pre_tags": [
+            "<b>"
+          ]
+        },
+        "post_filter": {
+          "$golden": "shared/post_filter.1aed0d45acbf.json"
+        },
+        "query": {
+          "function_score": {
+            "boost": 1,
+            "functions": [
+              {
+                "filter": {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                "weight": 0.25
+              }
+            ],
+            "max_boost": 3.4028235e+38,
+            "query": {
+              "function_score": {
+                "boost": 1,
+                "functions": [
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "oversikt"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "produktside"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "guide"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "temaside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "situasjonsside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor-legacy"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  }
+                ],
+                "max_boost": 3.4028235e+38,
+                "query": {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "filter": [
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must": [
+                            {
+                              "bool": {
+                                "adjust_pure_negative": true,
+                                "boost": 1,
+                                "must_not": [
+                                  {
+                                    "term": {
+                                      "languageRefs": {
+                                        "boost": 1,
+                                        "value": "nb"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "bool": {
+                                      "adjust_pure_negative": true,
+                                      "boost": 1,
+                                      "must": [
+                                        {
+                                          "term": {
+                                            "language": {
+                                              "boost": 1,
+                                              "value": "en"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "term": {
+                                            "languageRefs": {
+                                              "boost": 1,
+                                              "value": "nn"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "must": [
+                      {
+                        "match_all": {
+                          "boost": 1
+                        }
+                      }
+                    ]
+                  }
+                },
+                "score_mode": "max"
+              }
+            },
+            "score_mode": "max"
+          }
+        },
+        "size": 20,
+        "track_total_hits": 2147483647,
+        "version": true
+      },
+      "method": "POST",
+      "params": {
+        "allow_no_indices": "true",
+        "batched_reduce_size": "512",
+        "ccs_minimize_roundtrips": "true",
+        "expand_wildcards": "open",
+        "ignore_throttled": "true",
+        "ignore_unavailable": "false",
+        "max_concurrent_shard_requests": "5",
+        "search_type": "query_then_fetch",
+        "typed_keys": "true"
+      },
+      "path": "/search-content-v10/_search"
+    }
+  ]
+}

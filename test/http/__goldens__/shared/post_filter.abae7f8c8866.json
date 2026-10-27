@@ -1,0 +1,96 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "should": [
+            {
+              "bool": {
+                "adjust_pure_negative": true,
+                "boost": 1,
+                "must": [
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "should": [
+                        {
+                          "term": {
+                            "audience": {
+                              "boost": 1,
+                              "value": "person"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "audience": {
+                              "boost": 1,
+                              "value": "other"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "nyhet"
+                      }
+                    }
+                  }
+                ],
+                "must_not": [
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "pressemelding"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "presse"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "analyse"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "statistikk"
+                      }
+                    }
+                  },
+                  {
+                    "exists": {
+                      "boost": 1,
+                      "field": "fylke"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

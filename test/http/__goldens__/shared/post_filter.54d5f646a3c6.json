@@ -1,0 +1,50 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "should": [
+            {
+              "bool": {
+                "adjust_pure_negative": true,
+                "boost": 1,
+                "must": [
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "analyse"
+                      }
+                    }
+                  }
+                ],
+                "must_not": [
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "nyhet"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "pressemelding"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
