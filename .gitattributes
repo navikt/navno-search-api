@@ -1,0 +1,3 @@
+# Recorded OpenSearch traffic and fixture dumps for the golden suite (test/http/README.md): reviewed through the goldens
+test/fixtures/opensearch/recordings/** linguist-generated -diff
+test/fixtures/opensearch/seed.ndjson linguist-generated -diff

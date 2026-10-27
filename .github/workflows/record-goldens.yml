@@ -1,0 +1,105 @@
+name: Record goldens
+
+# Records the golden files of test/http/ from the Kotlin app (test/http/README.md), and commits them to the branch.
+# The OpenSearch it records against is a throwaway container in this job, created and filled with synthetic
+# documents by GoldenFixtures.kt. Nothing here reaches NAIS, Aiven or real data; the only outside fetches are the
+# common library from GitHub Packages and the public OpenSearch image.
+#
+# Run it on a pull request by adding the label `record-goldens` (removed again afterwards), or on a branch with
+# "Run workflow" once this file is on main.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  record:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref_name != 'main') ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'record-goldens')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      packages: read
+      pull-requests: write
+    env:
+      BRANCH: ${{ github.head_ref || github.ref_name }}
+    services:
+      opensearch:
+        image: opensearchproject/opensearch:2.19.6
+        env:
+          discovery.type: single-node
+          DISABLE_SECURITY_PLUGIN: 'true'
+          DISABLE_INSTALL_DEMO_CONFIG: 'true'
+          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd "curl -fs http://localhost:9200/_cluster/health"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.BRANCH }}
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      - uses: navikt/navno-actions/setup-node-pnpm@v1
+
+      - name: Create the index and the documents
+        run: ./gradlew test --tests 'no.nav.navnosearchapi.golden.GoldenFixtures' --no-daemon
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GOLDEN_OPENSEARCH_URI: http://localhost:9200
+
+      - name: Export the index and the documents
+        run: node test/fixtures/opensearch/export.ts http://localhost:9200
+
+      - name: Build the Kotlin app
+        run: ./gradlew bootJar --no-daemon
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Record
+        run: pnpm test:http:record
+        env:
+          RECORD_UPSTREAM: http://localhost:9200
+          GOLDEN_CHECK_UNUSED: 'true'
+
+      # Also when recording failed, to see how far it got
+      - name: Keep what was recorded
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goldens
+          path: |
+            test/http/__goldens__
+            test/fixtures/opensearch
+          if-no-files-found: ignore
+
+      - name: Commit to the branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add test/http/__goldens__ test/fixtures/opensearch
+          if git diff --cached --quiet; then
+            echo 'The goldens are unchanged'
+            exit 0
+          fi
+          git commit -m 'Ta opp goldens fra Kotlin-appen'
+          git push origin "HEAD:$BRANCH"
+
+      - name: Remove the label
+        if: always() && github.event_name == 'pull_request'
+        run: gh pr edit ${{ github.event.pull_request.number }} --remove-label record-goldens
+        env:
+          GH_TOKEN: ${{ github.token }}
