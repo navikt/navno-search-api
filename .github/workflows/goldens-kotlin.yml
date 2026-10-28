@@ -1,0 +1,48 @@
+name: Goldens (Kotlin)
+
+# Checks that the Kotlin app still does what the golden files in test/http/ say, by replaying the recorded OpenSearch
+# answers (test/http/README.md). No OpenSearch and no Docker needed.
+
+on:
+  pull_request:
+    paths:
+      - 'test/**'
+      - 'src/main/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/goldens-kotlin.yml'
+
+jobs:
+  goldens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      - uses: navikt/navno-actions/setup-node-pnpm@v1
+
+      - name: Lint the suite
+        run: pnpm lint && pnpm format:check
+
+      - name: Build the Kotlin app
+        run: ./gradlew bootJar --no-daemon
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Check the goldens
+        run: pnpm test:http:kotlin
+        env:
+          GOLDEN_CHECK_UNUSED: 'true'

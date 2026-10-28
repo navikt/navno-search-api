@@ -25,6 +25,10 @@ opensearch:
 
 Husk å starte applikasjonen med profile "local".
 
+## Golden-tester
+
+`test/http/` har tester som låser hva API-et gjør over HTTP i dag, før det skrives om til TypeScript. Se [test/http/README.md](test/http/README.md).
+
 ## Deploy til dev
 
 [Actions](https://github.com/navikt/navno-search-api/actions) -> Velg workflow -> Run workflow -> Velg branch -> Run workflow
