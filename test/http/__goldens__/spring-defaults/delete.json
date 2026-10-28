@@ -1,0 +1,34 @@
+{
+  "logs": [
+    {
+      "level": "ERROR",
+      "message": "Ukjent feil"
+    }
+  ],
+  "request": {
+    "method": "DELETE",
+    "path": "/content/decorator-search?ord=dagpenger&f=privatperson&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "error": "Internal Server Error",
+      "message": "Ukjent feil",
+      "path": "/content/decorator-search",
+      "status": 500,
+      "timestamp": "<local date-time>"
+    },
+    "headers": {
+      "access-control-allow-credentials": null,
+      "access-control-allow-headers": null,
+      "access-control-allow-methods": null,
+      "access-control-allow-origin": null,
+      "access-control-max-age": null,
+      "allow": null,
+      "content-type": "application/json",
+      "vary": null
+    },
+    "status": 500,
+    "type": "application/json"
+  },
+  "upstream": []
+}

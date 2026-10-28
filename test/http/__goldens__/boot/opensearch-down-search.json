@@ -1,0 +1,24 @@
+{
+  "logs": [
+    {
+      "level": "ERROR",
+      "message": "Ukjent feil"
+    }
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/content/decorator-search?ord=dagpenger&f=privatperson&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "error": "Internal Server Error",
+      "message": "Ukjent feil",
+      "path": "/content/decorator-search",
+      "status": 500,
+      "timestamp": "<local date-time>"
+    },
+    "status": 500,
+    "type": "application/json"
+  },
+  "upstream": []
+}

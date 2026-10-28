@@ -1,0 +1,126 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "should": [
+            {
+              "bool": {
+                "adjust_pure_negative": true,
+                "boost": 1,
+                "must": [
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "should": [
+                        {
+                          "term": {
+                            "audience": {
+                              "boost": 1,
+                              "value": "provider"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "audience": {
+                              "boost": 1,
+                              "value": "other"
+                            }
+                          }
+                        },
+                        {
+                          "bool": {
+                            "adjust_pure_negative": true,
+                            "boost": 1,
+                            "must_not": [
+                              {
+                                "exists": {
+                                  "boost": 1,
+                                  "field": "audience"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "bool": {
+                      "adjust_pure_negative": true,
+                      "boost": 1,
+                      "should": [
+                        {
+                          "term": {
+                            "type": {
+                              "boost": 1,
+                              "value": "kontor"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "type": {
+                              "boost": 1,
+                              "value": "kontor-legacy"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "must_not": [
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "pressemelding"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "presse"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "analyse"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "statistikk"
+                      }
+                    }
+                  },
+                  {
+                    "exists": {
+                      "boost": 1,
+                      "field": "fylke"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "logs": [],
+  "request": {
+    "method": "GET",
+    "path": "/content/search-url?term=https%3A%2F%2Fwww.nav.no%2Fdagpengr"
+  },
+  "response": {
+    "body": {
+      "title": "Dagpenger",
+      "url": "https://www.nav.no/dagpenger"
+    },
+    "status": 200,
+    "type": "application/json"
+  },
+  "upstream": [
+    {
+      "body": {
+        "explain": false,
+        "from": 0,
+        "query": {
+          "function_score": {
+            "boost": 1,
+            "functions": [
+              {
+                "filter": {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                "weight": 0.25
+              }
+            ],
+            "max_boost": 3.4028235e+38,
+            "query": {
+              "function_score": {
+                "boost": 1,
+                "functions": [
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "oversikt"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "produktside"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "guide"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "temaside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "situasjonsside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor-legacy"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  }
+                ],
+                "max_boost": 3.4028235e+38,
+                "query": {
+                  "match": {
+                    "href": {
+                      "auto_generate_synonyms_phrase_query": true,
+                      "boost": 1,
+                      "fuzziness": "AUTO",
+                      "fuzzy_transpositions": true,
+                      "lenient": false,
+                      "max_expansions": 50,
+                      "operator": "OR",
+                      "prefix_length": 0,
+                      "query": "https://www.nav.no/dagpengr",
+                      "zero_terms_query": "NONE"
+                    }
+                  }
+                },
+                "score_mode": "max"
+              }
+            },
+            "score_mode": "max"
+          }
+        },
+        "size": 10,
+        "version": true
+      },
+      "method": "POST",
+      "params": {
+        "allow_no_indices": "true",
+        "batched_reduce_size": "512",
+        "ccs_minimize_roundtrips": "true",
+        "expand_wildcards": "open",
+        "ignore_throttled": "true",
+        "ignore_unavailable": "false",
+        "max_concurrent_shard_requests": "5",
+        "search_type": "query_then_fetch",
+        "typed_keys": "true"
+      },
+      "path": "/search-content-v10/_search"
+    }
+  ]
+}

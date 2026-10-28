@@ -8,3 +8,6 @@ build
 .DS_Store
 
 /src/main/resources/application-local.yml
+node_modules
+# Written by the golden suite while it runs (test/http/README.md)
+/test/http/.recordings-used

@@ -1,0 +1,2920 @@
+{
+  "Agder": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "agder"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Analyser og forskning": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Analyser og forskningArtikler": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "nyhet"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Analyser og forskningNyheter": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Arbeidsgiver": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "should": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "employer"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "informasjon"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "employer"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor-legacy"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "employer"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjema"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjemaoversikt"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "employer"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ArbeidsgiverAktuelt": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "employer"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "nyhet"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ArbeidsgiverInformasjon": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "employer"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "informasjon"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ArbeidsgiverKontor": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "employer"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor-legacy"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ArbeidsgiverSøknad og skjema": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "employer"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjema"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjemaoversikt"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Innhold fra fylker": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Innlandet": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "innlandet"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Møre og Romsdal": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "more-og-romsdal"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Nordland": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "nordland"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Oslo": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "oslo"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Presse": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Privatperson": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "should": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "person"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "informasjon"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "person"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor-legacy"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "person"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjema"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjemaoversikt"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "person"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PrivatpersonAktuelt": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "person"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "nyhet"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PrivatpersonInformasjon": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "person"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "informasjon"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PrivatpersonKontor": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "person"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor-legacy"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PrivatpersonSøknad og skjema": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "person"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjema"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjemaoversikt"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Rogaland": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "rogaland"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Samarbeidspartner": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "should": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "provider"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "informasjon"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "provider"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "kontor-legacy"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "provider"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      },
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must_not": [
+                            {
+                              "exists": {
+                                "boost": 1,
+                                "field": "audience"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjema"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "type": {
+                            "boost": 1,
+                            "value": "skjemaoversikt"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "must": [
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "should": [
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "provider"
+                          }
+                        }
+                      },
+                      {
+                        "term": {
+                          "audience": {
+                            "boost": 1,
+                            "value": "other"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "presse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "analyse"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "statistikk"
+                    }
+                  }
+                },
+                {
+                  "exists": {
+                    "boost": 1,
+                    "field": "fylke"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "SamarbeidspartnerAktuelt": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "provider"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "nyhet"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "SamarbeidspartnerInformasjon": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "provider"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "informasjon"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "SamarbeidspartnerKontor": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "provider"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "kontor-legacy"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "SamarbeidspartnerSøknad og skjema": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "provider"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "audience": {
+                      "boost": 1,
+                      "value": "other"
+                    }
+                  }
+                },
+                {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "must_not": [
+                      {
+                        "exists": {
+                          "boost": 1,
+                          "field": "audience"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjema"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "type": {
+                      "boost": 1,
+                      "value": "skjemaoversikt"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "presse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "analyse"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "exists": {
+              "boost": 1,
+              "field": "fylke"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Statistikk": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "StatistikkArtikler": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "term": {
+              "type": {
+                "boost": 1,
+                "value": "tabell"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "nyhet"
+              }
+            }
+          },
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "pressemelding"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "StatistikkNyheter": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "should": [
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "pressemelding"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "StatistikkTabeller": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "metatags": {
+                "boost": 1,
+                "value": "statistikk"
+              }
+            }
+          },
+          {
+            "term": {
+              "type": {
+                "boost": 1,
+                "value": "tabell"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Troms og Finnmark": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "troms-og-finnmark"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Trøndelag": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "trondelag"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Vest-Viken": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "vest-viken"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Vestfold og Telemark": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "vestfold-og-telemark"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Vestland": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "vestland"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Øst-Viken": {
+    "filter": {
+      "bool": {
+        "adjust_pure_negative": true,
+        "boost": 1,
+        "must": [
+          {
+            "term": {
+              "fylke": {
+                "boost": 1,
+                "value": "ost-viken"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
