@@ -13,7 +13,39 @@ export const UPDATING = process.env.GOLDEN_UPDATE === 'true';
 
 export const SHARED_DIR = fileURLToPath(new URL('./__goldens__/shared/', import.meta.url));
 
+/** What hashes are made of; files get goldenJson or compactJson */
 export const canonicalJson = (value: unknown) => `${JSON.stringify(sortKeys(value), null, 2)}\n`;
+
+const cp = String.fromCodePoint;
+
+// Characters a diff wouldn't show, or that some tools take as line breaks (U+0085, U+2028 and U+2029): C1 controls,
+// no-break and zero-width spaces, the soft hyphen, bidi marks and the byte order mark. JSON.stringify leaves them raw.
+const INVISIBLE = new RegExp(
+	`[${[
+		[0x7f, 0xa0],
+		[0xad, 0xad],
+		[0x1680, 0x1680],
+		[0x180e, 0x180e],
+		[0x2000, 0x200f],
+		[0x2028, 0x202f],
+		[0x205f, 0x206f],
+		[0x3000, 0x3000],
+		[0xfeff, 0xfeff],
+	]
+		.map(([from, to]) => `${cp(from)}-${cp(to)}`)
+		.join('')}]`,
+	'g',
+);
+
+/** Writes those characters as \u escapes, which parse to the same JSON */
+export const escapeInvisible = (json: string) =>
+	json.replace(INVISIBLE, (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`);
+
+/** canonicalJson as the goldens have it */
+export const goldenJson = (value: unknown) => escapeInvisible(canonicalJson(value));
+
+/** On one line, for the recordings: they are read through the goldens, not line by line */
+export const compactJson = (value: unknown) => `${escapeInvisible(JSON.stringify(sortKeys(value)))}\n`;
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -85,11 +117,10 @@ export const shareParts = (upstream: CanonicalUpstream): CanonicalUpstream => {
 	}
 	const body = { ...upstream.body };
 	for (const part of SHARED_PARTS.filter((name) => name in body)) {
-		const text = canonicalJson(body[part]);
-		const file = `${part}.${sha256(text).slice(0, 12)}.json`;
+		const file = `${part}.${sha256(canonicalJson(body[part])).slice(0, 12)}.json`;
 		if (UPDATING) {
 			mkdirSync(SHARED_DIR, { recursive: true });
-			writeFileSync(`${SHARED_DIR}${file}`, text);
+			writeFileSync(`${SHARED_DIR}${file}`, goldenJson(body[part]));
 		}
 		if (existsSync(`${SHARED_DIR}${file}`)) {
 			body[part] = { $golden: `shared/${file}` };

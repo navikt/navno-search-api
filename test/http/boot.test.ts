@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { canonicalJson } from './canonical.ts';
+import { goldenJson } from './canonical.ts';
 import { decoratorQuery } from './clients.ts';
 import { describeResponse, golden, send } from './golden.ts';
 import { startServer, type TestServer } from './harness.ts';
@@ -29,7 +29,7 @@ test('sends OpenSearch nothing while starting or answering probes', async () => 
 		const probes = await probeStatuses(server);
 		// Nothing has reset the stub, so this is everything since the server started
 		const upstream = [...server.stub.challenged, ...server.stub.requests].map(routeOf);
-		await expect(canonicalJson({ probes, upstream })).toMatchFileSnapshot('./__goldens__/boot/startup.json');
+		await expect(goldenJson({ probes, upstream })).toMatchFileSnapshot('./__goldens__/boot/startup.json');
 	} finally {
 		await server.stop();
 	}
@@ -38,7 +38,7 @@ test('sends OpenSearch nothing while starting or answering probes', async () => 
 test('starts and answers probes while OpenSearch is down', async () => {
 	const server = await startServer({ openSearchDown: true });
 	try {
-		await expect(canonicalJson({ probes: await probeStatuses(server) })).toMatchFileSnapshot(
+		await expect(goldenJson({ probes: await probeStatuses(server) })).toMatchFileSnapshot(
 			'./__goldens__/boot/opensearch-down-probes.json',
 		);
 		await golden(server, 'boot/opensearch-down-search', { path: DECORATOR_SEARCH });
@@ -68,7 +68,7 @@ test('finishes a request in progress when it gets SIGTERM', async () => {
 
 	const response = await inProgress;
 	await stopped;
-	await expect(canonicalJson('error' in response ? response : describeResponse(response, {}))).toMatchFileSnapshot(
+	await expect(goldenJson('error' in response ? response : describeResponse(response, {}))).toMatchFileSnapshot(
 		'./__goldens__/boot/request-in-progress-at-sigterm.json',
 	);
 });

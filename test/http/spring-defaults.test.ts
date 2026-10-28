@@ -55,6 +55,7 @@ describe('query strings', () => {
 		['plus-is-space', 'ord=dagpenger+sykepenger'],
 		['encoded-plus', 'ord=a%2Bb'],
 		['invalid-percent', 'ord=%'],
+		['invalid-percent-in-unread-param', 'ord=dagpenger&x=%'],
 		['invalid-percent-pair', 'ord=dag%ZZpenger'],
 		['invalid-utf8', 'ord=%FF'],
 		['truncated-utf8', 'ord=%C3'],
@@ -69,6 +70,7 @@ describe('query strings', () => {
 		['indexed-list', 'ord=sykepenger&uf[0]=soknad-og-skjema'],
 		['bracket-list', 'ord=sykepenger&uf[]=informasjon&uf[]=kontor'],
 		['empty-name', '=x&ord=dagpenger'],
+		['empty-name-last', 'ord=dagpenger&=x'],
 		['name-only', 'ord'],
 		['semicolon-separator', 'ord=dagpenger;f=arbeidsgiver'],
 	])('%s', (name, query) => check(`query-${name}`, { path: `/content/decorator-search?${query}` }));

@@ -1,6 +1,6 @@
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { canonicalJson, canonicalUpstream, parseBody, sha256 } from './canonical.ts';
+import { canonicalJson, canonicalUpstream, compactJson, parseBody, sha256 } from './canonical.ts';
 import { routeOf, type StubRequest } from './stub.ts';
 
 /*
@@ -49,8 +49,12 @@ const record = async (request: StubRequest, file: string) => {
 		),
 		body: parseBody(await response.text()),
 	};
+	// How many milliseconds the search took changes every time, and no server passes it on
+	if (typeof recorded.body === 'object' && recorded.body !== null && 'took' in recorded.body) {
+		recorded.body.took = 0;
+	}
 	mkdirSync(RECORDINGS_DIR, { recursive: true });
-	writeFileSync(file, canonicalJson({ request: canonicalUpstream(request), response: recorded }));
+	writeFileSync(file, compactJson({ request: canonicalUpstream(request), response: recorded }));
 };
 
 /**

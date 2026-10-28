@@ -50,7 +50,7 @@ the app or the build.
 | `harness.ts` | Starts the server under test (`SERVER`; only `kotlin` until stage 2) with a prod-like env: `OPEN_SEARCH_URI` at the stub, fake credentials, `TZ=Europe/Oslo`. Waits for the readiness probe. `request()` makes plain `node:http` requests, so paths and headers are sent exactly as written. `stop()` sends SIGTERM. |
 | `stub.ts` | An HTTP server that records every request the server sends OpenSearch. Like OpenSearch's security plugin, it answers a request without credentials with a 401 asking for basic auth, so clients that only send credentials when asked work too; wrong credentials fail the test. Tests override answers with `on()`; `Response.error()` resets the connection. Requests nothing answers get a 599, and fail the test. |
 | `opensearch.ts` | The fake OpenSearch: answers a search with what a real OpenSearch answered when exactly that request was recorded (`test/fixtures/opensearch/recordings/`). A server that sends anything else finds no recording. |
-| `canonical.ts` | How things are written down: JSON with sorted keys, so key order and pretty-printing never count. The error body's timestamp is masked once its format has been checked. The aggregations and facet filters every search repeats go to `__goldens__/shared/`, named by content. |
+| `canonical.ts` | How things are written down: JSON with sorted keys, so key order and pretty-printing never count, and with invisible characters (soft hyphens, no-break spaces, U+0085, U+2028 and the like) as `\u` escapes so a diff shows them. The error body's timestamp is masked once its format has been checked. The aggregations and facet filters every search repeats go to `__goldens__/shared/`, named by content. Recordings are written on one line. |
 | `golden.ts` | `golden()`: one request, and everything observable about it compared with `__goldens__/<name>.json`. |
 | `clients.ts` | Query strings the way navno-search-frontend and nav-dekoratoren build them, so the main goldens describe real traffic. |
 | `global-setup.ts` | Clears the recordings before a recording run, and with `GOLDEN_CHECK_UNUSED` fails a run that left recordings unused. |
@@ -63,6 +63,7 @@ the app or the build.
 | `spring-defaults.test.ts` | What Spring Boot and Tomcat do by default: routing, methods, query decoding, CORS, pretty-printing, header limits. When the framework changes, this is the file that should change; the others pin the app's own behaviour. |
 | `fuzz.test.ts` | 1000 seeded random search terms, as hashes of the upstream requests, to pin how odd input becomes a query. |
 | `__goldens__/` | The expected values. Not formatted by oxfmt. |
+| `QUIRKS.md` | What the recordings show the Kotlin app doing, the deliberate differences, and what is still open for stage 2. |
 
 ## Removing it
 

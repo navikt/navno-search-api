@@ -198,7 +198,7 @@
       "preferredLanguage": "nb",
       "s": 0,
       "total": 6,
-      "word": " dagpenger "
+      "word": "\u00a0dagpenger\u00a0"
     },
     "status": 200,
     "type": "application/json"
@@ -283,7 +283,7 @@
                     "max_expansions": 50,
                     "operator": "AND",
                     "prefix_length": 0,
-                    "query": " dagpenger ",
+                    "query": "\u00a0dagpenger\u00a0",
                     "slop": 0,
                     "type": "best_fields",
                     "zero_terms_query": "NONE"
@@ -315,7 +315,7 @@
                           "max_expansions": 50,
                           "operator": "OR",
                           "prefix_length": 0,
-                          "query": " dagpenger ",
+                          "query": "\u00a0dagpenger\u00a0",
                           "slop": 0,
                           "type": "best_fields",
                           "zero_terms_query": "NONE"
@@ -337,7 +337,7 @@
                           "max_expansions": 50,
                           "operator": "AND",
                           "prefix_length": 0,
-                          "query": " dagpenger ",
+                          "query": "\u00a0dagpenger\u00a0",
                           "slop": 0,
                           "type": "best_fields",
                           "zero_terms_query": "NONE"
@@ -357,7 +357,7 @@
                       "max_expansions": 50,
                       "operator": "OR",
                       "prefix_length": 0,
-                      "query": " dagpenger ",
+                      "query": "\u00a0dagpenger\u00a0",
                       "zero_terms_query": "NONE"
                     }
                   }
@@ -555,7 +555,7 @@
                                 "max_expansions": 50,
                                 "operator": "AND",
                                 "prefix_length": 0,
-                                "query": " dagpenger ",
+                                "query": "\u00a0dagpenger\u00a0",
                                 "slop": 0,
                                 "type": "best_fields",
                                 "zero_terms_query": "NONE"
@@ -587,7 +587,7 @@
                                       "max_expansions": 50,
                                       "operator": "OR",
                                       "prefix_length": 0,
-                                      "query": " dagpenger ",
+                                      "query": "\u00a0dagpenger\u00a0",
                                       "slop": 0,
                                       "type": "best_fields",
                                       "zero_terms_query": "NONE"
@@ -609,7 +609,7 @@
                                       "max_expansions": 50,
                                       "operator": "AND",
                                       "prefix_length": 0,
-                                      "query": " dagpenger ",
+                                      "query": "\u00a0dagpenger\u00a0",
                                       "slop": 0,
                                       "type": "best_fields",
                                       "zero_terms_query": "NONE"
@@ -629,7 +629,7 @@
                                   "max_expansions": 50,
                                   "operator": "OR",
                                   "prefix_length": 0,
-                                  "query": " dagpenger ",
+                                  "query": "\u00a0dagpenger\u00a0",
                                   "zero_terms_query": "NONE"
                                 }
                               }

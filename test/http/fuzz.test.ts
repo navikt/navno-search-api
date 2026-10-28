@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, test } from 'vitest';
-import { canonicalJson, canonicalUpstream, parseBody, sha256 } from './canonical.ts';
+import { canonicalJson, canonicalUpstream, escapeInvisible, parseBody, sha256 } from './canonical.ts';
 import { decoratorQuery } from './clients.ts';
 import { startServer, type TestServer } from './harness.ts';
 import { EMPTY_SEARCH_RESPONSE, SEARCH } from './opensearch.ts';
@@ -87,15 +87,17 @@ test('turns odd search terms into queries', { timeout: 300_000 }, async () => {
 		const response = await server.request(`/content/decorator-search?${decoratorQuery(ord)}`);
 		const body = parseBody(response.body.toString('utf-8')) as { total?: number };
 		lines.push(
-			JSON.stringify({
-				ord,
-				status: response.status,
-				total: response.status === 200 ? body.total : undefined,
-				upstream:
-					server.stub.requests.length > 0
-						? sha256(canonicalJson(server.stub.requests.map(canonicalUpstream))).slice(0, 16)
-						: null,
-			}),
+			escapeInvisible(
+				JSON.stringify({
+					ord,
+					status: response.status,
+					total: response.status === 200 ? body.total : undefined,
+					upstream:
+						server.stub.requests.length > 0
+							? sha256(canonicalJson(server.stub.requests.map(canonicalUpstream))).slice(0, 16)
+							: null,
+				}),
+			),
 		);
 	}
 

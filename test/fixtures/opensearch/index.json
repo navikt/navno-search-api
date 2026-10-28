@@ -270,12 +270,12 @@
         },
         "char_filter": {
           "remove_soft_hyphen": {
-            "pattern": "­",
+            "pattern": "\u00ad",
             "replacement": "",
             "type": "pattern_replace"
           },
           "remove_zero_width_space": {
-            "pattern": "​",
+            "pattern": "\u200b",
             "replacement": "",
             "type": "pattern_replace"
           }

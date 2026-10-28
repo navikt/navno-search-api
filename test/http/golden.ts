@@ -1,5 +1,5 @@
 import { expect } from 'vitest';
-import { canonicalJson, canonicalUpstream, maskErrorTimestamp, parseBody, shareParts } from './canonical.ts';
+import { canonicalUpstream, goldenJson, maskErrorTimestamp, parseBody, shareParts } from './canonical.ts';
 import type { RawResponse, TestServer } from './harness.ts';
 import type { Override } from './stub.ts';
 
@@ -72,6 +72,6 @@ export const golden = async (
 		logs: server.logsSince(outputBefore),
 	};
 
-	await expect(canonicalJson(result)).toMatchFileSnapshot(`./__goldens__/${name}.json`);
+	await expect(goldenJson(result)).toMatchFileSnapshot(`./__goldens__/${name}.json`);
 	expect(server.stub.unexpected).toEqual([]);
 };

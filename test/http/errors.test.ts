@@ -67,6 +67,21 @@ describe('when OpenSearch answers unusually', () => {
 				];
 			},
 		],
+		// The two below narrow down which part of a shard failure the Kotlin app fails on
+		['shard-failure-count-only', (body: any) => (body._shards.failed = 1)],
+		[
+			'shard-failure-without-node',
+			(body: any) => {
+				body._shards.failed = 1;
+				body._shards.failures = [
+					{
+						shard: 0,
+						index: INDEX,
+						reason: { type: 'query_shard_exception', reason: 'Failed to create query', index: INDEX },
+					},
+				];
+			},
+		],
 		['timed-out', (body: any) => (body.timed_out = true)],
 		['score-null', (body: any) => (body.hits.hits[0]._score = null)],
 		['hit-without-title', (body: any) => (body.hits.hits[0]._source.title = {})],

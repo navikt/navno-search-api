@@ -82,7 +82,7 @@
       "preferredLanguage": "nb",
       "s": 0,
       "total": 0,
-      "word": "093501"
+      "word": "09\u008535\u008501"
     },
     "status": 200,
     "type": "application/json"
@@ -167,7 +167,7 @@
                     "max_expansions": 50,
                     "operator": "AND",
                     "prefix_length": 0,
-                    "query": "093501",
+                    "query": "09\u008535\u008501",
                     "slop": 0,
                     "type": "best_fields",
                     "zero_terms_query": "NONE"
@@ -199,7 +199,7 @@
                           "max_expansions": 50,
                           "operator": "OR",
                           "prefix_length": 0,
-                          "query": "093501",
+                          "query": "09\u008535\u008501",
                           "slop": 0,
                           "type": "best_fields",
                           "zero_terms_query": "NONE"
@@ -221,7 +221,7 @@
                           "max_expansions": 50,
                           "operator": "AND",
                           "prefix_length": 0,
-                          "query": "093501",
+                          "query": "09\u008535\u008501",
                           "slop": 0,
                           "type": "best_fields",
                           "zero_terms_query": "NONE"
@@ -241,7 +241,7 @@
                       "max_expansions": 50,
                       "operator": "OR",
                       "prefix_length": 0,
-                      "query": "093501",
+                      "query": "09\u008535\u008501",
                       "zero_terms_query": "NONE"
                     }
                   }
@@ -439,7 +439,7 @@
                                 "max_expansions": 50,
                                 "operator": "AND",
                                 "prefix_length": 0,
-                                "query": "093501",
+                                "query": "09\u008535\u008501",
                                 "slop": 0,
                                 "type": "best_fields",
                                 "zero_terms_query": "NONE"
@@ -471,7 +471,7 @@
                                       "max_expansions": 50,
                                       "operator": "OR",
                                       "prefix_length": 0,
-                                      "query": "093501",
+                                      "query": "09\u008535\u008501",
                                       "slop": 0,
                                       "type": "best_fields",
                                       "zero_terms_query": "NONE"
@@ -493,7 +493,7 @@
                                       "max_expansions": 50,
                                       "operator": "AND",
                                       "prefix_length": 0,
-                                      "query": "093501",
+                                      "query": "09\u008535\u008501",
                                       "slop": 0,
                                       "type": "best_fields",
                                       "zero_terms_query": "NONE"
@@ -513,7 +513,7 @@
                                   "max_expansions": 50,
                                   "operator": "OR",
                                   "prefix_length": 0,
-                                  "query": "093501",
+                                  "query": "09\u008535\u008501",
                                   "zero_terms_query": "NONE"
                                 }
                               }

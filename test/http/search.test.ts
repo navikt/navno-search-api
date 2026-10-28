@@ -142,6 +142,7 @@ describe('parameters', () => {
 		['page-too-big-for-int', frontendQuery({ page: '99999999999' })],
 		['sort-not-a-number', frontendQuery({ s: 'abc' })],
 		['sort-2', frontendQuery({ s: 2 })],
+		['sort-empty', frontendQuery({ s: '' })],
 		['repeated-ord', 'ord=dagpenger&ord=sykepenger'],
 		['repeated-page', 'ord=&page=1&page=2'],
 		['uf-repeated', 'ord=sykepenger&f=privatperson&uf=informasjon&uf=soknad-og-skjema'],
