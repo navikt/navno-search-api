@@ -1,0 +1,34 @@
+{
+  "logs": [
+    {
+      "level": "WARN",
+      "message": "Påkrevd request parameter mangler: null"
+    }
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/content/decorator-search?_ord=dagpenger"
+  },
+  "response": {
+    "body": {
+      "error": "Bad Request",
+      "message": "Påkrevd request parameter mangler: null",
+      "path": "/content/decorator-search",
+      "status": 400,
+      "timestamp": "<local date-time>"
+    },
+    "headers": {
+      "access-control-allow-credentials": null,
+      "access-control-allow-headers": null,
+      "access-control-allow-methods": null,
+      "access-control-allow-origin": null,
+      "access-control-max-age": null,
+      "allow": null,
+      "content-type": "application/json",
+      "vary": null
+    },
+    "status": 400,
+    "type": "application/json"
+  },
+  "upstream": []
+}

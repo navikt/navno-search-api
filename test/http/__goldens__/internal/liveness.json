@@ -1,0 +1,15 @@
+{
+  "logs": [],
+  "request": {
+    "method": "GET",
+    "path": "/internal/health/liveness"
+  },
+  "response": {
+    "body": {
+      "status": "UP"
+    },
+    "status": 200,
+    "type": "application/vnd.spring-boot.actuator.v3+json"
+  },
+  "upstream": []
+}

@@ -1,0 +1,24 @@
+{
+  "logs": [
+    {
+      "level": "WARN",
+      "message": "Påkrevd request parameter mangler: s"
+    }
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/content/search?ord=&page=0&f=privatperson&uf=&s=&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "error": "Bad Request",
+      "message": "Påkrevd request parameter mangler: s",
+      "path": "/content/search",
+      "status": 400,
+      "timestamp": "<local date-time>"
+    },
+    "status": 400,
+    "type": "application/json"
+  },
+  "upstream": []
+}

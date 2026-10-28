@@ -1,0 +1,24 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "must": [
+            {
+              "term": {
+                "metatags": {
+                  "boost": 1,
+                  "value": "analyse"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

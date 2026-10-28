@@ -1,0 +1,24 @@
+{
+  "logs": [
+    {
+      "level": "WARN",
+      "message": "Påkrevd request parameter mangler: null"
+    }
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/content/decorator-search?f=privatperson&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "error": "Bad Request",
+      "message": "Påkrevd request parameter mangler: null",
+      "path": "/content/decorator-search",
+      "status": 400,
+      "timestamp": "<local date-time>"
+    },
+    "status": 400,
+    "type": "application/json"
+  },
+  "upstream": []
+}

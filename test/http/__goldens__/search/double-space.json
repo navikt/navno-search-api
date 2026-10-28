@@ -1,0 +1,602 @@
+{
+  "logs": [],
+  "request": {
+    "method": "GET",
+    "path": "/content/search?ord=arbeid%20%20helse&page=0&f=privatperson&uf=&s=0&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "aggregations": {
+        "fasetter": {
+          "buckets": [
+            {
+              "checked": true,
+              "docCount": 0,
+              "key": "privatperson",
+              "name": "Privatperson",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "arbeidsgiver",
+              "name": "Arbeidsgiver",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "samarbeidspartner",
+              "name": "Samarbeidspartner",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "presse",
+              "name": "Presse",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "statistikk",
+              "name": "Statistikk",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "analyser-og-forskning",
+              "name": "Analyser og forskning",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "innhold-fra-fylker",
+              "name": "Innhold fra fylker",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            }
+          ]
+        }
+      },
+      "fasettKey": "privatperson",
+      "hits": [],
+      "isMore": false,
+      "page": 0,
+      "preferredLanguage": "nb",
+      "s": 0,
+      "total": 0,
+      "word": "arbeid  helse"
+    },
+    "status": 200,
+    "type": "application/json"
+  },
+  "upstream": [
+    {
+      "body": {
+        "aggregations": {
+          "$golden": "shared/aggregations.146663cd041e.json"
+        },
+        "explain": false,
+        "from": 0,
+        "highlight": {
+          "fields": {
+            "ingress.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no.ngrams": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "text.en": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no.ngrams": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.other": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "title.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            }
+          },
+          "highlight_query": {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "filter": [
+                {
+                  "multi_match": {
+                    "auto_generate_synonyms_phrase_query": true,
+                    "boost": 1,
+                    "fields": [
+                      "allText.en^1.0",
+                      "allText.no^1.0",
+                      "allText.other^1.0",
+                      "ingress.en.ngrams^1.0",
+                      "ingress.no.ngrams^1.0",
+                      "ingress.other.ngrams^1.0",
+                      "title.en.ngrams^1.0",
+                      "title.no.ngrams^1.0",
+                      "title.other.ngrams^1.0"
+                    ],
+                    "fuzziness": "AUTO:6,8",
+                    "fuzzy_transpositions": true,
+                    "max_expansions": 50,
+                    "operator": "AND",
+                    "prefix_length": 0,
+                    "query": "arbeid  helse",
+                    "slop": 0,
+                    "type": "best_fields",
+                    "zero_terms_query": "NONE"
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "dis_max": {
+                    "boost": 1,
+                    "queries": [
+                      {
+                        "multi_match": {
+                          "auto_generate_synonyms_phrase_query": true,
+                          "boost": 1,
+                          "fields": [
+                            "ingress.en^3.0",
+                            "ingress.no^3.0",
+                            "ingress.other^3.0",
+                            "text.en^0.01",
+                            "text.no^0.01",
+                            "text.other^0.01",
+                            "title.en^12.0",
+                            "title.no^12.0",
+                            "title.other^12.0"
+                          ],
+                          "fuzziness": "AUTO:6,8",
+                          "fuzzy_transpositions": true,
+                          "max_expansions": 50,
+                          "operator": "OR",
+                          "prefix_length": 0,
+                          "query": "arbeid  helse",
+                          "slop": 0,
+                          "type": "best_fields",
+                          "zero_terms_query": "NONE"
+                        }
+                      },
+                      {
+                        "multi_match": {
+                          "auto_generate_synonyms_phrase_query": true,
+                          "boost": 1,
+                          "fields": [
+                            "ingress.en.ngrams^3.0",
+                            "ingress.no.ngrams^3.0",
+                            "ingress.other.ngrams^3.0",
+                            "title.en.ngrams^11.5",
+                            "title.no.ngrams^11.5",
+                            "title.other.ngrams^11.5"
+                          ],
+                          "fuzzy_transpositions": true,
+                          "max_expansions": 50,
+                          "operator": "AND",
+                          "prefix_length": 0,
+                          "query": "arbeid  helse",
+                          "slop": 0,
+                          "type": "best_fields",
+                          "zero_terms_query": "NONE"
+                        }
+                      },
+                      {
+                        "multi_match": {
+                          "auto_generate_synonyms_phrase_query": true,
+                          "boost": 1.5,
+                          "fields": [
+                            "ingress.en.exact^6.0",
+                            "ingress.no.exact^6.0",
+                            "ingress.other.exact^6.0",
+                            "text.en.exact^1.0",
+                            "text.no.exact^1.0",
+                            "text.other.exact^1.0",
+                            "title.en.exact^12.0",
+                            "title.no.exact^12.0",
+                            "title.other.exact^12.0"
+                          ],
+                          "fuzzy_transpositions": true,
+                          "max_expansions": 50,
+                          "operator": "OR",
+                          "prefix_length": 0,
+                          "query": "arbeid  helse",
+                          "slop": 0,
+                          "type": "phrase",
+                          "zero_terms_query": "NONE"
+                        }
+                      }
+                    ],
+                    "tie_breaker": 0
+                  }
+                },
+                {
+                  "match": {
+                    "keywords": {
+                      "auto_generate_synonyms_phrase_query": true,
+                      "boost": 1,
+                      "fuzzy_transpositions": true,
+                      "lenient": false,
+                      "max_expansions": 50,
+                      "operator": "OR",
+                      "prefix_length": 0,
+                      "query": "arbeid  helse",
+                      "zero_terms_query": "NONE"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "post_tags": [
+            "</b>"
+          ],
+          "pre_tags": [
+            "<b>"
+          ]
+        },
+        "post_filter": {
+          "$golden": "shared/post_filter.6326c682390a.json"
+        },
+        "query": {
+          "function_score": {
+            "boost": 1,
+            "functions": [
+              {
+                "filter": {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                "weight": 0.25
+              }
+            ],
+            "max_boost": 3.4028235e+38,
+            "query": {
+              "function_score": {
+                "boost": 1,
+                "functions": [
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "oversikt"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "produktside"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "guide"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "temaside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "situasjonsside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor-legacy"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  }
+                ],
+                "max_boost": 3.4028235e+38,
+                "query": {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "filter": [
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must": [
+                            {
+                              "bool": {
+                                "adjust_pure_negative": true,
+                                "boost": 1,
+                                "must_not": [
+                                  {
+                                    "term": {
+                                      "languageRefs": {
+                                        "boost": 1,
+                                        "value": "nb"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "bool": {
+                                      "adjust_pure_negative": true,
+                                      "boost": 1,
+                                      "must": [
+                                        {
+                                          "term": {
+                                            "language": {
+                                              "boost": 1,
+                                              "value": "en"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "term": {
+                                            "languageRefs": {
+                                              "boost": 1,
+                                              "value": "nn"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "must": [
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "filter": [
+                            {
+                              "multi_match": {
+                                "auto_generate_synonyms_phrase_query": true,
+                                "boost": 1,
+                                "fields": [
+                                  "allText.en^1.0",
+                                  "allText.no^1.0",
+                                  "allText.other^1.0",
+                                  "ingress.en.ngrams^1.0",
+                                  "ingress.no.ngrams^1.0",
+                                  "ingress.other.ngrams^1.0",
+                                  "title.en.ngrams^1.0",
+                                  "title.no.ngrams^1.0",
+                                  "title.other.ngrams^1.0"
+                                ],
+                                "fuzziness": "AUTO:6,8",
+                                "fuzzy_transpositions": true,
+                                "max_expansions": 50,
+                                "operator": "AND",
+                                "prefix_length": 0,
+                                "query": "arbeid  helse",
+                                "slop": 0,
+                                "type": "best_fields",
+                                "zero_terms_query": "NONE"
+                              }
+                            }
+                          ],
+                          "should": [
+                            {
+                              "dis_max": {
+                                "boost": 1,
+                                "queries": [
+                                  {
+                                    "multi_match": {
+                                      "auto_generate_synonyms_phrase_query": true,
+                                      "boost": 1,
+                                      "fields": [
+                                        "ingress.en^3.0",
+                                        "ingress.no^3.0",
+                                        "ingress.other^3.0",
+                                        "text.en^0.01",
+                                        "text.no^0.01",
+                                        "text.other^0.01",
+                                        "title.en^12.0",
+                                        "title.no^12.0",
+                                        "title.other^12.0"
+                                      ],
+                                      "fuzziness": "AUTO:6,8",
+                                      "fuzzy_transpositions": true,
+                                      "max_expansions": 50,
+                                      "operator": "OR",
+                                      "prefix_length": 0,
+                                      "query": "arbeid  helse",
+                                      "slop": 0,
+                                      "type": "best_fields",
+                                      "zero_terms_query": "NONE"
+                                    }
+                                  },
+                                  {
+                                    "multi_match": {
+                                      "auto_generate_synonyms_phrase_query": true,
+                                      "boost": 1,
+                                      "fields": [
+                                        "ingress.en.ngrams^3.0",
+                                        "ingress.no.ngrams^3.0",
+                                        "ingress.other.ngrams^3.0",
+                                        "title.en.ngrams^11.5",
+                                        "title.no.ngrams^11.5",
+                                        "title.other.ngrams^11.5"
+                                      ],
+                                      "fuzzy_transpositions": true,
+                                      "max_expansions": 50,
+                                      "operator": "AND",
+                                      "prefix_length": 0,
+                                      "query": "arbeid  helse",
+                                      "slop": 0,
+                                      "type": "best_fields",
+                                      "zero_terms_query": "NONE"
+                                    }
+                                  },
+                                  {
+                                    "multi_match": {
+                                      "auto_generate_synonyms_phrase_query": true,
+                                      "boost": 1.5,
+                                      "fields": [
+                                        "ingress.en.exact^6.0",
+                                        "ingress.no.exact^6.0",
+                                        "ingress.other.exact^6.0",
+                                        "text.en.exact^1.0",
+                                        "text.no.exact^1.0",
+                                        "text.other.exact^1.0",
+                                        "title.en.exact^12.0",
+                                        "title.no.exact^12.0",
+                                        "title.other.exact^12.0"
+                                      ],
+                                      "fuzzy_transpositions": true,
+                                      "max_expansions": 50,
+                                      "operator": "OR",
+                                      "prefix_length": 0,
+                                      "query": "arbeid  helse",
+                                      "slop": 0,
+                                      "type": "phrase",
+                                      "zero_terms_query": "NONE"
+                                    }
+                                  }
+                                ],
+                                "tie_breaker": 0
+                              }
+                            },
+                            {
+                              "match": {
+                                "keywords": {
+                                  "auto_generate_synonyms_phrase_query": true,
+                                  "boost": 1,
+                                  "fuzzy_transpositions": true,
+                                  "lenient": false,
+                                  "max_expansions": 50,
+                                  "operator": "OR",
+                                  "prefix_length": 0,
+                                  "query": "arbeid  helse",
+                                  "zero_terms_query": "NONE"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "score_mode": "max"
+              }
+            },
+            "score_mode": "max"
+          }
+        },
+        "size": 20,
+        "track_total_hits": 2147483647,
+        "version": true
+      },
+      "method": "POST",
+      "params": {
+        "allow_no_indices": "true",
+        "batched_reduce_size": "512",
+        "ccs_minimize_roundtrips": "true",
+        "expand_wildcards": "open",
+        "ignore_throttled": "true",
+        "ignore_unavailable": "false",
+        "max_concurrent_shard_requests": "5",
+        "search_type": "query_then_fetch",
+        "typed_keys": "true"
+      },
+      "path": "/search-content-v10/_search"
+    }
+  ]
+}

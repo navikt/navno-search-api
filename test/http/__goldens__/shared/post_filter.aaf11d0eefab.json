@@ -1,0 +1,40 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "should": [
+            {
+              "bool": {
+                "adjust_pure_negative": true,
+                "boost": 1,
+                "must": [
+                  {
+                    "term": {
+                      "metatags": {
+                        "boost": 1,
+                        "value": "statistikk"
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                      "type": {
+                        "boost": 1,
+                        "value": "tabell"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

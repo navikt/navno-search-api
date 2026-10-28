@@ -1,0 +1,33 @@
+{
+	"name": "navno-search-api",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"lint": "eslint . && tsc --noEmit",
+		"format": "oxfmt",
+		"format:check": "oxfmt --check",
+		"test:http:kotlin": "SERVER=kotlin vitest run --config test/http/vitest.config.ts",
+		"test:http:record": "SERVER=kotlin GOLDEN_UPDATE=true vitest run --config test/http/vitest.config.ts --update"
+	},
+	"devDependencies": {
+		"@eslint/js": "10.0.1",
+		"@types/node": "24.10.1",
+		"eslint": "10.11.0",
+		"oxfmt": "0.71.0",
+		"typescript": "6.0.3",
+		"typescript-eslint": "8.70.1",
+		"vitest": "5.0.3"
+	},
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": "^24.19.0",
+			"onFail": "download"
+		}
+	},
+	"engines": {
+		"node": "24"
+	},
+	"packageManager": "pnpm@12.9.1"
+}

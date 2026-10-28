@@ -1,0 +1,22 @@
+{
+  "bool": {
+    "adjust_pure_negative": true,
+    "boost": 1,
+    "must": [
+      {
+        "bool": {
+          "adjust_pure_negative": true,
+          "boost": 1,
+          "must": [
+            {
+              "exists": {
+                "boost": 1,
+                "field": "fylke"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

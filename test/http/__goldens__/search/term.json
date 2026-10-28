@@ -1,0 +1,668 @@
+{
+  "logs": [],
+  "request": {
+    "method": "GET",
+    "path": "/content/search?ord=dagpenger&page=0&f=privatperson&uf=&s=0&preferredLanguage=nb"
+  },
+  "response": {
+    "body": {
+      "aggregations": {
+        "fasetter": {
+          "buckets": [
+            {
+              "checked": true,
+              "docCount": 6,
+              "key": "privatperson",
+              "name": "Privatperson",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 4,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "soknad-og-skjema",
+                    "name": "Søknad og skjema",
+                    "underaggregeringer": null
+                  },
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "aktuelt",
+                    "name": "Aktuelt",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 2,
+              "key": "arbeidsgiver",
+              "name": "Arbeidsgiver",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 2,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 1,
+              "key": "samarbeidspartner",
+              "name": "Samarbeidspartner",
+              "underaggregeringer": {
+                "buckets": [
+                  {
+                    "checked": false,
+                    "docCount": 1,
+                    "key": "informasjon",
+                    "name": "Informasjon",
+                    "underaggregeringer": null
+                  }
+                ]
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "presse",
+              "name": "Presse",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "statistikk",
+              "name": "Statistikk",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "analyser-og-forskning",
+              "name": "Analyser og forskning",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            },
+            {
+              "checked": false,
+              "docCount": 0,
+              "key": "innhold-fra-fylker",
+              "name": "Innhold fra fylker",
+              "underaggregeringer": {
+                "buckets": []
+              }
+            }
+          ]
+        }
+      },
+      "fasettKey": "privatperson",
+      "hits": [
+        {
+          "audience": [
+            "person"
+          ],
+          "displayName": "Dagpenger",
+          "highlight": "<b>Dagpenger</b> skal sikre deg inntekt når du er arbeidsledig eller permittert.",
+          "href": "https://www.nav.no/dagpenger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 86.309135,
+          "type": "produktside"
+        },
+        {
+          "audience": [
+            "person"
+          ],
+          "displayName": "Søknad om dagpenger (NAV 04-01.03)",
+          "highlight": "Søk om <b>dagpenger</b> når du er arbeidsledig eller permittert.",
+          "href": "https://www.nav.no/soknader/dagpenger",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 28.452065,
+          "type": "skjema"
+        },
+        {
+          "audience": [
+            "person"
+          ],
+          "displayName": "Nye satser for dagpenger",
+          "highlight": "Fra 1. januar øker satsene for <b>dagpenger</b>.",
+          "href": "https://www.nav.no/nyheter/nye-satser",
+          "language": "nb",
+          "modifiedTime": "2024-12-05T14:30:00.5+01:00",
+          "publishedTime": "2024-12-02T09:00:00+01:00",
+          "score": 7.113016,
+          "type": "aktuelt"
+        },
+        {
+          "audience": [],
+          "displayName": "Registrer deg som arbeidssøker",
+          "highlight": "Du må registrere deg som arbeidssøker for å få <b>dagpenger</b> og hjelp til å finne arbeid.",
+          "href": "https://www.nav.no/arbeidssoker",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 6.587015,
+          "type": "andre"
+        },
+        {
+          "audience": [
+            "person"
+          ],
+          "displayName": "Meldekort",
+          "highlight": "Når du får <b>dagpenger</b>, tiltakspenger eller arbeidsavklaringspenger, må du vanligvis sende inn et elektronisk skjema hver fjortende dag. Vi bruker skjemaet til å beregne hvor mye du skal få utbetalt, og det må sendes inn innen fristen for at du  …",
+          "href": "https://www.nav.no/meldekort",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 6.152443,
+          "type": "guide"
+        },
+        {
+          "audience": [
+            "person",
+            "employer"
+          ],
+          "displayName": "Permittering",
+          "highlight": "… Når du er permittert, kan du ha rett til <b>dagpenger</b>. Arbeidsgiveren må betale lønn de første dagene. …",
+          "href": "https://www.nav.no/permittering",
+          "language": "nb",
+          "modifiedTime": null,
+          "publishedTime": null,
+          "score": 0.022666536,
+          "type": "andre"
+        }
+      ],
+      "isMore": false,
+      "page": 0,
+      "preferredLanguage": "nb",
+      "s": 0,
+      "total": 6,
+      "word": "dagpenger"
+    },
+    "status": 200,
+    "type": "application/json"
+  },
+  "upstream": [
+    {
+      "body": {
+        "aggregations": {
+          "$golden": "shared/aggregations.146663cd041e.json"
+        },
+        "explain": false,
+        "from": 0,
+        "highlight": {
+          "fields": {
+            "ingress.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.no.ngrams": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "ingress.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "text.en": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.no.ngrams": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "text.other": {
+              "fragment_size": 200,
+              "number_of_fragments": 1
+            },
+            "title.en": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.no": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            },
+            "title.other": {
+              "fragment_size": 100,
+              "number_of_fragments": 0
+            }
+          },
+          "highlight_query": {
+            "bool": {
+              "adjust_pure_negative": true,
+              "boost": 1,
+              "filter": [
+                {
+                  "multi_match": {
+                    "auto_generate_synonyms_phrase_query": true,
+                    "boost": 1,
+                    "fields": [
+                      "allText.en^1.0",
+                      "allText.no^1.0",
+                      "allText.other^1.0",
+                      "ingress.en.ngrams^1.0",
+                      "ingress.no.ngrams^1.0",
+                      "ingress.other.ngrams^1.0",
+                      "title.en.ngrams^1.0",
+                      "title.no.ngrams^1.0",
+                      "title.other.ngrams^1.0"
+                    ],
+                    "fuzziness": "AUTO:6,8",
+                    "fuzzy_transpositions": true,
+                    "max_expansions": 50,
+                    "operator": "AND",
+                    "prefix_length": 0,
+                    "query": "dagpenger",
+                    "slop": 0,
+                    "type": "best_fields",
+                    "zero_terms_query": "NONE"
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "dis_max": {
+                    "boost": 1,
+                    "queries": [
+                      {
+                        "multi_match": {
+                          "auto_generate_synonyms_phrase_query": true,
+                          "boost": 1,
+                          "fields": [
+                            "ingress.en^3.0",
+                            "ingress.no^3.0",
+                            "ingress.other^3.0",
+                            "text.en^0.01",
+                            "text.no^0.01",
+                            "text.other^0.01",
+                            "title.en^12.0",
+                            "title.no^12.0",
+                            "title.other^12.0"
+                          ],
+                          "fuzziness": "AUTO:6,8",
+                          "fuzzy_transpositions": true,
+                          "max_expansions": 50,
+                          "operator": "OR",
+                          "prefix_length": 0,
+                          "query": "dagpenger",
+                          "slop": 0,
+                          "type": "best_fields",
+                          "zero_terms_query": "NONE"
+                        }
+                      },
+                      {
+                        "multi_match": {
+                          "auto_generate_synonyms_phrase_query": true,
+                          "boost": 1,
+                          "fields": [
+                            "ingress.en.ngrams^3.0",
+                            "ingress.no.ngrams^3.0",
+                            "ingress.other.ngrams^3.0",
+                            "title.en.ngrams^11.5",
+                            "title.no.ngrams^11.5",
+                            "title.other.ngrams^11.5"
+                          ],
+                          "fuzzy_transpositions": true,
+                          "max_expansions": 50,
+                          "operator": "AND",
+                          "prefix_length": 0,
+                          "query": "dagpenger",
+                          "slop": 0,
+                          "type": "best_fields",
+                          "zero_terms_query": "NONE"
+                        }
+                      }
+                    ],
+                    "tie_breaker": 0
+                  }
+                },
+                {
+                  "match": {
+                    "keywords": {
+                      "auto_generate_synonyms_phrase_query": true,
+                      "boost": 1,
+                      "fuzzy_transpositions": true,
+                      "lenient": false,
+                      "max_expansions": 50,
+                      "operator": "OR",
+                      "prefix_length": 0,
+                      "query": "dagpenger",
+                      "zero_terms_query": "NONE"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "post_tags": [
+            "</b>"
+          ],
+          "pre_tags": [
+            "<b>"
+          ]
+        },
+        "post_filter": {
+          "$golden": "shared/post_filter.6326c682390a.json"
+        },
+        "query": {
+          "function_score": {
+            "boost": 1,
+            "functions": [
+              {
+                "filter": {
+                  "term": {
+                    "metatags": {
+                      "boost": 1,
+                      "value": "nyhet"
+                    }
+                  }
+                },
+                "weight": 0.25
+              }
+            ],
+            "max_boost": 3.4028235e+38,
+            "query": {
+              "function_score": {
+                "boost": 1,
+                "functions": [
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "oversikt"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "produktside"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "guide"
+                        }
+                      }
+                    },
+                    "weight": 2
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "temaside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "situasjonsside"
+                        }
+                      }
+                    },
+                    "weight": 1.75
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  },
+                  {
+                    "filter": {
+                      "term": {
+                        "type": {
+                          "boost": 1,
+                          "value": "kontor-legacy"
+                        }
+                      }
+                    },
+                    "weight": 0.5
+                  }
+                ],
+                "max_boost": 3.4028235e+38,
+                "query": {
+                  "bool": {
+                    "adjust_pure_negative": true,
+                    "boost": 1,
+                    "filter": [
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "must": [
+                            {
+                              "bool": {
+                                "adjust_pure_negative": true,
+                                "boost": 1,
+                                "must_not": [
+                                  {
+                                    "term": {
+                                      "languageRefs": {
+                                        "boost": 1,
+                                        "value": "nb"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "bool": {
+                                      "adjust_pure_negative": true,
+                                      "boost": 1,
+                                      "must": [
+                                        {
+                                          "term": {
+                                            "language": {
+                                              "boost": 1,
+                                              "value": "en"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "term": {
+                                            "languageRefs": {
+                                              "boost": 1,
+                                              "value": "nn"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "must": [
+                      {
+                        "bool": {
+                          "adjust_pure_negative": true,
+                          "boost": 1,
+                          "filter": [
+                            {
+                              "multi_match": {
+                                "auto_generate_synonyms_phrase_query": true,
+                                "boost": 1,
+                                "fields": [
+                                  "allText.en^1.0",
+                                  "allText.no^1.0",
+                                  "allText.other^1.0",
+                                  "ingress.en.ngrams^1.0",
+                                  "ingress.no.ngrams^1.0",
+                                  "ingress.other.ngrams^1.0",
+                                  "title.en.ngrams^1.0",
+                                  "title.no.ngrams^1.0",
+                                  "title.other.ngrams^1.0"
+                                ],
+                                "fuzziness": "AUTO:6,8",
+                                "fuzzy_transpositions": true,
+                                "max_expansions": 50,
+                                "operator": "AND",
+                                "prefix_length": 0,
+                                "query": "dagpenger",
+                                "slop": 0,
+                                "type": "best_fields",
+                                "zero_terms_query": "NONE"
+                              }
+                            }
+                          ],
+                          "should": [
+                            {
+                              "dis_max": {
+                                "boost": 1,
+                                "queries": [
+                                  {
+                                    "multi_match": {
+                                      "auto_generate_synonyms_phrase_query": true,
+                                      "boost": 1,
+                                      "fields": [
+                                        "ingress.en^3.0",
+                                        "ingress.no^3.0",
+                                        "ingress.other^3.0",
+                                        "text.en^0.01",
+                                        "text.no^0.01",
+                                        "text.other^0.01",
+                                        "title.en^12.0",
+                                        "title.no^12.0",
+                                        "title.other^12.0"
+                                      ],
+                                      "fuzziness": "AUTO:6,8",
+                                      "fuzzy_transpositions": true,
+                                      "max_expansions": 50,
+                                      "operator": "OR",
+                                      "prefix_length": 0,
+                                      "query": "dagpenger",
+                                      "slop": 0,
+                                      "type": "best_fields",
+                                      "zero_terms_query": "NONE"
+                                    }
+                                  },
+                                  {
+                                    "multi_match": {
+                                      "auto_generate_synonyms_phrase_query": true,
+                                      "boost": 1,
+                                      "fields": [
+                                        "ingress.en.ngrams^3.0",
+                                        "ingress.no.ngrams^3.0",
+                                        "ingress.other.ngrams^3.0",
+                                        "title.en.ngrams^11.5",
+                                        "title.no.ngrams^11.5",
+                                        "title.other.ngrams^11.5"
+                                      ],
+                                      "fuzzy_transpositions": true,
+                                      "max_expansions": 50,
+                                      "operator": "AND",
+                                      "prefix_length": 0,
+                                      "query": "dagpenger",
+                                      "slop": 0,
+                                      "type": "best_fields",
+                                      "zero_terms_query": "NONE"
+                                    }
+                                  }
+                                ],
+                                "tie_breaker": 0
+                              }
+                            },
+                            {
+                              "match": {
+                                "keywords": {
+                                  "auto_generate_synonyms_phrase_query": true,
+                                  "boost": 1,
+                                  "fuzzy_transpositions": true,
+                                  "lenient": false,
+                                  "max_expansions": 50,
+                                  "operator": "OR",
+                                  "prefix_length": 0,
+                                  "query": "dagpenger",
+                                  "zero_terms_query": "NONE"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "score_mode": "max"
+              }
+            },
+            "score_mode": "max"
+          }
+        },
+        "size": 20,
+        "track_total_hits": 2147483647,
+        "version": true
+      },
+      "method": "POST",
+      "params": {
+        "allow_no_indices": "true",
+        "batched_reduce_size": "512",
+        "ccs_minimize_roundtrips": "true",
+        "expand_wildcards": "open",
+        "ignore_throttled": "true",
+        "ignore_unavailable": "false",
+        "max_concurrent_shard_requests": "5",
+        "search_type": "query_then_fetch",
+        "typed_keys": "true"
+      },
+      "path": "/search-content-v10/_search"
+    }
+  ]
+}

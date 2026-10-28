@@ -1,0 +1,20 @@
+{
+  "probes": {
+    "/internal/health": [
+      200,
+      200,
+      200
+    ],
+    "/internal/health/liveness": [
+      200,
+      200,
+      200
+    ],
+    "/internal/health/readiness": [
+      200,
+      200,
+      200
+    ]
+  },
+  "upstream": []
+}
