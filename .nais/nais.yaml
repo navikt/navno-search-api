@@ -61,6 +61,8 @@ spec:
           namespace: "navno"
         - application: "navno-search-frontend"
           namespace: "navno"
+        - application: "nav-dekoratoren"
+          namespace: "navno"
         - application: "*"
           namespace: "personbruker"
     outbound:
