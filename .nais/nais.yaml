@@ -63,6 +63,8 @@ spec:
           namespace: "navno"
         - application: "*"
           namespace: "personbruker"
+        - application: "nav-dekoratoren"
+          namespace: "navno"
     outbound:
       rules:
         - application: "*"
